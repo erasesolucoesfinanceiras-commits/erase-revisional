@@ -148,7 +148,7 @@ function footer() {
 </div>
 </div>
 <div class="legal">
-<p>ERASE Revisional é uma ferramenta de simulação operada pela ERASE Soluções Financeiras. Não somos uma instituição financeira, correspondente bancário nem escritório de advocacia. O resultado é uma estimativa baseada em médias de mercado e nos dados informados, e não constitui parecer, consultoria ou promessa de resultado. Os percentuais de referência têm como fonte a taxa média de juros divulgada pelo Banco Central do Brasil para crédito livre, pessoas físicas, aquisição de veículos. A avaliação de casos individuais é conduzida por escritório de advocacia parceiro.</p>
+<p>ERASE Revisional é uma ferramenta de simulação operada pela ERASE Soluções Financeiras. Não somos uma instituição financeira, correspondente bancário nem escritório de advocacia. O resultado é uma estimativa baseada em médias de mercado e nos dados informados, e não constitui parecer, consultoria ou promessa de resultado. Os percentuais de referência têm como fonte a taxa média de juros divulgada pelo Banco Central do Brasil para crédito livre, pessoas físicas, aquisição de veículos. A análise do contrato é realizada pela ERASE Soluções Financeiras.</p>
 <!-- TODO: CNPJ e endereço da empresa — preencha "empresa.cnpj" e "empresa.endereco" em data/config.json e rode: node scripts/build.js -->
 ${dados ? `<p class="company">${esc(dados)}</p>` : ''}
 <p class="legal-links"><a href="/termos.html">Termos de uso</a> · <a href="/privacidade.html">Política de Privacidade</a></p>
@@ -202,7 +202,7 @@ function trustBadges() {
   return `<section class="trust container" aria-label="Por que confiar">
 <div class="trust-item">${ICON.shield}<div><h3>Simulação segura</h3><p>Seus dados são usados só para devolver a análise e permitir o contato, se você quiser.</p></div></div>
 <div class="trust-item">${ICON.calc}<div><h3>Cálculo transparente</h3><p>Resolvemos a taxa pelo sistema Price, com os números que você informa.</p></div></div>
-<div class="trust-item">${ICON.people}<div><h3>Atendimento humano</h3><p>Se quiser, um especialista parceiro entra em contato. Sem compromisso.</p></div></div>
+<div class="trust-item">${ICON.people}<div><h3>Atendimento humano</h3><p>Se quiser, um especialista da ERASE entra em contato. Sem compromisso.</p></div></div>
 </section>`;
 }
 

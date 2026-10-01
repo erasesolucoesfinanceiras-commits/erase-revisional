@@ -186,9 +186,9 @@ function calculadora() {
     ['Uma taxa acima da faixa é ilegal?',
       'Não por si só. A jurisprudência do STJ é que juros remuneratórios não têm limite fixo e só podem ser considerados abusivos quando comprovadamente destoam da taxa média de mercado da época da contratação — e mesmo aí quem decide é o juiz, caso a caso. Sua taxa também depende do seu perfil de crédito, da garantia e do que foi negociado. Ficar acima da faixa é um indício que vale investigar, não uma conclusão.'],
     ['A ERASE é um banco ou um escritório de advocacia?',
-      'Nem um nem outro. A ERASE Revisional é uma ferramenta de simulação operada pela ERASE Soluções Financeiras, que não é instituição financeira, correspondente bancário nem escritório de advocacia. A avaliação de casos individuais é conduzida por escritório de advocacia parceiro, em relação profissional firmada diretamente entre você e o advogado.'],
+      'Nem um nem outro. A ERASE Revisional é uma ferramenta de simulação operada pela ERASE Soluções Financeiras, que não é instituição financeira, correspondente bancário nem escritório de advocacia. A análise do contrato é feita pela própria ERASE Soluções Financeiras e é 100% gratuita.'],
     ['A análise do contrato é gratuita?',
-      'Sim. A análise do contrato é 100% gratuita: você não paga nada por ela. Ela é feita pela ERASE, a partir do contrato que você enviar, e pode verificar itens que a calculadora não enxerga, como seguro prestamista, tarifas e outras cobranças dentro da parcela. Ela não indica valores a receber e não garante resultado. Qualquer avaliação jurídica de caso individual continua sendo conduzida por escritório de advocacia parceiro, conforme explicado no rodapé.'],
+      'Sim. A análise do contrato é 100% gratuita: você não paga nada por ela. Ela é feita pela ERASE, a partir do contrato que você enviar, e pode verificar itens que a calculadora não enxerga, como seguro prestamista, tarifas e outras cobranças dentro da parcela. Ela não indica valores a receber e não garante resultado.'],
     ['Quanto custa?',
       'A simulação e a análise do contrato são 100% gratuitas: você não paga nada por elas. Você não paga nada para usar esta página e não pedimos dados de pagamento em nenhum momento.'],
     ['O que vocês fazem com meus dados?',
@@ -241,7 +241,7 @@ function calculadora() {
 <div class="field"><label for="lead-nome">Nome completo <span class="req">*</span></label><input id="lead-nome" name="nome" autocomplete="name" placeholder="Seu nome completo (não abrevie)"><small class="err" data-err="nome">Informe seu nome completo (não abrevie)</small></div>
 <div class="field"><label for="lead-wa">WhatsApp <span class="req">*</span></label><input id="lead-wa" name="whatsapp" inputmode="tel" autocomplete="tel" placeholder="(81) 99999-9999"><small class="err" data-err="whatsapp">WhatsApp inválido — use DDD + 9 dígitos</small></div>
 <div class="field"><label for="lead-email">E-mail <span class="opt">(opcional)</span></label><input id="lead-email" name="email" type="email" autocomplete="email" placeholder="voce@email.com"><small class="err" data-err="email">E-mail inválido</small></div>
-<div class="field check"><label><input type="checkbox" id="lgpd" name="lgpd"><span>Autorizo a ERASE Soluções Financeiras e o escritório de advocacia parceiro a entrar em contato comigo por WhatsApp, telefone ou e-mail sobre esta simulação, conforme a <a href="/privacidade.html" target="_blank" rel="noopener">Política de Privacidade</a>. <span class="req">*</span></span></label><small class="err" data-err="lgpd">É necessário autorizar o contato para ver o resultado</small></div></div>
+<div class="field check"><label><input type="checkbox" id="lgpd" name="lgpd"><span>Autorizo a ERASE Soluções Financeiras a entrar em contato comigo por WhatsApp, telefone ou e-mail sobre esta simulação, conforme a <a href="/privacidade.html" target="_blank" rel="noopener">Política de Privacidade</a>. <span class="req">*</span></span></label><small class="err" data-err="lgpd">É necessário autorizar o contato para ver o resultado</small></div></div>
 ${S.freeBadge("block")}
 <button class="btn btn-primary btn-lg btn-block" type="submit" id="calc-btn">Calcular minha taxa — grátis</button>
 <p class="fine">Simulação sobre os dados que você informar. Não é análise jurídica e não indica valores a receber.</p>
@@ -271,7 +271,7 @@ ${S.freeBadge("block")}
 <h2>Por que duas pessoas pagam taxas diferentes pelo mesmo carro</h2>
 <p>A taxa de um financiamento de veículo não é tabelada. Ela varia com o banco, o perfil de crédito, o valor da entrada, o prazo e a negociação feita na hora. Duas pessoas comprando o mesmo carro no mesmo mês podem sair com taxas bem diferentes — e quem fecha rápido, na concessionária, sem comparar, costuma ficar do lado mais caro dessa distribuição.</p>
 <p>O problema é que quase ninguém sabe qual taxa está pagando. O contrato mostra a parcela, não o juro efetivo. Esta calculadora reverte essa conta: com parcela, prazo e valor financiado, ela devolve a taxa mensal que produz exatamente esses números e mostra onde ela cai em relação à faixa de referência do seu tipo de veículo.</p>
-<p>Saber isso é útil por si só — para renegociar, para comparar uma portabilidade ou simplesmente para entender o que você assinou. E se a diferença for grande, é o tipo de coisa que vale levar a um advogado, que aí sim pode ler o contrato e dizer se há algo a questionar.</p>
+<p>Saber isso é útil por si só — para renegociar, para comparar uma portabilidade ou simplesmente para entender o que você assinou. E se a diferença for grande, é o tipo de coisa que vale levar para a análise gratuita do contrato, feita pela ERASE, que pode ler o contrato e dizer se há algo a questionar.</p>
 </section>
 
 <section class="container prose-block">
@@ -282,7 +282,7 @@ ${S.freeBadge("block")}
 <li>Compara com a faixa de referência do seu tipo de veículo, baseada em dados do Banco Central.</li>
 <li>Estima a economia nas parcelas restantes caso o contrato estivesse na faixa de referência.</li>
 <li>Oferece a análise do contrato, feita pela ERASE e 100% gratuita: você não paga nada por ela.</li>
-<li>Se você quiser, encaminha seu contato a um especialista parceiro.</li></ul></div>
+<li>Se você quiser, um especialista da ERASE entra em contato com você.</li></ul></div>
 <div class="card-list no"><h3>Não faz</h3><ul>
 <li>Não lê o seu contrato nem consulta dados do banco.</li>
 <li>Não considera IOF, tarifas, seguros ou encargos embutidos.</li>
@@ -333,7 +333,7 @@ function legais() {
 <h2>2. Natureza da simulação</h2>
 <p>O resultado da calculadora é uma estimativa baseada em médias de mercado e nos dados informados pelo usuário. Não constitui parecer jurídico, financeiro ou consultoria, não indica valores a receber, não afirma a existência de cobrança indevida e não representa promessa ou garantia de resultado. A economia exibida é apenas uma comparação com uma faixa de referência e não é devida ao usuário por qualquer instituição.</p>
 <h2>3. O que não somos</h2>
-<p>A ${razao} não é instituição financeira, correspondente bancário nem escritório de advocacia. A avaliação de casos individuais é conduzida por escritório de advocacia parceiro, em relação profissional firmada diretamente entre o usuário e o advogado.</p>
+<p>A ${razao} não é instituição financeira, correspondente bancário nem escritório de advocacia. A análise do contrato é realizada pela ${razao}, é gratuita, não indica valores a receber e não garante resultado.</p>
 <h2>4. Responsabilidades do usuário</h2>
 <p>O usuário é responsável pela veracidade dos dados informados. Resultados baseados em dados incorretos ou incompletos não refletem a situação real do contrato.</p>
 <h2>5. Conteúdo</h2>
@@ -354,9 +354,9 @@ function legais() {
 <li><strong>Pop-up e newsletter:</strong> nome, telefone/WhatsApp e e-mail, conforme o formulário preenchido.</li>
 <li><strong>Fale Conosco:</strong> nome, e-mail e mensagem.</li></ul>
 <h2>2. Para que usamos</h2>
-<p>Usamos os dados para devolver a análise solicitada, entrar em contato por WhatsApp, telefone ou e-mail quando você autoriza, permitir o atendimento por um especialista parceiro, responder mensagens e enviar novidades quando você se inscreve na newsletter.</p>
+<p>Usamos os dados para devolver a análise solicitada, entrar em contato por WhatsApp, telefone ou e-mail quando você autoriza, permitir o atendimento por um especialista da ERASE, responder mensagens e enviar novidades quando você se inscreve na newsletter.</p>
 <h2>3. Com quem compartilhamos</h2>
-<p>Os dados enviados nos formulários são armazenados em ferramentas de hospedagem e captura de formulários e em nosso sistema de relacionamento (CRM), e podem ser encaminhados a escritório de advocacia parceiro para que entre em contato com você. Não vendemos seus dados.</p>
+<p>Os dados enviados nos formulários são armazenados em ferramentas de hospedagem e captura de formulários e em nosso sistema de relacionamento (CRM), e são usados pela equipe da ERASE Soluções Financeiras para entrar em contato com você. Não vendemos seus dados.</p>
 <h2>4. Por quanto tempo guardamos</h2>
 <p>Mantemos os dados pelo tempo necessário para as finalidades acima ou para cumprir obrigações legais.</p>
 <h2>5. Seus direitos</h2>
