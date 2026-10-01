@@ -16,6 +16,7 @@ const out = (rel, content) => {
 
 const articles = S.loadArticles();
 const SITE = C.siteNome;
+const hasBcb = fs.existsSync(path.join(S.ROOT, 'assets', 'data', 'bcb-veiculos.json')); // série histórica do Banco Central presente?
 const urls = []; // para o sitemap
 const LEGAL_DATE = '2026-10-01'; // data de vigência dos textos legais (altere ao revisá-los)
 const LASTMOD = articles[0].data; // evita diffs ruidosos a cada build
@@ -178,13 +179,15 @@ function calculadora() {
     ['O que a calculadora faz, exatamente?',
       'A partir do valor financiado, do valor da parcela e do prazo, ela resolve matematicamente qual taxa de juros mensal está embutida no seu contrato — pelo sistema Price — e compara esse número com uma faixa de referência de mercado para o seu tipo de veículo. O resultado é um cálculo comparativo, não uma análise do contrato assinado.'],
     ['O resultado é garantia de valor a receber?',
-      'Não. Nenhum valor exibido aqui é devido a você por qualquer instituição, e a diferença mostrada não é devida a você. Ela é apenas a economia estimada em relação à faixa de referência, dados os números que você informou. Se isso significa alguma coisa no seu caso concreto é uma avaliação jurídica, que depende de ler o contrato assinado — e a decisão final, quando há disputa, é do Judiciário.'],
+      'Não. Nenhum valor exibido aqui é devido a você por qualquer instituição, e a diferença mostrada não é devida a você. Ela é apenas a economia estimada em relação à faixa de referência, dados os números que você informou. Para saber o que isso significa no seu caso concreto é preciso ler o contrato assinado: a análise do contrato é feita gratuitamente pela ERASE. Em caso de ação judicial, a decisão final é do Judiciário.'],
     ['Quanto o mercado costuma cobrar num financiamento de veículo?',
       `A taxa média divulgada pelo Banco Central para crédito livre a pessoas físicas na aquisição de veículos foi de ${fmtPct(bc.taxaMedia)}% ao mês na última divulgação (${bc.mesReferencia}). Motos costumam ser mais caras e financiamentos agrícolas, mais baratos, por conta de linhas subsidiadas como o Pronaf.`],
     ['A partir de que taxa a calculadora sinaliza o contrato?',
-      `A partir de ${fmtPct(L.carro)}% ao mês para carros, ${fmtPct(L.moto)}% para motos e ${fmtPct(L.agricola)}% para agrícolas. Ser sinalizado aqui não quer dizer que o contrato tem problema — quer dizer que ele está acima do nosso parâmetro de comparação, que é conservador de propósito.`],
+      (hasBcb
+        ? `Para carros, comparamos a taxa calculada com a taxa média do Banco Central no mês em que você assinou o contrato (série histórica); se o mês não estiver disponível, usamos ${fmtPct(L.carro)}% ao mês. Para motos e agrícolas usamos referências fixas de ${fmtPct(L.moto)}% e ${fmtPct(L.agricola)}% ao mês. `
+        : `A partir de ${fmtPct(L.carro)}% ao mês para carros, ${fmtPct(L.moto)}% para motos e ${fmtPct(L.agricola)}% para agrícolas. `) + `Ser sinalizado aqui não quer dizer que o contrato tem problema — quer dizer que ele está acima do nosso parâmetro de comparação, que é conservador de propósito.`],
     ['Uma taxa acima da faixa é ilegal?',
-      'Não por si só. A jurisprudência do STJ é que juros remuneratórios não têm limite fixo e só podem ser considerados abusivos quando comprovadamente destoam da taxa média de mercado da época da contratação — e mesmo aí quem decide é o juiz, caso a caso. Sua taxa também depende do seu perfil de crédito, da garantia e do que foi negociado. Ficar acima da faixa é um indício que vale investigar, não uma conclusão.'],
+      'Não por si só. A jurisprudência do STJ é que juros remuneratórios não têm limite fixo e só podem ser considerados abusivos quando comprovadamente destoam da taxa média de mercado da época da contratação — e isso é avaliado caso a caso. Sua taxa também depende do seu perfil de crédito, da garantia e do que foi negociado. Ficar acima da faixa é um indício que vale investigar, não uma conclusão: a análise do contrato é feita gratuitamente pela ERASE e, em caso de ação judicial, a decisão final é do Judiciário.'],
     ['A ERASE é um banco ou um escritório de advocacia?',
       'Nem um nem outro. A ERASE Revisional é uma ferramenta de simulação operada pela ERASE Soluções Financeiras, que não é instituição financeira, correspondente bancário nem escritório de advocacia. A análise do contrato é feita pela própria ERASE Soluções Financeiras e é 100% gratuita.'],
     ['A análise do contrato é gratuita?',
@@ -200,6 +203,13 @@ function calculadora() {
     '@context': 'https://schema.org', '@type': 'FAQPage',
     mainEntity: faq.map(([q, a]) => ({ '@type': 'Question', name: q, acceptedAnswer: { '@type': 'Answer', text: a } })),
   };
+  // Opções curtas (≤ 9 caracteres) ficam lado a lado também no celular; as longas empilham.
+  const choices = (name, legend, opts, { req = false } = {}) => {
+    const curtas = Math.max(...opts.map((o) => o.length)) <= 9;
+    return `<fieldset class="field choices${curtas ? ' short' : ''}${curtas && opts.length === 2 ? ' two' : ''}" data-group="${name}"><legend>${legend}${req ? ' <span class="req">*</span>' : ' <span class="opt">(opcional)</span>'}</legend><div class="choice-grid">${opts.map((o) => `<label class="choice"><input type="radio" name="${name}" value="${esc(o)}"><span>${esc(o)}</span></label>`).join('')}</div><small class="err" data-err="${name}">Escolha uma opção</small></fieldset>`;
+  };
+  const MESES = ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'];
+  const UFS = 'AC AL AP AM BA CE DF ES GO MA MT MS MG PA PB PR PE PI RJ RN RS RO RR SC SP SE TO'.split(' ');
   const parcelasOpts = [12, 18, 24, 30, 36, 42, 48, 54, 60, 66, 72, 84, 96]
     .map((n) => `<option value="${n}">${n} parcelas</option>`).join('');
 
@@ -208,7 +218,7 @@ function calculadora() {
 <span class="eyebrow">Simulação gratuita · Carros, motos e agrícolas</span>
 <h1><span class="grad">Qual é a taxa real do seu financiamento?</span></h1>
 <p class="lead">Em pouco mais de um minuto, a calculadora resolve a taxa de juros mensal embutida no seu contrato — a partir da parcela, do valor financiado e do prazo — e mostra como ela se compara à média publicada pelo Banco Central, hoje em torno de <strong>${fmtPct(bc.taxaMedia)}% ao mês</strong> para carros, segundo a última divulgação do Banco Central (${esc(bc.mesReferencia)}).</p>
-<p class="small-note">É um cálculo comparativo, gratuito e sem compromisso. Não é análise jurídica do contrato e não indica valores a receber.</p>
+<p class="small-note">${hasBcb ? 'Para carros, a comparação usa a média do Banco Central do mês em que você assinou o contrato. ' : ''}É um cálculo comparativo, gratuito e sem compromisso. Não é análise jurídica do contrato e não indica valores a receber.</p>
 </div></section>
 
 <section class="container calc-grid" id="calculadora"
@@ -224,7 +234,7 @@ function calculadora() {
 <label><input type="radio" name="tipo" value="agricola"><span>Agrícola</span></label>
 </fieldset>
 <div class="field"><label for="banco">Banco / financeira <span class="opt">(opcional)</span></label>
-<input id="banco" name="banco" list="bancos" autocomplete="off" placeholder="Ex.: Banco do Brasil, Santander, BV..." maxlength="60"><datalist id="bancos"><option value="Banco do Brasil"><option value="Bradesco"><option value="Caixa"><option value="Itaú"><option value="Santander"><option value="BV"><option value="Banco Pan"><option value="Omni"><option value="Safra"><option value="Porto Seguro"><option value="Outro"></datalist></div>
+<input id="banco" name="banco" list="bancos" autocomplete="off" placeholder="Ex.: Santander, BV, Itaú" maxlength="60"><datalist id="bancos"><option value="Banco do Brasil"><option value="Bradesco"><option value="Caixa"><option value="Itaú"><option value="Santander"><option value="BV"><option value="Banco Pan"><option value="Omni"><option value="Safra"><option value="Porto Seguro"><option value="Outro"></datalist></div>
 <div class="field"><label for="valor_total">Valor total do veículo (R$) <span class="req">*</span></label>
 <div class="money"><span>R$</span><input id="valor_total" name="valor_total" inputmode="numeric" autocomplete="off" placeholder="0,00"></div><small class="err" data-err="valor_total">Informe o valor do veículo</small></div>
 <div class="field"><label for="entrada">Valor de entrada <span class="req">*</span></label>
@@ -234,13 +244,33 @@ function calculadora() {
 <div class="field-row">
 <div class="field"><label for="n_parcelas">Quantas parcelas financiou? <span class="req">*</span></label>
 <select id="n_parcelas" name="n_parcelas"><option value="">Selecione</option>${parcelasOpts}</select><small class="err" data-err="n_parcelas">Selecione o total de parcelas</small></div>
-<div class="field"><label for="pagas">Quantas parcelas já pagou? <span class="req">*</span></label>
+<div class="field" id="pagas-field"><label for="pagas">Quantas parcelas já pagou? <span class="req">*</span></label>
 <div class="money suffix"><input id="pagas" name="pagas" type="number" inputmode="numeric" min="0" step="1" placeholder="0"><span>meses</span></div><small class="err" data-err="pagas">Informe quantas parcelas já pagou</small></div>
 </div>
+<div class="field"><label for="mes_assinatura">Mês e ano em que assinou o contrato <span class="req">*</span></label>
+<div class="field-row tight"><select id="mes_assinatura" name="mes_assinatura"><option value="">Mês</option>${MESES.map((m, i) => `<option value="${i + 1}">${m}</option>`).join('')}</select>
+<select id="ano_assinatura" name="ano_assinatura"><option value="">Ano</option></select></div><small class="err" data-err="assinatura">Informe o mês e o ano da assinatura</small></div>
+
+<div class="form-section"><h3>Sobre o seu financiamento</h3>
+${choices('parcelas_em_dia', 'Suas parcelas estão em dia?', ['Em dia', 'Atrasadas', 'Já quitei o financiamento'], { req: true })}
+<div class="field" id="atrasadas-box" hidden><label for="atrasadas">Quantas parcelas estão atrasadas? <span class="req">*</span></label>
+<div class="money suffix"><input id="atrasadas" name="atrasadas" type="number" inputmode="numeric" min="1" max="96" step="1" placeholder="0"><span>parcelas</span></div><small class="err" data-err="atrasadas">Informe quantas parcelas estão atrasadas</small></div>
+${choices('busca_apreensao', 'Seu veículo está com busca e apreensão?', ['Não', 'Recebi notificação de cobrança', 'Já tem processo de busca e apreensão', 'O veículo já foi apreendido'], { req: true })}
+</div>
+
+<div class="form-section"><h3>Ajude a entender o seu caso <span class="opt">(opcional)</span></h3>
+${choices('seguro', 'Tem seguro no contrato?', ['Sim', 'Não', 'Não sei'])}
+${choices('contrato_em_maos', 'Tem o contrato em mãos?', ['Sim', 'Não', 'Posso pedir ao banco'])}
+${choices('acao_revisional_anterior', 'Já entrou com ação revisional antes?', ['Sim', 'Não'])}
+</div>
+
 <div class="contact-block"><h3>Para ver o resultado, informe seu contato</h3>
 <div class="field"><label for="lead-nome">Nome completo <span class="req">*</span></label><input id="lead-nome" name="nome" autocomplete="name" placeholder="Seu nome completo (não abrevie)"><small class="err" data-err="nome">Informe seu nome completo (não abrevie)</small></div>
 <div class="field"><label for="lead-wa">WhatsApp <span class="req">*</span></label><input id="lead-wa" name="whatsapp" inputmode="tel" autocomplete="tel" placeholder="(81) 99999-9999"><small class="err" data-err="whatsapp">WhatsApp inválido — use DDD + 9 dígitos</small></div>
 <div class="field"><label for="lead-email">E-mail <span class="opt">(opcional)</span></label><input id="lead-email" name="email" type="email" autocomplete="email" placeholder="voce@email.com"><small class="err" data-err="email">E-mail inválido</small></div>
+<div class="field-row cidade-row"><div class="field"><label for="cidade">Cidade <span class="opt">(opcional)</span></label><input id="cidade" name="cidade" autocomplete="address-level2" placeholder="Sua cidade" maxlength="60"></div>
+<div class="field"><label for="estado">Estado <span class="opt">(opcional)</span></label><select id="estado" name="estado" autocomplete="address-level1"><option value="">UF</option>${UFS.map((u) => `<option value="${u}">${u}</option>`).join('')}</select></div></div>
+${choices('horario_contato', 'Melhor horário para contato', ['Manhã', 'Tarde', 'Noite'])}
 <div class="field check"><label><input type="checkbox" id="lgpd" name="lgpd"><span>Autorizo a ERASE Soluções Financeiras a entrar em contato comigo por WhatsApp, telefone ou e-mail sobre esta simulação, conforme a <a href="/privacidade.html" target="_blank" rel="noopener">Política de Privacidade</a>. <span class="req">*</span></span></label><small class="err" data-err="lgpd">É necessário autorizar o contato para ver o resultado</small></div></div>
 ${S.freeBadge("block")}
 <button class="btn btn-primary btn-lg btn-block" type="submit" id="calc-btn">Calcular minha taxa — grátis</button>
@@ -264,7 +294,7 @@ ${S.freeBadge("block")}
 </section>
 
 <section class="container prose-block">
-<div class="notice"><strong>Esta página é uma ferramenta de simulação.</strong> O resultado é um <strong>cálculo estimado</strong> feito sobre os números que você digitou e comparado a médias de mercado. Não é análise do seu contrato, não é parecer jurídico ou financeiro, não afirma que houve cobrança indevida e <strong>não indica valores a receber</strong>. Só um advogado, lendo o contrato assinado, pode avaliar o seu caso — e, havendo disputa, quem decide é o Judiciário.</div>
+<div class="notice"><strong>Esta página é uma ferramenta de simulação.</strong> O resultado é um <strong>cálculo estimado</strong> feito sobre os números que você digitou e comparado a médias de mercado. Não é análise do seu contrato, não é parecer jurídico ou financeiro, não afirma que houve cobrança indevida e <strong>não indica valores a receber</strong>. A análise do contrato é feita gratuitamente pela ERASE. Em caso de ação judicial, a decisão final é do Judiciário.</div>
 </section>
 
 <section class="container prose-block">
