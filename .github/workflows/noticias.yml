@@ -1,0 +1,61 @@
+name: Gerar notícia (a cada 3 dias)
+
+on:
+  schedule:
+    # Roda TODO dia; o passo "decidir" só segue 1 a cada 3 (dia do ano % 3 == 0).
+    # Evita o erro de usar */3 no cron, que "reinicia" na virada do mês.
+    - cron: "0 11 * * *"
+  workflow_dispatch:
+    inputs:
+      categoria:
+        description: "Categoria (vazio = rodízio automático)"
+        required: false
+        type: choice
+        default: ""
+        options: ["", revisional, financeiro, mercado]
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  noticia:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Decidir se roda hoje
+        id: decidir
+        run: |
+          DOY=$((10#$(date -u +%j)))
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ] || [ $((DOY % 3)) -eq 0 ]; then
+            echo "rodar=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "rodar=false" >> "$GITHUB_OUTPUT"
+            echo "Dia do ano $DOY: não é dia de publicar."
+          fi
+
+      - uses: actions/setup-node@v4
+        if: steps.decidir.outputs.rodar == 'true'
+        with:
+          node-version: 20
+
+      - name: Gerar artigo (Gemini gratuito + Google Search)
+        if: steps.decidir.outputs.rodar == 'true'
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: node scripts/generate-article.js "${{ github.event.inputs.categoria }}"
+
+      - name: Abrir Pull Request para revisão
+        if: steps.decidir.outputs.rodar == 'true'
+        uses: peter-evans/create-pull-request@v7
+        with:
+          branch: noticia/auto-${{ github.run_id }}
+          commit-message: "Nova notícia automática (revisar antes de publicar)"
+          title: "Nova notícia automática — revisar antes de publicar"
+          body: |
+            Artigo gerado automaticamente (Gemini gratuito + Google Search).
+
+            **Revise antes de aceitar:** fatos, tom, ausência de promessa de resultado e a fonte citada.
+            Ao fazer o merge, o Netlify publica o artigo, o card na home e na categoria, e o sitemap atualizado.
+          labels: noticia-automatica
