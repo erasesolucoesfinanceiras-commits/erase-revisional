@@ -22,7 +22,7 @@ const FREE_BADGE_TXT = 'ANÁLISE DO CONTRATO 100% GRATUITA';
   };
   const NOMES = { carro: 'carro', moto: 'moto', agricola: 'veículo agrícola' };
   const QUITADO = 'Já quitei o financiamento', ATRASADAS = 'Atrasadas';
-  const ANO_INICIO = 2011; // início da série histórica do Banco Central
+  const ANO_INICIO = 2000; // a série do Banco Central começa em 06/2000
 
   // ---- Série histórica do Banco Central (opcional) --------------------
   let bcb = null;

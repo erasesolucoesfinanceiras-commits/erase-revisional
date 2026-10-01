@@ -1,4 +1,4 @@
-name: Atualizar série do Banco Central (mensal)
+name: Atualizar série do Banco Central (mensal ou manual)
 
 on:
   schedule:
@@ -27,4 +27,4 @@ jobs:
           branch: bcb/atualizacao-${{ github.run_id }}
           commit-message: "Atualiza série histórica do Banco Central"
           title: "Atualiza série histórica do Banco Central"
-          body: "Série mensal de juros (aquisição de veículos) atualizada automaticamente pelo SGS/Banco Central. Confira o último mês antes do merge."
+          body: "Série SGS 25471 (taxa média mensal de juros, pessoas físicas, aquisição de veículos, % a.m.) baixada do Banco Central pelo GitHub Actions. Confira o último mês antes do merge. Ao fazer o merge, a calculadora passa a comparar com a média do mês da assinatura."
