@@ -244,8 +244,8 @@ if (ct) {
           <div class="field"><label class="sr-only" for="pp-nome">Nome</label><input id="pp-nome" name="nome" placeholder="Seu nome" autocomplete="name"></div>
           <div class="field"><label class="sr-only" for="pp-tel">Telefone / WhatsApp</label><input id="pp-tel" name="telefone" inputmode="tel" placeholder="Telefone / WhatsApp" autocomplete="tel"></div>
           <div class="field"><label class="sr-only" for="pp-email">E-mail</label><input id="pp-email" name="email" type="email" placeholder="Seu e-mail" autocomplete="email"></div>
+          <div class="field check"><label><input type="checkbox" id="pp-lgpd" name="lgpd"><span>Autorizo a ERASE Soluções Financeiras e o escritório de advocacia parceiro a entrar em contato comigo por WhatsApp, telefone ou e-mail, conforme a <a href="/privacidade.html" target="_blank" rel="noopener">Política de Privacidade</a>. *</span></label></div>
           <button class="btn btn-primary btn-block" type="submit">Quero reduzir minhas parcelas</button>
-          <p class="fine">Ao enviar, você autoriza a ERASE Soluções Financeiras e o escritório parceiro a entrar em contato, conforme a <a href="/privacidade.html" target="_blank" rel="noopener">Política de Privacidade</a>.</p>
           <p class="form-msg" id="popup-msg" role="status" aria-live="polite"></p>
         </form>
       </div>`;
@@ -270,8 +270,9 @@ if (ct) {
       if (d.nome.length < 2) return setMsg(msg, 'Informe seu nome.', 'bad');
       if (!phoneOk(d.telefone)) return setMsg(msg, 'Informe um telefone/WhatsApp válido com DDD.', 'bad');
       if (!emailOk(d.email)) return setMsg(msg, 'Informe um e-mail válido.', 'bad');
+      if (!f.lgpd.checked) return setMsg(msg, 'É necessário autorizar o contato para enviar.', 'bad');
       // Grava na fila (reenvio automático) e envia ao CRM em paralelo; nunca perde o lead.
-      queueLead({ form: 'popup-entrada', crm: 'popup-entrada', data: { ...d, lgpd_aceite: 'aceite-por-envio', status: 'novo' } });
+      queueLead({ form: 'popup-entrada', crm: 'popup-entrada', data: { ...d, lgpd_aceite: 'sim', status: 'novo' } });
       f.reset();
       setMsg(msg, 'Recebemos seus dados! Em breve um especialista falará com você.', 'ok');
       setTimeout(close, 2600);
