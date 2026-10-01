@@ -26,6 +26,7 @@ function home() {
   const INICIAL = 4;
   const list = rest.map((a, i) => S.rowCard(a, i >= INICIAL)).join('\n');
   const body = `
+<div class="free-strip" role="note"><div class="container">${S.FREE_TXT} <span>· feita pela ERASE, sem pagar nada por ela</span></div></div>
 <section class="hero">
 <div class="container hero-inner">
 <span class="badge">Simulação gratuita</span>
@@ -186,8 +187,10 @@ function calculadora() {
       'Não por si só. A jurisprudência do STJ é que juros remuneratórios não têm limite fixo e só podem ser considerados abusivos quando comprovadamente destoam da taxa média de mercado da época da contratação — e mesmo aí quem decide é o juiz, caso a caso. Sua taxa também depende do seu perfil de crédito, da garantia e do que foi negociado. Ficar acima da faixa é um indício que vale investigar, não uma conclusão.'],
     ['A ERASE é um banco ou um escritório de advocacia?',
       'Nem um nem outro. A ERASE Revisional é uma ferramenta de simulação operada pela ERASE Soluções Financeiras, que não é instituição financeira, correspondente bancário nem escritório de advocacia. A avaliação de casos individuais é conduzida por escritório de advocacia parceiro, em relação profissional firmada diretamente entre você e o advogado.'],
+    ['A análise do contrato é gratuita?',
+      'Sim. A análise do contrato é 100% gratuita: você não paga nada por ela. Ela é feita pela ERASE, a partir do contrato que você enviar, e pode verificar itens que a calculadora não enxerga, como seguro prestamista, tarifas e outras cobranças dentro da parcela. Ela não indica valores a receber e não garante resultado. Qualquer avaliação jurídica de caso individual continua sendo conduzida por escritório de advocacia parceiro, conforme explicado no rodapé.'],
     ['Quanto custa?',
-      'A simulação é gratuita e o contato do especialista também, sem compromisso. Você não paga nada para usar esta página e não pedimos dados de pagamento em nenhum momento.'],
+      'A simulação e a análise do contrato são 100% gratuitas: você não paga nada por elas. Você não paga nada para usar esta página e não pedimos dados de pagamento em nenhum momento.'],
     ['O que vocês fazem com meus dados?',
       'Usamos nome e WhatsApp para devolver a análise e permitir o contato do especialista. Não vendemos seus dados. O detalhamento completo — o que coletamos, com quem compartilhamos e como pedir exclusão — está na Política de Privacidade, linkada no rodapé.'],
     ['Serve para carro, moto e agrícola?',
@@ -239,6 +242,7 @@ function calculadora() {
 <div class="field"><label for="lead-wa">WhatsApp <span class="req">*</span></label><input id="lead-wa" name="whatsapp" inputmode="tel" autocomplete="tel" placeholder="(81) 99999-9999"><small class="err" data-err="whatsapp">WhatsApp inválido — use DDD + 9 dígitos</small></div>
 <div class="field"><label for="lead-email">E-mail <span class="opt">(opcional)</span></label><input id="lead-email" name="email" type="email" autocomplete="email" placeholder="voce@email.com"><small class="err" data-err="email">E-mail inválido</small></div>
 <div class="field check"><label><input type="checkbox" id="lgpd" name="lgpd"><span>Autorizo a ERASE Soluções Financeiras e o escritório de advocacia parceiro a entrar em contato comigo por WhatsApp, telefone ou e-mail sobre esta simulação, conforme a <a href="/privacidade.html" target="_blank" rel="noopener">Política de Privacidade</a>. <span class="req">*</span></span></label><small class="err" data-err="lgpd">É necessário autorizar o contato para ver o resultado</small></div></div>
+${S.freeBadge("block")}
 <button class="btn btn-primary btn-lg btn-block" type="submit" id="calc-btn">Calcular minha taxa — grátis</button>
 <p class="fine">Simulação sobre os dados que você informar. Não é análise jurídica e não indica valores a receber.</p>
 </form>
@@ -277,6 +281,7 @@ function calculadora() {
 <li>Calcula a taxa mensal e anual efetiva embutida no seu contrato.</li>
 <li>Compara com a faixa de referência do seu tipo de veículo, baseada em dados do Banco Central.</li>
 <li>Estima a economia nas parcelas restantes caso o contrato estivesse na faixa de referência.</li>
+<li>Oferece a análise do contrato, feita pela ERASE e 100% gratuita: você não paga nada por ela.</li>
 <li>Se você quiser, encaminha seu contato a um especialista parceiro.</li></ul></div>
 <div class="card-list no"><h3>Não faz</h3><ul>
 <li>Não lê o seu contrato nem consulta dados do banco.</li>

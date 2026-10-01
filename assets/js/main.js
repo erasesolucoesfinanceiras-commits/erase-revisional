@@ -238,6 +238,7 @@ if (ct) {
       <div class="popup" role="dialog" aria-modal="true" aria-labelledby="popup-title">
         <button class="popup-close" type="button" aria-label="Fechar">&times;</button>
         <div class="popup-icon"><svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 17H3v-5l2-5a2 2 0 0 1 1.9-1.3h10.2A2 2 0 0 1 19 7l2 5v5h-2"/><path d="M3 12h18"/><circle cx="7.5" cy="17" r="2"/><circle cx="16.5" cy="17" r="2"/><path d="M9.5 17h5"/></svg></div>
+        <p class="free-badge">ANÁLISE DO CONTRATO 100% GRATUITA</p>
         <h2 id="popup-title">Reduza até 70% do valor das parcelas do seu carro financiado</h2>
         <p>Deixe seus dados e um especialista entra em contato. Sem compromisso. O resultado depende da análise de cada caso.</p>
         <form id="popup-form" novalidate>

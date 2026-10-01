@@ -213,7 +213,11 @@ function ctaBanner() {
 </div></section>`;
 }
 
+const FREE_TXT = 'ANÁLISE DO CONTRATO 100% GRATUITA';
+const freeBadge = (cls = '') => `<p class="free-badge ${cls}" role="note">${FREE_TXT}</p>`;
+
 module.exports = {
+  FREE_TXT, freeBadge,
   ROOT, config, loadArticles, esc, fmtPct, fmtData, catNome, catUrl, artUrl, absUrl, coverUrl,
   ICON, page, rowCard, promoCard, trustBadges, ctaBanner,
 };

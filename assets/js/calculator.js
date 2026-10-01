@@ -4,6 +4,7 @@
  * Matemática: Tabela Price  PMT = PV · i / (1 − (1+i)^−n)
  * Dado PMT, PV e n, a taxa "i" é encontrada por bisseção (a função é crescente em i).
  */
+const FREE_BADGE_TXT = 'ANÁLISE DO CONTRATO 100% GRATUITA';
 (function () {
   const root = $('#calculadora');
   if (!root) return;
@@ -186,10 +187,15 @@
       <div class="verdict ${acima ? 'over' : ''}">${acima ? 'Acima do parâmetro de referência' : 'Dentro do parâmetro de referência'}</div>
       <p>${acima
         ? `Sua taxa está <strong>${pct(mensal - limite)} ponto(s) percentual(is)</strong> acima da referência de ${pct(limite)}% ao mês para ${NOMES[t]}. Isso é um indício que vale investigar, não uma conclusão sobre o contrato.`
-        : `Sua taxa está dentro da referência de ${pct(limite)}% ao mês para ${NOMES[t]}. Ainda assim, vale comparar propostas e, se quiser, falar com um especialista.`}</p>
+        : `Pela taxa de juros, seu contrato parece estar dentro da média de mercado (referência de <strong>${pct(limite)}% ao mês</strong> para ${NOMES[t]}).`}</p>
+      <p>${acima
+        ? `<strong>A economia mostrada é só uma estimativa, feita com os números que você informou.</strong> A análise do contrato é que permite conferir esses números e verificar se há outras cobranças, como seguro prestamista e tarifas, que esta simulação não enxerga.`
+        : `<strong>Mas esta calculadora é só uma estimativa da taxa de juros.</strong> O contrato pode incluir seguro prestamista, tarifas e outras cobranças dentro da parcela, e isso só aparece na leitura do contrato. A análise do contrato pode verificar se há algo a questionar nesses itens.`}</p>
+      ${acima ? '' : '<p class="fine" style="margin-top:0">Esta simulação não indica valores a receber.</p>'}
+      <div class="free-badge" role="note">${FREE_BADGE_TXT}</div>
       ${acima ? `<div class="saving"><small>Economia estimada nas parcelas restantes (${restantes})</small><b>${brl(economia)}</b>
         <p>≈ ${brl(porParcela)} por parcela, caso o contrato estivesse na taxa de referência. É uma estimativa comparativa: <strong>não indica valores a receber</strong> e a diferença não é devida a você por qualquer instituição.</p></div>` : ''}
-      <p class="fine">Cálculo pelo sistema Price com os números informados. Não considera IOF, tarifas, seguros ou encargos. Não é análise jurídica.</p>`;
+      <p class="fine">Cálculo pelo sistema Price com os números informados. Não considera IOF, tarifas, seguros (inclusive seguro prestamista) ou encargos. Não é análise jurídica.</p>`;
 
     // --- Lead: grava (fila com reenvio) ANTES de mostrar o resultado ---
     const k = contato();
@@ -209,9 +215,11 @@
       enviado = queueLead({ form: 'calculadora', crm: 'calculadora', data: lead }).enviado;
     }
 
-    const msgWa = `Olá! Meu nome é ${k.nome}. Fiz a simulação na ERASE Revisional para ${NOMES[t]} e a taxa calculada foi de ${pct(mensal)}% ao mês. Gostaria de falar com um especialista.`;
+    const msgWa = acima
+      ? `Olá! Meu nome é ${k.nome}. Fiz a simulação na ERASE Revisional para ${NOMES[t]} e a taxa calculada foi de ${pct(mensal)}% ao mês. Gostaria de falar com um especialista.`
+      : `Olá! Meu nome é ${k.nome}. Fiz a simulação na ERASE Revisional para ${NOMES[t]}, a taxa calculada foi de ${pct(mensal)}% ao mês (dentro da referência) e gostaria de pedir a análise gratuita do contrato.`;
     actions.hidden = false;
-    actions.innerHTML = `<a class="btn btn-wa btn-block" target="_blank" rel="noopener noreferrer" href="${waLink(msgWa)}">Falar com um especialista no WhatsApp</a>
+    actions.innerHTML = `<a class="btn btn-wa btn-block" target="_blank" rel="noopener noreferrer" href="${waLink(msgWa)}">${acima ? 'Falar com um especialista no WhatsApp' : 'Quero a análise gratuita do contrato'}</a>
       <p class="send-status" id="send-status" role="status">Recebemos seus dados. Um especialista entrará em contato, sem compromisso.</p>`;
     enviado.then((ok) => {
       if (!ok) { const el = $('#send-status'); if (el) el.textContent = 'Recebemos seus dados e vamos reenviá-los automaticamente em segundo plano. Você não perde nada.'; }
