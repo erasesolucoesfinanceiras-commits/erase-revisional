@@ -1,0 +1,30 @@
+name: Atualizar série do Banco Central (mensal ou manual)
+
+on:
+  schedule:
+    - cron: "0 12 6 * *" # dia 6 de cada mês (o BC publica com defasagem)
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  bcb:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Baixar série do Banco Central
+        run: node scripts/update-bcb.js
+      - name: Reconstruir o site
+        run: node scripts/build.js
+      - name: Abrir Pull Request
+        uses: peter-evans/create-pull-request@v7
+        with:
+          branch: bcb/atualizacao-${{ github.run_id }}
+          commit-message: "Atualiza série histórica do Banco Central"
+          title: "Atualiza série histórica do Banco Central"
+          body: "Série SGS 25471 (taxa média mensal de juros, pessoas físicas, aquisição de veículos, % a.m.) baixada do Banco Central pelo GitHub Actions. Confira o último mês antes do merge. Ao fazer o merge, a calculadora passa a comparar com a média do mês da assinatura."
