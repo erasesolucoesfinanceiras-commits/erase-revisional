@@ -15,7 +15,7 @@ const CRM_API_KEY = "SUBSTITUIR-DEPOIS";
 
 // ---- Envios --------------------------------------------------------
 
-/** Backup: grava o lead no Netlify Forms (form-name deve existir no formulário espelho do HTML). */
+/** POST cru ao Netlify Forms (form-name deve existir no formulário espelho do HTML). */
 function postNetlify(formName, data) {
   const body = new URLSearchParams({ 'form-name': formName, ...data }).toString();
   return fetch('/', { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body });
@@ -33,7 +33,7 @@ function enviarParaCRM(origem, dados) {
     fetch(CRM_ENDPOINT, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'x-api-key': CRM_API_KEY },
-      body: JSON.stringify({ origem, ...dados, pagina: location.pathname, enviado_em: new Date().toISOString() }),
+      body: JSON.stringify({ origem, ...dados }),
       keepalive: true,
       signal: ctrl ? ctrl.signal : undefined,
     })
@@ -43,6 +43,97 @@ function enviarParaCRM(origem, dados) {
   } catch (err) {
     console.error('Falha ao enviar lead ao CRM:', err);
   }
+}
+
+// ---- Origem do acesso (UTMs, referrer, página de entrada) ----------
+const UTM_KEYS = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content'];
+function store(kind, key, val) {
+  try { const st = window[kind]; if (val === undefined) return st.getItem(key); st.setItem(key, val); } catch (e) { /* sem storage */ }
+  return null;
+}
+(function captureAttribution() {
+  const q = new URLSearchParams(location.search);
+  if (UTM_KEYS.some((k) => q.get(k))) {
+    const utm = {}; UTM_KEYS.forEach((k) => { utm[k] = (q.get(k) || '').slice(0, 120); });
+    store('localStorage', 'erase-utm', JSON.stringify(utm)); // última campanha conhecida
+  }
+  if (!store('sessionStorage', 'erase-landing')) {
+    store('sessionStorage', 'erase-landing', location.pathname + location.search);
+    let ref = 'direto';
+    try { if (document.referrer && new URL(document.referrer).host !== location.host) ref = new URL(document.referrer).host; else if (document.referrer) ref = 'interno'; } catch (e) { /* ignore */ }
+    store('sessionStorage', 'erase-ref', ref);
+  }
+})();
+function atribuicao() {
+  let utm = {}; try { utm = JSON.parse(store('localStorage', 'erase-utm') || '{}'); } catch (e) { /* ignore */ }
+  const agora = new Date();
+  const out = {
+    data_hora: agora.toISOString(),
+    data_hora_local: agora.toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo' }),
+    origem_trafego: utm.utm_source || store('sessionStorage', 'erase-ref') || 'direto',
+    pagina_entrada: store('sessionStorage', 'erase-landing') || location.pathname,
+    pagina_envio: location.pathname,
+  };
+  UTM_KEYS.forEach((k) => { out[k] = utm[k] || ''; });
+  return out;
+}
+
+// ---- Fila de envio com reenvio automático (não perde lead) ----------
+// Todo formulário é gravado primeiro em localStorage ("caixa de saída") e só sai
+// da fila quando o Netlify Forms responde OK. Se falhar (rede, instabilidade),
+// tenta de novo com espera crescente, ao voltar a conexão, ao reabrir a aba
+// e na próxima visita ao site.
+const OUTBOX_KEY = 'erase-outbox';
+const RETRY_BASE_MS = 3000, RETRY_MAX_MS = 300000;
+let outboxMem = [], flushing = null, retryTimer = null;
+
+function readBox() {
+  try { const raw = localStorage.getItem(OUTBOX_KEY); if (raw) return JSON.parse(raw); } catch (e) { /* usa memória */ }
+  return outboxMem;
+}
+function writeBox(box) { outboxMem = box; try { localStorage.setItem(OUTBOX_KEY, JSON.stringify(box)); } catch (e) { /* só memória */ } }
+const uuid = () => (crypto.randomUUID ? crypto.randomUUID() : 'l' + Date.now().toString(36) + Math.random().toString(36).slice(2, 10));
+
+/** Tenta enviar tudo que está pendente. Resolve com a quantidade que continua na fila. */
+function flushOutbox() {
+  if (flushing) return flushing;
+  flushing = (async () => {
+    for (const item of readBox()) {
+      let ok = false;
+      try { ok = (await postNetlify(item.form, item.data)).ok; } catch (e) { ok = false; }
+      const atual = readBox();
+      if (ok) writeBox(atual.filter((i) => i.id !== item.id));
+      else {
+        console.error('Envio pendente, será repetido:', item.form);
+        writeBox(atual.map((i) => (i.id === item.id ? { ...i, tentativas: (i.tentativas || 0) + 1 } : i)));
+      }
+    }
+    const restantes = readBox();
+    clearTimeout(retryTimer);
+    if (restantes.length) {
+      const n = Math.max(...restantes.map((i) => i.tentativas || 1));
+      retryTimer = setTimeout(flushOutbox, Math.min(RETRY_MAX_MS, RETRY_BASE_MS * 2 ** (n - 1)));
+    }
+    flushing = null;
+    return restantes.length;
+  })();
+  return flushing;
+}
+window.addEventListener('online', flushOutbox);
+document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible' && readBox().length) flushOutbox(); });
+if (readBox().length) setTimeout(flushOutbox, 1500); // pendências de visitas anteriores
+
+/**
+ * Registra um lead: grava na fila (nunca se perde), dispara o envio ao Netlify Forms
+ * (com reenvio automático) e, se `crm` for informado, o envio paralelo ao CRM.
+ * Retorna { id, enviado: Promise<boolean> } — `enviado` resolve true se já saiu na 1ª tentativa.
+ */
+function queueLead({ form, crm, data, comAtribuicao = true }) {
+  const id = uuid();
+  const completo = { ...data, ...(comAtribuicao ? atribuicao() : {}), lead_id: id };
+  writeBox([...readBox(), { id, form, data: completo, criado: Date.now(), tentativas: 0 }]);
+  if (crm) enviarParaCRM(crm, completo);
+  return { id, enviado: flushOutbox().then(() => !readBox().some((i) => i.id === id)) };
 }
 
 // ---- Utilidades ----------------------------------------------------
@@ -58,7 +149,9 @@ function maskPhone(input) {
     else input.value = d;
   });
 }
-const phoneOk = (v) => { const d = v.replace(/\D/g, ''); return d.length === 10 || d.length === 11; };
+const DDDS = new Set('11 12 13 14 15 16 17 18 19 21 22 24 27 28 31 32 33 34 35 37 38 41 42 43 44 45 46 47 48 49 51 53 54 55 61 62 63 64 65 66 67 68 69 71 73 74 75 77 79 81 82 83 84 85 86 87 88 89 91 92 93 94 95 96 97 98 99'.split(' '));
+/** Celular brasileiro: DDD válido + 9 dígitos começando em 9 (11 dígitos no total). */
+const phoneOk = (v) => { const d = v.replace(/\D/g, ''); return d.length === 11 && DDDS.has(d.slice(0, 2)) && d[2] === '9'; };
 const emailOk = (v) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
 function waNumber() { return (document.body.dataset.wa || '').replace(/\D/g, ''); }
 function waLink(texto) { return `https://wa.me/${waNumber()}${texto ? '?text=' + encodeURIComponent(texto) : ''}`; }
@@ -108,39 +201,27 @@ function setMsg(el, text, kind) { if (el) { el.textContent = text; el.className 
 
 const nl = $('#newsletter-form');
 if (nl) {
-  nl.addEventListener('submit', async (e) => {
+  nl.addEventListener('submit', (e) => {
     e.preventDefault();
     const msg = $('#newsletter-msg');
     const email = nl.email.value.trim();
     if (!emailOk(email)) return setMsg(msg, 'Informe um e-mail válido.', 'bad');
     if (nl['bot-field'].value) return;
-    const btn = $('button', nl); btn.disabled = true;
-    try {
-      const r = await postNetlify('newsletter', { email });
-      if (!r.ok) throw new Error(r.status);
-      nl.reset(); setMsg(msg, 'Pronto! Você vai receber nossas novidades.', 'ok');
-    } catch (err) {
-      console.error(err); setMsg(msg, 'Não foi possível enviar agora. Tente novamente.', 'bad');
-    } finally { btn.disabled = false; }
+    queueLead({ form: 'newsletter', data: { email }, comAtribuicao: false });
+    nl.reset(); setMsg(msg, 'Pronto! Você vai receber nossas novidades.', 'ok');
   });
 }
 
 const ct = $('#contact-form');
 if (ct) {
-  ct.addEventListener('submit', async (e) => {
+  ct.addEventListener('submit', (e) => {
     e.preventDefault();
     const msg = $('#contact-msg');
     const d = { nome: ct.nome.value.trim(), email: ct.email.value.trim(), mensagem: ct.mensagem.value.trim() };
     if (!d.nome || !emailOk(d.email) || !d.mensagem) return setMsg(msg, 'Preencha nome, e-mail válido e mensagem.', 'bad');
     if (ct['bot-field'].value) return;
-    const btn = $('button[type=submit]', ct); btn.disabled = true;
-    try {
-      const r = await postNetlify('contato', d);
-      if (!r.ok) throw new Error(r.status);
-      ct.reset(); setMsg(msg, 'Mensagem enviada. Retornaremos em breve.', 'ok');
-    } catch (err) {
-      console.error(err); setMsg(msg, 'Não foi possível enviar agora. Tente pelo WhatsApp.', 'bad');
-    } finally { btn.disabled = false; }
+    queueLead({ form: 'contato', data: d, comAtribuicao: false });
+    ct.reset(); setMsg(msg, 'Mensagem recebida. Retornaremos em breve.', 'ok');
   });
 }
 
@@ -158,12 +239,13 @@ if (ct) {
         <button class="popup-close" type="button" aria-label="Fechar">&times;</button>
         <div class="popup-icon"><svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 17H3v-5l2-5a2 2 0 0 1 1.9-1.3h10.2A2 2 0 0 1 19 7l2 5v5h-2"/><path d="M3 12h18"/><circle cx="7.5" cy="17" r="2"/><circle cx="16.5" cy="17" r="2"/><path d="M9.5 17h5"/></svg></div>
         <h2 id="popup-title">Reduza até 70% do valor das parcelas do seu carro financiado</h2>
-        <p>Deixe seus dados e um especialista entra em contato. Sem compromisso. Resultado depende da análise de cada caso.</p>
+        <p>Deixe seus dados e um especialista entra em contato. Sem compromisso. O resultado depende da análise de cada caso.</p>
         <form id="popup-form" novalidate>
           <div class="field"><label class="sr-only" for="pp-nome">Nome</label><input id="pp-nome" name="nome" placeholder="Seu nome" autocomplete="name"></div>
           <div class="field"><label class="sr-only" for="pp-tel">Telefone / WhatsApp</label><input id="pp-tel" name="telefone" inputmode="tel" placeholder="Telefone / WhatsApp" autocomplete="tel"></div>
           <div class="field"><label class="sr-only" for="pp-email">E-mail</label><input id="pp-email" name="email" type="email" placeholder="Seu e-mail" autocomplete="email"></div>
           <button class="btn btn-primary btn-block" type="submit">Quero reduzir minhas parcelas</button>
+          <p class="fine">Ao enviar, você autoriza a ERASE Soluções Financeiras e o escritório parceiro a entrar em contato, conforme a <a href="/privacidade.html" target="_blank" rel="noopener">Política de Privacidade</a>.</p>
           <p class="form-msg" id="popup-msg" role="status" aria-live="polite"></p>
         </form>
       </div>`;
@@ -188,17 +270,11 @@ if (ct) {
       if (d.nome.length < 2) return setMsg(msg, 'Informe seu nome.', 'bad');
       if (!phoneOk(d.telefone)) return setMsg(msg, 'Informe um telefone/WhatsApp válido com DDD.', 'bad');
       if (!emailOk(d.email)) return setMsg(msg, 'Informe um e-mail válido.', 'bad');
-      const btn = $('button[type=submit]', f); btn.disabled = true;
-      enviarParaCRM('popup-entrada', d); // em paralelo; falhas só vão ao console
-      try {
-        const r = await postNetlify('popup-entrada', { ...d, pagina: location.pathname });
-        if (!r.ok) throw new Error(r.status);
-        setMsg(msg, 'Recebemos seus dados! Em breve um especialista falará com você.', 'ok');
-        setTimeout(close, 2600);
-      } catch (err) {
-        console.error(err); btn.disabled = false;
-        setMsg(msg, 'Não foi possível enviar agora. Tente novamente.', 'bad');
-      }
+      // Grava na fila (reenvio automático) e envia ao CRM em paralelo; nunca perde o lead.
+      queueLead({ form: 'popup-entrada', crm: 'popup-entrada', data: { ...d, lgpd_aceite: 'aceite-por-envio', status: 'novo' } });
+      f.reset();
+      setMsg(msg, 'Recebemos seus dados! Em breve um especialista falará com você.', 'ok');
+      setTimeout(close, 2600);
     });
   }
   setTimeout(open, 3500);

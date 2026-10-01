@@ -7,11 +7,17 @@ Portal de notícias sobre financiamento de veículos + calculadora de juros (isc
 - `data/config.json`: URL do site, WhatsApp, redes sociais, CNPJ/endereço (rodapé), taxa média do Banco Central + mês (`bc`), limites por tipo de veículo.
 - Imagens (capas, favicon, og-image): `node scripts/make-images.js` (precisa de Playwright/Chromium).
 
-## Pendências para você preencher
-1. `assets/js/main.js` (topo): `CRM_ENDPOINT` e `CRM_API_KEY` (placeholders). Enquanto não preenchidos, o envio ao CRM falha em silêncio; o Netlify Forms segue como backup.
-2. `data/config.json`: `whatsapp` (hoje `5500000000000`), `social`, `empresa.cnpj`, `empresa.endereco`, `siteUrl` (domínio real), e revisar `bc` a cada nova divulgação do Banco Central. Depois rode `node scripts/build.js`.
+## Leads
+- **Calculadora:** formulário único (nome, WhatsApp com DDD + 9 dígitos, e-mail opcional, aceite LGPD obrigatório + dados do financiamento). O resultado só aparece depois do envio. Todo lead — acima ou dentro do limite — é salvo (`status`: `novo_acima_do_limite` / `novo_dentro_do_limite`).
+- **Netlify Forms** recebe: tipo, banco, valores, parcelas, taxa, resultado, UTMs, origem, página de entrada, data/hora (UTC e Brasília) e `lead_id`.
+- **Não perde lead:** cada envio entra numa fila em `localStorage` e só sai quando o Netlify responde OK; se falhar, reenvia com espera crescente (e ao voltar a rede, ao reabrir a aba e na próxima visita).
+- **CRM:** envio paralelo e silencioso (`enviarParaCRM`), com `origem` = `calculadora` | `popup-entrada`. Constantes `CRM_ENDPOINT`/`CRM_API_KEY` no topo de `assets/js/main.js` (ainda placeholders).
+
+## Pendências
+1. CRM: preencher `CRM_ENDPOINT`/`CRM_API_KEY` e ajustar o formato do corpo quando o `erasecrm` estiver pronto.
+2. `data/config.json`: links de X e Facebook em `social` (ícones só aparecem quando há URL) e revisar `bc` a cada divulgação do Banco Central. Depois rode `node scripts/build.js`.
 3. Os 8 artigos iniciais são exemplos genéricos: revise antes de publicar.
-4. GitHub: crie o secret `GEMINI_API_KEY` (chave gratuita do Google AI Studio) e habilite *Settings → Actions → General → Allow GitHub Actions to create and approve pull requests*.
+4. Netlify: subdomínio, notificação de e-mail dos formulários; GitHub: secret `GEMINI_API_KEY` e permissão de PRs (passo a passo na descrição do PR).
 
 ## Automação de notícias
 `.github/workflows/noticias.yml` roda todo dia e segue só quando `dia do ano % 3 == 0` (ou manualmente, na aba Actions). Gera 1 artigo com `gemini-2.5-flash` + Google Search (camada gratuita), reconstrói o site e abre um **Pull Request** para revisão — nada vai ao ar sem o merge.

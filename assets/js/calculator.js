@@ -58,19 +58,29 @@
     n: $('#n_parcelas'), pagas: $('#pagas'),
   };
   [f.total, f.entrada, f.parcela].forEach(maskMoney);
+  maskPhone($('#lead-wa'));
+  const c = { nome: $('#lead-nome'), wa: $('#lead-wa'), email: $('#lead-email'), lgpd: $('#lgpd'), banco: $('#banco') };
   const panel = $('#analise'), panelBody = $('#panel-body'), status = $('#status');
-  const leadBox = $('#lead-box'), leadForm = $('#lead-form');
+  const actions = $('#result-actions');
   const progressFill = $('#progress-fill'), progressText = $('#progress-text'), progressBar = $('#progress');
-  let resultado = null; // último cálculo (usado no lead)
+  let ultimoEnvio = null; // evita lead duplicado se a pessoa clicar de novo sem mudar nada
 
   const tipo = () => form.tipo.value;
   const dados = () => ({
     total: parseMoney(f.total.value), entrada: parseMoney(f.entrada.value), parcela: parseMoney(f.parcela.value),
     n: parseInt(f.n.value, 10), pagas: f.pagas.value === '' ? NaN : parseInt(f.pagas.value, 10),
   });
-  const preenchidos = (d) => [d.total, d.entrada, d.parcela, d.n, d.pagas].filter((v) => !Number.isNaN(v) && v !== undefined).length;
+  const contato = () => ({
+    nome: c.nome.value.trim().replace(/\s+/g, ' '), whatsapp: c.wa.value.trim(), email: c.email.value.trim(), lgpd: c.lgpd.checked,
+  });
+  const TOTAL_CAMPOS = 8; // 5 do financiamento + nome + WhatsApp + aceite LGPD
+  const preenchidos = (d) => {
+    const k = contato();
+    return [d.total, d.entrada, d.parcela, d.n, d.pagas].filter((v) => !Number.isNaN(v) && v !== undefined).length
+      + (k.nome ? 1 : 0) + (k.whatsapp ? 1 : 0) + (k.lgpd ? 1 : 0);
+  };
 
-  /** Valida e devolve {erros:{campo:msg}} — campos obrigatórios e coerência. */
+  /** Valida e devolve {campo: mensagem} — obrigatórios e coerência. */
   function validar(d) {
     const e = {};
     if (!(d.total > 0)) e.valor_total = 'Informe o valor do veículo';
@@ -80,27 +90,33 @@
     if (!(d.n > 0)) e.n_parcelas = 'Selecione o total de parcelas';
     if (Number.isNaN(d.pagas) || d.pagas < 0) e.pagas = 'Informe quantas parcelas já pagou';
     else if (d.n > 0 && d.pagas >= d.n) e.pagas = 'Parcelas pagas deve ser menor que o total financiado';
+    const k = contato();
+    const palavras = k.nome.split(' ').filter((w) => w.length >= 2);
+    if (palavras.length < 2) e.nome = 'Informe seu nome completo (não abrevie)';
+    if (!phoneOk(k.whatsapp)) e.whatsapp = 'WhatsApp inválido — use DDD + 9 dígitos';
+    if (k.email && !emailOk(k.email)) e.email = 'E-mail inválido';
+    if (!k.lgpd) e.lgpd = 'É necessário autorizar o contato para ver o resultado';
     return e;
   }
 
   // ---- Painel "Análise em tempo real" ---------------------------------
   function setProgress(qtd) {
-    const p = Math.round((qtd / 5) * 100);
+    const p = Math.round((qtd / TOTAL_CAMPOS) * 100);
     progressFill.style.width = p + '%';
     progressBar.setAttribute('aria-valuenow', p);
-    progressText.textContent = qtd === 0 ? 'Preencha seus dados para iniciar...' : qtd < 5 ? `${qtd} de 5 campos preenchidos` : 'Tudo preenchido — pronto para calcular';
+    progressText.textContent = qtd === 0 ? 'Preencha seus dados para iniciar...' : qtd < TOTAL_CAMPOS ? `${qtd} de ${TOTAL_CAMPOS} campos preenchidos` : 'Tudo preenchido — pronto para calcular';
   }
 
   function painelColetando(d, qtd) {
-    const pronto = qtd === 5 && Object.keys(validar(d)).length === 0;
+    const pronto = qtd === TOTAL_CAMPOS && Object.keys(validar(d)).length === 0;
     panel.dataset.state = pronto ? 'pronto' : 'coletando';
     status.textContent = pronto ? 'Pronto' : 'Coletando';
     const financiado = d.total > 0 && d.entrada >= 0 && d.total > d.entrada ? d.total - d.entrada : null;
-    const steps = [qtd >= 3 && d.parcela > 0, qtd >= 4, pronto];
+    const steps = [d.parcela > 0 && d.n > 0, d.total > 0 && d.entrada >= 0 && d.pagas >= 0, pronto];
     panelBody.innerHTML = `
       <h2 class="panel-title">${pronto ? 'Tudo certo! Falta só calcular' : 'Aguardando seu contrato...'}</h2>
       <p>${pronto
-        ? `Clique em <strong>Calcular minha taxa</strong> para ver a taxa embutida no seu contrato e a comparação com a média de mercado para <span id="tipo-label">${NOMES[tipo()]}</span>.`
+        ? `Clique em <strong>Calcular minha taxa</strong>: ao enviar seus dados, mostramos a taxa embutida no seu contrato e a comparação com a média de mercado para <span id="tipo-label">${NOMES[tipo()]}</span>.`
         : `À medida que você preencher o formulário, calculamos a taxa que está sendo cobrada e comparamos com a média de mercado para <span id="tipo-label">${NOMES[tipo()]}</span>.`}</p>
       ${financiado ? `<div class="kv"><div><small>Valor financiado</small><b>${brl(financiado)}</b></div><div><small>Referência (${NOMES[tipo()]})</small><b>${pct(LIMITES[tipo()])}% a.m.</b></div></div>` : ''}
       <ul class="steps-list">
@@ -108,11 +124,10 @@
         <li data-step="2" class="${steps[1] ? 'done' : ''}"><i></i>Cruzar com a faixa de referência do mercado</li>
         <li data-step="3" class="${steps[2] ? 'done' : ''}"><i></i>Estimar a economia nas parcelas restantes</li>
       </ul>`;
-    leadBox.hidden = true;
+    actions.hidden = true;
   }
 
   function onChange() {
-    resultado = null;
     const d = dados(), qtd = preenchidos(d);
     setProgress(qtd);
     painelColetando(d, qtd);
@@ -141,7 +156,7 @@
     const pv = d.total - d.entrada;
     const i = resolverTaxa(pv, d.parcela, d.n);
     if (i === null) {
-      panel.dataset.state = 'coletando'; status.textContent = 'Revisar dados'; leadBox.hidden = true;
+      panel.dataset.state = 'coletando'; status.textContent = 'Revisar dados'; actions.hidden = true;
       panelBody.innerHTML = `<h2 class="panel-title">Não conseguimos calcular</h2>
         <p class="msg-bad">Com esses números a parcela multiplicada pelo prazo não supera o valor financiado (ou a taxa resultante seria irreal). Confira o valor do veículo, a entrada, a parcela e o prazo.</p>`;
       return;
@@ -156,7 +171,6 @@
       porParcela = d.parcela - pmtPrice(pv, limite / 100, d.n);
       economia = porParcela * restantes;
     }
-    resultado = { tipo: t, mensal, anual, acima, economia, financiado: pv, ...d };
 
     const escala = Math.max(limite * 2, mensal * 1.15);
     const wFill = Math.min(100, (mensal / escala) * 100), wMark = (limite / escala) * 100;
@@ -176,38 +190,36 @@
       ${acima ? `<div class="saving"><small>Economia estimada nas parcelas restantes (${restantes})</small><b>${brl(economia)}</b>
         <p>≈ ${brl(porParcela)} por parcela, caso o contrato estivesse na taxa de referência. É uma estimativa comparativa: <strong>não indica valores a receber</strong> e a diferença não é devida a você por qualquer instituição.</p></div>` : ''}
       <p class="fine">Cálculo pelo sistema Price com os números informados. Não considera IOF, tarifas, seguros ou encargos. Não é análise jurídica.</p>`;
+
+    // --- Lead: grava (fila com reenvio) ANTES de mostrar o resultado ---
+    const k = contato();
+    const lead = {
+      nome: k.nome, whatsapp: k.whatsapp, email: k.email, lgpd_aceite: 'sim',
+      status: acima ? 'novo_acima_do_limite' : 'novo_dentro_do_limite',
+      resultado: acima ? 'acima_do_limite' : 'dentro_do_limite',
+      tipo: t, banco: c.banco.value.trim(),
+      valor_total: d.total.toFixed(2), entrada: d.entrada.toFixed(2), valor_financiado: pv.toFixed(2),
+      parcela: d.parcela.toFixed(2), n_parcelas: String(d.n), parcelas_pagas: String(d.pagas),
+      taxa_calculada: mensal.toFixed(4), limite_referencia: String(limite), economia_estimada: acima ? economia.toFixed(2) : '0.00',
+    };
+    const chave = JSON.stringify(lead);
+    let enviado = Promise.resolve(true);
+    if (chave !== ultimoEnvio) { // mesmo formulário reenviado = só recalcula, sem lead duplicado
+      ultimoEnvio = chave;
+      enviado = queueLead({ form: 'calculadora', crm: 'calculadora', data: lead }).enviado;
+    }
+
+    const msgWa = `Olá! Meu nome é ${k.nome}. Fiz a simulação na ERASE Revisional para ${NOMES[t]} e a taxa calculada foi de ${pct(mensal)}% ao mês. Gostaria de falar com um especialista.`;
+    actions.hidden = false;
+    actions.innerHTML = `<a class="btn btn-wa btn-block" target="_blank" rel="noopener noreferrer" href="${waLink(msgWa)}">Falar com um especialista no WhatsApp</a>
+      <p class="send-status" id="send-status" role="status">Recebemos seus dados. Um especialista entrará em contato, sem compromisso.</p>`;
+    enviado.then((ok) => {
+      if (!ok) { const el = $('#send-status'); if (el) el.textContent = 'Recebemos seus dados e vamos reenviá-los automaticamente em segundo plano. Você não perde nada.'; }
+    });
     requestAnimationFrame(() => requestAnimationFrame(() => {
       const el = $('.cmp-fill', panelBody); if (el) el.style.width = el.dataset.w + '%';
     }));
-    leadBox.hidden = false;
     panel.scrollIntoView({ behavior: 'smooth', block: 'start' });
-  });
-
-  // ---- Lead (após o cálculo) -----------------------------------------
-  maskPhone($('#lead-wa'));
-  leadForm.addEventListener('submit', (ev) => {
-    ev.preventDefault();
-    if (!resultado) return;
-    const nome = leadForm.nome.value.trim(), wa = leadForm.whatsapp.value.trim();
-    const erros = {};
-    if (nome.split(/\s+/).filter(Boolean).length < 2) erros.nome = 'Informe seu nome completo (não abrevie)';
-    if (!phoneOk(wa)) erros.whatsapp = 'WhatsApp inválido';
-    mostrarErros(erros);
-    if (Object.keys(erros).length) return;
-
-    const r = resultado;
-    const msgTxt = `Olá! Meu nome é ${nome}. Fiz a simulação na ERASE Revisional para ${NOMES[r.tipo]} e a taxa calculada foi de ${pct(r.mensal)}% ao mês. Gostaria de falar com um especialista.`;
-    // Abre o WhatsApp de forma síncrona (dentro do gesto do usuário) para não ser bloqueado.
-    window.open(waLink(msgTxt), '_blank', 'noopener');
-
-    const msg = $('#lead-msg'); msg.textContent = 'Obrigado! Abrimos o WhatsApp para você continuar a conversa.';
-    const lead = {
-      nome, whatsapp: wa, tipo: r.tipo,
-      valor_total: String(r.total), entrada: String(r.entrada), parcela: String(r.parcela),
-      n_parcelas: String(r.n), parcelas_pagas: String(r.pagas), taxa_calculada: r.mensal.toFixed(4),
-    };
-    enviarParaCRM('calculadora', { ...lead, telefone: wa, acima_do_limite: r.acima, economia_estimada: Number(r.economia.toFixed(2)) });
-    postNetlify('calculadora', lead).catch((err) => console.error('Netlify Forms:', err));
   });
 
   // ---- Eventos ------------------------------------------------------

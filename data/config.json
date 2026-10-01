@@ -1,17 +1,17 @@
 {
   "_leia": "Fonte única de configuração. Depois de editar, rode: node scripts/build.js",
-  "siteUrl": "https://erase-revisional.netlify.app",
+  "siteUrl": "https://revisional.eraseconsulta.com.br",
   "siteNome": "ERASE Revisional",
   "empresa": {
     "razaoSocial": "ERASE Soluções Financeiras",
-    "cnpj": "",
-    "endereco": ""
+    "cnpj": "59.449.234/0001-63",
+    "endereco": "Rua Pedro Barreto, 20, Centro, Lagoa dos Gatos - PE, 55.450-000"
   },
-  "whatsapp": "5500000000000",
+  "whatsapp": "5581991547396",
   "social": {
-    "x": "#",
-    "instagram": "#",
-    "facebook": "#"
+    "x": "",
+    "instagram": "https://www.instagram.com/erasesolucoesfinanceiras",
+    "facebook": ""
   },
   "bc": {
     "taxaMedia": 1.97,
@@ -23,8 +23,17 @@
     "agricola": 1.2
   },
   "categorias": {
-    "revisional": { "nome": "Revisional de juros", "descricao": "Entenda como funcionam os juros do seu financiamento e quando vale a pena revisar." },
-    "financeiro": { "nome": "Sistema financeiro", "descricao": "Taxas, CET, portabilidade e as regras do crédito para veículos." },
-    "mercado": { "nome": "Mercado de carros", "descricao": "O que acontece no mercado de veículos e como isso afeta o seu bolso." }
+    "revisional": {
+      "nome": "Revisional de juros",
+      "descricao": "Entenda como funcionam os juros do seu financiamento e quando vale a pena revisar."
+    },
+    "financeiro": {
+      "nome": "Sistema financeiro",
+      "descricao": "Taxas, CET, portabilidade e as regras do crédito para veículos."
+    },
+    "mercado": {
+      "nome": "Mercado de carros",
+      "descricao": "O que acontece no mercado de veículos e como isso afeta o seu bolso."
+    }
   }
 }

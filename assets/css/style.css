@@ -275,3 +275,13 @@ input:focus, select:focus, textarea:focus { border-color: var(--blue); outline: 
   .logo-sub { display: none; } .logo-sep { display: none; }
 }
 @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; } }
+
+/* Formulário único da calculadora (contato + LGPD) */
+.contact-block { margin: 22px 0 18px; padding-top: 18px; border-top: 1px solid var(--border); }
+.contact-block h3 { font-size: 1.02rem; margin-bottom: 12px; }
+.opt { font-weight: 500; color: var(--muted); font-size: .85em; }
+.field.check label { display: flex; gap: 10px; align-items: flex-start; font-weight: 400; font-size: .86rem; color: var(--muted); cursor: pointer; }
+.field.check input { width: 20px; height: 20px; flex-shrink: 0; margin-top: 2px; accent-color: var(--blue); }
+.field.check.invalid label { color: var(--bad); }
+#result-actions { margin-top: 18px; display: grid; gap: 10px; }
+.send-status { font-size: .85rem; color: var(--muted); margin: 0; }

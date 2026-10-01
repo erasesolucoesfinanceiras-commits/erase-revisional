@@ -220,6 +220,8 @@ function calculadora() {
 <label><input type="radio" name="tipo" value="moto"><span>Moto</span></label>
 <label><input type="radio" name="tipo" value="agricola"><span>Agrícola</span></label>
 </fieldset>
+<div class="field"><label for="banco">Banco / financeira <span class="opt">(opcional)</span></label>
+<input id="banco" name="banco" list="bancos" autocomplete="off" placeholder="Ex.: Banco do Brasil, Santander, BV..." maxlength="60"><datalist id="bancos"><option value="Banco do Brasil"><option value="Bradesco"><option value="Caixa"><option value="Itaú"><option value="Santander"><option value="BV"><option value="Banco Pan"><option value="Omni"><option value="Safra"><option value="Porto Seguro"><option value="Outro"></datalist></div>
 <div class="field"><label for="valor_total">Valor total do veículo (R$) <span class="req">*</span></label>
 <div class="money"><span>R$</span><input id="valor_total" name="valor_total" inputmode="numeric" autocomplete="off" placeholder="0,00"></div><small class="err" data-err="valor_total">Informe o valor do veículo</small></div>
 <div class="field"><label for="entrada">Valor de entrada <span class="req">*</span></label>
@@ -232,6 +234,11 @@ function calculadora() {
 <div class="field"><label for="pagas">Quantas parcelas já pagou? <span class="req">*</span></label>
 <div class="money suffix"><input id="pagas" name="pagas" type="number" inputmode="numeric" min="0" step="1" placeholder="0"><span>meses</span></div><small class="err" data-err="pagas">Informe quantas parcelas já pagou</small></div>
 </div>
+<div class="contact-block"><h3>Para ver o resultado, informe seu contato</h3>
+<div class="field"><label for="lead-nome">Nome completo <span class="req">*</span></label><input id="lead-nome" name="nome" autocomplete="name" placeholder="Seu nome completo (não abrevie)"><small class="err" data-err="nome">Informe seu nome completo (não abrevie)</small></div>
+<div class="field"><label for="lead-wa">WhatsApp <span class="req">*</span></label><input id="lead-wa" name="whatsapp" inputmode="tel" autocomplete="tel" placeholder="(81) 99999-9999"><small class="err" data-err="whatsapp">WhatsApp inválido — use DDD + 9 dígitos</small></div>
+<div class="field"><label for="lead-email">E-mail <span class="opt">(opcional)</span></label><input id="lead-email" name="email" type="email" autocomplete="email" placeholder="voce@email.com"><small class="err" data-err="email">E-mail inválido</small></div>
+<div class="field check"><label><input type="checkbox" id="lgpd" name="lgpd"><span>Autorizo a ERASE Soluções Financeiras e o escritório de advocacia parceiro a entrar em contato comigo por WhatsApp, telefone ou e-mail sobre esta simulação, conforme a <a href="/privacidade.html" target="_blank" rel="noopener">Política de Privacidade</a>. <span class="req">*</span></span></label><small class="err" data-err="lgpd">É necessário autorizar o contato para ver o resultado</small></div></div>
 <button class="btn btn-primary btn-lg btn-block" type="submit" id="calc-btn">Calcular minha taxa — grátis</button>
 <p class="fine">Simulação sobre os dados que você informar. Não é análise jurídica e não indica valores a receber.</p>
 </form>
@@ -241,23 +248,14 @@ function calculadora() {
 <div class="panel-head"><strong>Análise em tempo real</strong><span class="status" id="status">Coletando</span></div>
 <div id="panel-body">
 <h2 class="panel-title">Aguardando seu contrato...</h2>
-<p>À medida que você preencher o formulário, calculamos a taxa que está sendo cobrada e comparamos com a média de mercado para <span id="tipo-label">carro</span>.</p>
+<p>À medida que você preencher o formulário, preparamos o cálculo e, depois do envio dos seus dados, mostramos o resultado: calculamos a taxa que está sendo cobrada e comparamos com a média de mercado para <span id="tipo-label">carro</span>.</p>
 <ul class="steps-list">
 <li data-step="1"><i></i>Identificar a taxa real do contrato</li>
 <li data-step="2"><i></i>Cruzar com a faixa de referência do mercado</li>
 <li data-step="3"><i></i>Estimar a economia nas parcelas restantes</li>
 </ul>
 </div>
-<div id="lead-box" hidden>
-<h3>Quer que um especialista veja seu caso?</h3>
-<p class="small-note">Informe seu nome e WhatsApp. Um especialista parceiro entra em contato, sem compromisso.</p>
-<form id="lead-form" novalidate>
-<div class="field"><label for="lead-nome">Nome completo</label><input id="lead-nome" name="nome" autocomplete="name" placeholder="Seu nome completo"><small class="err" data-err="nome">Informe seu nome</small></div>
-<div class="field"><label for="lead-wa">WhatsApp</label><input id="lead-wa" name="whatsapp" inputmode="tel" autocomplete="tel" placeholder="(00) 00000-0000"><small class="err" data-err="whatsapp">WhatsApp inválido</small></div>
-<button class="btn btn-primary btn-block" type="submit">Falar com um especialista no WhatsApp</button>
-<p class="fine" id="lead-msg" role="status"></p>
-</form>
-</div>
+<div id="result-actions" hidden></div>
 </aside>
 </section>
 
@@ -346,11 +344,12 @@ function legais() {
 <p class="meta">Última atualização: ${fmtData(LEGAL_DATE)}</p>
 <p>Esta política explica como a ${razao} trata dados pessoais coletados neste site, em conformidade com a Lei Geral de Proteção de Dados (Lei 13.709/2018).</p>
 <h2>1. Dados que coletamos</h2>
-<ul><li><strong>Calculadora:</strong> nome, WhatsApp e os dados do financiamento informados (tipo de veículo, valores, parcelas e taxa calculada).</li>
+<ul><li><strong>Calculadora:</strong> nome, WhatsApp, e-mail (opcional), o aceite de contato e os dados do financiamento informados (tipo de veículo, banco, valores, parcelas e taxa calculada), além do resultado (acima ou dentro do parâmetro).</li>
+<li><strong>Origem do acesso:</strong> parâmetros de campanha (UTMs), site de origem, página de entrada, data e hora do envio, para saber de onde veio o contato e medir nossos anúncios.</li>
 <li><strong>Pop-up e newsletter:</strong> nome, telefone/WhatsApp e e-mail, conforme o formulário preenchido.</li>
 <li><strong>Fale Conosco:</strong> nome, e-mail e mensagem.</li></ul>
 <h2>2. Para que usamos</h2>
-<p>Usamos os dados para devolver a análise solicitada, permitir o contato de um especialista parceiro, responder mensagens e enviar novidades quando você se inscreve na newsletter.</p>
+<p>Usamos os dados para devolver a análise solicitada, entrar em contato por WhatsApp, telefone ou e-mail quando você autoriza, permitir o atendimento por um especialista parceiro, responder mensagens e enviar novidades quando você se inscreve na newsletter.</p>
 <h2>3. Com quem compartilhamos</h2>
 <p>Os dados enviados nos formulários são armazenados em ferramentas de hospedagem e captura de formulários e em nosso sistema de relacionamento (CRM), e podem ser encaminhados a escritório de advocacia parceiro para que entre em contato com você. Não vendemos seus dados.</p>
 <h2>4. Por quanto tempo guardamos</h2>
@@ -358,7 +357,7 @@ function legais() {
 <h2>5. Seus direitos</h2>
 <p>Você pode solicitar confirmação de tratamento, acesso, correção, anonimização, portabilidade e exclusão dos dados, além de revogar consentimentos, pela página <a href="/contato.html">Fale Conosco</a>.</p>
 <h2>6. Armazenamento no navegador</h2>
-<p>Usamos o armazenamento local do navegador apenas para lembrar a sua escolha de tema (claro/escuro) e para exibir o pop-up uma vez por sessão. Não usamos esses dados para identificá-lo.</p>
+<p>Usamos o armazenamento local do navegador para lembrar a sua escolha de tema (claro/escuro), exibir o pop-up uma vez por sessão, guardar a origem do acesso (UTMs e página de entrada) e manter uma fila temporária que reenvia automaticamente um formulário caso a conexão falhe, sem perder o seu contato.</p>
 <h2>7. Contato</h2>
 <p>Controladora: ${razao}. Solicitações pela página <a href="/contato.html">Fale Conosco</a>.</p>`);
 }

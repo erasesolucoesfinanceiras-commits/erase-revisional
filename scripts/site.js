@@ -38,9 +38,11 @@ const ICON = {
   people: '<svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="8" r="3.500"/><path d="M2.500 20c.5-3.500 3-5.500 6.500-5.500s6 2 6.500 5.500"/><path d="M16 4.500a3.500 3.500 0 0 1 0 7M18 14.800c1.800.7 3 2.400 3.500 5.200"/></svg>',
 };
 
+// Campos de atribuição/controle anexados automaticamente a todo lead (ver main.js → queueLead).
+const ATTR = ['lead_id', 'data_hora', 'data_hora_local', 'origem_trafego', 'utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content', 'pagina_entrada', 'pagina_envio'];
 const FORMS = {
-  'popup-entrada': ['nome', 'telefone', 'email', 'pagina'],
-  calculadora: ['nome', 'whatsapp', 'tipo', 'valor_total', 'entrada', 'parcela', 'n_parcelas', 'parcelas_pagas', 'taxa_calculada'],
+  'popup-entrada': ['nome', 'telefone', 'email', 'lgpd_aceite', 'status', ...ATTR],
+  calculadora: ['nome', 'whatsapp', 'email', 'lgpd_aceite', 'status', 'resultado', 'tipo', 'banco', 'valor_total', 'entrada', 'valor_financiado', 'parcela', 'n_parcelas', 'parcelas_pagas', 'taxa_calculada', 'limite_referencia', 'economia_estimada', ...ATTR],
   newsletter: ['email'],
   contato: ['nome', 'email', 'mensagem'],
 };
@@ -125,7 +127,8 @@ function footer() {
   const e = config.empresa;
   // Dados da empresa: preencha razaoSocial/cnpj/endereco em data/config.json (aparecem aqui automaticamente).
   const dados = [e.razaoSocial, e.cnpj && `CNPJ ${e.cnpj}`, e.endereco].filter(Boolean).join(' · ');
-  const soc = (k, label) =>
+  // Ícone só aparece quando há URL real em data/config.json (evita link morto).
+  const soc = (k, label) => !config.social[k] ? '' :
     `<a class="social" href="${esc(config.social[k])}" target="_blank" rel="noopener noreferrer" aria-label="${label}">${ICON[k]}</a>`;
   return `<footer class="site-footer">
 <div class="container">
