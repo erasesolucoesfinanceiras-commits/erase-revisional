@@ -10,7 +10,13 @@
       "url": "https://www.bcb.gov.br"
     },
     "corpo": "<p>Quem financia um veículo costuma olhar para a parcela que cabe no orçamento e para o prazo. A taxa de juros, que define quanto o crédito realmente custa, muitas vezes fica em segundo plano. Mesmo assim, é ela que explica por que dois contratos de mesmo valor podem ter parcelas muito diferentes.</p><h2>Como a parcela é formada</h2><p>Na maior parte dos financiamentos de veículos, as parcelas são fixas e seguem a Tabela Price. Nesse sistema, cada parcela combina uma parte de juros e uma parte de amortização do saldo devedor. A relação entre valor financiado, taxa, prazo e parcela é matemática: conhecendo três dessas variáveis, é possível encontrar a quarta.</p><p>É isso que permite descobrir a taxa mensal embutida: com o valor financiado (preço do veículo menos a entrada), o valor da parcela e o número de parcelas, resolve-se a equação da Price para a taxa. Como a equação não tem solução algébrica simples, o cálculo é feito por aproximações sucessivas, como o método da bisseção.</p><h2>O que ficar de olho</h2><p>O resultado serve de comparação com a taxa média divulgada pelo Banco Central para crédito a pessoas físicas na aquisição de veículos. Ele não considera IOF, tarifas ou seguros embutidos, e por isso é uma estimativa, não uma análise do contrato.</p><p>Saber a taxa ajuda a negociar, comparar propostas e decidir se vale pesquisar uma portabilidade. Se a diferença em relação ao mercado for grande, vale levar o contrato a um profissional habilitado para uma análise individual.</p>",
-    "foto_busca": "calculator car keys paperwork"
+    "foto_busca": "calculator car keys paperwork",
+    "foto": {
+      "id": 385506,
+      "autor": "stevepb",
+      "autorUrl": "https://pixabay.com/users/stevepb-282134/",
+      "pagina": "https://pixabay.com/photos/calculator-calculation-insurance-385506/"
+    }
   },
   {
     "slug": "juros-acima-da-media-sao-abusivos-o-que-diz-o-stj",
@@ -23,7 +29,13 @@
       "url": "https://www.stj.jus.br"
     },
     "corpo": "<p>É comum ouvir que juros acima de determinado percentual são automaticamente ilegais. Não é bem assim. A jurisprudência do Superior Tribunal de Justiça trata os juros remuneratórios de contratos bancários com bastante cautela.</p><h2>Sem limite fixo</h2><p>O entendimento consolidado é que a estipulação de juros remuneratórios acima de 12% ao ano, por si só, não indica abusividade (Súmula 382 do STJ). Em outras palavras, não existe um teto numérico único aplicável a todos os contratos.</p><h2>A comparação com a média de mercado</h2><p>Em julgamento de recursos repetitivos, o STJ também firmou que a abusividade pode ser reconhecida quando a taxa destoa de forma relevante da média praticada pelo mercado na época da contratação, e isso precisa ser avaliado caso a caso, considerando o perfil do cliente, a garantia e as condições do negócio.</p><p>Por isso, uma ferramenta de simulação não decide se um contrato é abusivo. Ela apenas mostra onde a taxa calculada se encontra em relação a uma referência. Quem decide, havendo disputa, é o Judiciário, depois de analisar o contrato assinado e as provas do processo.</p>",
-    "foto_busca": "courtroom gavel justice"
+    "foto_busca": "courtroom gavel justice",
+    "foto": {
+      "id": 2492011,
+      "autor": "qimono",
+      "autorUrl": "https://pixabay.com/users/qimono-1962238/",
+      "pagina": "https://pixabay.com/photos/gavel-auction-law-hammer-symbol-2492011/"
+    }
   },
   {
     "slug": "o-que-e-revisao-de-contrato-de-financiamento",
@@ -36,7 +48,13 @@
       "url": "https://www.planalto.gov.br/ccivil_03/leis/l8078compilado.htm"
     },
     "corpo": "<p>A revisão de contrato é a análise das cláusulas e das taxas de um financiamento, para verificar se há algo a questionar. Não é um procedimento automático e não tem resultado garantido.</p><h2>Quando a análise pode ser útil</h2><p>Em geral, ela é considerada quando a taxa contratada parece muito acima da praticada pelo mercado, quando há cobranças pouco claras ou quando o consumidor não recebeu informações adequadas sobre o custo total do crédito. O Código de Defesa do Consumidor prevê o direito à informação clara sobre o preço e as condições do contrato.</p><h2>O papel de uma simulação</h2><p>Uma simulação como a da ERASE Revisional serve como um primeiro passo informativo: mostra a taxa mensal embutida e a compara a uma faixa de referência. A avaliação do caso concreto, contudo, depende da leitura do contrato assinado e é feita na análise gratuita do contrato pela ERASE Soluções Financeiras.</p><p>Nenhum valor exibido na simulação é devido ao consumidor por qualquer instituição. A diferença mostrada é apenas uma estimativa em relação a uma referência.</p>",
-    "foto_busca": "reviewing contract documents pen"
+    "foto_busca": "reviewing contract documents pen",
+    "foto": {
+      "id": 3196481,
+      "autor": "AymaneJed",
+      "autorUrl": "https://pixabay.com/users/AymaneJed-1888423/",
+      "pagina": "https://pixabay.com/photos/laptop-office-hand-writing-3196481/"
+    }
   },
   {
     "slug": "taxa-nominal-x-taxa-efetiva-entenda-a-diferenca",
@@ -49,7 +67,13 @@
       "url": "https://www.bcb.gov.br"
     },
     "corpo": "<p>Ao comparar propostas de financiamento, é comum encontrar a taxa expressa de formas diferentes: ao mês, ao ano, nominal, efetiva. Misturar essas formas leva a comparações erradas, e é nessa confusão que uma proposta aparentemente barata pode sair mais cara.</p>\n<h2>O que é taxa nominal</h2>\n<p>No crédito brasileiro, a taxa nominal costuma ser a taxa mensal multiplicada por 12 (ou a anual dividida por 12 para voltar ao mês). É uma convenção de apresentação: ela não considera que os juros de cada mês incidem sobre o saldo que já inclui os juros dos meses anteriores.</p>\n<h2>O que é taxa efetiva</h2>\n<p>A taxa efetiva é a que realmente atua sobre o saldo devedor no período considerado. Como os juros são compostos, a conversão correta de mensal para anual eleva o fator mensal à potência 12 e subtrai 1.</p>\n<h2>Exemplo com números</h2>\n<p>Uma taxa de 1,8% ao mês aparece como <strong>21,6% ao ano nominal</strong> (1,8 × 12). A taxa efetiva anual é (1,018<sup>12</sup> − 1), ou seja, cerca de <strong>23,9% ao ano</strong>. Com 2% ao mês, a diferença é maior: 24% nominal contra cerca de <strong>26,8% efetivo</strong>. Quanto maior a taxa e o prazo, maior a distância entre as duas.</p>\n<h2>Como evitar a armadilha</h2>\n<ul><li>Compare sempre taxas na mesma base: ao mês com ao mês, ou efetiva anual com efetiva anual.</li><li>Peça a taxa efetiva mensal e o Custo Efetivo Total (CET) por escrito, antes de assinar.</li><li>Desconfie de propostas que destacam só a parcela ou só a taxa anual nominal.</li></ul>\n<p>A calculadora da ERASE Revisional trabalha com a taxa efetiva mensal embutida na parcela, que é a base mais direta para comparar contratos. O resultado é uma estimativa e não substitui a análise do seu contrato.</p>",
-    "foto_busca": "financial charts calculator desk"
+    "foto_busca": "financial charts calculator desk",
+    "foto": {
+      "id": 3821034,
+      "autor": "ArtsyBee",
+      "autorUrl": "https://pixabay.com/users/ArtsyBee-462611/",
+      "pagina": "https://pixabay.com/photos/mathematics-maths-computer-laptop-3821034/"
+    }
   },
   {
     "slug": "cet-custo-efetivo-total-o-que-entra-na-conta",
@@ -62,7 +86,13 @@
       "url": "https://www.bcb.gov.br"
     },
     "corpo": "<p>O Custo Efetivo Total, o CET, é o indicador que reúne todos os encargos e despesas de uma operação de crédito, e não apenas a taxa de juros. Por norma do Conselho Monetário Nacional, as instituições financeiras devem informá-lo ao cliente antes da contratação.</p><h2>O que costuma entrar</h2><p>Além dos juros, o CET considera tributos como o IOF, tarifas, seguros contratados em conjunto com o crédito e outras despesas cobradas na operação. Duas propostas com a mesma taxa de juros podem ter CETs bem diferentes.</p><h2>Como usar na prática</h2><p>Compare sempre o CET entre propostas de mesmo prazo e valor. Desconfie de propostas que destacam apenas a parcela. A calculadora da ERASE Revisional considera apenas juros embutidos na parcela e não inclui IOF, tarifas ou seguros, por isso o resultado é uma estimativa e não substitui o CET do seu contrato.</p>",
-    "foto_busca": "coins bills budget planning"
+    "foto_busca": "coins bills budget planning",
+    "foto": {
+      "id": 5039173,
+      "autor": "NomeVisualizzato",
+      "autorUrl": "https://pixabay.com/users/NomeVisualizzato-9517909/",
+      "pagina": "https://pixabay.com/photos/money-coins-ruble-finance-5039173/"
+    }
   },
   {
     "slug": "portabilidade-de-credito-quando-vale-a-pena",
@@ -75,7 +105,13 @@
       "url": "https://www.bcb.gov.br/pre/normativos/res/2013/pdf/res_4292_v1_o.pdf"
     },
     "corpo": "<p>A portabilidade de crédito é um direito do consumidor: permite transferir a dívida para outra instituição que ofereça condições mais vantajosas, sem que você precise quitar o contrato com recursos próprios. As regras estão na Resolução CMN nº 4.292/2013, que abrange operações de crédito de pessoas naturais, incluindo o financiamento de veículos.</p>\n<h2>Como funciona</h2>\n<p>Você procura a instituição que quer passar a ser a credora e ela solicita à atual a transferência da dívida. A instituição original não pode recusar o pedido sem justificativa prevista na norma e não pode repassar ao cliente o custo de originação da operação.</p>\n<h2>O que avaliar antes de pedir</h2>\n<ul><li><strong>A taxa que você paga hoje.</strong> Sem esse número, não há como saber se a oferta nova é de fato melhor. A calculadora da ERASE ajuda a estimá-lo a partir da parcela, do valor financiado e do prazo.</li><li><strong>O CET da nova proposta</strong>, e não só a taxa de juros: tarifas, seguros e tributos entram na conta.</li><li><strong>O prazo restante.</strong> Prolongar o prazo reduz a parcela, mas aumenta o total pago em juros.</li><li><strong>Saldo devedor atualizado.</strong> Peça o valor para quitação e confira se ele bate com o seu controle de pagamentos.</li></ul>\n<h2>Particularidades do financiamento de veículo</h2>\n<p>O financiamento de veículo costuma ter alienação fiduciária: o carro fica como garantia, com o gravame registrado no órgão de trânsito. Na portabilidade, esse gravame precisa ser transferido para a nova instituição, o que pode levar mais tempo e exigir mais etapas do que em outros tipos de crédito. Pergunte à instituição proponente como será esse processo e quais prazos ela pratica.</p>\n<h2>Portabilidade e revisão não são a mesma coisa</h2>\n<p>A portabilidade troca o credor e as condições daqui para frente. Já a revisão do contrato é a análise do que foi pactuado no passado. Uma não impede a outra, mas são caminhos diferentes. Em caso de dúvida sobre o contrato, procure orientação profissional.</p>",
-    "foto_busca": "bank customer handshake"
+    "foto_busca": "bank customer handshake",
+    "foto": {
+      "id": 1841132,
+      "autor": "Pexels",
+      "autorUrl": "https://pixabay.com/users/Pexels-2286921/",
+      "pagina": "https://pixabay.com/photos/apples-farmers-market-buy-buying-1841132/"
+    }
   },
   {
     "slug": "por-que-motos-pagam-juros-mais-altos-que-carros",
@@ -88,7 +124,13 @@
       "url": "https://www.bcb.gov.br"
     },
     "corpo": "<p>Quem acompanha as taxas divulgadas pelo Banco Central percebe que o crédito para motos costuma ser mais caro do que o destinado a carros. Isso não vale para todos os contratos, mas é uma tendência observada no mercado e vale entender os motivos antes de comparar propostas.</p>\n<h2>Fatores que pesam no preço do crédito</h2>\n<ul><li><strong>Perfil do tomador.</strong> Parte dos compradores de moto usa o veículo para trabalhar e tem renda variável, o que muda a análise de risco das instituições.</li><li><strong>Valor e liquidez do bem.</strong> Motos têm preço menor que carros. Em operações de valor baixo, os custos fixos da concessão pesam mais na taxa.</li><li><strong>Risco de inadimplência percebido.</strong> Quanto maior o risco que a instituição enxerga, maior o juro que cobra para cobri-lo.</li><li><strong>Prazo.</strong> Prazos longos aumentam a incerteza para quem empresta e o total de juros para quem paga.</li></ul>\n<h2>Por que a comparação precisa ser por segmento</h2>\n<p>Comparar o juro de uma moto com a média de carros leva a conclusões erradas: um contrato pode estar acima da média dos carros e, ainda assim, dentro do que o mercado pratica para motos. Por isso a calculadora da ERASE usa uma referência própria para cada tipo de veículo.</p>\n<h2>O que fazer na prática</h2>\n<ol><li>Descubra a taxa efetiva mensal do seu contrato.</li><li>Compare com a referência do seu segmento, e não com a de outro tipo de veículo.</li><li>Peça o CET e pesquise propostas em mais de uma instituição, inclusive a portabilidade.</li></ol>\n<p>A simulação é informativa e não considera IOF, tarifas ou seguros. Ela não define se um contrato é ou não abusivo: isso depende da análise do documento assinado.</p>",
-    "foto_busca": "motorcycle on street"
+    "foto_busca": "motorcycle on street",
+    "foto": {
+      "id": 6553537,
+      "autor": "Sunriseforever",
+      "autorUrl": "https://pixabay.com/users/Sunriseforever-6314823/",
+      "pagina": "https://pixabay.com/photos/motorbike-woman-fashion-beautiful-6553537/"
+    }
   },
   {
     "slug": "financiamento-agricola-linhas-subsidiadas-e-pronaf",
@@ -101,6 +143,12 @@
       "url": "https://www.bcb.gov.br"
     },
     "corpo": "<p>O financiamento de máquinas e equipamentos agrícolas segue uma lógica diferente da do crédito para carros e motos. Existem linhas específicas, algumas com recursos controlados e juros reduzidos, e é por isso que comparar contratos entre esses segmentos leva a erros.</p>\n<h2>Crédito rural e Pronaf</h2>\n<p>O crédito rural tem regras próprias, definidas pelo Conselho Monetário Nacional e reunidas no Manual de Crédito Rural do Banco Central. O Pronaf, voltado à agricultura familiar, é o exemplo mais conhecido: nas linhas do Plano Safra 2025/2026, por exemplo, as taxas de juros divulgadas ficam em patamares de poucos pontos percentuais ao ano, muito abaixo do crédito livre para veículos, que é cobrado ao mês.</p>\n<h2>Por que a comparação com carros engana</h2>\n<p>As taxas do crédito para carros e as do crédito rural subsidiado têm origem, público e custo de captação diferentes. Um contrato agrícola contratado com recursos livres, sem a linha subsidiada, pode ter juros bem mais altos do que o Pronaf, mas isso também não o torna comparável ao de um carro. O que importa é saber de qual linha o contrato veio.</p>\n<h2>O que conferir no seu contrato</h2>\n<ul><li><strong>Qual é a linha ou o programa.</strong> Está escrito no contrato ou na cédula de crédito.</li><li><strong>A taxa efetiva mensal embutida na parcela.</strong> A calculadora da ERASE estima esse número a partir do valor financiado, da parcela e do prazo.</li><li><strong>O CET.</strong> Veja o que mais entra na conta: tarifas, seguros e tributos.</li><li><strong>Condições da safra.</strong> Algumas operações têm parcelas anuais ou vinculadas ao ciclo da produção, o que muda a leitura da calculadora, que considera parcelas mensais iguais.</li></ul>\n<h2>Cuidado com generalizações</h2>\n<p>Condições variam conforme a linha, o programa e o perfil do produtor. A calculadora usa uma referência fixa para a categoria agrícola e, por isso, o resultado é apenas um indicativo. Qualquer conclusão sobre um contrato específico depende da leitura do documento e da análise de um profissional habilitado.</p>",
-    "foto_busca": "tractor farm field"
+    "foto_busca": "tractor farm field",
+    "foto": {
+      "id": 10395070,
+      "autor": "Alexas_Fotos",
+      "autorUrl": "https://pixabay.com/users/Alexas_Fotos-686414/",
+      "pagina": "https://pixabay.com/photos/tractor-field-summer-landscape-10395070/"
+    }
   }
 ]
