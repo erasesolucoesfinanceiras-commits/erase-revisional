@@ -26,8 +26,9 @@ function postNetlify(formName, data) {
  * a interface e nunca mostra nada ao visitante (apenas console.error).
  * `origem` = "calculadora" | "popup-entrada".
  */
-function enviarParaCRM(origem, dados) {
+function enviarParaCRM(origem, dados, tentativa = 1) {
   if (CRM_ENDPOINT.includes('SUBSTITUIR')) return; // CRM ainda não configurado
+  const retry = () => { if (tentativa < 3) setTimeout(() => enviarParaCRM(origem, dados, tentativa + 1), 5000 * tentativa); };
   try {
     const ctrl = typeof AbortController !== 'undefined' ? new AbortController() : null;
     const timer = ctrl ? setTimeout(() => ctrl.abort(), 8000) : null;
@@ -38,8 +39,8 @@ function enviarParaCRM(origem, dados) {
       keepalive: true,
       signal: ctrl ? ctrl.signal : undefined,
     })
-      .then((r) => { if (!r.ok) console.error('CRM respondeu', r.status); })
-      .catch((err) => console.error('Falha ao enviar lead ao CRM:', err))
+      .then((r) => { if (!r.ok) { console.error('CRM respondeu', r.status); retry(); } })
+      .catch((err) => { console.error('Falha ao enviar lead ao CRM:', err); retry(); })
       .finally(() => timer && clearTimeout(timer));
   } catch (err) {
     console.error('Falha ao enviar lead ao CRM:', err);
@@ -47,6 +48,7 @@ function enviarParaCRM(origem, dados) {
 }
 
 // ---- Origem do acesso (UTMs, referrer, página de entrada) ----------
+const UTM_TTL_MS = 30 * 864e5;
 const UTM_KEYS = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content'];
 function store(kind, key, val) {
   try { const st = window[kind]; if (val === undefined) return st.getItem(key); st.setItem(key, val); } catch (e) { /* sem storage */ }
@@ -56,6 +58,7 @@ function store(kind, key, val) {
   const q = new URLSearchParams(location.search);
   if (UTM_KEYS.some((k) => q.get(k))) {
     const utm = {}; UTM_KEYS.forEach((k) => { utm[k] = (q.get(k) || '').slice(0, 120); });
+    utm.t = Date.now();
     store('localStorage', 'erase-utm', JSON.stringify(utm)); // última campanha conhecida
   }
   if (!store('sessionStorage', 'erase-landing')) {
@@ -67,6 +70,7 @@ function store(kind, key, val) {
 })();
 function atribuicao() {
   let utm = {}; try { utm = JSON.parse(store('localStorage', 'erase-utm') || '{}'); } catch (e) { /* ignore */ }
+  if (utm.t && Date.now() - utm.t > UTM_TTL_MS) utm = {}; // campanha antiga não leva o crédito
   const agora = new Date();
   const out = {
     data_hora: agora.toISOString(),
@@ -232,6 +236,7 @@ if (ct) {
 
 // ---- Pop-up de entrada --------------------------------------------
 (function popup() {
+  if (location.pathname.includes('calculadora')) return; // quem já está no formulário não precisa do pop-up
   try { if (sessionStorage.getItem('erase-popup')) return; } catch (e) { /* sem storage: mostra */ }
 
   function open() {
@@ -262,7 +267,15 @@ if (ct) {
       ov.remove();
       if (prevFocus && prevFocus.focus) prevFocus.focus();
     }
-    function onKey(e) { if (e.key === 'Escape') close(); }
+    function onKey(e) {
+      if (e.key === 'Escape') return close();
+      if (e.key !== 'Tab') return;
+      const f = $$('button, input, a[href]', ov); // prende o foco dentro do diálogo
+      const [a, z] = [f[0], f[f.length - 1]];
+      if (!ov.contains(document.activeElement)) { e.preventDefault(); a.focus(); }
+      else if (e.shiftKey && document.activeElement === a) { e.preventDefault(); z.focus(); }
+      else if (!e.shiftKey && document.activeElement === z) { e.preventDefault(); a.focus(); }
+    }
     document.addEventListener('keydown', onKey);
     ov.addEventListener('mousedown', (e) => { if (e.target === ov) close(); });
     $('.popup-close', ov).addEventListener('click', close);
