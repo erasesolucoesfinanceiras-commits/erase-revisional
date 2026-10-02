@@ -58,8 +58,8 @@ const ICON = {
 // Campos de atribuição/controle anexados automaticamente a todo lead (ver main.js → queueLead).
 const ATTR = ['lead_id', 'data_hora', 'data_hora_local', 'origem_trafego', 'utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content', 'pagina_entrada', 'pagina_envio'];
 const FORMS = {
-  'popup-entrada': ['nome', 'telefone', 'email', 'lgpd_aceite', 'status', ...ATTR],
-  calculadora: ['nome', 'whatsapp', 'email', 'lgpd_aceite', 'status', 'resultado', 'tipo', 'banco', 'valor_total', 'entrada', 'valor_financiado', 'parcela', 'n_parcelas', 'parcelas_pagas', 'taxa_calculada', 'limite_referencia', 'economia_estimada', 'parcelas_em_dia', 'parcelas_atrasadas', 'busca_apreensao', 'mes_assinatura', 'ano_assinatura', 'data_assinatura', 'seguro', 'contrato_em_maos', 'acao_revisional_anterior', 'cidade', 'estado', 'horario_contato', 'referencia_periodo', 'media_bcb_periodo', 'fonte_referencia', ...ATTR],
+  'popup-entrada': ['nome', 'telefone', 'parcelas_em_dia', 'busca_apreensao', 'lgpd_aceite', 'status', ...ATTR],
+  calculadora: ['nome', 'whatsapp', 'lgpd_aceite', 'status', 'resultado', 'tipo', 'valor_financiado', 'parcela', 'n_parcelas', 'parcelas_pagas', 'taxa_calculada', 'limite_referencia', 'economia_estimada', 'parcelas_em_dia', 'busca_apreensao', 'mes_assinatura', 'ano_assinatura', 'data_assinatura', 'referencia_periodo', 'media_bcb_periodo', 'fonte_referencia', ...ATTR],
   newsletter: ['email'],
   contato: ['nome', 'email', 'mensagem'],
 };

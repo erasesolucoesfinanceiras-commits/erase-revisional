@@ -1,5 +1,5 @@
 /* Calculadora de juros — carregada depois de main.js (usa $, $$, maskPhone, phoneOk,
- * emailOk, queueLead e waLink de lá).
+ * queueLead e waLink de lá).
  *
  * Matemática: Tabela Price  PMT = PV · i / (1 − (1+i)^−n)
  * Dado PMT, PV e n, a taxa "i" é encontrada por bisseção (a função é crescente em i).
@@ -21,7 +21,7 @@ const FREE_BADGE_TXT = 'ANÁLISE DO CONTRATO 100% GRATUITA';
     agricola: parseFloat(root.dataset.limiteAgricola),
   };
   const NOMES = { carro: 'carro', moto: 'moto', agricola: 'veículo agrícola' };
-  const QUITADO = 'Já quitei o financiamento', ATRASADAS = 'Atrasadas';
+  const QUITADO = 'Já quitei o financiamento';
   const ANO_INICIO = 2000; // a série do Banco Central começa em 06/2000
 
   // ---- Série histórica do Banco Central (opcional) --------------------
@@ -73,10 +73,10 @@ const FREE_BADGE_TXT = 'ANÁLISE DO CONTRATO 100% GRATUITA';
 
   // ---- Elementos -----------------------------------------------------
   const form = $('#calc-form');
-  const f = { total: $('#valor_total'), entrada: $('#entrada'), parcela: $('#parcela'), n: $('#n_parcelas'), pagas: $('#pagas') };
-  const c = { nome: $('#lead-nome'), wa: $('#lead-wa'), email: $('#lead-email'), lgpd: $('#lgpd'), banco: $('#banco'), cidade: $('#cidade'), estado: $('#estado') };
-  const mesSel = $('#mes_assinatura'), anoSel = $('#ano_assinatura'), atras = $('#atrasadas');
-  [f.total, f.entrada, f.parcela].forEach(maskMoney);
+  const f = { pv: $('#valor_financiado'), parcela: $('#parcela'), n: $('#n_parcelas'), pagas: $('#pagas') };
+  const c = { nome: $('#lead-nome'), wa: $('#lead-wa'), lgpd: $('#lgpd') };
+  const mesSel = $('#mes_assinatura'), anoSel = $('#ano_assinatura');
+  [f.pv, f.parcela].forEach(maskMoney);
   maskPhone($('#lead-wa'));
   for (let y = new Date().getFullYear(); y >= ANO_INICIO; y--) anoSel.add(new Option(String(y), String(y)));
 
@@ -91,30 +91,27 @@ const FREE_BADGE_TXT = 'ANÁLISE DO CONTRATO 100% GRATUITA';
     const emDia = radio('parcelas_em_dia');
     const n = parseInt(f.n.value, 10);
     return {
-      total: parseMoney(f.total.value), entrada: parseMoney(f.entrada.value), parcela: parseMoney(f.parcela.value), n,
+      pv: parseMoney(f.pv.value), parcela: parseMoney(f.parcela.value), n,
       pagas: emDia === QUITADO ? n : (f.pagas.value === '' ? NaN : parseInt(f.pagas.value, 10)),
-      emDia, atrasadas: atras.value === '' ? NaN : parseInt(atras.value, 10),
+      emDia,
       busca: radio('busca_apreensao'),
       mes: parseInt(mesSel.value, 10) || 0, ano: parseInt(anoSel.value, 10) || 0,
     };
   }
-  const contato = () => ({ nome: c.nome.value.trim().replace(/\s+/g, ' '), whatsapp: c.wa.value.trim(), email: c.email.value.trim(), lgpd: c.lgpd.checked });
+  const contato = () => ({ nome: c.nome.value.trim().replace(/\s+/g, ' '), whatsapp: c.wa.value.trim(), lgpd: c.lgpd.checked });
 
   /** Itens obrigatórios (true = preenchido) — alimenta a barra de progresso. */
   function itens(d) {
     const k = contato(), ok = (v) => !Number.isNaN(v) && v !== undefined;
-    const lista = [ok(d.total), ok(d.entrada), ok(d.parcela), ok(d.n), d.emDia === QUITADO || ok(d.pagas),
+    const lista = [ok(d.pv), ok(d.parcela), ok(d.n), d.emDia === QUITADO || ok(d.pagas),
       !!(d.mes && d.ano), !!d.emDia, !!d.busca, !!k.nome, !!k.whatsapp, k.lgpd];
-    if (d.emDia === ATRASADAS) lista.push(ok(d.atrasadas));
     return lista;
   }
 
   /** Valida e devolve {campo: mensagem}. */
   function validar(d) {
     const e = {};
-    if (!(d.total > 0)) e.valor_total = 'Informe o valor do veículo';
-    if (Number.isNaN(d.entrada)) e.entrada = 'Informe a entrada (pode ser 0)';
-    else if (d.total > 0 && d.entrada >= d.total) e.entrada = 'A entrada deve ser menor que o valor do veículo';
+    if (!(d.pv > 0)) e.valor_financiado = 'Informe o valor financiado';
     if (!(d.parcela > 0)) e.parcela = 'Informe a parcela atual';
     if (!(d.n > 0)) e.n_parcelas = 'Selecione o total de parcelas';
 
@@ -128,13 +125,11 @@ const FREE_BADGE_TXT = 'ANÁLISE DO CONTRATO 100% GRATUITA';
       else if (d.mes && d.ano && meses >= 0 && d.pagas > meses + 1) e.pagas = 'Mais parcelas pagas do que meses desde a assinatura';
     }
     if (!d.emDia) e.parcelas_em_dia = 'Escolha uma opção';
-    if (d.emDia === ATRASADAS && (Number.isNaN(d.atrasadas) || d.atrasadas < 1 || (d.n > 0 && d.atrasadas > d.n))) e.atrasadas = 'Informe quantas parcelas estão atrasadas';
     if (!d.busca) e.busca_apreensao = 'Escolha uma opção';
 
     const k = contato();
     if (k.nome.split(' ').filter((w) => w.length >= 2).length < 2) e.nome = 'Informe seu nome completo (não abrevie)';
     if (!phoneOk(k.whatsapp)) e.whatsapp = 'WhatsApp inválido — use DDD + 9 dígitos';
-    if (k.email && !emailOk(k.email)) e.email = 'E-mail inválido';
     if (!k.lgpd) e.lgpd = 'É necessário autorizar o contato para ver o resultado';
     return e;
   }
@@ -159,8 +154,8 @@ const FREE_BADGE_TXT = 'ANÁLISE DO CONTRATO 100% GRATUITA';
     panel.dataset.state = pronto ? 'pronto' : 'coletando';
     status.textContent = pronto ? 'Pronto' : 'Coletando';
     const t = tipo(), ref = referencia(t, d.ano, d.mes);
-    const financiado = d.total > 0 && d.entrada >= 0 && d.total > d.entrada ? d.total - d.entrada : null;
-    const steps = [d.parcela > 0 && d.n > 0, d.total > 0 && d.entrada >= 0 && !!(d.mes && d.ano), pronto];
+    const financiado = d.pv > 0 ? d.pv : null;
+    const steps = [d.parcela > 0 && d.n > 0, d.pv > 0 && !!(d.mes && d.ano), pronto];
     panelBody.innerHTML = `
       <h2 class="panel-title">${pronto ? 'Tudo certo! Falta só calcular' : 'Aguardando seu contrato...'}</h2>
       <p>${pronto
@@ -176,9 +171,8 @@ const FREE_BADGE_TXT = 'ANÁLISE DO CONTRATO 100% GRATUITA';
   }
 
   function onChange() {
-    // pergunta condicional: atrasadas / quitado
+    // pergunta condicional: quitado não tem parcelas já pagas a informar
     const emDia = radio('parcelas_em_dia');
-    $('#atrasadas-box').hidden = emDia !== ATRASADAS;
     $('#pagas-field').hidden = emDia === QUITADO;
     const d = dados(), lista = itens(d);
     setProgress(lista);
@@ -205,11 +199,11 @@ const FREE_BADGE_TXT = 'ANÁLISE DO CONTRATO 100% GRATUITA';
       if (primeiro) { primeiro.scrollIntoView({ block: 'center', behavior: 'smooth' }); const i = $('input:not([type=radio]), select', primeiro) || $('input', primeiro); if (i) i.focus({ preventScroll: true }); }
       return;
     }
-    const pv = d.total - d.entrada, i = resolverTaxa(pv, d.parcela, d.n);
+    const pv = d.pv, i = resolverTaxa(pv, d.parcela, d.n);
     if (i === null) {
       panel.dataset.state = 'coletando'; status.textContent = 'Revisar dados'; actions.hidden = true;
       panelBody.innerHTML = `<h2 class="panel-title">Não conseguimos calcular</h2>
-        <p class="msg-bad">Com esses números a parcela multiplicada pelo prazo não supera o valor financiado (ou a taxa resultante seria irreal). Confira o valor do veículo, a entrada, a parcela e o prazo.</p>`;
+        <p class="msg-bad">Com esses números a parcela multiplicada pelo prazo não supera o valor financiado (ou a taxa resultante seria irreal). Confira o valor financiado, a parcela e o prazo.</p>`;
       return;
     }
     const t = tipo(), ref = referencia(t, d.ano, d.mes), limite = ref.limite;
@@ -250,18 +244,15 @@ const FREE_BADGE_TXT = 'ANÁLISE DO CONTRATO 100% GRATUITA';
     // --- Lead: grava (fila com reenvio) com TODAS as respostas ---
     const k = contato();
     const lead = {
-      nome: k.nome, whatsapp: k.whatsapp, email: k.email, lgpd_aceite: 'sim',
+      nome: k.nome, whatsapp: k.whatsapp, lgpd_aceite: 'sim',
       status: acima ? 'novo_acima_do_limite' : 'novo_dentro_do_limite',
       resultado: acima ? 'acima_do_limite' : 'dentro_do_limite',
-      tipo: t, banco: c.banco.value.trim(),
-      valor_total: d.total.toFixed(2), entrada: d.entrada.toFixed(2), valor_financiado: pv.toFixed(2),
+      tipo: t, valor_financiado: pv.toFixed(2),
       parcela: d.parcela.toFixed(2), n_parcelas: String(d.n), parcelas_pagas: String(d.pagas),
       taxa_calculada: mensal.toFixed(4), limite_referencia: String(limite), economia_estimada: acima ? economia.toFixed(2) : '0.00',
-      parcelas_em_dia: d.emDia, parcelas_atrasadas: d.emDia === ATRASADAS ? String(d.atrasadas) : '',
+      parcelas_em_dia: d.emDia,
       busca_apreensao: d.busca,
       mes_assinatura: String(d.mes).padStart(2, '0'), ano_assinatura: String(d.ano), data_assinatura: `${d.ano}-${String(d.mes).padStart(2, '0')}`,
-      seguro: radio('seguro'), contrato_em_maos: radio('contrato_em_maos'), acao_revisional_anterior: radio('acao_revisional_anterior'),
-      cidade: c.cidade.value.trim(), estado: c.estado.value, horario_contato: radio('horario_contato'),
       referencia_periodo: ref.historico ? ref.chave : 'atual', media_bcb_periodo: ref.historico ? ref.limite.toFixed(2) : '',
       fonte_referencia: ref.historico ? `BCB SGS ${bcb.serie || ''}`.trim() : 'limite_fixo_config',
     };

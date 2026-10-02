@@ -216,7 +216,6 @@ function calculadora() {
     return `<fieldset class="field choices${curtas ? ' short' : ''}${curtas && opts.length === 2 ? ' two' : ''}" data-group="${name}"><legend>${legend}${req ? ' <span class="req">*</span>' : ' <span class="opt">(opcional)</span>'}</legend><div class="choice-grid">${opts.map((o) => `<label class="choice"><input type="radio" name="${name}" value="${esc(o)}"><span>${esc(o)}</span></label>`).join('')}</div><small class="err" data-err="${name}">Escolha uma opção</small></fieldset>`;
   };
   const MESES = ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'];
-  const UFS = 'AC AL AP AM BA CE DF ES GO MA MT MS MG PA PB PR PE PI RJ RN RS RO RR SC SP SE TO'.split(' ');
   const parcelasOpts = [12, 18, 24, 30, 36, 42, 48, 54, 60, 66, 72, 84, 96]
     .map((n) => `<option value="${n}">${n} parcelas</option>`).join('');
 
@@ -240,12 +239,9 @@ function calculadora() {
 <label><input type="radio" name="tipo" value="moto"><span>Moto</span></label>
 <label><input type="radio" name="tipo" value="agricola"><span>Agrícola</span></label>
 </fieldset>
-<div class="field"><label for="banco">Banco / financeira <span class="opt">(opcional)</span></label>
-<input id="banco" name="banco" list="bancos" autocomplete="off" placeholder="Ex.: Santander, BV, Itaú" maxlength="60"><datalist id="bancos"><option value="Banco do Brasil"><option value="Bradesco"><option value="Caixa"><option value="Itaú"><option value="Santander"><option value="BV"><option value="Banco Pan"><option value="Omni"><option value="Safra"><option value="Porto Seguro"><option value="Outro"></datalist></div>
-<div class="field"><label for="valor_total">Valor total do veículo (R$) <span class="req">*</span></label>
-<div class="money"><span>R$</span><input id="valor_total" name="valor_total" inputmode="numeric" autocomplete="off" placeholder="0,00"></div><small class="err" data-err="valor_total">Informe o valor do veículo</small></div>
-<div class="field"><label for="entrada">Valor de entrada <span class="req">*</span></label>
-<div class="money"><span>R$</span><input id="entrada" name="entrada" inputmode="numeric" autocomplete="off" placeholder="0,00"></div><small class="err" data-err="entrada">Informe a entrada (pode ser 0)</small></div>
+<div class="field"><label for="valor_financiado">Valor financiado <span class="req">*</span></label>
+<small class="hint" id="valor_financiado-hint">Valor do veículo menos a entrada</small>
+<div class="money"><span>R$</span><input id="valor_financiado" name="valor_financiado" inputmode="numeric" autocomplete="off" placeholder="0,00" aria-describedby="valor_financiado-hint"></div><small class="err" data-err="valor_financiado">Informe o valor financiado</small></div>
 <div class="field"><label for="parcela">Valor atual da parcela <span class="req">*</span></label>
 <div class="money"><span>R$</span><input id="parcela" name="parcela" inputmode="numeric" autocomplete="off" placeholder="0,00"></div><small class="err" data-err="parcela">Informe a parcela atual</small></div>
 <div class="field-row">
@@ -260,25 +256,13 @@ function calculadora() {
 
 <div class="form-section"><h3>Sobre o seu financiamento</h3>
 ${choices('parcelas_em_dia', 'Suas parcelas estão em dia?', ['Em dia', 'Atrasadas', 'Já quitei o financiamento'], { req: true })}
-<div class="field" id="atrasadas-box" hidden><label for="atrasadas">Quantas parcelas estão atrasadas? <span class="req">*</span></label>
-<div class="money suffix"><input id="atrasadas" name="atrasadas" type="number" inputmode="numeric" min="1" max="96" step="1" placeholder="0"><span>parcelas</span></div><small class="err" data-err="atrasadas">Informe quantas parcelas estão atrasadas</small></div>
 ${choices('busca_apreensao', 'Seu veículo está com busca e apreensão?', ['Não', 'Recebi notificação de cobrança', 'Já tem processo de busca e apreensão', 'O veículo já foi apreendido'], { req: true })}
-</div>
-
-<div class="form-section"><h3>Ajude a entender o seu caso <span class="opt">(opcional)</span></h3>
-${choices('seguro', 'Tem seguro no contrato?', ['Sim', 'Não', 'Não sei'])}
-${choices('contrato_em_maos', 'Tem o contrato em mãos?', ['Sim', 'Não', 'Posso pedir ao banco'])}
-${choices('acao_revisional_anterior', 'Já entrou com ação revisional antes?', ['Sim', 'Não'])}
 </div>
 
 <div class="contact-block"><h3>Para ver o resultado, informe seu contato</h3>
 <div class="field"><label for="lead-nome">Nome completo <span class="req">*</span></label><input id="lead-nome" name="nome" autocomplete="name" placeholder="Seu nome completo (não abrevie)"><small class="err" data-err="nome">Informe seu nome completo (não abrevie)</small></div>
 <div class="field"><label for="lead-wa">WhatsApp <span class="req">*</span></label><input id="lead-wa" name="whatsapp" inputmode="tel" autocomplete="tel" placeholder="(81) 99999-9999"><small class="err" data-err="whatsapp">WhatsApp inválido — use DDD + 9 dígitos</small></div>
-<div class="field"><label for="lead-email">E-mail <span class="opt">(opcional)</span></label><input id="lead-email" name="email" type="email" autocomplete="email" placeholder="voce@email.com"><small class="err" data-err="email">E-mail inválido</small></div>
-<div class="field-row cidade-row"><div class="field"><label for="cidade">Cidade <span class="opt">(opcional)</span></label><input id="cidade" name="cidade" autocomplete="address-level2" placeholder="Sua cidade" maxlength="60"></div>
-<div class="field"><label for="estado">Estado <span class="opt">(opcional)</span></label><select id="estado" name="estado" autocomplete="address-level1"><option value="">UF</option>${UFS.map((u) => `<option value="${u}">${u}</option>`).join('')}</select></div></div>
-${choices('horario_contato', 'Melhor horário para contato', ['Manhã', 'Tarde', 'Noite'])}
-<div class="field check"><label><input type="checkbox" id="lgpd" name="lgpd"><span>Autorizo a ERASE Soluções Financeiras a entrar em contato comigo por WhatsApp, telefone ou e-mail sobre esta simulação, conforme a <a href="/privacidade.html" target="_blank" rel="noopener">Política de Privacidade</a>. <span class="req">*</span></span></label><small class="err" data-err="lgpd">É necessário autorizar o contato para ver o resultado</small></div></div>
+<div class="field check"><label><input type="checkbox" id="lgpd" name="lgpd"><span>Autorizo a ERASE Soluções Financeiras a entrar em contato comigo por WhatsApp ou telefone sobre esta simulação, conforme a <a href="/privacidade.html" target="_blank" rel="noopener">Política de Privacidade</a>. <span class="req">*</span></span></label><small class="err" data-err="lgpd">É necessário autorizar o contato para ver o resultado</small></div></div>
 ${S.freeBadge("block")}
 <button class="btn btn-primary btn-lg btn-block" type="submit" id="calc-btn">Calcular minha taxa — grátis</button>
 <p class="fine">Simulação sobre os dados que você informar. Não é análise jurídica e não indica valores a receber.</p>
@@ -331,7 +315,7 @@ ${S.freeBadge("block")}
 <section class="container prose-block">
 <h2>Como funciona</h2>
 <ol class="how">
-<li><span>1</span><div><h3>Informe os números do contrato</h3><p>Tipo de veículo, valor do veículo, entrada, parcela, prazo e quantas parcelas já pagou.</p></div></li>
+<li><span>1</span><div><h3>Informe os números do contrato</h3><p>Tipo de veículo, valor financiado (valor do veículo menos a entrada), parcela, prazo e quantas parcelas já pagou.</p></div></li>
 <li><span>2</span><div><h3>Calculamos a taxa embutida</h3><p>Resolvemos a taxa mensal pelo sistema Price e comparamos com a referência do seu tipo de veículo.</p></div></li>
 <li><span>3</span><div><h3>Veja o resultado e decida</h3><p>Você vê a taxa, o veredito e a economia estimada. Se quiser, fala com um especialista.</p></div></li>
 </ol>
@@ -386,9 +370,9 @@ function legais() {
 <p class="meta">Última atualização: ${fmtData(LEGAL_DATE)}</p>
 <p>Esta política explica como a ${razao} trata dados pessoais coletados neste site, em conformidade com a Lei Geral de Proteção de Dados (Lei 13.709/2018).</p>
 <h2>1. Dados que coletamos</h2>
-<ul><li><strong>Calculadora:</strong> nome, WhatsApp, e-mail (opcional), o aceite de contato e os dados do financiamento informados (tipo de veículo, banco, valores, parcelas e taxa calculada), além do resultado (acima ou dentro do parâmetro).</li>
+<ul><li><strong>Calculadora:</strong> nome, WhatsApp, o aceite de contato e os dados do financiamento informados (tipo de veículo, valor financiado, parcela, prazo, parcelas pagas, mês e ano da assinatura, situação das parcelas e se há busca e apreensão), além da taxa calculada e do resultado (acima ou dentro do parâmetro).</li>
 <li><strong>Origem do acesso:</strong> parâmetros de campanha (UTMs), site de origem, página de entrada, data e hora do envio, para saber de onde veio o contato e medir nossos anúncios.</li>
-<li><strong>Pop-up e newsletter:</strong> nome, telefone/WhatsApp e e-mail, conforme o formulário preenchido.</li>
+<li><strong>Pop-up:</strong> nome, telefone/WhatsApp, a situação do financiamento (em dia, atrasado ou busca e apreensão) e o aceite de contato. <strong>Newsletter:</strong> e-mail.</li>
 <li><strong>Fale Conosco:</strong> nome, e-mail e mensagem.</li></ul>
 <h2>2. Para que usamos</h2>
 <p>Usamos os dados para devolver a análise solicitada, entrar em contato por WhatsApp, telefone ou e-mail quando você autoriza, permitir o atendimento por um especialista da ERASE, responder mensagens e enviar novidades quando você se inscreve na newsletter.</p>
