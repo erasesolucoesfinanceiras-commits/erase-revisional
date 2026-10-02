@@ -249,14 +249,14 @@ if (ct) {
         <button class="popup-close" type="button" aria-label="Fechar">&times;</button>
         <div class="popup-icon"><svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 17H3v-5l2-5a2 2 0 0 1 1.9-1.3h10.2A2 2 0 0 1 19 7l2 5v5h-2"/><path d="M3 12h18"/><circle cx="7.5" cy="17" r="2"/><circle cx="16.5" cy="17" r="2"/><path d="M9.5 17h5"/></svg></div>
         <p class="free-badge">ANÁLISE DO CONTRATO 100% GRATUITA</p>
-        <h2 id="popup-title">Reduza até 70% do valor das parcelas do seu carro financiado</h2>
+        <h2 id="popup-title">Descubra se você está pagando juros acima da média no seu financiamento</h2>
         <p>Deixe seus dados e um especialista entra em contato. Sem compromisso. O resultado depende da análise de cada caso.</p>
         <form id="popup-form" novalidate>
           <div class="field"><label class="sr-only" for="pp-nome">Nome</label><input id="pp-nome" name="nome" placeholder="Seu nome" autocomplete="name"></div>
           <div class="field"><label class="sr-only" for="pp-tel">Telefone / WhatsApp</label><input id="pp-tel" name="telefone" inputmode="tel" placeholder="Telefone / WhatsApp" autocomplete="tel"></div>
           <div class="field"><label class="sr-only" for="pp-email">E-mail</label><input id="pp-email" name="email" type="email" placeholder="Seu e-mail" autocomplete="email"></div>
           <div class="field check"><label><input type="checkbox" id="pp-lgpd" name="lgpd"><span>Autorizo a ERASE Soluções Financeiras a entrar em contato comigo por WhatsApp, telefone ou e-mail, conforme a <a href="/privacidade.html" target="_blank" rel="noopener">Política de Privacidade</a>. *</span></label></div>
-          <button class="btn btn-primary btn-block" type="submit">Quero reduzir minhas parcelas</button>
+          <button class="btn btn-primary btn-block" type="submit">Quero a análise gratuita</button>
           <p class="form-msg" id="popup-msg" role="status" aria-live="polite"></p>
         </form>
       </div>`;
