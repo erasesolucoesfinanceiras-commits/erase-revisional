@@ -70,24 +70,20 @@
 <label><input type="radio" name="tipo" value="moto"><span>Moto</span></label>
 <label><input type="radio" name="tipo" value="agricola"><span>Agrícola</span></label>
 </fieldset>
-<div class="field"><label for="valor_financiado">Valor financiado <span class="req">*</span></label>
+<div class="field"><label for="valor_financiado">Valor financiado <span class="opt">(opcional)</span></label>
 <small class="hint" id="valor_financiado-hint">Valor do veículo menos a entrada</small>
 <div class="money"><span>R$</span><input id="valor_financiado" name="valor_financiado" inputmode="numeric" autocomplete="off" placeholder="0,00" aria-describedby="valor_financiado-hint"></div><small class="err" data-err="valor_financiado">Informe o valor financiado</small></div>
-<div class="field"><label for="parcela">Valor atual da parcela <span class="req">*</span></label>
+<div class="field"><label for="parcela">Valor atual da parcela <span class="opt">(opcional)</span></label>
 <div class="money"><span>R$</span><input id="parcela" name="parcela" inputmode="numeric" autocomplete="off" placeholder="0,00"></div><small class="err" data-err="parcela">Informe a parcela atual</small></div>
 <div class="field-row">
-<div class="field"><label for="n_parcelas">Quantas parcelas financiou? <span class="req">*</span></label>
+<div class="field"><label for="n_parcelas">Quantas parcelas financiou? <span class="opt">(opcional)</span></label>
 <select id="n_parcelas" name="n_parcelas"><option value="">Selecione</option><option value="12">12 parcelas</option><option value="18">18 parcelas</option><option value="24">24 parcelas</option><option value="30">30 parcelas</option><option value="36">36 parcelas</option><option value="42">42 parcelas</option><option value="48">48 parcelas</option><option value="54">54 parcelas</option><option value="60">60 parcelas</option><option value="66">66 parcelas</option><option value="72">72 parcelas</option><option value="84">84 parcelas</option><option value="96">96 parcelas</option></select><small class="err" data-err="n_parcelas">Selecione o total de parcelas</small></div>
-<div class="field" id="pagas-field"><label for="pagas">Quantas parcelas já pagou? <span class="req">*</span></label>
+<div class="field" id="pagas-field"><label for="pagas">Quantas parcelas já pagou? <span class="opt">(opcional)</span></label>
+<small class="hint">Usamos para estimar a data do contrato</small>
 <div class="money suffix"><input id="pagas" name="pagas" type="number" inputmode="numeric" min="0" step="1" placeholder="0"><span>meses</span></div><small class="err" data-err="pagas">Informe quantas parcelas já pagou</small></div>
 </div>
-<div class="field"><label for="mes_assinatura">Mês e ano em que assinou o contrato <span class="req">*</span></label>
-<div class="field-row tight"><select id="mes_assinatura" name="mes_assinatura"><option value="">Mês</option><option value="1">Janeiro</option><option value="2">Fevereiro</option><option value="3">Março</option><option value="4">Abril</option><option value="5">Maio</option><option value="6">Junho</option><option value="7">Julho</option><option value="8">Agosto</option><option value="9">Setembro</option><option value="10">Outubro</option><option value="11">Novembro</option><option value="12">Dezembro</option></select>
-<select id="ano_assinatura" name="ano_assinatura"><option value="">Ano</option></select></div><small class="err" data-err="assinatura">Informe o mês e o ano da assinatura</small></div>
-
 <div class="form-section"><h3>Sobre o seu financiamento</h3>
-<fieldset class="field choices" data-group="parcelas_em_dia"><legend>Suas parcelas estão em dia? <span class="req">*</span></legend><div class="choice-grid"><label class="choice"><input type="radio" name="parcelas_em_dia" value="Em dia"><span>Em dia</span></label><label class="choice"><input type="radio" name="parcelas_em_dia" value="Atrasadas"><span>Atrasadas</span></label><label class="choice"><input type="radio" name="parcelas_em_dia" value="Já quitei o financiamento"><span>Já quitei o financiamento</span></label></div><small class="err" data-err="parcelas_em_dia">Escolha uma opção</small></fieldset>
-<fieldset class="field choices" data-group="busca_apreensao"><legend>Seu veículo está com busca e apreensão? <span class="req">*</span></legend><div class="choice-grid"><label class="choice"><input type="radio" name="busca_apreensao" value="Não"><span>Não</span></label><label class="choice"><input type="radio" name="busca_apreensao" value="Recebi notificação de cobrança"><span>Recebi notificação de cobrança</span></label><label class="choice"><input type="radio" name="busca_apreensao" value="Já tem processo de busca e apreensão"><span>Já tem processo de busca e apreensão</span></label><label class="choice"><input type="radio" name="busca_apreensao" value="O veículo já foi apreendido"><span>O veículo já foi apreendido</span></label></div><small class="err" data-err="busca_apreensao">Escolha uma opção</small></fieldset>
+<fieldset class="field choices" data-group="situacao"><legend>Como está seu financiamento hoje? <span class="req">*</span></legend><div class="choice-grid"><label class="choice"><input type="radio" name="situacao" value="Em dia"><span>Em dia</span></label><label class="choice"><input type="radio" name="situacao" value="Atrasado"><span>Atrasado</span></label><label class="choice"><input type="radio" name="situacao" value="Busca e apreensão"><span>Busca e apreensão</span></label><label class="choice"><input type="radio" name="situacao" value="Já quitei"><span>Já quitei</span></label></div><small class="err" data-err="situacao">Escolha uma opção</small></fieldset>
 </div>
 
 <div class="contact-block"><h3>Para ver o resultado, informe seu contato</h3>
@@ -146,7 +142,7 @@
 <section class="container prose-block">
 <h2>Como funciona</h2>
 <ol class="how">
-<li><span>1</span><div><h3>Informe os números do contrato</h3><p>Tipo de veículo, valor financiado (valor do veículo menos a entrada), parcela, prazo e quantas parcelas já pagou.</p></div></li>
+<li><span>1</span><div><h3>Informe os números do contrato</h3><p>Tipo de veículo, como está o financiamento e, se quiser, valor financiado (valor do veículo menos a entrada), parcela, prazo e quantas parcelas já pagou.</p></div></li>
 <li><span>2</span><div><h3>Calculamos a taxa embutida</h3><p>Resolvemos a taxa mensal pelo sistema Price e comparamos com a referência do seu tipo de veículo.</p></div></li>
 <li><span>3</span><div><h3>Veja o resultado e decida</h3><p>Você vê a taxa, o veredito e a economia estimada. Se quiser, fala com um especialista.</p></div></li>
 </ol>

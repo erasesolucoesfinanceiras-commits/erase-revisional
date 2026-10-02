@@ -191,7 +191,7 @@ function calculadora() {
       `A taxa média divulgada pelo Banco Central para crédito livre a pessoas físicas na aquisição de veículos foi de ${fmtPct(bc.taxaMedia)}% ao mês na última divulgação (${bc.mesReferencia}). Motos costumam ser mais caras e financiamentos agrícolas, mais baratos, por conta de linhas subsidiadas como o Pronaf.`],
     ['A partir de que taxa a calculadora sinaliza o contrato?',
       (hasBcb
-        ? `Para carros, comparamos a taxa calculada com a taxa média do Banco Central no mês em que você assinou o contrato (série histórica); se o mês não estiver disponível, usamos ${fmtPct(L.carro)}% ao mês. Para motos e agrícolas usamos referências fixas de ${fmtPct(L.moto)}% e ${fmtPct(L.agricola)}% ao mês. `
+        ? `Para carros, comparamos a taxa calculada com a taxa média do Banco Central no mês estimado da assinatura — hoje menos as parcelas já pagas (série histórica); se o mês não estiver disponível, usamos ${fmtPct(L.carro)}% ao mês. Para motos e agrícolas usamos referências fixas de ${fmtPct(L.moto)}% e ${fmtPct(L.agricola)}% ao mês. `
         : `A partir de ${fmtPct(L.carro)}% ao mês para carros, ${fmtPct(L.moto)}% para motos e ${fmtPct(L.agricola)}% para agrícolas. `) + `Ser sinalizado aqui não quer dizer que o contrato tem problema — quer dizer que ele está acima do nosso parâmetro de comparação, que é conservador de propósito.`],
     ['Uma taxa acima da faixa é ilegal?',
       'Não por si só. A jurisprudência do STJ é que juros remuneratórios não têm limite fixo e só podem ser considerados abusivos quando comprovadamente destoam da taxa média de mercado da época da contratação — e isso é avaliado caso a caso. Sua taxa também depende do seu perfil de crédito, da garantia e do que foi negociado. Ficar acima da faixa é um indício que vale investigar, não uma conclusão: a análise do contrato é feita gratuitamente pela ERASE e, em caso de ação judicial, a decisão final é do Judiciário.'],
@@ -224,7 +224,7 @@ function calculadora() {
 <span class="eyebrow">Simulação gratuita · Carros, motos e agrícolas</span>
 <h1><span class="grad">Qual é a taxa real do seu financiamento?</span></h1>
 <p class="lead">Em pouco mais de um minuto, a calculadora resolve a taxa de juros mensal embutida no seu contrato — a partir da parcela, do valor financiado e do prazo — e mostra como ela se compara à média publicada pelo Banco Central, hoje em torno de <strong>${fmtPct(bc.taxaMedia)}% ao mês</strong> para carros, segundo a última divulgação do Banco Central (${esc(bc.mesReferencia)}).</p>
-<p class="small-note">${hasBcb ? 'Para carros, a comparação usa a média do Banco Central do mês em que você assinou o contrato. ' : ''}É um cálculo comparativo, gratuito e sem compromisso. Não é análise jurídica do contrato e não indica valores a receber.</p>
+<p class="small-note">${hasBcb ? 'Para carros, a comparação usa a média do Banco Central do mês estimado da assinatura (hoje menos as parcelas já pagas). ' : ''}É um cálculo comparativo, gratuito e sem compromisso. Não é análise jurídica do contrato e não indica valores a receber.</p>
 </div></section>
 
 <section class="container calc-grid" id="calculadora"
@@ -239,24 +239,20 @@ function calculadora() {
 <label><input type="radio" name="tipo" value="moto"><span>Moto</span></label>
 <label><input type="radio" name="tipo" value="agricola"><span>Agrícola</span></label>
 </fieldset>
-<div class="field"><label for="valor_financiado">Valor financiado <span class="req">*</span></label>
+<div class="field"><label for="valor_financiado">Valor financiado <span class="opt">(opcional)</span></label>
 <small class="hint" id="valor_financiado-hint">Valor do veículo menos a entrada</small>
 <div class="money"><span>R$</span><input id="valor_financiado" name="valor_financiado" inputmode="numeric" autocomplete="off" placeholder="0,00" aria-describedby="valor_financiado-hint"></div><small class="err" data-err="valor_financiado">Informe o valor financiado</small></div>
-<div class="field"><label for="parcela">Valor atual da parcela <span class="req">*</span></label>
+<div class="field"><label for="parcela">Valor atual da parcela <span class="opt">(opcional)</span></label>
 <div class="money"><span>R$</span><input id="parcela" name="parcela" inputmode="numeric" autocomplete="off" placeholder="0,00"></div><small class="err" data-err="parcela">Informe a parcela atual</small></div>
 <div class="field-row">
-<div class="field"><label for="n_parcelas">Quantas parcelas financiou? <span class="req">*</span></label>
+<div class="field"><label for="n_parcelas">Quantas parcelas financiou? <span class="opt">(opcional)</span></label>
 <select id="n_parcelas" name="n_parcelas"><option value="">Selecione</option>${parcelasOpts}</select><small class="err" data-err="n_parcelas">Selecione o total de parcelas</small></div>
-<div class="field" id="pagas-field"><label for="pagas">Quantas parcelas já pagou? <span class="req">*</span></label>
+<div class="field" id="pagas-field"><label for="pagas">Quantas parcelas já pagou? <span class="opt">(opcional)</span></label>
+<small class="hint">Usamos para estimar a data do contrato</small>
 <div class="money suffix"><input id="pagas" name="pagas" type="number" inputmode="numeric" min="0" step="1" placeholder="0"><span>meses</span></div><small class="err" data-err="pagas">Informe quantas parcelas já pagou</small></div>
 </div>
-<div class="field"><label for="mes_assinatura">Mês e ano em que assinou o contrato <span class="req">*</span></label>
-<div class="field-row tight"><select id="mes_assinatura" name="mes_assinatura"><option value="">Mês</option>${MESES.map((m, i) => `<option value="${i + 1}">${m}</option>`).join('')}</select>
-<select id="ano_assinatura" name="ano_assinatura"><option value="">Ano</option></select></div><small class="err" data-err="assinatura">Informe o mês e o ano da assinatura</small></div>
-
 <div class="form-section"><h3>Sobre o seu financiamento</h3>
-${choices('parcelas_em_dia', 'Suas parcelas estão em dia?', ['Em dia', 'Atrasadas', 'Já quitei o financiamento'], { req: true })}
-${choices('busca_apreensao', 'Seu veículo está com busca e apreensão?', ['Não', 'Recebi notificação de cobrança', 'Já tem processo de busca e apreensão', 'O veículo já foi apreendido'], { req: true })}
+${choices('situacao', 'Como está seu financiamento hoje?', ['Em dia', 'Atrasado', 'Busca e apreensão', 'Já quitei'], { req: true })}
 </div>
 
 <div class="contact-block"><h3>Para ver o resultado, informe seu contato</h3>
@@ -315,7 +311,7 @@ ${S.freeBadge("block")}
 <section class="container prose-block">
 <h2>Como funciona</h2>
 <ol class="how">
-<li><span>1</span><div><h3>Informe os números do contrato</h3><p>Tipo de veículo, valor financiado (valor do veículo menos a entrada), parcela, prazo e quantas parcelas já pagou.</p></div></li>
+<li><span>1</span><div><h3>Informe os números do contrato</h3><p>Tipo de veículo, como está o financiamento e, se quiser, valor financiado (valor do veículo menos a entrada), parcela, prazo e quantas parcelas já pagou.</p></div></li>
 <li><span>2</span><div><h3>Calculamos a taxa embutida</h3><p>Resolvemos a taxa mensal pelo sistema Price e comparamos com a referência do seu tipo de veículo.</p></div></li>
 <li><span>3</span><div><h3>Veja o resultado e decida</h3><p>Você vê a taxa, o veredito e a economia estimada. Se quiser, fala com um especialista.</p></div></li>
 </ol>
