@@ -13,6 +13,10 @@ Portal de notícias sobre financiamento de veículos + calculadora de juros (isc
 - **Não perde lead:** cada envio entra numa fila em `localStorage` e só sai quando o Netlify responde OK; se falhar, reenvia com espera crescente (e ao voltar a rede, ao reabrir a aba e na próxima visita).
 - **CRM:** envio paralelo e silencioso (`enviarParaCRM`), com `origem` = `calculadora` | `popup-entrada`. Constantes `CRM_ENDPOINT`/`CRM_API_KEY` no topo de `assets/js/main.js` (ainda placeholders).
 
+## E-mail de cada lead (configurar na Netlify)
+Netlify → site → **Forms** → *Form notifications* (ou *Project configuration → Notifications → Form submission notifications*) → **Add notification → Email notification** → informe o e-mail da ERASE e, em *Form*, escolha **Any form** (cobre `calculadora`, `popup-entrada`, `contato` e `newsletter`). Cada envio gera um e-mail na hora.
+Antes de confiar, faça um envio de teste na calculadora e confira no painel Forms (abas *Verified* e *Spam*).
+
 ## Pendências
 1. CRM: preencher `CRM_ENDPOINT`/`CRM_API_KEY` e ajustar o formato do corpo quando o `erasecrm` estiver pronto.
 2. `data/config.json`: links de X e Facebook em `social` (ícones só aparecem quando há URL) e revisar `bc` a cada divulgação do Banco Central. Depois rode `node scripts/build.js`.

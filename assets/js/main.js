@@ -4,11 +4,12 @@
 
 // =====================================================================
 // ⚠️  ATENÇÃO — PLACEHOLDERS A PREENCHER DEPOIS  ⚠️
-// Endpoint e chave da API do CRM da ERASE (repositório erasecrm).
-// Enquanto estiverem como "SUBSTITUIR-DEPOIS", o envio ao CRM falha em
-// silêncio (console.error) e o visitante nem percebe. O Netlify Forms
-// continua funcionando como backup redundante — NÃO remover.
-// Estas constantes também são usadas por calculator.js.
+// Endpoint e chave da API do CRM da ERASE (repositório erasecrm), ainda não existe.
+// Enquanto o endereço contiver "SUBSTITUIR", o envio ao CRM fica desligado (ver
+// enviarParaCRM) e o lead vai só para o Netlify Forms, que o guarda e avisa por e-mail.
+// Quando o CRM estiver pronto: troque as duas constantes abaixo, rode
+// `node scripts/build.js` e publique. Nada mais precisa mudar.
+// O Netlify Forms continua como backup redundante — NÃO remover.
 // =====================================================================
 const CRM_ENDPOINT = "https://SUBSTITUIR-DEPOIS.com/api/leads/website";
 const CRM_API_KEY = "SUBSTITUIR-DEPOIS";
