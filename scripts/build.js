@@ -6,7 +6,7 @@
 const fs = require('fs');
 const path = require('path');
 const S = require('./site');
-const { config: C, esc, fmtPct, fmtData, catNome, catUrl, artUrl, absUrl, coverUrl, ICON } = S;
+const { config: C, esc, fmtPct, fmtData, catNome, catUrl, artUrl, absUrl, coverUrl, coverImg, ICON } = S;
 
 const out = (rel, content) => {
   const f = path.join(S.ROOT, rel);
@@ -22,6 +22,14 @@ const LEGAL_DATE = '2026-10-01'; // data de vigência dos textos legais (altere 
 const LASTMOD = articles[0].data; // evita diffs ruidosos a cada build
 
 // ---------------------------------------------------------------- HOME
+const nl = `<form class="newsletter" id="newsletter-form" novalidate>
+<label class="sr-only" for="nl-email">Seu e-mail</label>
+<input id="nl-email" name="email" type="email" placeholder="Seu melhor e-mail" autocomplete="email" required>
+<input type="text" name="bot-field" class="hp" tabindex="-1" autocomplete="off" aria-hidden="true">
+<button class="btn btn-dark" type="submit">Receber novidades</button>
+</form>
+<p class="form-msg" id="newsletter-msg" role="status" aria-live="polite"></p>
+`;
 function home() {
   const [feat, ...rest] = articles;
   const INICIAL = 4;
@@ -33,20 +41,13 @@ function home() {
 <span class="badge">Simulação gratuita</span>
 <h1>Seu financiamento de veículo pode estar cobrando juros acima da média</h1>
 <p class="lead">Notícias sobre financiamento e uma calculadora gratuita que resolve a taxa de juros real do seu contrato e compara com a referência do Banco Central.</p>
-<form class="newsletter" id="newsletter-form" novalidate>
-<label class="sr-only" for="nl-email">Seu e-mail</label>
-<input id="nl-email" name="email" type="email" placeholder="Seu melhor e-mail" autocomplete="email" required>
-<input type="text" name="bot-field" class="hp" tabindex="-1" autocomplete="off" aria-hidden="true">
-<button class="btn btn-dark" type="submit">Receber novidades</button>
-</form>
-<p class="form-msg" id="newsletter-msg" role="status" aria-live="polite"></p>
-<a class="btn btn-primary btn-lg" href="/calculadora.html">Calcular minha taxa agora</a>
+<a class="btn btn-primary btn-lg btn-hero" href="/calculadora.html">${ICON.calc}Calcular minha taxa agora<span aria-hidden="true">→</span></a>
 </div>
 </section>
 
 <section class="container featured-wrap" aria-label="Destaque">
 <a class="featured" href="${artUrl(feat)}">
-<img src="${coverUrl(feat)}" alt="" width="1160" height="460">
+${coverImg(feat, { width: 1160, height: 460, sizes: '(max-width: 1200px) 100vw, 1160px', eager: true })}
 <div class="featured-text">
 <span class="tag tag-on-img">${esc(catNome(feat.categoria))}</span>
 <h2>${esc(feat.titulo)}</h2>
@@ -69,7 +70,13 @@ ${rest.length > INICIAL ? '<button class="btn btn-outline btn-block more-btn" id
 </section>
 
 ${S.ctaBanner()}
-${S.trustBadges()}`;
+${S.trustBadges()}
+<section class="container nl-section" aria-label="Newsletter">
+<div class="nl-card">
+${ICON.mail}<h2>Receber novidades</h2>
+${nl}
+</div>
+</section>`;
   out('index.html', S.page({
     meta: {
       title: `${SITE} | Juros de financiamento de veículos: notícias e calculadora`,
@@ -153,7 +160,7 @@ function artigos() {
 <h1>${esc(a.titulo)}</h1>
 <p class="lead">${esc(a.resumo)}</p>
 <p class="meta"><time datetime="${a.data}">${fmtData(a.data)}</time></p>
-<img class="article-cover" src="${coverUrl(a)}" alt="" width="860" height="430">
+<figure class="article-fig">${coverImg(a, { width: 860, height: 430, sizes: '(max-width: 860px) 100vw, 860px', eager: true, cls: 'article-cover' })}${a.foto ? `<figcaption>Foto: <a href="${esc(a.foto.autorUrl)}" target="_blank" rel="noopener noreferrer">${esc(a.foto.autor)}</a> / <a href="${esc(a.foto.pagina)}" target="_blank" rel="noopener noreferrer">Pexels</a></figcaption>` : ''}</figure>
 <div class="article-body">
 ${injectCTA(a.corpo)}
 </div>

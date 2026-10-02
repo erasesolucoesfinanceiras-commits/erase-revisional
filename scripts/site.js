@@ -31,6 +31,14 @@ const catUrl = (slug) => `/categoria-${slug}.html`;
 const artUrl = (a) => `/noticias/${a.slug}.html`;
 const absUrl = (p) => config.siteUrl.replace(/\/$/, '') + p;
 const coverUrl = (a) => `/assets/img/cover-${a.categoria}.svg`;
+// Capa: foto WebP (scripts/photos.js) em 3 tamanhos; sem foto, ou se ela não carregar, volta ao desenho SVG.
+const PHOTO_WIDTHS = [480, 960, 1600]; // manter igual a WIDTHS em photos.js
+const coverImg = (a, { width, height, sizes, eager = false, cls = '' }) => {
+  const base = `${cls ? `class="${cls}" ` : ''}alt="" width="${width}" height="${height}" ${eager ? 'fetchpriority="high"' : 'loading="lazy" decoding="async"'}`;
+  if (!a.foto) return `<img src="${coverUrl(a)}" ${base}>`;
+  const srcset = PHOTO_WIDTHS.map((w) => `/assets/img/news/${a.slug}-${w}.webp ${w}w`).join(', ');
+  return `<img src="/assets/img/news/${a.slug}-960.webp" srcset="${srcset}" sizes="${sizes}" ${base} onerror="this.onerror=null;this.removeAttribute('srcset');this.src='${coverUrl(a)}'">`;
+};
 
 const ICON = {
   sun: '<svg class="i-sun" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>',
@@ -38,6 +46,7 @@ const ICON = {
   x: '<svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true"><path d="M18.2 2h3.3l-7.2 8.3L22.8 22h-6.6l-5.2-6.8L5 22H1.7l7.7-8.8L1.2 2H8l4.7 6.2L18.2 2zm-1.2 18h1.8L7 3.9H5.1L17 20z"/></svg>',
   instagram: '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>',
   facebook: '<svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true"><path d="M14 8.5V6.9c0-.8.2-1.2 1.3-1.2H17V2.2C16.700 2.200 15.700 2 14.600 2 12.100 2 10.500 3.500 10.500 6.300v2.200H8v3.500h2.500V22H14v-10h2.700l.4-3.500H14z"/></svg>',
+  mail: '<svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg>',
   car: '<svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 17H3v-5l2-5a2 2 0 0 1 1.9-1.3h10.200A2 2 0 0 1 19 7l2 5v5h-2"/><path d="M3 12h18"/><circle cx="7.500" cy="17" r="2"/><circle cx="16.500" cy="17" r="2"/><path d="M9.500 17h5"/></svg>',
   shield: '<svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l8 3v6c0 4.500-3.200 8-8 9-4.800-1-8-4.500-8-9V6l8-3z"/><path d="M9 12l2 2 4-4"/></svg>',
   calc: '<svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="2" width="16" height="20" rx="2"/><path d="M8 6h8M8 11h2M14 11h2M8 15h2M14 15h2M8 19h2M14 19h2"/></svg>',
@@ -184,7 +193,7 @@ ${scripts.map((s) => `<script src="${s}" defer></script>`).join('\n')}
 // Cards -----------------------------------------------------------------
 function rowCard(a, hidden) {
   return `<article class="row-card"${hidden ? ' data-extra hidden' : ''}>
-<a class="row-thumb" href="${artUrl(a)}" tabindex="-1" aria-hidden="true"><img src="${coverUrl(a)}" alt="" width="168" height="112" loading="lazy"></a>
+<a class="row-thumb" href="${artUrl(a)}" tabindex="-1" aria-hidden="true">${coverImg(a, { width: 168, height: 112, sizes: '(max-width: 600px) 100vw, 168px' })}</a>
 <div class="row-body">
 <a class="tag" href="${catUrl(a.categoria)}">${esc(catNome(a.categoria))}</a>
 <h3><a href="${artUrl(a)}">${esc(a.titulo)}</a></h3>
@@ -224,6 +233,6 @@ const freeBadge = (cls = '') => `<p class="free-badge ${cls}" role="note">${FREE
 
 module.exports = {
   FREE_TXT, freeBadge,
-  ROOT, config, loadArticles, esc, fmtPct, fmtData, catNome, catUrl, artUrl, absUrl, coverUrl,
+  ROOT, config, loadArticles, esc, fmtPct, fmtData, catNome, catUrl, artUrl, absUrl, coverUrl, coverImg,
   ICON, page, rowCard, promoCard, trustBadges, ctaBanner,
 };
