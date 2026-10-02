@@ -105,7 +105,13 @@
       "url": "https://www.bcb.gov.br/pre/normativos/res/2013/pdf/res_4292_v1_o.pdf"
     },
     "corpo": "<p>A portabilidade de crédito é um direito do consumidor: permite transferir a dívida para outra instituição que ofereça condições mais vantajosas, sem que você precise quitar o contrato com recursos próprios. As regras estão na Resolução CMN nº 4.292/2013, que abrange operações de crédito de pessoas naturais, incluindo o financiamento de veículos.</p>\n<h2>Como funciona</h2>\n<p>Você procura a instituição que quer passar a ser a credora e ela solicita à atual a transferência da dívida. A instituição original não pode recusar o pedido sem justificativa prevista na norma e não pode repassar ao cliente o custo de originação da operação.</p>\n<h2>O que avaliar antes de pedir</h2>\n<ul><li><strong>A taxa que você paga hoje.</strong> Sem esse número, não há como saber se a oferta nova é de fato melhor. A calculadora da ERASE ajuda a estimá-lo a partir da parcela, do valor financiado e do prazo.</li><li><strong>O CET da nova proposta</strong>, e não só a taxa de juros: tarifas, seguros e tributos entram na conta.</li><li><strong>O prazo restante.</strong> Prolongar o prazo reduz a parcela, mas aumenta o total pago em juros.</li><li><strong>Saldo devedor atualizado.</strong> Peça o valor para quitação e confira se ele bate com o seu controle de pagamentos.</li></ul>\n<h2>Particularidades do financiamento de veículo</h2>\n<p>O financiamento de veículo costuma ter alienação fiduciária: o carro fica como garantia, com o gravame registrado no órgão de trânsito. Na portabilidade, esse gravame precisa ser transferido para a nova instituição, o que pode levar mais tempo e exigir mais etapas do que em outros tipos de crédito. Pergunte à instituição proponente como será esse processo e quais prazos ela pratica.</p>\n<h2>Portabilidade e revisão não são a mesma coisa</h2>\n<p>A portabilidade troca o credor e as condições daqui para frente. Já a revisão do contrato é a análise do que foi pactuado no passado. Uma não impede a outra, mas são caminhos diferentes. Em caso de dúvida sobre o contrato, procure orientação profissional.</p>",
-    "foto_busca": "bank building"
+    "foto_busca": "bank building",
+    "foto": {
+      "id": 6576684,
+      "autor": "wal_172619",
+      "autorUrl": "https://pixabay.com/users/wal_172619-12138562/",
+      "pagina": "https://pixabay.com/photos/silhouettes-people-bank-suitcase-6576684/"
+    }
   },
   {
     "slug": "por-que-motos-pagam-juros-mais-altos-que-carros",
@@ -118,7 +124,13 @@
       "url": "https://www.bcb.gov.br"
     },
     "corpo": "<p>Quem acompanha as taxas divulgadas pelo Banco Central percebe que o crédito para motos costuma ser mais caro do que o destinado a carros. Isso não vale para todos os contratos, mas é uma tendência observada no mercado e vale entender os motivos antes de comparar propostas.</p>\n<h2>Fatores que pesam no preço do crédito</h2>\n<ul><li><strong>Perfil do tomador.</strong> Parte dos compradores de moto usa o veículo para trabalhar e tem renda variável, o que muda a análise de risco das instituições.</li><li><strong>Valor e liquidez do bem.</strong> Motos têm preço menor que carros. Em operações de valor baixo, os custos fixos da concessão pesam mais na taxa.</li><li><strong>Risco de inadimplência percebido.</strong> Quanto maior o risco que a instituição enxerga, maior o juro que cobra para cobri-lo.</li><li><strong>Prazo.</strong> Prazos longos aumentam a incerteza para quem empresta e o total de juros para quem paga.</li></ul>\n<h2>Por que a comparação precisa ser por segmento</h2>\n<p>Comparar o juro de uma moto com a média de carros leva a conclusões erradas: um contrato pode estar acima da média dos carros e, ainda assim, dentro do que o mercado pratica para motos. Por isso a calculadora da ERASE usa uma referência própria para cada tipo de veículo.</p>\n<h2>O que fazer na prática</h2>\n<ol><li>Descubra a taxa efetiva mensal do seu contrato.</li><li>Compare com a referência do seu segmento, e não com a de outro tipo de veículo.</li><li>Peça o CET e pesquise propostas em mais de uma instituição, inclusive a portabilidade.</li></ol>\n<p>A simulação é informativa e não considera IOF, tarifas ou seguros. Ela não define se um contrato é ou não abusivo: isso depende da análise do documento assinado.</p>",
-    "foto_busca": "motorcycle handlebar"
+    "foto_busca": "motorcycle handlebar",
+    "foto": {
+      "id": 2077914,
+      "autor": "2780243",
+      "autorUrl": "https://pixabay.com/users/2780243-2780243/",
+      "pagina": "https://pixabay.com/photos/motorcycle-transportation-monochrome-2077914/"
+    }
   },
   {
     "slug": "financiamento-agricola-linhas-subsidiadas-e-pronaf",
