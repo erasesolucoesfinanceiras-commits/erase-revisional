@@ -86,20 +86,24 @@ function atribuicao() {
 // e na próxima visita ao site.
 const OUTBOX_KEY = 'erase-outbox';
 const RETRY_BASE_MS = 3000, RETRY_MAX_MS = 300000;
-let outboxMem = [], flushing = null, retryTimer = null;
+let outboxMem = [], storageBad = false, flushing = null, retryTimer = null;
 
 function readBox() {
-  try { const raw = localStorage.getItem(OUTBOX_KEY); if (raw) return JSON.parse(raw); } catch (e) { /* usa memória */ }
+  if (!storageBad) try { const raw = localStorage.getItem(OUTBOX_KEY); if (raw) return JSON.parse(raw); } catch (e) { /* usa memória */ }
   return outboxMem;
 }
-function writeBox(box) { outboxMem = box; try { localStorage.setItem(OUTBOX_KEY, JSON.stringify(box)); } catch (e) { /* só memória */ } }
+function writeBox(box) { outboxMem = box; try { localStorage.setItem(OUTBOX_KEY, JSON.stringify(box)); storageBad = false; } catch (e) { storageBad = true; /* só memória */ } }
 const uuid = () => (crypto.randomUUID ? crypto.randomUUID() : 'l' + Date.now().toString(36) + Math.random().toString(36).slice(2, 10));
 
 /** Tenta enviar tudo que está pendente. Resolve com a quantidade que continua na fila. */
 function flushOutbox() {
   if (flushing) return flushing;
-  flushing = (async () => {
-    for (const item of readBox()) {
+  // navigator.locks: só uma aba envia por vez (a fila no localStorage é compartilhada)
+  const comLock = (fn) => (navigator.locks ? navigator.locks.request('erase-flush', fn) : fn());
+  flushing = comLock(async () => {
+    const tentados = new Set(); // inclui leads enfileirados durante o envio
+    for (let item; (item = readBox().find((i) => !tentados.has(i.id))); ) {
+      tentados.add(item.id);
       let ok = false;
       try { ok = (await postNetlify(item.form, item.data)).ok; } catch (e) { ok = false; }
       const atual = readBox();
@@ -117,7 +121,7 @@ function flushOutbox() {
     }
     flushing = null;
     return restantes.length;
-  })();
+  });
   return flushing;
 }
 window.addEventListener('online', flushOutbox);
