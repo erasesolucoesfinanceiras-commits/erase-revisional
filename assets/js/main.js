@@ -27,6 +27,7 @@ function postNetlify(formName, data) {
  * `origem` = "calculadora" | "popup-entrada".
  */
 function enviarParaCRM(origem, dados) {
+  if (CRM_ENDPOINT.includes('SUBSTITUIR')) return; // CRM ainda não configurado
   try {
     const ctrl = typeof AbortController !== 'undefined' ? new AbortController() : null;
     const timer = ctrl ? setTimeout(() => ctrl.abort(), 8000) : null;
