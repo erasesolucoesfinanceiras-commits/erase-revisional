@@ -1,4 +1,4 @@
-name: Buscar fotos dos artigos (Pexels)
+name: Buscar fotos dos artigos (Pixabay)
 
 # Roda sozinho ao enviar mudanças em branches "claude/**" e manualmente (aba Actions).
 # Preenche a foto dos artigos que ainda não têm e salva no mesmo branch (o preview da Netlify atualiza).
@@ -22,11 +22,11 @@ jobs:
       - run: npm i --no-save sharp
       - name: Buscar fotos
         env:
-          PEXELS_API_KEY: ${{ secrets.PEXELS_API_KEY }}
+          PIXABAY_API_KEY: ${{ secrets.PIXABAY_API_KEY }}
         run: node scripts/photos.js
       - name: Salvar no branch
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add -A
-          git diff --cached --quiet || { git commit -m "Fotos dos artigos (Pexels)" && git push; }
+          git diff --cached --quiet || { git commit -m "Fotos dos artigos (Pixabay)" && git push; }

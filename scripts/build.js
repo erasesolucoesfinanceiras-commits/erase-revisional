@@ -160,7 +160,7 @@ function artigos() {
 <h1>${esc(a.titulo)}</h1>
 <p class="lead">${esc(a.resumo)}</p>
 <p class="meta"><time datetime="${a.data}">${fmtData(a.data)}</time></p>
-<figure class="article-fig">${coverImg(a, { width: 860, height: 430, sizes: '(max-width: 860px) 100vw, 860px', eager: true, cls: 'article-cover' })}${a.foto ? `<figcaption>Foto: <a href="${esc(a.foto.autorUrl)}" target="_blank" rel="noopener noreferrer">${esc(a.foto.autor)}</a> / <a href="${esc(a.foto.pagina)}" target="_blank" rel="noopener noreferrer">Pexels</a></figcaption>` : ''}</figure>
+<figure class="article-fig">${coverImg(a, { width: 860, height: 430, sizes: '(max-width: 860px) 100vw, 860px', eager: true, cls: 'article-cover' })}${a.foto ? `<figcaption>Foto: <a href="${esc(a.foto.autorUrl)}" target="_blank" rel="noopener noreferrer">${esc(a.foto.autor)}</a> / <a href="${esc(a.foto.pagina)}" target="_blank" rel="noopener noreferrer">Pixabay</a></figcaption>` : ''}</figure>
 <div class="article-body">
 ${injectCTA(a.corpo)}
 </div>

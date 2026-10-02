@@ -32,7 +32,7 @@ const artUrl = (a) => `/noticias/${a.slug}.html`;
 const absUrl = (p) => config.siteUrl.replace(/\/$/, '') + p;
 const coverUrl = (a) => `/assets/img/cover-${a.categoria}.svg`;
 // Capa: foto WebP (scripts/photos.js) em 3 tamanhos; sem foto, ou se ela não carregar, volta ao desenho SVG.
-const PHOTO_WIDTHS = [480, 960, 1600]; // manter igual a WIDTHS em photos.js
+const PHOTO_WIDTHS = [480, 960, 1280]; // manter igual a WIDTHS em photos.js
 const coverImg = (a, { width, height, sizes, eager = false, cls = '' }) => {
   const base = `${cls ? `class="${cls}" ` : ''}alt="" width="${width}" height="${height}" ${eager ? 'fetchpriority="high"' : 'loading="lazy" decoding="async"'}`;
   if (!a.foto) return `<img src="${coverUrl(a)}" ${base}>`;
