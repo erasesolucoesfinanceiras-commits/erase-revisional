@@ -166,6 +166,10 @@ const FREE_BADGE_TXT = 'ANÁLISE DO CONTRATO 100% GRATUITA';
     $('#pagas-field').hidden = radio('situacao') === QUITADO;
     const d = dados(), lista = itens(d);
     setProgress(lista);
+    // aviso + destaque dos campos que faltam para mostrar a taxa na hora (não são obrigatórios)
+    const falta = { valor_financiado: !(d.pv > 0), parcela: !(d.parcela > 0), n_parcelas: !(d.n > 0) };
+    for (const [id, m] of Object.entries(falta)) $('#' + id).closest('.field').classList.toggle('falta', m);
+    $('#calc-warn').hidden = !Object.values(falta).some(Boolean);
     painelColetando(d, lista);
   }
 
@@ -208,6 +212,7 @@ const FREE_BADGE_TXT = 'ANÁLISE DO CONTRATO 100% GRATUITA';
       panel.dataset.state = 'resultado'; status.textContent = 'Recebido';
       panelBody.innerHTML = `<h2 class="panel-title">Recebemos seus dados!</h2>
         <p>Um especialista vai calcular sua taxa e falar com você no WhatsApp.</p>
+        ${completo ? '<p class="msg-bad">Não conseguimos calcular na hora: com esses números a parcela multiplicada pelo prazo não supera o valor financiado (ou a taxa seria irreal). Se quiser, confira o valor financiado, a parcela e o prazo.</p>' : ''}
         <div class="free-badge" role="note">${FREE_BADGE_TXT}</div>`;
       actions.hidden = false;
       actions.innerHTML = `<a class="btn btn-wa btn-block" target="_blank" rel="noopener noreferrer" href="${waLink(`Olá! Meu nome é ${k.nome}. Fiz a simulação na ERASE Revisional para ${NOMES[t]} e gostaria de falar com um especialista.`)}">Falar com um especialista no WhatsApp</a>

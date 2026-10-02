@@ -385,3 +385,11 @@ fieldset.field { border: 0; padding: 0; margin: 0 0 18px; min-width: 0; }
 .popup .choice-grid { grid-template-columns: 1fr; }
 .popup .choice span { min-height: 48px; }
 .popup .field legend { color: var(--text); }
+
+/* Campos necessários para ver a taxa na hora (não obrigatórios): texto + ícone + borda tracejada, nunca só cor */
+.need { display: inline-block; font-size: .72rem; font-weight: 700; padding: 2px 8px; border-radius: 999px; margin-left: 4px; vertical-align: 1px; background: color-mix(in srgb, var(--blue) 18%, var(--surface)); color: var(--blue-ink); border: 1.5px solid var(--blue); }
+.need::before { content: "◆ "; font-size: .8em; }
+.field.falta .money, .field.falta > select { border-width: 2px; border-style: dashed; border-color: var(--blue-ink); }
+.field.falta .need::after { content: " · falta preencher"; }
+.calc-warn { display: flex; gap: 8px; align-items: flex-start; margin: 14px 0 0; padding: 12px 14px; border: 2px dashed var(--blue-ink); border-radius: 12px; background: color-mix(in srgb, var(--blue) 12%, var(--surface)); color: var(--text); font-weight: 600; font-size: .92rem; }
+.calc-warn::before { content: "⚠"; font-weight: 800; flex-shrink: 0; }

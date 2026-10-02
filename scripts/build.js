@@ -239,13 +239,13 @@ function calculadora() {
 <label><input type="radio" name="tipo" value="moto"><span>Moto</span></label>
 <label><input type="radio" name="tipo" value="agricola"><span>Agrícola</span></label>
 </fieldset>
-<div class="field"><label for="valor_financiado">Valor financiado <span class="opt">(opcional)</span></label>
+<div class="field"><label for="valor_financiado">Valor financiado <span class="need">necessário para o resultado</span></label>
 <small class="hint" id="valor_financiado-hint">Valor do veículo menos a entrada</small>
 <div class="money"><span>R$</span><input id="valor_financiado" name="valor_financiado" inputmode="numeric" autocomplete="off" placeholder="0,00" aria-describedby="valor_financiado-hint"></div><small class="err" data-err="valor_financiado">Informe o valor financiado</small></div>
-<div class="field"><label for="parcela">Valor atual da parcela <span class="opt">(opcional)</span></label>
+<div class="field"><label for="parcela">Valor atual da parcela <span class="need">necessário para o resultado</span></label>
 <div class="money"><span>R$</span><input id="parcela" name="parcela" inputmode="numeric" autocomplete="off" placeholder="0,00"></div><small class="err" data-err="parcela">Informe a parcela atual</small></div>
 <div class="field-row">
-<div class="field"><label for="n_parcelas">Quantas parcelas financiou? <span class="opt">(opcional)</span></label>
+<div class="field"><label for="n_parcelas">Quantas parcelas financiou? <span class="need">necessário para o resultado</span></label>
 <select id="n_parcelas" name="n_parcelas"><option value="">Selecione</option>${parcelasOpts}</select><small class="err" data-err="n_parcelas">Selecione o total de parcelas</small></div>
 <div class="field" id="pagas-field"><label for="pagas">Quantas parcelas já pagou? <span class="opt">(opcional)</span></label>
 <small class="hint">Usamos para estimar a data do contrato</small>
@@ -259,6 +259,7 @@ ${choices('situacao', 'Como está seu financiamento hoje?', ['Em dia', 'Atrasado
 <div class="field"><label for="lead-nome">Nome completo <span class="req">*</span></label><input id="lead-nome" name="nome" autocomplete="name" placeholder="Seu nome completo (não abrevie)"><small class="err" data-err="nome">Informe seu nome completo (não abrevie)</small></div>
 <div class="field"><label for="lead-wa">WhatsApp <span class="req">*</span></label><input id="lead-wa" name="whatsapp" inputmode="tel" autocomplete="tel" placeholder="(81) 99999-9999"><small class="err" data-err="whatsapp">WhatsApp inválido — use DDD + 9 dígitos</small></div>
 <div class="field check"><label><input type="checkbox" id="lgpd" name="lgpd"><span>Autorizo a ERASE Soluções Financeiras a entrar em contato comigo por WhatsApp ou telefone sobre esta simulação, conforme a <a href="/privacidade.html" target="_blank" rel="noopener">Política de Privacidade</a>. <span class="req">*</span></span></label><small class="err" data-err="lgpd">É necessário autorizar o contato para ver o resultado</small></div></div>
+<p class="calc-warn" id="calc-warn" role="status" hidden>Para ver sua taxa na hora, preencha valor financiado, parcela e número de parcelas</p>
 ${S.freeBadge("block")}
 <button class="btn btn-primary btn-lg btn-block" type="submit" id="calc-btn">Calcular minha taxa — grátis</button>
 <p class="fine">Simulação sobre os dados que você informar. Não é análise jurídica e não indica valores a receber.</p>
