@@ -291,8 +291,9 @@ input:focus, select:focus, textarea:focus { border-color: var(--blue); outline: 
 .free-badge::before { content: "✓"; display: grid; place-items: center; width: 20px; height: 20px; border-radius: 50%; background: var(--on-blue); color: var(--blue); font-size: .8rem; flex-shrink: 0; }
 .popup .free-badge { color: var(--on-blue); margin: 0 0 14px; padding-right: 44px; justify-content: flex-start; font-size: .72rem; box-shadow: none; text-align: left; }
 .free-strip { background: var(--blue); color: var(--on-blue); font-weight: 800; font-size: .82rem; letter-spacing: .06em; text-align: center; padding: 9px 0; }
-.free-strip span { font-weight: 600; letter-spacing: 0; }
-@media (max-width: 600px) { .free-strip span { display: none; } .free-badge { font-size: .74rem; } }
+.free-strip span { display: block; font-weight: 400; font-style: italic; text-transform: none; letter-spacing: 0; font-size: .95rem; margin-top: 2px; }
+@media (min-width: 700px) { .free-strip span { display: inline; margin: 0 0 0 .5em; } .free-strip span::before { content: "· "; } }
+@media (max-width: 600px) { .free-badge { font-size: .74rem; } }
 
 /* Perguntas de múltipla escolha: botões grandes, fáceis de tocar */
 .form-section { margin: 26px 0 8px; padding-top: 18px; border-top: 1px solid var(--border); }

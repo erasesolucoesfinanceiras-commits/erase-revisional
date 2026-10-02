@@ -35,7 +35,7 @@ function home() {
   const INICIAL = 4;
   const list = rest.map((a, i) => S.rowCard(a, i >= INICIAL)).join('\n');
   const body = `
-<div class="free-strip" role="note"><div class="container">${S.FREE_TXT} <span>· feita pela ERASE, sem pagar nada por ela</span></div></div>
+<div class="free-strip" role="note"><div class="container">${S.FREE_TXT} <span>Descubra se você tem valores a recuperar</span></div></div>
 <section class="hero">
 <div class="container hero-inner">
 <span class="badge">Simulação gratuita</span>
