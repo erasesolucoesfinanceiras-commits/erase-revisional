@@ -13,6 +13,8 @@ try {
   const mes = new Date(m + '-15T12:00:00Z').toLocaleDateString('pt-BR', { month: 'long', year: 'numeric', timeZone: 'UTC' });
   config.bc = { taxaMedia: valores[m], mesReferencia: mes };
 } catch (e) { if (e.code !== 'ENOENT') throw e; }
+// Versão do CSS na URL: evita que um style.css antigo em cache (1h) quebre o HTML novo.
+const cssVer = require('crypto').createHash('md5').update(fs.readFileSync(path.join(ROOT, 'assets/css/style.css'))).digest('hex').slice(0, 8);
 const loadArticles = () =>
   readJSON('data/articles.json').sort((a, b) => (a.data < b.data ? 1 : a.data > b.data ? -1 : 0));
 
@@ -108,7 +110,7 @@ ${noindex ? '<meta name="robots" content="noindex">\n' : ''}<link rel="canonical
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/assets/css/style.css">
+<link rel="stylesheet" href="/assets/css/style.css?v=${cssVer}">
 ${jsonld ? `<script type="application/ld+json">${JSON.stringify(jsonld)}</script>\n` : ''}</head>`;
 }
 
