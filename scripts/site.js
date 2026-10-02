@@ -120,7 +120,7 @@ function header(active) {
   return `<a class="skip" href="#conteudo">Pular para o conteúdo</a>
 <header class="site-header">
 <div class="container nav">
-<a class="logo" href="/" aria-label="ERASE Revisional — início"><span class="logo-main">ERASE</span><span class="logo-sep" aria-hidden="true"></span><span class="logo-sub">REVISIONAL</span></a>
+<a class="logo" href="/" aria-label="ERASE Revisional — início"><img class="logo-img logo-light" src="/assets/img/logo-erase.webp" alt="" width="147" height="26"><img class="logo-img logo-dark" src="/assets/img/logo-erase-dark.webp" alt="" width="147" height="26"><span class="logo-sep" aria-hidden="true"></span><span class="logo-sub">REVISIONAL</span></a>
 <nav class="nav-links" id="menu" aria-label="Principal">
 <a href="/"${cur('home')}>Início</a>
 <a href="/artigos.html"${cur('artigos')}>Artigos</a>
@@ -149,7 +149,7 @@ function footer() {
 <div class="container">
 <div class="footer-grid">
 <div>
-<a class="logo" href="/" aria-label="ERASE Revisional — início"><span class="logo-main">ERASE</span><span class="logo-sep" aria-hidden="true"></span><span class="logo-sub">REVISIONAL</span></a>
+<a class="logo" href="/" aria-label="ERASE Revisional — início"><img class="logo-img logo-light" src="/assets/img/logo-erase.webp" alt="" width="147" height="26"><img class="logo-img logo-dark" src="/assets/img/logo-erase-dark.webp" alt="" width="147" height="26"><span class="logo-sep" aria-hidden="true"></span><span class="logo-sub">REVISIONAL</span></a>
 <p class="footer-desc">Notícias sobre financiamento de veículos e uma calculadora gratuita para você descobrir a taxa de juros real do seu contrato.</p>
 <div class="socials">${soc('x', 'X')}${soc('instagram', 'Instagram')}${soc('facebook', 'Facebook')}</div>
 </div>

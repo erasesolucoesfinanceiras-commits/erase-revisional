@@ -372,3 +372,8 @@ fieldset.field { border: 0; padding: 0; margin: 0 0 18px; min-width: 0; }
 .popup-close { width: 44px; height: 44px; border: 1.5px solid var(--border); }
 .popup-icon { box-shadow: 0 6px 18px rgba(63, 169, 245, .35); }
 .free-badge { border: 2px solid var(--on-blue); }
+
+/* Logo oficial (WebP transparente; versão branca no tema escuro) */
+.logo-img { height: 26px; width: auto; }
+[data-theme="dark"] .logo-light, :root:not([data-theme="dark"]) .logo-dark { display: none; }
+@media (max-width: 600px) { .logo-img { height: 22px; } }
