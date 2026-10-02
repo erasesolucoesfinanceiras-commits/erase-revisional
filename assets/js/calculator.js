@@ -70,13 +70,27 @@ const FREE_BADGE_TXT = 'ANÁLISE DO CONTRATO 100% GRATUITA';
   // ---- Formatação / máscara ---------------------------------------
   const brl = (v) => v.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
   const pct = (v) => v.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  /** Campo em reais: digitar 50000, 50.000 ou 50.000,00 vira R$ 50.000,00 (ao sair do campo; durante a digitação só põe os pontos de milhar). */
+  const fmt2 = (v) => v.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  function parseMoney(str) {
+    const s = String(str).trim().replace(/[^\d.,]/g, '');
+    if (!/\d/.test(s)) return NaN;
+    if (s.includes(',')) return parseFloat(s.replace(/\./g, '').replace(',', '.'));
+    if (/^\d+\.\d{1,2}$/.test(s)) return parseFloat(s); // "50.5" = 50,50
+    return parseFloat(s.replace(/\./g, '')); // "50.000" ou "50000"
+  }
   function maskMoney(input) {
     input.addEventListener('input', () => {
-      const d = input.value.replace(/\D/g, '').replace(/^0+(?=\d)/, '');
-      input.value = d === '' ? '' : (parseInt(d, 10) / 100).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+      const pos = input.selectionStart, antes = input.value.slice(0, pos).replace(/[^\d,]/g, '').length;
+      const [int, ...resto] = input.value.replace(/[^\d,]/g, '').split(',');
+      const inteiro = int.replace(/^0+(?=\d)/, '').replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+      input.value = resto.length ? `${inteiro},${resto.join('').slice(0, 2)}` : inteiro;
+      let n = 0, i = 0; // devolve o cursor para a mesma posição lógica
+      while (i < input.value.length && n < antes) { if (/[\d,]/.test(input.value[i])) n++; i++; }
+      input.setSelectionRange(i, i);
     });
+    input.addEventListener('blur', () => { const v = parseMoney(input.value); if (!Number.isNaN(v)) input.value = fmt2(v); });
   }
-  const parseMoney = (s) => (s === '' ? NaN : parseFloat(s.replace(/\./g, '').replace(',', '.')));
 
   // ---- Elementos -----------------------------------------------------
   const form = $('#calc-form');

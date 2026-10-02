@@ -241,9 +241,9 @@ function calculadora() {
 </fieldset>
 <div class="field"><label for="valor_financiado">Valor financiado <span class="need">necessário para o resultado</span></label>
 <small class="hint" id="valor_financiado-hint">Valor do veículo menos a entrada</small>
-<div class="money"><span>R$</span><input id="valor_financiado" name="valor_financiado" inputmode="numeric" autocomplete="off" placeholder="0,00" aria-describedby="valor_financiado-hint"></div><small class="err" data-err="valor_financiado">Informe o valor financiado</small></div>
+<div class="money"><span>R$</span><input id="valor_financiado" name="valor_financiado" inputmode="decimal" autocomplete="off" placeholder="0,00" aria-describedby="valor_financiado-hint"></div><small class="err" data-err="valor_financiado">Informe o valor financiado</small></div>
 <div class="field"><label for="parcela">Valor atual da parcela <span class="need">necessário para o resultado</span></label>
-<div class="money"><span>R$</span><input id="parcela" name="parcela" inputmode="numeric" autocomplete="off" placeholder="0,00"></div><small class="err" data-err="parcela">Informe a parcela atual</small></div>
+<div class="money"><span>R$</span><input id="parcela" name="parcela" inputmode="decimal" autocomplete="off" placeholder="0,00"></div><small class="err" data-err="parcela">Informe a parcela atual</small></div>
 <div class="field-row">
 <div class="field"><label for="n_parcelas">Quantas parcelas financiou? <span class="need">necessário para o resultado</span></label>
 <select id="n_parcelas" name="n_parcelas"><option value="">Selecione</option>${parcelasOpts}</select><small class="err" data-err="n_parcelas">Selecione o total de parcelas</small></div>
