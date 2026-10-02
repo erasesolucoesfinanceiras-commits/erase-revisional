@@ -28,7 +28,7 @@ const FREE_BADGE_TXT = 'ANÁLISE DO CONTRATO 100% GRATUITA';
   let bcb = null;
   fetch('/assets/data/bcb-veiculos.json')
     .then((r) => (r.ok ? r.json() : null))
-    .then((j) => { if (j && j.valores) { bcb = j; onChange(); } })
+    .then((j) => { if (j && j.valores) { bcb = j; if (!ultimoEnvio) onChange(); } }) // não apaga um resultado já exibido
     .catch(() => { /* sem série: usa os limites fixos */ });
 
   /** Referência (% a.m.) para o tipo e o mês de assinatura. */

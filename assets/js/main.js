@@ -26,7 +26,9 @@ function postNetlify(formName, data) {
  * a interface e nunca mostra nada ao visitante (apenas console.error).
  * `origem` = "calculadora" | "popup-entrada".
  */
-function enviarParaCRM(origem, dados) {
+function enviarParaCRM(origem, dados, tentativa = 1) {
+  if (CRM_ENDPOINT.includes('SUBSTITUIR')) return; // CRM ainda não configurado
+  const retry = () => { if (tentativa < 3) setTimeout(() => enviarParaCRM(origem, dados, tentativa + 1), 5000 * tentativa); };
   try {
     const ctrl = typeof AbortController !== 'undefined' ? new AbortController() : null;
     const timer = ctrl ? setTimeout(() => ctrl.abort(), 8000) : null;
@@ -37,8 +39,8 @@ function enviarParaCRM(origem, dados) {
       keepalive: true,
       signal: ctrl ? ctrl.signal : undefined,
     })
-      .then((r) => { if (!r.ok) console.error('CRM respondeu', r.status); })
-      .catch((err) => console.error('Falha ao enviar lead ao CRM:', err))
+      .then((r) => { if (!r.ok) { console.error('CRM respondeu', r.status); retry(); } })
+      .catch((err) => { console.error('Falha ao enviar lead ao CRM:', err); retry(); })
       .finally(() => timer && clearTimeout(timer));
   } catch (err) {
     console.error('Falha ao enviar lead ao CRM:', err);
@@ -46,6 +48,7 @@ function enviarParaCRM(origem, dados) {
 }
 
 // ---- Origem do acesso (UTMs, referrer, página de entrada) ----------
+const UTM_TTL_MS = 30 * 864e5;
 const UTM_KEYS = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content'];
 function store(kind, key, val) {
   try { const st = window[kind]; if (val === undefined) return st.getItem(key); st.setItem(key, val); } catch (e) { /* sem storage */ }
@@ -55,6 +58,7 @@ function store(kind, key, val) {
   const q = new URLSearchParams(location.search);
   if (UTM_KEYS.some((k) => q.get(k))) {
     const utm = {}; UTM_KEYS.forEach((k) => { utm[k] = (q.get(k) || '').slice(0, 120); });
+    utm.t = Date.now();
     store('localStorage', 'erase-utm', JSON.stringify(utm)); // última campanha conhecida
   }
   if (!store('sessionStorage', 'erase-landing')) {
@@ -66,6 +70,7 @@ function store(kind, key, val) {
 })();
 function atribuicao() {
   let utm = {}; try { utm = JSON.parse(store('localStorage', 'erase-utm') || '{}'); } catch (e) { /* ignore */ }
+  if (utm.t && Date.now() - utm.t > UTM_TTL_MS) utm = {}; // campanha antiga não leva o crédito
   const agora = new Date();
   const out = {
     data_hora: agora.toISOString(),
@@ -85,20 +90,24 @@ function atribuicao() {
 // e na próxima visita ao site.
 const OUTBOX_KEY = 'erase-outbox';
 const RETRY_BASE_MS = 3000, RETRY_MAX_MS = 300000;
-let outboxMem = [], flushing = null, retryTimer = null;
+let outboxMem = [], storageBad = false, flushing = null, retryTimer = null;
 
 function readBox() {
-  try { const raw = localStorage.getItem(OUTBOX_KEY); if (raw) return JSON.parse(raw); } catch (e) { /* usa memória */ }
+  if (!storageBad) try { const raw = localStorage.getItem(OUTBOX_KEY); if (raw) return JSON.parse(raw); } catch (e) { /* usa memória */ }
   return outboxMem;
 }
-function writeBox(box) { outboxMem = box; try { localStorage.setItem(OUTBOX_KEY, JSON.stringify(box)); } catch (e) { /* só memória */ } }
+function writeBox(box) { outboxMem = box; try { localStorage.setItem(OUTBOX_KEY, JSON.stringify(box)); storageBad = false; } catch (e) { storageBad = true; /* só memória */ } }
 const uuid = () => (crypto.randomUUID ? crypto.randomUUID() : 'l' + Date.now().toString(36) + Math.random().toString(36).slice(2, 10));
 
 /** Tenta enviar tudo que está pendente. Resolve com a quantidade que continua na fila. */
 function flushOutbox() {
   if (flushing) return flushing;
-  flushing = (async () => {
-    for (const item of readBox()) {
+  // navigator.locks: só uma aba envia por vez (a fila no localStorage é compartilhada)
+  const comLock = (fn) => (navigator.locks ? navigator.locks.request('erase-flush', fn) : fn());
+  flushing = comLock(async () => {
+    const tentados = new Set(); // inclui leads enfileirados durante o envio
+    for (let item; (item = readBox().find((i) => !tentados.has(i.id))); ) {
+      tentados.add(item.id);
       let ok = false;
       try { ok = (await postNetlify(item.form, item.data)).ok; } catch (e) { ok = false; }
       const atual = readBox();
@@ -116,7 +125,7 @@ function flushOutbox() {
     }
     flushing = null;
     return restantes.length;
-  })();
+  });
   return flushing;
 }
 window.addEventListener('online', flushOutbox);
@@ -227,6 +236,7 @@ if (ct) {
 
 // ---- Pop-up de entrada --------------------------------------------
 (function popup() {
+  if (location.pathname.includes('calculadora')) return; // quem já está no formulário não precisa do pop-up
   try { if (sessionStorage.getItem('erase-popup')) return; } catch (e) { /* sem storage: mostra */ }
 
   function open() {
@@ -239,14 +249,14 @@ if (ct) {
         <button class="popup-close" type="button" aria-label="Fechar">&times;</button>
         <div class="popup-icon"><svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 17H3v-5l2-5a2 2 0 0 1 1.9-1.3h10.2A2 2 0 0 1 19 7l2 5v5h-2"/><path d="M3 12h18"/><circle cx="7.5" cy="17" r="2"/><circle cx="16.5" cy="17" r="2"/><path d="M9.5 17h5"/></svg></div>
         <p class="free-badge">ANÁLISE DO CONTRATO 100% GRATUITA</p>
-        <h2 id="popup-title">Reduza até 70% do valor das parcelas do seu carro financiado</h2>
+        <h2 id="popup-title">Descubra se você está pagando juros acima da média no seu financiamento</h2>
         <p>Deixe seus dados e um especialista entra em contato. Sem compromisso. O resultado depende da análise de cada caso.</p>
         <form id="popup-form" novalidate>
           <div class="field"><label class="sr-only" for="pp-nome">Nome</label><input id="pp-nome" name="nome" placeholder="Seu nome" autocomplete="name"></div>
           <div class="field"><label class="sr-only" for="pp-tel">Telefone / WhatsApp</label><input id="pp-tel" name="telefone" inputmode="tel" placeholder="Telefone / WhatsApp" autocomplete="tel"></div>
           <div class="field"><label class="sr-only" for="pp-email">E-mail</label><input id="pp-email" name="email" type="email" placeholder="Seu e-mail" autocomplete="email"></div>
           <div class="field check"><label><input type="checkbox" id="pp-lgpd" name="lgpd"><span>Autorizo a ERASE Soluções Financeiras a entrar em contato comigo por WhatsApp, telefone ou e-mail, conforme a <a href="/privacidade.html" target="_blank" rel="noopener">Política de Privacidade</a>. *</span></label></div>
-          <button class="btn btn-primary btn-block" type="submit">Quero reduzir minhas parcelas</button>
+          <button class="btn btn-primary btn-block" type="submit">Quero a análise gratuita</button>
           <p class="form-msg" id="popup-msg" role="status" aria-live="polite"></p>
         </form>
       </div>`;
@@ -257,7 +267,15 @@ if (ct) {
       ov.remove();
       if (prevFocus && prevFocus.focus) prevFocus.focus();
     }
-    function onKey(e) { if (e.key === 'Escape') close(); }
+    function onKey(e) {
+      if (e.key === 'Escape') return close();
+      if (e.key !== 'Tab') return;
+      const f = $$('button, input, a[href]', ov); // prende o foco dentro do diálogo
+      const [a, z] = [f[0], f[f.length - 1]];
+      if (!ov.contains(document.activeElement)) { e.preventDefault(); a.focus(); }
+      else if (e.shiftKey && document.activeElement === a) { e.preventDefault(); z.focus(); }
+      else if (!e.shiftKey && document.activeElement === z) { e.preventDefault(); a.focus(); }
+    }
     document.addEventListener('keydown', onKey);
     ov.addEventListener('mousedown', (e) => { if (e.target === ov) close(); });
     $('.popup-close', ov).addEventListener('click', close);

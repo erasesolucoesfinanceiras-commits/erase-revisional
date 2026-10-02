@@ -7,6 +7,12 @@ const ROOT = path.join(__dirname, '..');
 const readJSON = (p) => JSON.parse(fs.readFileSync(path.join(ROOT, p), 'utf8'));
 
 const config = readJSON('data/config.json');
+// A série do BC (scripts/update-bcb.js) manda; config.bc é só o fallback até ela existir.
+try {
+  const { valores, ultimo_mes: m } = readJSON('assets/data/bcb-veiculos.json');
+  const mes = new Date(m + '-15T12:00:00Z').toLocaleDateString('pt-BR', { month: 'long', year: 'numeric', timeZone: 'UTC' });
+  config.bc = { taxaMedia: valores[m], mesReferencia: mes };
+} catch (e) { if (e.code !== 'ENOENT') throw e; }
 const loadArticles = () =>
   readJSON('data/articles.json').sort((a, b) => (a.data < b.data ? 1 : a.data > b.data ? -1 : 0));
 
