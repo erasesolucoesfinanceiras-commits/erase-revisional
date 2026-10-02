@@ -40,8 +40,9 @@ const FREE_BADGE_TXT = 'ANÁLISE DO CONTRATO 100% GRATUITA';
   /** Referência (% a.m.) para o tipo e o mês de assinatura. */
   function referencia(tipo, ano, mes) {
     const fixa = { limite: LIMITES[tipo], historico: false };
-    if (tipo !== 'carro' || !bcb || !ano || !mes) return fixa;
-    const chave = `${ano}-${String(mes).padStart(2, '0')}`;
+    if (tipo !== 'carro' || !bcb) return fixa;
+    // sem data estimada (nenhuma parcela paga informada): usa a última média publicada pelo BC
+    const chave = ano && mes ? `${ano}-${String(mes).padStart(2, '0')}` : bcb.ultimo_mes;
     let k = chave;
     if (bcb.valores[k] === undefined && bcb.ultimo_mes && chave > bcb.ultimo_mes) k = bcb.ultimo_mes; // mês ainda não publicado
     const v = bcb.valores[k];
@@ -151,7 +152,7 @@ const FREE_BADGE_TXT = 'ANÁLISE DO CONTRATO 100% GRATUITA';
       <p>${pronto
         ? `Clique em <strong>Calcular minha taxa</strong>: ao enviar seus dados, mostramos a taxa embutida no seu contrato (se você informou valor financiado, parcela e número de parcelas) e a comparação com a média de mercado para <span id="tipo-label">${NOMES[t]}</span>.`
         : `À medida que você preencher o formulário, preparamos o cálculo e, depois do envio dos seus dados, mostramos o resultado: calculamos a taxa que está sendo cobrada e comparamos com a média de mercado para <span id="tipo-label">${NOMES[t]}</span>.`}</p>
-      ${financiado ? `<div class="kv"><div><small>Valor financiado</small><b>${brl(financiado)}</b></div><div><small>${ref.historico ? 'Média do BC na assinatura' : `Referência (${NOMES[t]})`}</small><b>${pct(ref.limite)}% a.m.</b></div></div>` : ''}
+      ${financiado ? `<div class="kv"><div><small>Valor financiado</small><b>${brl(financiado)}</b></div><div><small>${ref.historico ? 'Média do BC no período' : `Referência (${NOMES[t]})`}</small><b>${pct(ref.limite)}% a.m.</b></div></div>` : ''}
       <ul class="steps-list">
         <li class="${steps[0] ? 'done' : ''}"><i></i>Identificar a taxa real do contrato</li>
         <li class="${steps[1] ? 'done' : ''}"><i></i>Cruzar com a referência do período estimado da assinatura</li>
@@ -223,9 +224,11 @@ const FREE_BADGE_TXT = 'ANÁLISE DO CONTRATO 100% GRATUITA';
 
     const escala = Math.max(limite * 2, mensal * 1.15);
     const wFill = Math.min(100, (mensal / escala) * 100), wMark = (limite / escala) * 100;
-    const nota = ref.historico
+    const nota = ref.historico && !d.ano
+      ? `Sem o número de parcelas pagas, usamos a média mais recente do Banco Central (${mm(...ref.chave.split('-').map(Number))}).`
+      : ref.historico
       ? `Comparação com a média do Banco Central no mês estimado da assinatura (${mm(...ref.chave.split('-').map(Number))}${ref.chave !== ref.solicitado ? ', mês mais recente disponível' : ''}).`
-      : (t === 'carro' && bcb ? (d.ano ? 'Média do mês estimado da assinatura indisponível; usamos a referência atual.' : 'Sem o número de parcelas pagas, usamos a referência atual.') : `Referência fixa para ${NOMES[t]}.`);
+      : (t === 'carro' && bcb ? 'Média do mês estimado da assinatura indisponível; usamos a referência atual.' : `Referência fixa para ${NOMES[t]}.`);
     panel.dataset.state = 'resultado'; status.textContent = 'Resultado';
     panelBody.innerHTML = `
       <p class="small-note" style="margin:0">Taxa de juros calculada (${NOMES[t]})</p>
