@@ -76,7 +76,7 @@ ${S.trustBadges()}`;
       desc: 'Notícias sobre financiamento de veículos e uma calculadora gratuita para descobrir a taxa de juros real do seu contrato e comparar com a média do Banco Central.',
       path: '/',
     },
-    active: 'home', body, forms: ['newsletter'],
+    active: 'home', body,
   }));
   urls.push(['/', '1.0']);
 }
@@ -274,6 +274,7 @@ ${choices('horario_contato', 'Melhor horário para contato', ['Manhã', 'Tarde',
 <div class="field check"><label><input type="checkbox" id="lgpd" name="lgpd"><span>Autorizo a ERASE Soluções Financeiras a entrar em contato comigo por WhatsApp, telefone ou e-mail sobre esta simulação, conforme a <a href="/privacidade.html" target="_blank" rel="noopener">Política de Privacidade</a>. <span class="req">*</span></span></label><small class="err" data-err="lgpd">É necessário autorizar o contato para ver o resultado</small></div></div>
 ${S.freeBadge("block")}
 <button class="btn btn-primary btn-lg btn-block" type="submit" id="calc-btn">Calcular minha taxa — grátis</button>
+<p class="form-msg" id="calc-msg" role="alert" aria-live="polite"></p>
 <p class="fine">Simulação sobre os dados que você informar. Não é análise jurídica e não indica valores a receber.</p>
 </form>
 </div>
@@ -340,7 +341,7 @@ ${faq.map(([q, a]) => `<details><summary>${esc(q)}</summary><p>${esc(a)}</p></de
       desc: 'Descubra a taxa de juros mensal embutida no seu financiamento de carro, moto ou máquina agrícola e compare com a média do Banco Central. Simulação gratuita.',
       path: '/calculadora.html', jsonld: faqLd,
     },
-    active: 'calc', body, forms: ['calculadora'], scripts: ['/assets/js/calculator.js'],
+    active: 'calc', body, scripts: ['/assets/js/calculator.js'],
   }));
   urls.push(['/calculadora.html', '0.9']);
 }
@@ -386,13 +387,13 @@ function legais() {
 <h2>2. Para que usamos</h2>
 <p>Usamos os dados para devolver a análise solicitada, entrar em contato por WhatsApp, telefone ou e-mail quando você autoriza, permitir o atendimento por um especialista da ERASE, responder mensagens e enviar novidades quando você se inscreve na newsletter.</p>
 <h2>3. Com quem compartilhamos</h2>
-<p>Os dados enviados nos formulários são armazenados em ferramentas de hospedagem e captura de formulários e em nosso sistema de relacionamento (CRM), e são usados pela equipe da ERASE Soluções Financeiras para entrar em contato com você. Não vendemos seus dados.</p>
+<p>Os dados enviados nos formulários são recebidos e armazenados em nosso sistema de relacionamento (CRM) e são usados pela equipe da ERASE Soluções Financeiras para entrar em contato com você. Não vendemos seus dados.</p>
 <h2>4. Por quanto tempo guardamos</h2>
 <p>Mantemos os dados pelo tempo necessário para as finalidades acima ou para cumprir obrigações legais.</p>
 <h2>5. Seus direitos</h2>
 <p>Você pode solicitar confirmação de tratamento, acesso, correção, anonimização, portabilidade e exclusão dos dados, além de revogar consentimentos, pela página <a href="/contato.html">Fale Conosco</a>.</p>
 <h2>6. Armazenamento no navegador</h2>
-<p>Usamos o armazenamento local do navegador para lembrar a sua escolha de tema (claro/escuro), exibir o pop-up uma vez por sessão, guardar a origem do acesso (UTMs e página de entrada) e manter uma fila temporária que reenvia automaticamente um formulário caso a conexão falhe, sem perder o seu contato.</p>
+<p>Usamos o armazenamento local do navegador para lembrar a sua escolha de tema (claro/escuro), exibir o pop-up uma vez por sessão e guardar a origem do acesso (UTMs e página de entrada).</p>
 <h2>7. Contato</h2>
 <p>Controladora: ${razao}. Solicitações pela página <a href="/contato.html">Fale Conosco</a>.</p>`);
 }
@@ -418,7 +419,7 @@ function contato() {
 </section>`;
   out('contato.html', S.page({
     meta: { title: `Fale Conosco | ${SITE}`, desc: 'Entre em contato com a ERASE Revisional por formulário ou WhatsApp.', path: '/contato.html' },
-    active: '', body, forms: ['contato'],
+    active: '', body,
   }));
   urls.push(['/contato.html', '0.4']);
 }

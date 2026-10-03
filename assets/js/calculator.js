@@ -1,5 +1,5 @@
 /* Calculadora de juros — carregada depois de main.js (usa $, $$, maskPhone, phoneOk,
- * emailOk, queueLead e waLink de lá).
+ * emailOk, enviarLead, setMsg, MSG_FALHA e waLink de lá).
  *
  * Matemática: Tabela Price  PMT = PV · i / (1 − (1+i)^−n)
  * Dado PMT, PV e n, a taxa "i" é encontrada por bisseção (a função é crescente em i).
@@ -196,7 +196,7 @@ const FREE_BADGE_TXT = 'ANÁLISE DO CONTRATO 100% GRATUITA';
   }
 
   // ---- Cálculo + lead ----------------------------------------------------
-  form.addEventListener('submit', (ev) => {
+  form.addEventListener('submit', async (ev) => {
     ev.preventDefault();
     const d = dados(), erros = validar(d);
     mostrarErros(erros);
@@ -223,31 +223,7 @@ const FREE_BADGE_TXT = 'ANÁLISE DO CONTRATO 100% GRATUITA';
     const nota = ref.historico
       ? `Comparação com a média do Banco Central no mês da assinatura (${mm(...ref.chave.split('-').map(Number))}${ref.chave !== ref.solicitado ? ', mês mais recente disponível' : ''}).`
       : (t === 'carro' && bcb ? 'Média do mês da assinatura indisponível; usamos a referência atual.' : `Referência fixa para ${NOMES[t]}.`);
-    panel.dataset.state = 'resultado'; status.textContent = 'Resultado';
-    panelBody.innerHTML = `
-      <p class="small-note" style="margin:0">Taxa de juros calculada (${NOMES[t]})</p>
-      <div class="rate-big">${pct(mensal)}% <small style="font-size:1rem;font-weight:600;color:var(--muted)">ao mês</small></div>
-      <p style="margin:2px 0 0">≈ ${pct(anual)}% ao ano · financiado ${brl(pv)}</p>
-      <div class="cmp ${acima ? 'over' : ''}" aria-label="Comparação com a referência">
-        <div class="cmp-track"><div class="cmp-fill" style="width:0" data-w="${wFill}"></div><div class="cmp-mark" style="left:${wMark}%" title="Referência"></div></div>
-        <div class="cmp-labels"><span>0%</span><span>Referência: ${pct(limite)}% a.m.</span><span>${pct(escala)}%</span></div>
-        <p class="fine" style="margin:6px 0 0">${nota}</p>
-      </div>
-      <div class="verdict ${acima ? 'over' : ''}">${acima ? 'Acima do parâmetro de referência' : 'Dentro do parâmetro de referência'}</div>
-      <p>${acima
-        ? `Sua taxa está <strong>${pct(mensal - limite)} ponto(s) percentual(is)</strong> acima da ${textoRef(ref, t)}. Isso é um indício que vale investigar, não uma conclusão sobre o contrato.`
-        : `Pela taxa de juros, seu contrato parece estar dentro da média de mercado (<strong>${textoRef(ref, t)}</strong>).`}</p>
-      <p>${acima
-        ? `<strong>A economia mostrada é só uma estimativa, feita com os números que você informou.</strong> A análise do contrato é que permite conferir esses números e verificar se há outras cobranças, como seguro prestamista e tarifas, que esta simulação não enxerga.`
-        : `<strong>Mas esta calculadora é só uma estimativa da taxa de juros.</strong> O contrato pode incluir seguro prestamista, tarifas e outras cobranças dentro da parcela, e isso só aparece na leitura do contrato. A análise do contrato pode verificar se há algo a questionar nesses itens.`}</p>
-      ${acima ? '' : '<p class="fine" style="margin-top:0">Esta simulação não indica valores a receber.</p>'}
-      <div class="free-badge" role="note">${FREE_BADGE_TXT}</div>
-      ${acima && restantes > 0 ? `<div class="saving"><small>Economia estimada nas parcelas restantes (${restantes})</small><b>${brl(economia)}</b>
-        <p>≈ ${brl(porParcela)} por parcela, caso o contrato estivesse na taxa de referência. É uma estimativa comparativa: <strong>não indica valores a receber</strong> e a diferença não é devida a você por qualquer instituição.</p></div>` : ''}
-      ${acima && quitado ? '<p class="fine">Como o financiamento já foi quitado, não há parcelas restantes para estimar. A diferença acima é apenas uma comparação de taxas e não indica valores a receber.</p>' : ''}
-      <p class="fine">Cálculo pelo sistema Price com os números informados. Não considera IOF, tarifas, seguros (inclusive seguro prestamista) ou encargos. Não é análise jurídica.</p>`;
-
-    // --- Lead: grava (fila com reenvio) com TODAS as respostas ---
+    // --- Lead com TODAS as respostas (enviado ao CRM antes de mostrar o resultado) ---
     const k = contato();
     const lead = {
       nome: k.nome, whatsapp: k.whatsapp, email: k.email, lgpd_aceite: 'sim',
@@ -266,25 +242,54 @@ const FREE_BADGE_TXT = 'ANÁLISE DO CONTRATO 100% GRATUITA';
       fonte_referencia: ref.historico ? `BCB SGS ${bcb.serie || ''}`.trim() : 'limite_fixo_config',
     };
     const chave = JSON.stringify(lead);
-    let enviado = Promise.resolve(true);
     if (chave !== ultimoEnvio) { // mesmo formulário reenviado = só recalcula, sem lead duplicado
+      const btn = $('#calc-btn'), rotulo = btn.textContent, aviso = $('#calc-msg');
+      btn.disabled = true; btn.textContent = 'Enviando…'; setMsg(aviso, ''); form.inert = true;
+      const ok = await enviarLead('calculadora', lead);
+      form.inert = false; btn.disabled = false; btn.textContent = rotulo;
+      if (!ok) return setMsg(aviso, MSG_FALHA + ' O resultado aparece assim que o envio for confirmado.', 'bad');
       ultimoEnvio = chave;
-      enviado = queueLead({ form: 'calculadora', crm: 'calculadora', data: lead }).enviado;
     }
+    setMsg($('#calc-msg'), '');
 
-    const msgWa = acima
-      ? `Olá! Meu nome é ${k.nome}. Fiz a simulação na ERASE Revisional para ${NOMES[t]} e a taxa calculada foi de ${pct(mensal)}% ao mês. Gostaria de falar com um especialista.`
-      : `Olá! Meu nome é ${k.nome}. Fiz a simulação na ERASE Revisional para ${NOMES[t]}, a taxa calculada foi de ${pct(mensal)}% ao mês (dentro da referência) e gostaria de pedir a análise gratuita do contrato.`;
-    actions.hidden = false;
-    actions.innerHTML = `<a class="btn btn-wa btn-block" target="_blank" rel="noopener noreferrer" href="${waLink(msgWa)}">${acima ? 'Falar com um especialista no WhatsApp' : 'Quero a análise gratuita do contrato'}</a>
-      <p class="send-status" id="send-status" role="status">Recebemos seus dados. Um especialista entrará em contato, sem compromisso.</p>`;
-    enviado.then((ok) => {
-      if (!ok) { const el = $('#send-status'); if (el) el.textContent = 'Recebemos seus dados e vamos reenviá-los automaticamente em segundo plano. Você não perde nada.'; }
-    });
-    requestAnimationFrame(() => requestAnimationFrame(() => {
-      const el = $('.cmp-fill', panelBody); if (el) el.style.width = el.dataset.w + '%';
-    }));
-    panel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    // --- Só chega aqui com o recebimento confirmado pelo CRM ---
+    const mostrarResultado = () => {
+      panel.dataset.state = 'resultado'; status.textContent = 'Resultado';
+      panelBody.innerHTML = `
+        <p class="small-note" style="margin:0">Taxa de juros calculada (${NOMES[t]})</p>
+        <div class="rate-big">${pct(mensal)}% <small style="font-size:1rem;font-weight:600;color:var(--muted)">ao mês</small></div>
+        <p style="margin:2px 0 0">≈ ${pct(anual)}% ao ano · financiado ${brl(pv)}</p>
+        <div class="cmp ${acima ? 'over' : ''}" aria-label="Comparação com a referência">
+          <div class="cmp-track"><div class="cmp-fill" style="width:0" data-w="${wFill}"></div><div class="cmp-mark" style="left:${wMark}%" title="Referência"></div></div>
+          <div class="cmp-labels"><span>0%</span><span>Referência: ${pct(limite)}% a.m.</span><span>${pct(escala)}%</span></div>
+          <p class="fine" style="margin:6px 0 0">${nota}</p>
+        </div>
+        <div class="verdict ${acima ? 'over' : ''}">${acima ? 'Acima do parâmetro de referência' : 'Dentro do parâmetro de referência'}</div>
+        <p>${acima
+          ? `Sua taxa está <strong>${pct(mensal - limite)} ponto(s) percentual(is)</strong> acima da ${textoRef(ref, t)}. Isso é um indício que vale investigar, não uma conclusão sobre o contrato.`
+          : `Pela taxa de juros, seu contrato parece estar dentro da média de mercado (<strong>${textoRef(ref, t)}</strong>).`}</p>
+        <p>${acima
+          ? `<strong>A economia mostrada é só uma estimativa, feita com os números que você informou.</strong> A análise do contrato é que permite conferir esses números e verificar se há outras cobranças, como seguro prestamista e tarifas, que esta simulação não enxerga.`
+          : `<strong>Mas esta calculadora é só uma estimativa da taxa de juros.</strong> O contrato pode incluir seguro prestamista, tarifas e outras cobranças dentro da parcela, e isso só aparece na leitura do contrato. A análise do contrato pode verificar se há algo a questionar nesses itens.`}</p>
+        ${acima ? '' : '<p class="fine" style="margin-top:0">Esta simulação não indica valores a receber.</p>'}
+        <div class="free-badge" role="note">${FREE_BADGE_TXT}</div>
+        ${acima && restantes > 0 ? `<div class="saving"><small>Economia estimada nas parcelas restantes (${restantes})</small><b>${brl(economia)}</b>
+          <p>≈ ${brl(porParcela)} por parcela, caso o contrato estivesse na taxa de referência. É uma estimativa comparativa: <strong>não indica valores a receber</strong> e a diferença não é devida a você por qualquer instituição.</p></div>` : ''}
+        ${acima && quitado ? '<p class="fine">Como o financiamento já foi quitado, não há parcelas restantes para estimar. A diferença acima é apenas uma comparação de taxas e não indica valores a receber.</p>' : ''}
+        <p class="fine">Cálculo pelo sistema Price com os números informados. Não considera IOF, tarifas, seguros (inclusive seguro prestamista) ou encargos. Não é análise jurídica.</p>`;
+
+      const msgWa = acima
+        ? `Olá! Meu nome é ${k.nome}. Fiz a simulação na ERASE Revisional para ${NOMES[t]} e a taxa calculada foi de ${pct(mensal)}% ao mês. Gostaria de falar com um especialista.`
+        : `Olá! Meu nome é ${k.nome}. Fiz a simulação na ERASE Revisional para ${NOMES[t]}, a taxa calculada foi de ${pct(mensal)}% ao mês (dentro da referência) e gostaria de pedir a análise gratuita do contrato.`;
+      actions.hidden = false;
+      actions.innerHTML = `<a class="btn btn-wa btn-block" target="_blank" rel="noopener noreferrer" href="${waLink(msgWa)}">${acima ? 'Falar com um especialista no WhatsApp' : 'Quero a análise gratuita do contrato'}</a>
+        <p class="send-status" id="send-status" role="status">Recebemos seus dados. Um especialista entrará em contato, sem compromisso.</p>`;
+      requestAnimationFrame(() => requestAnimationFrame(() => {
+        const el = $('.cmp-fill', panelBody); if (el) el.style.width = el.dataset.w + '%';
+      }));
+      panel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    };
+    mostrarResultado();
   });
 
   // ---- Eventos ------------------------------------------------------

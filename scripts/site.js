@@ -44,30 +44,6 @@ const ICON = {
   people: '<svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="8" r="3.500"/><path d="M2.500 20c.5-3.500 3-5.500 6.500-5.500s6 2 6.500 5.500"/><path d="M16 4.500a3.500 3.500 0 0 1 0 7M18 14.800c1.800.7 3 2.400 3.500 5.200"/></svg>',
 };
 
-// Campos de atribuição/controle anexados automaticamente a todo lead (ver main.js → queueLead).
-const ATTR = ['lead_id', 'data_hora', 'data_hora_local', 'origem_trafego', 'utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content', 'pagina_entrada', 'pagina_envio'];
-const FORMS = {
-  'popup-entrada': ['nome', 'telefone', 'email', 'lgpd_aceite', 'status', ...ATTR],
-  calculadora: ['nome', 'whatsapp', 'email', 'lgpd_aceite', 'status', 'resultado', 'tipo', 'banco', 'valor_total', 'entrada', 'valor_financiado', 'parcela', 'n_parcelas', 'parcelas_pagas', 'taxa_calculada', 'limite_referencia', 'economia_estimada', 'parcelas_em_dia', 'parcelas_atrasadas', 'busca_apreensao', 'mes_assinatura', 'ano_assinatura', 'data_assinatura', 'seguro', 'contrato_em_maos', 'acao_revisional_anterior', 'cidade', 'estado', 'horario_contato', 'referencia_periodo', 'media_bcb_periodo', 'fonte_referencia', ...ATTR],
-  newsletter: ['email'],
-  contato: ['nome', 'email', 'mensagem'],
-};
-
-// Formulários espelho (ocultos) — a Netlify precisa vê-los no HTML estático
-// do build, já que os formulários reais são enviados via JavaScript.
-function hiddenForms(names) {
-  return names
-    .map(
-      (n) =>
-        `<form name="${n}" data-netlify="true" netlify-honeypot="bot-field" hidden>` +
-        `<input type="hidden" name="form-name" value="${n}">` +
-        `<input name="bot-field">` +
-        FORMS[n].map((f) => `<input name="${f}">`).join('') +
-        `</form>`
-    )
-    .join('\n');
-}
-
 function head({ title, desc, path: p, image, type = 'website', jsonld, noindex }) {
   const url = absUrl(p);
   const img = absUrl(image || '/assets/img/og-image.png');
@@ -164,8 +140,8 @@ ${dados ? `<p class="company">${esc(dados)}</p>` : ''}
 </footer>`;
 }
 
-// Monta a página completa. `forms` = formulários espelho extras desta página.
-function page({ meta, active, body, forms = [], scripts = [] }) {
+// Monta a página completa.
+function page({ meta, active, body, scripts = [] }) {
   return `${head(meta)}
 <body data-wa="${esc(config.whatsapp)}">
 ${header(active)}
@@ -173,7 +149,6 @@ ${header(active)}
 ${body}
 </main>
 ${footer()}
-${hiddenForms(['popup-entrada', ...forms])}
 <script src="/assets/js/main.js" defer></script>
 ${scripts.map((s) => `<script src="${s}" defer></script>`).join('\n')}
 </body>
