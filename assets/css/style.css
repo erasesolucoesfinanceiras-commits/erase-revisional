@@ -291,8 +291,9 @@ input:focus, select:focus, textarea:focus { border-color: var(--blue); outline: 
 .free-badge::before { content: "✓"; display: grid; place-items: center; width: 20px; height: 20px; border-radius: 50%; background: var(--on-blue); color: var(--blue); font-size: .8rem; flex-shrink: 0; }
 .popup .free-badge { color: var(--on-blue); margin: 0 0 14px; padding-right: 44px; justify-content: flex-start; font-size: .72rem; box-shadow: none; text-align: left; }
 .free-strip { background: var(--blue); color: var(--on-blue); font-weight: 800; font-size: .82rem; letter-spacing: .06em; text-align: center; padding: 9px 0; }
-.free-strip span { font-weight: 600; letter-spacing: 0; }
-@media (max-width: 600px) { .free-strip span { display: none; } .free-badge { font-size: .74rem; } }
+.free-strip span { display: block; font-weight: 400; font-style: italic; text-transform: none; letter-spacing: 0; font-size: .95rem; margin-top: 2px; }
+@media (min-width: 700px) { .free-strip span { display: inline; margin: 0 0 0 .5em; } .free-strip span::before { content: "· "; } }
+@media (max-width: 600px) { .free-badge { font-size: .74rem; } }
 
 /* Perguntas de múltipla escolha: botões grandes, fáceis de tocar */
 .form-section { margin: 26px 0 8px; padding-top: 18px; border-top: 1px solid var(--border); }
@@ -318,3 +319,77 @@ fieldset.field { border: 0; padding: 0; margin: 0 0 18px; min-width: 0; }
   .field-row.tight { grid-template-columns: 1fr 1fr; }
   .choice span { min-height: 56px; }
 }
+
+/* ===== Revisão visual (acessível a daltonismo: estado = texto + ícone + padrão, nunca só cor) ===== */
+/* Home: a calculadora é a chamada principal */
+.hero { padding: 56px 0 44px; background: radial-gradient(900px 420px at 50% -20%, color-mix(in srgb, var(--blue) 28%, transparent), transparent), var(--bg); }
+.hero h1 { font-size: clamp(2.1rem, 5.5vw, 3.4rem); }
+.hero .lead { margin-bottom: 28px; }
+.btn-hero { gap: 12px; padding: 18px 34px; font-size: 1.2rem; border-radius: 16px; border: 2px solid var(--on-blue); box-shadow: 0 10px 28px rgba(63, 169, 245, .45); }
+.btn-hero:hover { transform: translateY(-2px); }
+.btn-hero svg { flex-shrink: 0; }
+.nl-section { margin-bottom: 56px; }
+.nl-card { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 20px; background: var(--surface); border: 1px solid var(--border); border-radius: 20px; padding: 24px; max-width: 760px; margin: 0 auto; }
+.nl-card > svg { color: var(--blue-ink); }
+.nl-card h2 { margin: 0; font-size: 1.3rem; flex: 1 1 200px; }
+.nl-card .newsletter { flex: 1 1 100%; margin: 0; max-width: none; }
+.nl-card .form-msg { flex: 1 1 100%; margin: 0; }
+
+/* Cards e fotos */
+.row-card, .promo, .trust-item, .card-form, .calc-card, .panel { border-width: 1.5px; }
+.row-thumb { background: var(--surface-2); }
+.row-thumb img, .featured img, .article-cover { background: var(--surface-2); }
+.tag::before { content: "● "; font-size: .7em; vertical-align: 1px; }
+.tag-on-img::before { content: none; }
+.article-fig { margin: 20px 0 28px; }
+.article-fig .article-cover { margin: 0; }
+.article-fig figcaption { font-size: .8rem; color: var(--muted); margin-top: 8px; }
+.article-fig figcaption a { color: var(--muted); text-decoration: underline; }
+.featured::after { background: linear-gradient(180deg, rgba(3,8,14,.2) 10%, rgba(3,8,14,.92)); } /* texto sobre foto sempre legível */
+
+/* Estados: ícone + texto + padrão além da cor */
+.form-msg.ok::before { content: "✓ "; font-weight: 800; }
+.form-msg.bad::before { content: "⚠ "; font-weight: 800; }
+.form-msg.ok, .form-msg.bad { font-weight: 600; }
+.err::before, .msg-bad::before { content: "⚠ "; }
+.field.invalid .money, .field.invalid > input, .field.invalid > select, .field.invalid .choice span { border-width: 3px; border-style: dashed; }
+.verdict::before { content: "✓ "; }
+.verdict.over::before { content: "▲ "; }
+.verdict { border: 2px solid currentColor; }
+.verdict.over { border-style: dashed; }
+.cmp-fill { background-image: none; }
+.cmp.over .cmp-fill { background-image: repeating-linear-gradient(45deg, transparent 0 6px, rgba(255,255,255,.45) 6px 10px); } /* listras = acima */
+.cmp-mark { width: 4px; box-shadow: 0 0 0 2px var(--surface); }
+.card-list.yes h3::before { content: "✓ "; }
+.card-list.no h3::before { content: "✕ "; }
+.panel[data-state="resultado"] .status::before { content: "✓ "; }
+.steps-list li.done i::after { content: "✓"; display: block; font-size: 11px; line-height: 14px; text-align: center; color: var(--on-blue); font-style: normal; font-weight: 800; }
+.steps-list li.done i { box-shadow: none; }
+
+/* Calculadora e pop-up */
+.calc-card, .panel { border-radius: 24px; }
+.field label, .vtype legend, .field legend { font-size: .95rem; }
+.popup { border: 2px solid var(--blue); }
+.popup-close { width: 44px; height: 44px; border: 1.5px solid var(--border); }
+.popup-icon { box-shadow: 0 6px 18px rgba(63, 169, 245, .35); }
+.free-badge { border: 2px solid var(--on-blue); }
+
+/* Logo oficial (WebP transparente; versão branca no tema escuro) */
+.logo-img { height: 26px; width: auto; }
+[data-theme="dark"] .logo-light, :root:not([data-theme="dark"]) .logo-dark { display: none; }
+@media (max-width: 600px) { .logo-img { height: 22px; } }
+
+/* Formulários simplificados */
+.hint { display: block; color: var(--muted); font-size: .84rem; margin: -2px 0 6px; }
+.popup .choices { margin-bottom: 12px; }
+.popup .choice-grid { grid-template-columns: 1fr; }
+.popup .choice span { min-height: 48px; }
+.popup .field legend { color: var(--text); }
+
+/* Campos necessários para ver a taxa na hora (não obrigatórios): texto + ícone + borda tracejada, nunca só cor */
+.need { display: inline-block; font-size: .72rem; font-weight: 700; padding: 2px 8px; border-radius: 999px; margin-left: 4px; vertical-align: 1px; background: color-mix(in srgb, var(--blue) 18%, var(--surface)); color: var(--blue-ink); border: 1.5px solid var(--blue); }
+.need::before { content: "◆ "; font-size: .8em; }
+.field.falta .money, .field.falta > select { border-width: 2px; border-style: dashed; border-color: var(--blue-ink); }
+.field.falta .need::after { content: " · falta preencher"; }
+.calc-warn { display: flex; gap: 8px; align-items: flex-start; margin: 14px 0 0; padding: 12px 14px; border: 2px dashed var(--blue-ink); border-radius: 12px; background: color-mix(in srgb, var(--blue) 12%, var(--surface)); color: var(--text); font-weight: 600; font-size: .92rem; }
+.calc-warn::before { content: "⚠"; font-weight: 800; flex-shrink: 0; }

@@ -213,8 +213,8 @@ if (ct) {
         <form id="popup-form" novalidate>
           <div class="field"><label class="sr-only" for="pp-nome">Nome</label><input id="pp-nome" name="nome" placeholder="Seu nome" autocomplete="name"></div>
           <div class="field"><label class="sr-only" for="pp-tel">Telefone / WhatsApp</label><input id="pp-tel" name="telefone" inputmode="tel" placeholder="Telefone / WhatsApp" autocomplete="tel"></div>
-          <div class="field"><label class="sr-only" for="pp-email">E-mail</label><input id="pp-email" name="email" type="email" placeholder="Seu e-mail" autocomplete="email"></div>
-          <div class="field check"><label><input type="checkbox" id="pp-lgpd" name="lgpd"><span>Autorizo a ERASE Soluções Financeiras a entrar em contato comigo por WhatsApp, telefone ou e-mail, conforme a <a href="/privacidade.html" target="_blank" rel="noopener">Política de Privacidade</a>. *</span></label></div>
+          <fieldset class="field choices" data-group="situacao"><legend>Como está seu financiamento hoje? <span class="req">*</span></legend><div class="choice-grid">${['Em dia', 'Atrasado', 'Busca e apreensão'].map((o) => `<label class="choice"><input type="radio" name="situacao" value="${o}"><span>${o}</span></label>`).join('')}</div></fieldset>
+          <div class="field check"><label><input type="checkbox" id="pp-lgpd" name="lgpd"><span>Autorizo a ERASE Soluções Financeiras a entrar em contato comigo por WhatsApp ou telefone, conforme a <a href="/privacidade.html" target="_blank" rel="noopener">Política de Privacidade</a>. *</span></label></div>
           <button class="btn btn-primary btn-block" type="submit">Quero a análise gratuita</button>
           <p class="form-msg" id="popup-msg" role="status" aria-live="polite"></p>
         </form>
@@ -244,10 +244,17 @@ if (ct) {
     $('#popup-form', ov).addEventListener('submit', async (e) => {
       e.preventDefault();
       const f = e.target, msg = $('#popup-msg', ov);
-      const d = { nome: f.nome.value.trim(), telefone: f.telefone.value.trim(), email: f.email.value.trim() };
+      const sit = f.querySelector('input[name="situacao"]:checked');
+      // Mesmos nomes de campo e valores da calculadora (o CRM marca URGENTE se atrasado ou busca e apreensão).
+      const SITUACAO = {
+        'Em dia': { parcelas_em_dia: 'Em dia', busca_apreensao: '' },
+        'Atrasado': { parcelas_em_dia: 'Atrasadas', busca_apreensao: '' },
+        'Busca e apreensão': { parcelas_em_dia: '', busca_apreensao: 'Já tem processo de busca e apreensão' },
+      };
+      const d = { nome: f.nome.value.trim(), telefone: f.telefone.value.trim(), ...(sit ? SITUACAO[sit.value] : {}) };
       if (d.nome.length < 2) return setMsg(msg, 'Informe seu nome.', 'bad');
       if (!phoneOk(d.telefone)) return setMsg(msg, 'Informe um telefone/WhatsApp válido com DDD.', 'bad');
-      if (!emailOk(d.email)) return setMsg(msg, 'Informe um e-mail válido.', 'bad');
+      if (!sit) return setMsg(msg, 'Escolha como está seu financiamento.', 'bad');
       if (!f.lgpd.checked) return setMsg(msg, 'É necessário autorizar o contato para enviar.', 'bad');
       const btn = $('button[type=submit]', f);
       btn.disabled = true; setMsg(msg, 'Enviando…');
