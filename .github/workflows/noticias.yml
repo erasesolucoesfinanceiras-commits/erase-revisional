@@ -44,7 +44,10 @@ jobs:
         if: steps.decidir.outputs.rodar == 'true'
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
-        run: node scripts/generate-article.js "${{ github.event.inputs.categoria }}"
+          PIXABAY_API_KEY: ${{ secrets.PIXABAY_API_KEY }}
+        run: |
+          npm i --no-save sharp
+          node scripts/generate-article.js "${{ github.event.inputs.categoria }}"
 
       - name: Abrir Pull Request para revisão
         if: steps.decidir.outputs.rodar == 'true'

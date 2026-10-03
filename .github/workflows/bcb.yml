@@ -4,6 +4,11 @@ on:
   schedule:
     - cron: "0 12 6 * *" # dia 6 de cada mês (o BC publica com defasagem)
   workflow_dispatch:
+    inputs:
+      direto:
+        description: "Gravar direto na branch escolhida, sem abrir Pull Request (para testar numa branch)"
+        type: boolean
+        default: false
 
 permissions:
   contents: write
@@ -21,7 +26,15 @@ jobs:
         run: node scripts/update-bcb.js
       - name: Reconstruir o site
         run: node scripts/build.js
+      - name: Gravar direto na branch
+        if: inputs.direto
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git diff --cached --quiet || { git commit -m "Série histórica do Banco Central" && git push; }
       - name: Abrir Pull Request
+        if: ${{ !inputs.direto }}
         uses: peter-evans/create-pull-request@v7
         with:
           branch: bcb/atualizacao-${{ github.run_id }}

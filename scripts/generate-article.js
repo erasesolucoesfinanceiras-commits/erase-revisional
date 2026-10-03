@@ -6,6 +6,7 @@
 const fs = require('fs');
 const path = require('path');
 const { execFileSync } = require('child_process');
+const { fetchPhoto, FALLBACK_Q } = require('./photos');
 
 const ROOT = path.join(__dirname, '..');
 const ARTICLES = path.join(ROOT, 'data', 'articles.json');
@@ -63,7 +64,7 @@ Regras obrigatórias:
 - Não repita estes assuntos já publicados: ${existentes.slice(0, 25).map((a) => `"${a.titulo}"`).join('; ')}.
 - Corpo em HTML simples usando apenas <p>, <h2>, <h3>, <ul>, <li>, <strong>, <em> (sem <h1>, sem estilos).
 Responda APENAS com um objeto JSON (sem markdown) neste formato:
-{"titulo": "até 90 caracteres", "resumo": "1 a 2 frases, até 220 caracteres", "corpo": "<p>...</p>", "fonte": {"nome": "nome do veículo/órgão", "url": "https://..."}}`;
+{"titulo": "até 90 caracteres", "resumo": "1 a 2 frases, até 220 caracteres", "corpo": "<p>...</p>", "fonte": {"nome": "nome do veículo/órgão", "url": "https://..."}, "foto_busca": "2 a 4 palavras EM INGLÊS para buscar uma foto de banco de imagens que combine com o tema (objetos/cenas genéricas, sem nomes de pessoas, marcas ou logotipos)"}`;
 
   const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${MODEL}:generateContent`, {
     method: 'POST',
@@ -104,7 +105,9 @@ Responda APENAS com um objeto JSON (sem markdown) neste formato:
         url: /^https?:\/\//.test((art.fonte && art.fonte.url) || '') ? art.fonte.url : (fallbackFonte && fallbackFonte.uri) || '',
       };
       if (!fonte.nome) throw new Error('Sem fonte');
-      lista.unshift({ slug, categoria, titulo, resumo, data: new Date().toISOString().slice(0, 10), fonte, corpo });
+      const foto_busca = String(art.foto_busca || '').trim().slice(0, 60) || FALLBACK_Q[categoria];
+      const foto = await fetchPhoto(slug, foto_busca, lista.map((a) => a.foto && a.foto.id)); // null = capa SVG de reserva
+      lista.unshift({ slug, categoria, titulo, resumo, data: new Date().toISOString().slice(0, 10), fonte, corpo, foto_busca, ...(foto && { foto }) });
       fs.writeFileSync(ARTICLES, JSON.stringify(lista, null, 2) + '\n');
       execFileSync('node', [path.join(__dirname, 'build.js')], { stdio: 'inherit' });
       console.log(`Artigo criado: ${slug} (${config.categorias[categoria].nome})`);

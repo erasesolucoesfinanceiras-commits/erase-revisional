@@ -6,7 +6,7 @@
 const fs = require('fs');
 const path = require('path');
 const S = require('./site');
-const { config: C, esc, fmtPct, fmtData, catNome, catUrl, artUrl, absUrl, coverUrl, ICON } = S;
+const { config: C, esc, fmtPct, fmtData, catNome, catUrl, artUrl, absUrl, coverUrl, coverImg, ICON } = S;
 
 // Páginas .html: links internos saem sem a extensão (href="/calculadora.html" -> "/calculadora").
 const limparLinks = (html) => html.replace(/(href|action)="(\/[^"#?]*?)\.html([#?][^"]*)?"/g, '$1="$2$3"');
@@ -24,31 +24,32 @@ const LEGAL_DATE = '2026-10-01'; // data de vigência dos textos legais (altere 
 const LASTMOD = articles[0].data; // evita diffs ruidosos a cada build
 
 // ---------------------------------------------------------------- HOME
-function home() {
-  const [feat, ...rest] = articles;
-  const INICIAL = 4;
-  const list = rest.map((a, i) => S.rowCard(a, i >= INICIAL)).join('\n');
-  const body = `
-<div class="free-strip" role="note"><div class="container">${S.FREE_TXT} <span>· feita pela ERASE, sem pagar nada por ela</span></div></div>
-<section class="hero">
-<div class="container hero-inner">
-<span class="badge">Simulação gratuita</span>
-<h1>Seu financiamento de veículo pode estar cobrando juros acima da média</h1>
-<p class="lead">Notícias sobre financiamento e uma calculadora gratuita que resolve a taxa de juros real do seu contrato e compara com a referência do Banco Central.</p>
-<form class="newsletter" id="newsletter-form" novalidate>
+const nl = `<form class="newsletter" id="newsletter-form" novalidate>
 <label class="sr-only" for="nl-email">Seu e-mail</label>
 <input id="nl-email" name="email" type="email" placeholder="Seu melhor e-mail" autocomplete="email" required>
 <input type="text" name="bot-field" class="hp" tabindex="-1" autocomplete="off" aria-hidden="true">
 <button class="btn btn-dark" type="submit">Receber novidades</button>
 </form>
 <p class="form-msg" id="newsletter-msg" role="status" aria-live="polite"></p>
-<a class="btn btn-primary btn-lg" href="/calculadora.html">Calcular minha taxa agora</a>
+`;
+function home() {
+  const [feat, ...rest] = articles;
+  const INICIAL = 4;
+  const list = rest.map((a, i) => S.rowCard(a, i >= INICIAL)).join('\n');
+  const body = `
+<div class="free-strip" role="note"><div class="container">${S.FREE_TXT} <span>Descubra se você tem valores a recuperar</span></div></div>
+<section class="hero">
+<div class="container hero-inner">
+<span class="badge">Simulação gratuita</span>
+<h1>Seu financiamento de veículo pode estar cobrando juros acima da média</h1>
+<p class="lead">Notícias sobre financiamento e uma calculadora gratuita que resolve a taxa de juros real do seu contrato e compara com a referência do Banco Central.</p>
+<a class="btn btn-primary btn-lg btn-hero" href="/calculadora.html">${ICON.calc}Calcular minha taxa agora<span aria-hidden="true">→</span></a>
 </div>
 </section>
 
 <section class="container featured-wrap" aria-label="Destaque">
 <a class="featured" href="${artUrl(feat)}">
-<img src="${coverUrl(feat)}" alt="" width="1160" height="460">
+${coverImg(feat, { width: 1160, height: 460, sizes: '(max-width: 1200px) 100vw, 1160px', eager: true })}
 <div class="featured-text">
 <span class="tag tag-on-img">${esc(catNome(feat.categoria))}</span>
 <h2>${esc(feat.titulo)}</h2>
@@ -71,7 +72,13 @@ ${rest.length > INICIAL ? '<button class="btn btn-outline btn-block more-btn" id
 </section>
 
 ${S.ctaBanner()}
-${S.trustBadges()}`;
+${S.trustBadges()}
+<section class="container nl-section" aria-label="Newsletter">
+<div class="nl-card">
+${ICON.mail}<h2>Receber novidades</h2>
+${nl}
+</div>
+</section>`;
   out('index.html', S.page({
     meta: {
       title: `${SITE} | Juros de financiamento de veículos: notícias e calculadora`,
@@ -155,7 +162,7 @@ function artigos() {
 <h1>${esc(a.titulo)}</h1>
 <p class="lead">${esc(a.resumo)}</p>
 <p class="meta"><time datetime="${a.data}">${fmtData(a.data)}</time></p>
-<img class="article-cover" src="${coverUrl(a)}" alt="" width="860" height="430">
+<figure class="article-fig">${coverImg(a, { width: 860, height: 430, sizes: '(max-width: 860px) 100vw, 860px', eager: true, cls: 'article-cover' })}${a.foto ? `<figcaption>Foto: <a href="${esc(a.foto.autorUrl)}" target="_blank" rel="noopener noreferrer">${esc(a.foto.autor)}</a> / <a href="${esc(a.foto.pagina)}" target="_blank" rel="noopener noreferrer">Pixabay</a></figcaption>` : ''}</figure>
 <div class="article-body">
 ${injectCTA(a.corpo)}
 </div>
@@ -186,7 +193,7 @@ function calculadora() {
       `A taxa média divulgada pelo Banco Central para crédito livre a pessoas físicas na aquisição de veículos foi de ${fmtPct(bc.taxaMedia)}% ao mês na última divulgação (${bc.mesReferencia}). Motos costumam ser mais caras e financiamentos agrícolas, mais baratos, por conta de linhas subsidiadas como o Pronaf.`],
     ['A partir de que taxa a calculadora sinaliza o contrato?',
       (hasBcb
-        ? `Para carros, comparamos a taxa calculada com a taxa média do Banco Central no mês em que você assinou o contrato (série histórica); se o mês não estiver disponível, usamos ${fmtPct(L.carro)}% ao mês. Para motos e agrícolas usamos referências fixas de ${fmtPct(L.moto)}% e ${fmtPct(L.agricola)}% ao mês. `
+        ? `Para carros, comparamos a taxa calculada com a taxa média do Banco Central no mês estimado da assinatura — hoje menos as parcelas já pagas (série histórica); se o mês não estiver disponível, usamos ${fmtPct(L.carro)}% ao mês. Para motos e agrícolas usamos referências fixas de ${fmtPct(L.moto)}% e ${fmtPct(L.agricola)}% ao mês. `
         : `A partir de ${fmtPct(L.carro)}% ao mês para carros, ${fmtPct(L.moto)}% para motos e ${fmtPct(L.agricola)}% para agrícolas. `) + `Ser sinalizado aqui não quer dizer que o contrato tem problema — quer dizer que ele está acima do nosso parâmetro de comparação, que é conservador de propósito.`],
     ['Uma taxa acima da faixa é ilegal?',
       'Não por si só. A jurisprudência do STJ é que juros remuneratórios não têm limite fixo e só podem ser considerados abusivos quando comprovadamente destoam da taxa média de mercado da época da contratação — e isso é avaliado caso a caso. Sua taxa também depende do seu perfil de crédito, da garantia e do que foi negociado. Ficar acima da faixa é um indício que vale investigar, não uma conclusão: a análise do contrato é feita gratuitamente pela ERASE e, em caso de ação judicial, a decisão final é do Judiciário.'],
@@ -211,7 +218,6 @@ function calculadora() {
     return `<fieldset class="field choices${curtas ? ' short' : ''}${curtas && opts.length === 2 ? ' two' : ''}" data-group="${name}"><legend>${legend}${req ? ' <span class="req">*</span>' : ' <span class="opt">(opcional)</span>'}</legend><div class="choice-grid">${opts.map((o) => `<label class="choice"><input type="radio" name="${name}" value="${esc(o)}"><span>${esc(o)}</span></label>`).join('')}</div><small class="err" data-err="${name}">Escolha uma opção</small></fieldset>`;
   };
   const MESES = ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'];
-  const UFS = 'AC AL AP AM BA CE DF ES GO MA MT MS MG PA PB PR PE PI RJ RN RS RO RR SC SP SE TO'.split(' ');
   const parcelasOpts = [12, 18, 24, 30, 36, 42, 48, 54, 60, 66, 72, 84, 96]
     .map((n) => `<option value="${n}">${n} parcelas</option>`).join('');
 
@@ -220,7 +226,7 @@ function calculadora() {
 <span class="eyebrow">Simulação gratuita · Carros, motos e agrícolas</span>
 <h1><span class="grad">Qual é a taxa real do seu financiamento?</span></h1>
 <p class="lead">Em pouco mais de um minuto, a calculadora resolve a taxa de juros mensal embutida no seu contrato — a partir da parcela, do valor financiado e do prazo — e mostra como ela se compara à média publicada pelo Banco Central, hoje em torno de <strong>${fmtPct(bc.taxaMedia)}% ao mês</strong> para carros, segundo a última divulgação do Banco Central (${esc(bc.mesReferencia)}).</p>
-<p class="small-note">${hasBcb ? 'Para carros, a comparação usa a média do Banco Central do mês em que você assinou o contrato. ' : ''}É um cálculo comparativo, gratuito e sem compromisso. Não é análise jurídica do contrato e não indica valores a receber.</p>
+<p class="small-note">${hasBcb ? 'Para carros, a comparação usa a média do Banco Central do mês estimado da assinatura (hoje menos as parcelas já pagas). ' : ''}É um cálculo comparativo, gratuito e sem compromisso. Não é análise jurídica do contrato e não indica valores a receber.</p>
 </div></section>
 
 <section class="container calc-grid" id="calculadora"
@@ -235,45 +241,27 @@ function calculadora() {
 <label><input type="radio" name="tipo" value="moto"><span>Moto</span></label>
 <label><input type="radio" name="tipo" value="agricola"><span>Agrícola</span></label>
 </fieldset>
-<div class="field"><label for="banco">Banco / financeira <span class="opt">(opcional)</span></label>
-<input id="banco" name="banco" list="bancos" autocomplete="off" placeholder="Ex.: Santander, BV, Itaú" maxlength="60"><datalist id="bancos"><option value="Banco do Brasil"><option value="Bradesco"><option value="Caixa"><option value="Itaú"><option value="Santander"><option value="BV"><option value="Banco Pan"><option value="Omni"><option value="Safra"><option value="Porto Seguro"><option value="Outro"></datalist></div>
-<div class="field"><label for="valor_total">Valor total do veículo (R$) <span class="req">*</span></label>
-<div class="money"><span>R$</span><input id="valor_total" name="valor_total" inputmode="numeric" autocomplete="off" placeholder="0,00"></div><small class="err" data-err="valor_total">Informe o valor do veículo</small></div>
-<div class="field"><label for="entrada">Valor de entrada <span class="req">*</span></label>
-<div class="money"><span>R$</span><input id="entrada" name="entrada" inputmode="numeric" autocomplete="off" placeholder="0,00"></div><small class="err" data-err="entrada">Informe a entrada (pode ser 0)</small></div>
-<div class="field"><label for="parcela">Valor atual da parcela <span class="req">*</span></label>
-<div class="money"><span>R$</span><input id="parcela" name="parcela" inputmode="numeric" autocomplete="off" placeholder="0,00"></div><small class="err" data-err="parcela">Informe a parcela atual</small></div>
+<div class="field"><label for="valor_financiado">Valor financiado <span class="need">necessário para o resultado</span></label>
+<small class="hint" id="valor_financiado-hint">Valor do veículo menos a entrada</small>
+<div class="money"><span>R$</span><input id="valor_financiado" name="valor_financiado" inputmode="decimal" autocomplete="off" placeholder="0,00" aria-describedby="valor_financiado-hint"></div><small class="err" data-err="valor_financiado">Informe o valor financiado</small></div>
+<div class="field"><label for="parcela">Valor atual da parcela <span class="need">necessário para o resultado</span></label>
+<div class="money"><span>R$</span><input id="parcela" name="parcela" inputmode="decimal" autocomplete="off" placeholder="0,00"></div><small class="err" data-err="parcela">Informe a parcela atual</small></div>
 <div class="field-row">
-<div class="field"><label for="n_parcelas">Quantas parcelas financiou? <span class="req">*</span></label>
+<div class="field"><label for="n_parcelas">Quantas parcelas financiou? <span class="need">necessário para o resultado</span></label>
 <select id="n_parcelas" name="n_parcelas"><option value="">Selecione</option>${parcelasOpts}</select><small class="err" data-err="n_parcelas">Selecione o total de parcelas</small></div>
-<div class="field" id="pagas-field"><label for="pagas">Quantas parcelas já pagou? <span class="req">*</span></label>
+<div class="field" id="pagas-field"><label for="pagas">Quantas parcelas já pagou? <span class="opt">(opcional)</span></label>
+<small class="hint">Usamos para estimar a data do contrato</small>
 <div class="money suffix"><input id="pagas" name="pagas" type="number" inputmode="numeric" min="0" step="1" placeholder="0"><span>meses</span></div><small class="err" data-err="pagas">Informe quantas parcelas já pagou</small></div>
 </div>
-<div class="field"><label for="mes_assinatura">Mês e ano em que assinou o contrato <span class="req">*</span></label>
-<div class="field-row tight"><select id="mes_assinatura" name="mes_assinatura"><option value="">Mês</option>${MESES.map((m, i) => `<option value="${i + 1}">${m}</option>`).join('')}</select>
-<select id="ano_assinatura" name="ano_assinatura"><option value="">Ano</option></select></div><small class="err" data-err="assinatura">Informe o mês e o ano da assinatura</small></div>
-
 <div class="form-section"><h3>Sobre o seu financiamento</h3>
-${choices('parcelas_em_dia', 'Suas parcelas estão em dia?', ['Em dia', 'Atrasadas', 'Já quitei o financiamento'], { req: true })}
-<div class="field" id="atrasadas-box" hidden><label for="atrasadas">Quantas parcelas estão atrasadas? <span class="req">*</span></label>
-<div class="money suffix"><input id="atrasadas" name="atrasadas" type="number" inputmode="numeric" min="1" max="96" step="1" placeholder="0"><span>parcelas</span></div><small class="err" data-err="atrasadas">Informe quantas parcelas estão atrasadas</small></div>
-${choices('busca_apreensao', 'Seu veículo está com busca e apreensão?', ['Não', 'Recebi notificação de cobrança', 'Já tem processo de busca e apreensão', 'O veículo já foi apreendido'], { req: true })}
-</div>
-
-<div class="form-section"><h3>Ajude a entender o seu caso <span class="opt">(opcional)</span></h3>
-${choices('seguro', 'Tem seguro no contrato?', ['Sim', 'Não', 'Não sei'])}
-${choices('contrato_em_maos', 'Tem o contrato em mãos?', ['Sim', 'Não', 'Posso pedir ao banco'])}
-${choices('acao_revisional_anterior', 'Já entrou com ação revisional antes?', ['Sim', 'Não'])}
+${choices('situacao', 'Como está seu financiamento hoje?', ['Em dia', 'Atrasado', 'Busca e apreensão', 'Já quitei'], { req: true })}
 </div>
 
 <div class="contact-block"><h3>Para ver o resultado, informe seu contato</h3>
 <div class="field"><label for="lead-nome">Nome completo <span class="req">*</span></label><input id="lead-nome" name="nome" autocomplete="name" placeholder="Seu nome completo (não abrevie)"><small class="err" data-err="nome">Informe seu nome completo (não abrevie)</small></div>
 <div class="field"><label for="lead-wa">WhatsApp <span class="req">*</span></label><input id="lead-wa" name="whatsapp" inputmode="tel" autocomplete="tel" placeholder="(81) 99999-9999"><small class="err" data-err="whatsapp">WhatsApp inválido — use DDD + 9 dígitos</small></div>
-<div class="field"><label for="lead-email">E-mail <span class="opt">(opcional)</span></label><input id="lead-email" name="email" type="email" autocomplete="email" placeholder="voce@email.com"><small class="err" data-err="email">E-mail inválido</small></div>
-<div class="field-row cidade-row"><div class="field"><label for="cidade">Cidade <span class="opt">(opcional)</span></label><input id="cidade" name="cidade" autocomplete="address-level2" placeholder="Sua cidade" maxlength="60"></div>
-<div class="field"><label for="estado">Estado <span class="opt">(opcional)</span></label><select id="estado" name="estado" autocomplete="address-level1"><option value="">UF</option>${UFS.map((u) => `<option value="${u}">${u}</option>`).join('')}</select></div></div>
-${choices('horario_contato', 'Melhor horário para contato', ['Manhã', 'Tarde', 'Noite'])}
-<div class="field check"><label><input type="checkbox" id="lgpd" name="lgpd"><span>Autorizo a ERASE Soluções Financeiras a entrar em contato comigo por WhatsApp, telefone ou e-mail sobre esta simulação, conforme a <a href="/privacidade.html" target="_blank" rel="noopener">Política de Privacidade</a>. <span class="req">*</span></span></label><small class="err" data-err="lgpd">É necessário autorizar o contato para ver o resultado</small></div></div>
+<div class="field check"><label><input type="checkbox" id="lgpd" name="lgpd"><span>Autorizo a ERASE Soluções Financeiras a entrar em contato comigo por WhatsApp ou telefone sobre esta simulação, conforme a <a href="/privacidade.html" target="_blank" rel="noopener">Política de Privacidade</a>. <span class="req">*</span></span></label><small class="err" data-err="lgpd">É necessário autorizar o contato para ver o resultado</small></div></div>
+<p class="calc-warn" id="calc-warn" role="status" hidden>Para ver sua taxa na hora, preencha valor financiado, parcela e número de parcelas</p>
 ${S.freeBadge("block")}
 <button class="btn btn-primary btn-lg btn-block" type="submit" id="calc-btn">Calcular minha taxa — grátis</button>
 <p class="form-msg" id="calc-msg" role="alert" aria-live="polite"></p>
@@ -327,7 +315,7 @@ ${S.freeBadge("block")}
 <section class="container prose-block">
 <h2>Como funciona</h2>
 <ol class="how">
-<li><span>1</span><div><h3>Informe os números do contrato</h3><p>Tipo de veículo, valor do veículo, entrada, parcela, prazo e quantas parcelas já pagou.</p></div></li>
+<li><span>1</span><div><h3>Informe os números do contrato</h3><p>Tipo de veículo, como está o financiamento e, se quiser, valor financiado (valor do veículo menos a entrada), parcela, prazo e quantas parcelas já pagou.</p></div></li>
 <li><span>2</span><div><h3>Calculamos a taxa embutida</h3><p>Resolvemos a taxa mensal pelo sistema Price e comparamos com a referência do seu tipo de veículo.</p></div></li>
 <li><span>3</span><div><h3>Veja o resultado e decida</h3><p>Você vê a taxa, o veredito e a economia estimada. Se quiser, fala com um especialista.</p></div></li>
 </ol>
@@ -382,9 +370,9 @@ function legais() {
 <p class="meta">Última atualização: ${fmtData(LEGAL_DATE)}</p>
 <p>Esta política explica como a ${razao} trata dados pessoais coletados neste site, em conformidade com a Lei Geral de Proteção de Dados (Lei 13.709/2018).</p>
 <h2>1. Dados que coletamos</h2>
-<ul><li><strong>Calculadora:</strong> nome, WhatsApp, e-mail (opcional), o aceite de contato e os dados do financiamento informados (tipo de veículo, banco, valores, parcelas e taxa calculada), além do resultado (acima ou dentro do parâmetro).</li>
+<ul><li><strong>Calculadora:</strong> nome, WhatsApp, o aceite de contato e os dados do financiamento informados (tipo de veículo, valor financiado, parcela, prazo, parcelas pagas, mês e ano da assinatura, situação das parcelas e se há busca e apreensão), além da taxa calculada e do resultado (acima ou dentro do parâmetro).</li>
 <li><strong>Origem do acesso:</strong> parâmetros de campanha (UTMs), site de origem, página de entrada, data e hora do envio, para saber de onde veio o contato e medir nossos anúncios.</li>
-<li><strong>Pop-up e newsletter:</strong> nome, telefone/WhatsApp e e-mail, conforme o formulário preenchido.</li>
+<li><strong>Pop-up:</strong> nome, telefone/WhatsApp, a situação do financiamento (em dia, atrasado ou busca e apreensão) e o aceite de contato. <strong>Newsletter:</strong> e-mail.</li>
 <li><strong>Fale Conosco:</strong> nome, e-mail e mensagem.</li></ul>
 <h2>2. Para que usamos</h2>
 <p>Usamos os dados para devolver a análise solicitada, entrar em contato por WhatsApp, telefone ou e-mail quando você autoriza, permitir o atendimento por um especialista da ERASE, responder mensagens e enviar novidades quando você se inscreve na newsletter.</p>
