@@ -3,47 +3,43 @@
  */
 
 // =====================================================================
-// ⚠️  ATENÇÃO — PLACEHOLDERS A PREENCHER DEPOIS  ⚠️
-// Endpoint e chave da API do CRM da ERASE (repositório erasecrm).
-// Enquanto estiverem como "SUBSTITUIR-DEPOIS", o envio ao CRM falha em
-// silêncio (console.error) e o visitante nem percebe. O Netlify Forms
-// continua funcionando como backup redundante — NÃO remover.
+// ENVIO DE LEADS — CRM da ERASE (único destino; o Netlify Forms foi removido).
+// A chave abaixo é a "chave do site": por natureza fica visível no navegador, e o
+// CRM só aceita envios vindos de *.eraseconsulta.com.br. Teste real:
+// https://revisional.eraseconsulta.com.br (prévias *.netlify.app podem ser bloqueadas).
 // Estas constantes também são usadas por calculator.js.
 // =====================================================================
-const CRM_ENDPOINT = "https://SUBSTITUIR-DEPOIS.com/api/leads/website";
-const CRM_API_KEY = "SUBSTITUIR-DEPOIS";
-
-// ---- Envios --------------------------------------------------------
-
-/** POST cru ao Netlify Forms (form-name deve existir no formulário espelho do HTML). */
-function postNetlify(formName, data) {
-  const body = new URLSearchParams({ 'form-name': formName, ...data }).toString();
-  return fetch('/', { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body });
-}
+const CRM_ENDPOINT = "https://lqxwdyjctsmirinvvyow.supabase.co/functions/v1/entrada-site";
+const CRM_API_KEY = "erase_site_179340d5359c433abb6011ee7c881e3e79f932e261ce4b04ac037debf431bf6e";
+const ENVIO_TIMEOUT_MS = 15000;
+const MSG_FALHA = 'Não conseguimos enviar agora. Seus dados continuam aqui: confira a conexão e tente de novo.';
 
 /**
- * Segundo envio, direto ao CRM. Dispara e esquece: nunca lança, nunca bloqueia
- * a interface e nunca mostra nada ao visitante (apenas console.error).
- * `origem` = "calculadora" | "popup-entrada".
+ * Envia um formulário ao CRM (JSON). `origem` = nome do formulário
+ * (newsletter | contato | popup-entrada | calculadora); "bot-field" vai vazio
+ * (campo anti-spam). Resolve true SOMENTE se o CRM confirmar o recebimento
+ * (HTTP 2xx e corpo sem erro). Nunca lança: qualquer falha resolve false.
  */
-function enviarParaCRM(origem, dados, tentativa = 1) {
-  if (CRM_ENDPOINT.includes('SUBSTITUIR')) return; // CRM ainda não configurado
-  const retry = () => { if (tentativa < 3) setTimeout(() => enviarParaCRM(origem, dados, tentativa + 1), 5000 * tentativa); };
+async function enviarParaCRM(origem, dados) {
+  const ctrl = new AbortController();
+  const timer = setTimeout(() => ctrl.abort(), ENVIO_TIMEOUT_MS);
   try {
-    const ctrl = typeof AbortController !== 'undefined' ? new AbortController() : null;
-    const timer = ctrl ? setTimeout(() => ctrl.abort(), 8000) : null;
-    fetch(CRM_ENDPOINT, {
+    const r = await fetch(CRM_ENDPOINT, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'x-api-key': CRM_API_KEY },
-      body: JSON.stringify({ origem, ...dados }),
-      keepalive: true,
-      signal: ctrl ? ctrl.signal : undefined,
-    })
-      .then((r) => { if (!r.ok) { console.error('CRM respondeu', r.status); retry(); } })
-      .catch((err) => { console.error('Falha ao enviar lead ao CRM:', err); retry(); })
-      .finally(() => timer && clearTimeout(timer));
+      body: JSON.stringify({ origem, 'bot-field': '', ...dados }),
+      signal: ctrl.signal,
+    });
+    let corpo = null;
+    try { corpo = await r.json(); } catch (e) { /* corpo vazio ou não-JSON */ }
+    const ok = r.ok && !(corpo && (corpo.ok === false || corpo.success === false || corpo.error));
+    if (!ok) console.error('CRM não confirmou o recebimento:', r.status, corpo);
+    return ok;
   } catch (err) {
-    console.error('Falha ao enviar lead ao CRM:', err);
+    console.error('Falha ao enviar ao CRM:', err);
+    return false;
+  } finally {
+    clearTimeout(timer);
   }
 }
 
@@ -83,67 +79,24 @@ function atribuicao() {
   return out;
 }
 
-// ---- Fila de envio com reenvio automático (não perde lead) ----------
-// Todo formulário é gravado primeiro em localStorage ("caixa de saída") e só sai
-// da fila quando o Netlify Forms responde OK. Se falhar (rede, instabilidade),
-// tenta de novo com espera crescente, ao voltar a conexão, ao reabrir a aba
-// e na próxima visita ao site.
-const OUTBOX_KEY = 'erase-outbox';
-const RETRY_BASE_MS = 3000, RETRY_MAX_MS = 300000;
-let outboxMem = [], storageBad = false, flushing = null, retryTimer = null;
-
-function readBox() {
-  if (!storageBad) try { const raw = localStorage.getItem(OUTBOX_KEY); if (raw) return JSON.parse(raw); } catch (e) { /* usa memória */ }
-  return outboxMem;
-}
-function writeBox(box) { outboxMem = box; try { localStorage.setItem(OUTBOX_KEY, JSON.stringify(box)); storageBad = false; } catch (e) { storageBad = true; /* só memória */ } }
+// ---- Envio de lead ---------------------------------------------------
+// Sem fila em segundo plano: o visitante só vê sucesso depois que o CRM confirma.
+// Se falhar, o formulário continua preenchido e a pessoa tenta de novo. O lead_id
+// é o MESMO nas novas tentativas do mesmo envio, para o CRM reconhecer duplicados.
 const uuid = () => (crypto.randomUUID ? crypto.randomUUID() : 'l' + Date.now().toString(36) + Math.random().toString(36).slice(2, 10));
-
-/** Tenta enviar tudo que está pendente. Resolve com a quantidade que continua na fila. */
-function flushOutbox() {
-  if (flushing) return flushing;
-  // navigator.locks: só uma aba envia por vez (a fila no localStorage é compartilhada)
-  const comLock = (fn) => (navigator.locks ? navigator.locks.request('erase-flush', fn) : fn());
-  flushing = comLock(async () => {
-    const tentados = new Set(); // inclui leads enfileirados durante o envio
-    for (let item; (item = readBox().find((i) => !tentados.has(i.id))); ) {
-      tentados.add(item.id);
-      let ok = false;
-      try { ok = (await postNetlify(item.form, item.data)).ok; } catch (e) { ok = false; }
-      const atual = readBox();
-      if (ok) writeBox(atual.filter((i) => i.id !== item.id));
-      else {
-        console.error('Envio pendente, será repetido:', item.form);
-        writeBox(atual.map((i) => (i.id === item.id ? { ...i, tentativas: (i.tentativas || 0) + 1 } : i)));
-      }
-    }
-    const restantes = readBox();
-    clearTimeout(retryTimer);
-    if (restantes.length) {
-      const n = Math.max(...restantes.map((i) => i.tentativas || 1));
-      retryTimer = setTimeout(flushOutbox, Math.min(RETRY_MAX_MS, RETRY_BASE_MS * 2 ** (n - 1)));
-    }
-    flushing = null;
-    return restantes.length;
-  });
-  return flushing;
+const idsPendentes = {};
+function idDoEnvio(form, chave) {
+  const p = idsPendentes[form];
+  return p && p.chave === chave ? p.id : (idsPendentes[form] = { chave, id: uuid() }).id;
 }
-window.addEventListener('online', flushOutbox);
-document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible' && readBox().length) flushOutbox(); });
-if (readBox().length) setTimeout(flushOutbox, 1500); // pendências de visitas anteriores
-
-/**
- * Registra um lead: grava na fila (nunca se perde), dispara o envio ao Netlify Forms
- * (com reenvio automático) e, se `crm` for informado, o envio paralelo ao CRM.
- * Retorna { id, enviado: Promise<boolean> } — `enviado` resolve true se já saiu na 1ª tentativa.
- */
-function queueLead({ form, crm, data, comAtribuicao = true }) {
-  const id = uuid();
-  const completo = { ...data, ...(comAtribuicao ? atribuicao() : {}), lead_id: id };
-  writeBox([...readBox(), { id, form, data: completo, criado: Date.now(), tentativas: 0 }]);
-  if (crm) enviarParaCRM(crm, completo);
-  return { id, enviado: flushOutbox().then(() => !readBox().some((i) => i.id === id)) };
+/** Envia o lead ao CRM; com `comAtribuicao`, anexa lead_id e os campos de origem/UTM. */
+async function enviarLead(form, dados, { comAtribuicao = true } = {}) {
+  const extra = comAtribuicao ? { ...atribuicao(), lead_id: idDoEnvio(form, JSON.stringify(dados)) } : {};
+  const ok = await enviarParaCRM(form, { ...dados, ...extra });
+  if (ok) delete idsPendentes[form];
+  return ok;
 }
+try { localStorage.removeItem('erase-outbox'); } catch (e) { /* fila antiga, se existir */ }
 
 // ---- Utilidades ----------------------------------------------------
 const $ = (s, el) => (el || document).querySelector(s);
@@ -210,26 +163,32 @@ function setMsg(el, text, kind) { if (el) { el.textContent = text; el.className 
 
 const nl = $('#newsletter-form');
 if (nl) {
-  nl.addEventListener('submit', (e) => {
+  nl.addEventListener('submit', async (e) => {
     e.preventDefault();
-    const msg = $('#newsletter-msg');
+    const msg = $('#newsletter-msg'), btn = $('button[type=submit]', nl);
     const email = nl.email.value.trim();
     if (!emailOk(email)) return setMsg(msg, 'Informe um e-mail válido.', 'bad');
     if (nl['bot-field'].value) return;
-    queueLead({ form: 'newsletter', data: { email }, comAtribuicao: false });
+    btn.disabled = true; setMsg(msg, 'Enviando…');
+    const ok = await enviarLead('newsletter', { email, 'bot-field': nl['bot-field'].value }, { comAtribuicao: false });
+    btn.disabled = false;
+    if (!ok) return setMsg(msg, MSG_FALHA, 'bad');
     nl.reset(); setMsg(msg, 'Pronto! Você vai receber nossas novidades.', 'ok');
   });
 }
 
 const ct = $('#contact-form');
 if (ct) {
-  ct.addEventListener('submit', (e) => {
+  ct.addEventListener('submit', async (e) => {
     e.preventDefault();
-    const msg = $('#contact-msg');
+    const msg = $('#contact-msg'), btn = $('button[type=submit]', ct);
     const d = { nome: ct.nome.value.trim(), email: ct.email.value.trim(), mensagem: ct.mensagem.value.trim() };
     if (!d.nome || !emailOk(d.email) || !d.mensagem) return setMsg(msg, 'Preencha nome, e-mail válido e mensagem.', 'bad');
     if (ct['bot-field'].value) return;
-    queueLead({ form: 'contato', data: d, comAtribuicao: false });
+    btn.disabled = true; setMsg(msg, 'Enviando…');
+    const ok = await enviarLead('contato', { ...d, 'bot-field': ct['bot-field'].value }, { comAtribuicao: false });
+    btn.disabled = false;
+    if (!ok) return setMsg(msg, MSG_FALHA, 'bad');
     ct.reset(); setMsg(msg, 'Mensagem recebida. Retornaremos em breve.', 'ok');
   });
 }
@@ -297,8 +256,11 @@ if (ct) {
       if (!phoneOk(d.telefone)) return setMsg(msg, 'Informe um telefone/WhatsApp válido com DDD.', 'bad');
       if (!sit) return setMsg(msg, 'Escolha como está seu financiamento.', 'bad');
       if (!f.lgpd.checked) return setMsg(msg, 'É necessário autorizar o contato para enviar.', 'bad');
-      // Grava na fila (reenvio automático) e envia ao CRM em paralelo; nunca perde o lead.
-      queueLead({ form: 'popup-entrada', crm: 'popup-entrada', data: { ...d, lgpd_aceite: 'sim', status: 'novo' } });
+      const btn = $('button[type=submit]', f);
+      btn.disabled = true; setMsg(msg, 'Enviando…');
+      const ok = await enviarLead('popup-entrada', { ...d, lgpd_aceite: 'sim', status: 'novo' });
+      btn.disabled = false;
+      if (!ok) return setMsg(msg, MSG_FALHA, 'bad'); // dados continuam no formulário
       f.reset();
       setMsg(msg, 'Recebemos seus dados! Em breve um especialista falará com você.', 'ok');
       setTimeout(close, 2600);
