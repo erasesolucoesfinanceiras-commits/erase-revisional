@@ -1,0 +1,8 @@
+{
+  "name": "erase-revisional",
+  "private": true,
+  "description": "Portal ERASE Revisional (site estático)",
+  "scripts": {
+    "build": "node scripts/build.js && node scripts/publish.js"
+  }
+}

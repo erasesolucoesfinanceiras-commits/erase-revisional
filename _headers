@@ -1,0 +1,14 @@
+# Cabeçalhos HTTP — equivalente ao [[headers]] do netlify.toml.
+# Formato lido pelo Cloudflare Pages (a Netlify também lê este arquivo; os valores são os mesmos).
+/assets/*
+  Cache-Control: public, max-age=3600
+
+/*
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+
+# Não indexar os endereços temporários do Cloudflare (*.pages.dev e prévias); só o domínio oficial.
+https://:project.pages.dev/*
+  X-Robots-Tag: noindex
+https://:version.:project.pages.dev/*
+  X-Robots-Tag: noindex

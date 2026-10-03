@@ -1,6 +1,6 @@
 # ERASE Revisional
 
-Portal de notícias sobre financiamento de veículos + calculadora de juros (isca de leads). Site estático (HTML/CSS/JS puro) na Netlify; os 4 formulários (newsletter, contato, popup-entrada, calculadora) enviam direto ao CRM da ERASE.
+Portal de notícias sobre financiamento de veículos + calculadora de juros (isca de leads). Site estático (HTML/CSS/JS puro), hospedado na Netlify (e preparado para o Cloudflare Pages); os 4 formulários (newsletter, contato, popup-entrada, calculadora) enviam direto ao CRM da ERASE.
 
 ## Como editar
 - **Tudo é gerado** por `node scripts/build.js` a partir de `data/config.json` e `data/articles.json`. Não edite os `.html` à mão.
@@ -18,13 +18,23 @@ Portal de notícias sobre financiamento de veículos + calculadora de juros (isc
 2. `data/config.json`: links de X e Facebook em `social` (ícones só aparecem quando há URL) e revisar `bc` a cada divulgação do Banco Central. Depois rode `node scripts/build.js`.
 3. Os 8 artigos iniciais são exemplos genéricos: revise antes de publicar.
 4. **Banco Central:** rodar o workflow *Atualizar série do Banco Central* (acima) logo após o merge.
-5. Netlify: subdomínio `revisional.eraseconsulta.com.br`; GitHub: secret `GEMINI_API_KEY` e permissão de PRs (passo a passo na descrição do PR).
+5. Hospedagem: subdomínio `revisional.eraseconsulta.com.br` (Netlify hoje; ver "Hospedagem" para o Cloudflare Pages); GitHub: secret `GEMINI_API_KEY` e permissão de PRs (passo a passo na descrição do PR).
 
 ## Série histórica do Banco Central (comparação por período)
 A calculadora compara a taxa de **carros** com a média do Banco Central do **mês da assinatura** (SGS 25471: taxa média mensal de juros, pessoas físicas, aquisição de veículos, % ao mês, desde 06/2000). Moto e agrícola usam limite fixo (`data/config.json`).
 - O arquivo `assets/data/bcb-veiculos.json` **ainda não existe**: enquanto isso a calculadora usa os limites fixos e os textos do site não afirmam comparação por período.
 - Para gerar: GitHub → Actions → **Atualizar série do Banco Central** → *Run workflow* (disparo manual, depois do merge na `main`). Ele baixa a série pelo GitHub Actions, reconstrói o site e abre um PR; ao fazer o merge, a comparação por período passa a valer. Roda sozinho todo dia 6 do mês.
 - O script se recusa a gravar séries curtas ou em unidade errada (% ao ano).
+
+## Hospedagem
+- **Netlify (atual):** `netlify.toml` publica a raiz (`.`) com os cabeçalhos de segurança/cache. Sem redirecionamentos, funções, plugins nem variáveis.
+- **Cloudflare Pages (migração):** conectar este repositório, produção = `main`.
+  - Framework preset: **None** · Build command: `node scripts/build.js && node scripts/publish.js` (ou `npm run build`) · Build output directory: **`dist`**
+  - Variáveis de ambiente: **nenhuma obrigatória** (a versão do Node vem de `.node-version`; opcional `NODE_VERSION`).
+  - `_headers` é o equivalente do `[[headers]]` do `netlify.toml` (e bloqueia a indexação de `*.pages.dev`). Não há `_redirects` porque não existem redirecionamentos.
+  - Os links do site não usam `.html` (o Cloudflare redireciona `/x.html` → `/x`); `scripts/publish.js` copia só os arquivos públicos para `dist/`.
+  - Cada branch/PR gera uma prévia no Cloudflare; para economizar builds, em *Settings > Builds* desligue as prévias de branches.
+  - O CRM só aceita `*.eraseconsulta.com.br`: os formulários só funcionam no domínio oficial, não em `*.pages.dev`.
 
 ## Automação de notícias
 `.github/workflows/noticias.yml` roda todo dia e segue só quando `dia do ano % 3 == 0` (ou manualmente, na aba Actions). Gera 1 artigo com `gemini-2.5-flash` + Google Search (camada gratuita), reconstrói o site e abre um **Pull Request** para revisão — nada vai ao ar sem o merge.

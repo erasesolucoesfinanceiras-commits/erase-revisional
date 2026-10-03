@@ -8,10 +8,12 @@ const path = require('path');
 const S = require('./site');
 const { config: C, esc, fmtPct, fmtData, catNome, catUrl, artUrl, absUrl, coverUrl, ICON } = S;
 
+// Páginas .html: links internos saem sem a extensão (href="/calculadora.html" -> "/calculadora").
+const limparLinks = (html) => html.replace(/(href|action)="(\/[^"#?]*?)\.html([#?][^"]*)?"/g, '$1="$2$3"');
 const out = (rel, content) => {
   const f = path.join(S.ROOT, rel);
   fs.mkdirSync(path.dirname(f), { recursive: true });
-  fs.writeFileSync(f, content);
+  fs.writeFileSync(f, rel.endsWith('.html') ? limparLinks(content) : content);
 };
 
 const articles = S.loadArticles();

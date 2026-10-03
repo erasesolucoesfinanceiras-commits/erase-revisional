@@ -29,7 +29,9 @@ const fmtData = (iso) =>
 const catNome = (slug) => config.categorias[slug].nome;
 const catUrl = (slug) => `/categoria-${slug}.html`;
 const artUrl = (a) => `/noticias/${a.slug}.html`;
-const absUrl = (p) => config.siteUrl.replace(/\/$/, '') + p;
+// URLs públicas sem ".html" (o Cloudflare Pages redireciona /x.html -> /x; a Netlify serve /x direto).
+const semHtml = (p) => p.replace(/\.html$/, '');
+const absUrl = (p) => config.siteUrl.replace(/\/$/, '') + semHtml(p);
 const coverUrl = (a) => `/assets/img/cover-${a.categoria}.svg`;
 
 const ICON = {

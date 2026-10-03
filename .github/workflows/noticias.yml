@@ -57,5 +57,5 @@ jobs:
             Artigo gerado automaticamente (Gemini gratuito + Google Search).
 
             **Revise antes de aceitar:** fatos, tom, ausência de promessa de resultado e a fonte citada.
-            Ao fazer o merge, o Netlify publica o artigo, o card na home e na categoria, e o sitemap atualizado.
+            Ao fazer o merge na main, o site é publicado automaticamente com o artigo, o card na home e na categoria e o sitemap atualizado.
           labels: noticia-automatica
