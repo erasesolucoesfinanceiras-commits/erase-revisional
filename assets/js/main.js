@@ -93,8 +93,10 @@ function idDoEnvio(form, chave) {
 const CAMPOS_CAMPANHA = ['origem_trafego', 'pagina_entrada', 'pagina_envio', ...UTM_KEYS];
 function soCampanha() { const a = atribuicao(); return Object.fromEntries(CAMPOS_CAMPANHA.map((k) => [k, a[k]])); }
 /** Envia o lead ao CRM; `comAtribuicao`: lead_id + origem/UTM/data-hora (calculadora, pop-up); `campanha`: só origem/UTM/páginas. */
-async function enviarLead(form, dados, { comAtribuicao = true, campanha = false } = {}) {
+async function enviarLead(form, dados, { comAtribuicao = true, campanha = false, comLeadId = false } = {}) {
   const extra = comAtribuicao ? { ...atribuicao(), lead_id: idDoEnvio(form, JSON.stringify(dados)) } : campanha ? soCampanha() : {};
+  // `comLeadId`: só o lead_id (mesmo formato da calculadora/pop-up); fica igual nas novas tentativas do mesmo envio.
+  if (!comAtribuicao && comLeadId) extra.lead_id = idDoEnvio(form, JSON.stringify(dados));
   const ok = await enviarParaCRM(form, { ...dados, ...extra });
   if (ok) delete idsPendentes[form];
   return ok;
@@ -189,7 +191,7 @@ if (ct) {
     if (!d.nome || !emailOk(d.email) || !d.mensagem) return setMsg(msg, 'Preencha nome, e-mail válido e mensagem.', 'bad');
     if (ct['bot-field'].value) return;
     btn.disabled = true; setMsg(msg, 'Enviando…');
-    const ok = await enviarLead('contato', { ...d, 'bot-field': ct['bot-field'].value }, { comAtribuicao: false, campanha: true });
+    const ok = await enviarLead('contato', { ...d, 'bot-field': ct['bot-field'].value }, { comAtribuicao: false, campanha: true, comLeadId: true });
     btn.disabled = false;
     if (!ok) return setMsg(msg, MSG_FALHA, 'bad');
     ct.reset(); setMsg(msg, 'Mensagem recebida. Retornaremos em breve.', 'ok');
