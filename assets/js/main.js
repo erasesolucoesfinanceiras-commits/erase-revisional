@@ -170,7 +170,7 @@ if (nl) {
     if (!emailOk(email)) return setMsg(msg, 'Informe um e-mail válido.', 'bad');
     if (nl['bot-field'].value) return;
     btn.disabled = true; setMsg(msg, 'Enviando…');
-    const ok = await enviarLead('newsletter', { email, 'bot-field': nl['bot-field'].value }, { comAtribuicao: false });
+    const ok = await enviarLead('newsletter', { email, lgpd_aceite: 'sim', 'bot-field': nl['bot-field'].value }, { comAtribuicao: false });
     btn.disabled = false;
     if (!ok) return setMsg(msg, MSG_FALHA, 'bad');
     nl.reset(); setMsg(msg, 'Pronto! Você vai receber nossas novidades.', 'ok');

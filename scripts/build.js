@@ -30,6 +30,7 @@ const nl = `<form class="newsletter" id="newsletter-form" novalidate>
 <input type="text" name="bot-field" class="hp" tabindex="-1" autocomplete="off" aria-hidden="true">
 <button class="btn btn-dark" type="submit">Receber novidades</button>
 </form>
+<p class="fine newsletter-note">Ao se inscrever, você concorda em receber e-mails da ERASE e pode cancelar quando quiser. <a href="/privacidade.html">Política de Privacidade</a></p>
 <p class="form-msg" id="newsletter-msg" role="status" aria-live="polite"></p>
 `;
 function home() {
