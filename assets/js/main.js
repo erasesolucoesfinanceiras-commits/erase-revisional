@@ -89,9 +89,12 @@ function idDoEnvio(form, chave) {
   const p = idsPendentes[form];
   return p && p.chave === chave ? p.id : (idsPendentes[form] = { chave, id: uuid() }).id;
 }
-/** Envia o lead ao CRM; com `comAtribuicao`, anexa lead_id e os campos de origem/UTM. */
-async function enviarLead(form, dados, { comAtribuicao = true } = {}) {
-  const extra = comAtribuicao ? { ...atribuicao(), lead_id: idDoEnvio(form, JSON.stringify(dados)) } : {};
+// Só os campos de campanha/origem (sem lead_id nem data/hora), usados por newsletter e contato.
+const CAMPOS_CAMPANHA = ['origem_trafego', 'pagina_entrada', 'pagina_envio', ...UTM_KEYS];
+function soCampanha() { const a = atribuicao(); return Object.fromEntries(CAMPOS_CAMPANHA.map((k) => [k, a[k]])); }
+/** Envia o lead ao CRM; `comAtribuicao`: lead_id + origem/UTM/data-hora (calculadora, pop-up); `campanha`: só origem/UTM/páginas. */
+async function enviarLead(form, dados, { comAtribuicao = true, campanha = false } = {}) {
+  const extra = comAtribuicao ? { ...atribuicao(), lead_id: idDoEnvio(form, JSON.stringify(dados)) } : campanha ? soCampanha() : {};
   const ok = await enviarParaCRM(form, { ...dados, ...extra });
   if (ok) delete idsPendentes[form];
   return ok;
@@ -170,7 +173,7 @@ if (nl) {
     if (!emailOk(email)) return setMsg(msg, 'Informe um e-mail válido.', 'bad');
     if (nl['bot-field'].value) return;
     btn.disabled = true; setMsg(msg, 'Enviando…');
-    const ok = await enviarLead('newsletter', { email, lgpd_aceite: 'sim', 'bot-field': nl['bot-field'].value }, { comAtribuicao: false });
+    const ok = await enviarLead('newsletter', { email, lgpd_aceite: 'sim', 'bot-field': nl['bot-field'].value }, { comAtribuicao: false, campanha: true });
     btn.disabled = false;
     if (!ok) return setMsg(msg, MSG_FALHA, 'bad');
     nl.reset(); setMsg(msg, 'Pronto! Você vai receber nossas novidades.', 'ok');
@@ -186,7 +189,7 @@ if (ct) {
     if (!d.nome || !emailOk(d.email) || !d.mensagem) return setMsg(msg, 'Preencha nome, e-mail válido e mensagem.', 'bad');
     if (ct['bot-field'].value) return;
     btn.disabled = true; setMsg(msg, 'Enviando…');
-    const ok = await enviarLead('contato', { ...d, 'bot-field': ct['bot-field'].value }, { comAtribuicao: false });
+    const ok = await enviarLead('contato', { ...d, 'bot-field': ct['bot-field'].value }, { comAtribuicao: false, campanha: true });
     btn.disabled = false;
     if (!ok) return setMsg(msg, MSG_FALHA, 'bad');
     ct.reset(); setMsg(msg, 'Mensagem recebida. Retornaremos em breve.', 'ok');
