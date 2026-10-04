@@ -31,7 +31,7 @@ A calculadora compara a taxa de **carros** com a média do Banco Central do **m�
 - **Cloudflare Pages (migração):** conectar este repositório, produção = `main`.
   - Framework preset: **None** · Build command: `node scripts/build.js && node scripts/publish.js` (ou `npm run build`) · Build output directory: **`dist`**
   - Variáveis de ambiente: **nenhuma obrigatória** (a versão do Node vem de `.node-version`; opcional `NODE_VERSION`).
-  - `_headers` é o equivalente do `[[headers]]` do `netlify.toml` (e bloqueia a indexação de `*.pages.dev`). Não há `_redirects` porque não existem redirecionamentos.
+  - O `_headers` do Cloudflare é **gerado** por `scripts/publish.js` em `dist/` (equivalente ao `[[headers]]` do `netlify.toml` + `noindex` só para `*.pages.dev`). Não deixe um `_headers` na raiz: a Netlify o lê e o `noindex` pegaria o site oficial. Não há `_redirects` porque não existem redirecionamentos.
   - Os links do site não usam `.html` (o Cloudflare redireciona `/x.html` → `/x`); `scripts/publish.js` copia só os arquivos públicos para `dist/`.
   - Cada branch/PR gera uma prévia no Cloudflare; para economizar builds, em *Settings > Builds* desligue as prévias de branches.
   - O CRM só aceita `*.eraseconsulta.com.br`: os formulários só funcionam no domínio oficial, não em `*.pages.dev`.
