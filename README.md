@@ -1,6 +1,6 @@
 # ERASE Revisional
 
-Portal de notícias sobre financiamento de veículos + calculadora de juros (isca de leads). Site estático (HTML/CSS/JS puro), hospedado na Netlify (e preparado para o Cloudflare Pages); os 4 formulários (newsletter, contato, popup-entrada, calculadora) enviam direto ao CRM da ERASE.
+Portal de notícias sobre financiamento de veículos + calculadora de juros (isca de leads). Site estático (HTML/CSS/JS puro), hospedado no **Cloudflare Pages**; os 4 formulários (newsletter, contato, popup-entrada, calculadora) enviam direto ao CRM da ERASE.
 
 ## Como editar
 - **Tudo é gerado** por `node scripts/build.js` a partir de `data/config.json` e `data/articles.json`. Não edite os `.html` à mão.
@@ -11,31 +11,36 @@ Portal de notícias sobre financiamento de veículos + calculadora de juros (isc
 - **Calculadora:** formulário único (nome, WhatsApp com DDD + 9 dígitos, e-mail opcional, aceite LGPD obrigatório + dados do financiamento). O resultado só aparece depois do envio. Todo lead — acima ou dentro do limite — é salvo (`status`: `novo_acima_do_limite` / `novo_dentro_do_limite`).
 - **Campos enviados** (JSON, POST em `CRM_ENDPOINT`, cabeçalhos `Content-Type` e `x-api-key`): `origem` (= nome do formulário), `bot-field` (vazio) e os campos de cada formulário. Calculadora e popup levam também UTMs, origem, página de entrada, data/hora (UTC e Brasília) e `lead_id`.
 - **Sem sucesso falso:** o site só mostra sucesso (e o resultado da calculadora) depois que o CRM confirma (HTTP 2xx). Se falhar, aparece uma mensagem, o formulário continua preenchido e a pessoa tenta de novo; o `lead_id` é o mesmo nas novas tentativas do mesmo envio.
-- **CRM:** `CRM_ENDPOINT` e `CRM_API_KEY` ficam no topo de `assets/js/main.js`. A chave é a "chave do site" (pública no navegador); o CRM só aceita origens `*.eraseconsulta.com.br`, então o teste real é em `revisional.eraseconsulta.com.br` (prévias `*.netlify.app` podem ser bloqueadas).
+- **CRM:** `CRM_ENDPOINT` e `CRM_API_KEY` ficam no topo de `assets/js/main.js`. A chave é a "chave do site" (pública no navegador); o CRM só aceita origens `*.eraseconsulta.com.br`, então o teste real é em `revisional.eraseconsulta.com.br` (prévias `*.pages.dev` não funcionam).
 
 ## Pendências
-1. CRM: confirmar com o `erasecrm` o formato final do corpo, se mudar.
-2. `data/config.json`: links de X e Facebook em `social` (ícones só aparecem quando há URL) e revisar `bc` a cada divulgação do Banco Central. Depois rode `node scripts/build.js`.
-3. Os 8 artigos iniciais são exemplos genéricos: revise antes de publicar.
-4. **Banco Central:** rodar o workflow *Atualizar série do Banco Central* (acima) logo após o merge.
-5. Hospedagem: subdomínio `revisional.eraseconsulta.com.br` (Netlify hoje; ver "Hospedagem" para o Cloudflare Pages); GitHub: secret `GEMINI_API_KEY` e permissão de PRs (passo a passo na descrição do PR).
+1. **Google Analytics:** troque `G-XXXXXXXXXX` pelo ID real em `data/config.json` (campo `gaId`, linha 11) e rode `node scripts/build.js`. Enquanto estiver com o marcador, nada é carregado. Eventos: `envio_calculadora`, `envio_popup`, `envio_newsletter`, `envio_contato` (só depois que o CRM confirma).
+2. `data/config.json`: links de X e Facebook em `social` (ícones só aparecem quando há URL).
+3. Os 8 artigos iniciais são exemplos genéricos: revise.
+4. Secrets do GitHub: `GEMINI_API_KEY`, `PIXABAY_API_KEY` e, para o alerta por e-mail, `RESEND_API_KEY`, `ALERTA_EMAIL_PARA` (e `ALERTA_EMAIL_DE`, opcional).
 
 ## Série histórica do Banco Central (comparação por período)
 A calculadora compara a taxa de **carros** com a média do Banco Central do **mês da assinatura** (SGS 25471: taxa média mensal de juros, pessoas físicas, aquisição de veículos, % ao mês, desde 06/2000). Moto e agrícola usam limite fixo (`data/config.json`).
-- O arquivo `assets/data/bcb-veiculos.json` **ainda não existe**: enquanto isso a calculadora usa os limites fixos e os textos do site não afirmam comparação por período.
-- Para gerar: GitHub → Actions → **Atualizar série do Banco Central** → *Run workflow* (disparo manual, depois do merge na `main`). Ele baixa a série pelo GitHub Actions, reconstrói o site e abre um PR; ao fazer o merge, a comparação por período passa a valer. Roda sozinho todo dia 6 do mês.
+- O arquivo `assets/data/bcb-veiculos.json` é gerado por `scripts/update-bcb.js`. O workflow **Atualizar série do Banco Central** roda sozinho todo dia do 5 ao 25 de cada mês, reconstrói o site e grava direto na `main` só quando sai mês novo (também pode ser disparado à mão em Actions).
 - O script se recusa a gravar séries curtas ou em unidade errada (% ao ano).
 
-## Hospedagem
-- **Netlify (atual):** `netlify.toml` publica a raiz (`.`) com os cabeçalhos de segurança/cache. Sem redirecionamentos, funções, plugins nem variáveis.
-- **Cloudflare Pages (migração):** conectar este repositório, produção = `main`.
-  - Framework preset: **None** · Build command: `node scripts/build.js && node scripts/publish.js` (ou `npm run build`) · Build output directory: **`dist`**
-  - Variáveis de ambiente: **nenhuma obrigatória** (a versão do Node vem de `.node-version`; opcional `NODE_VERSION`).
-  - O `_headers` do Cloudflare é **gerado** por `scripts/publish.js` em `dist/` (equivalente ao `[[headers]]` do `netlify.toml` + `noindex` só para `*.pages.dev`). Não deixe um `_headers` na raiz: a Netlify o lê e o `noindex` pegaria o site oficial. Não há `_redirects` porque não existem redirecionamentos.
-  - Os links do site não usam `.html` (o Cloudflare redireciona `/x.html` → `/x`); `scripts/publish.js` copia só os arquivos públicos para `dist/`.
-  - Cada branch/PR gera uma prévia no Cloudflare; para economizar builds, em *Settings > Builds* desligue as prévias de branches.
-  - O CRM só aceita `*.eraseconsulta.com.br`: os formulários só funcionam no domínio oficial, não em `*.pages.dev`.
+## Hospedagem (Cloudflare Pages)
+- Projeto `erase-revisional` ligado a este repositório; produção = `main`. Domínio: `revisional.eraseconsulta.com.br`.
+- Framework preset: **None** · Build command: `node scripts/build.js && node scripts/publish.js` (ou `npm run build`) · Build output directory: **`dist`**. Sem variáveis obrigatórias (Node vem de `.node-version`).
+- `scripts/publish.js` copia só os arquivos públicos para `dist/` (inclui `robots.txt`, `sitemap.xml`, `llms.txt`) e GERA `dist/_headers` (cache, `nosniff`, `Referrer-Policy` e `noindex` só para `*.pages.dev`). Nunca coloque `X-Robots-Tag` em regra de caminho nem um `_headers` na raiz.
+- Links sem `.html` (o Cloudflare redireciona `/x.html` → `/x`).
+- Cada branch gera uma prévia; para economizar builds, desligue as prévias de branches em *Settings > Builds*. O CRM só aceita `*.eraseconsulta.com.br`: os formulários não funcionam em `*.pages.dev`.
 
-## Automação de notícias
-`.github/workflows/noticias.yml` roda todo dia e segue só quando `dia do ano % 3 == 0` (ou manualmente, na aba Actions). Gera 1 artigo com `gemini-2.5-flash` + Google Search (camada gratuita), reconstrói o site e abre um **Pull Request** para revisão — nada vai ao ar sem o merge.
-Categoria por rodízio: `dia do ano % 3` → revisional, financeiro, mercado.
+## Notícias automáticas (sem Pull Request)
+`.github/workflows/noticias.yml` roda todo dia às 08h (Brasília) e grava direto na `main`; o Cloudflare publica sozinho. Código em `scripts/noticias/`. Usa `gemini-2.5-flash` + Google Search (camada gratuita).
+- **Ritmo:** 1 **artigo completo a cada 2 dias** e 1 **nota do Radar por dia** (2 a 4 linhas, só com novidade real). Máximo 1 artigo e 1 nota por dia. Notas ficam em `data/notas.json` e aparecem em `/radar` e na home.
+- **Temas** (`scripts/noticias/temas.js`, 10 categorias em `data/config.json`): veículos (revisional + lançamentos/tecnologia) saem em ~metade das vezes; o resto reveza entre energia solar, mercado imobiliário, consórcio e seguros, crédito pessoal e dívidas, crédito rural, empresas e MEI, bancos e sistema financeiro, economia e política monetária. Sem novidade no tema da vez, pula para o próximo da lista. Só se NENHUM tiver novidade, o artigo vira um guia explicativo com fontes oficiais; nota sem novidade não é publicada.
+- **Calibragem automática** (no lugar da aprovação manual), em duas camadas:
+  1. verificações do código: ≥2 fontes de sites diferentes, que abrem, achadas pela busca do Google e recentes (guia: oficiais); sem trecho copiado das fontes (9+ palavras seguidas); sem repetir assunto/fonte dos últimos 15 dias; sem promessa de resultado, conselho jurídico individual, escritório parceiro, menção política/partidária ou assinatura;
+  2. revisão por uma 2ª chamada de IA, independente da que escreveu, que confere cada número/data/decisão nas fontes.
+  Reprovou: reescreve 1 vez; reprovou de novo: tenta o próximo tema; nada passou: não publica no dia.
+- **Chamada final:** veículos/lançamentos → calculadora; demais temas → análise gratuita da ERASE (Fale Conosco). Assinatura sempre "Equipe ERASE".
+- **Log:** `data/noticias-log.jsonl` (publicações, temas pulados, reprovações com o motivo, erros).
+- **Alerta:** se o workflow falhar 3 dias seguidos, envia e-mail via Resend (secrets acima).
+- **Amostra sem publicar:** Actions → *Notícias automáticas* → *Run workflow* com `modo = amostra` (gera 3 artigos + 1 nota em `amostras/AMOSTRAS.md` na branch escolhida, sem tocar no site).
+- Banco Central: `.github/workflows/bcb.yml` roda todo dia do 5 ao 25 e só grava (direto na `main`) quando sai mês novo.

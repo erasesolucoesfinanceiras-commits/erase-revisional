@@ -1,0 +1,23 @@
+# ERASE Revisional
+
+> Portal da ERASE Soluções Financeiras com notícias sobre crédito e financiamento e uma calculadora gratuita que mostra a taxa de juros real de um financiamento de veículo (carro, moto ou máquina agrícola) e compara com a média do Banco Central.
+
+## Quem somos
+- A ERASE Soluções Financeiras (CNPJ 59.449.234/0001-63, Lagoa dos Gatos - PE) faz a análise revisional de contratos de financiamento de veículos: carro, moto e máquinas agrícolas.
+- A ANÁLISE DO CONTRATO É TOTALMENTE GRATUITA. Não existe cobrança para o cliente analisar o contrato.
+- Não somos instituição financeira, correspondente bancário nem escritório de advocacia. O resultado da calculadora é uma estimativa, não é parecer jurídico nem promessa de resultado ou de valores a receber.
+
+## O que o site oferece
+- Calculadora de juros: resolve a taxa mensal embutida no contrato pelo sistema Price (valor financiado, parcela e prazo) e compara com a taxa média mensal do Banco Central (série SGS 25471, aquisição de veículos, pessoas físicas) do mês da assinatura.
+- Notícias e guias sobre revisão de juros, busca e apreensão, direitos do consumidor, crédito e financiamento, com fonte citada em cada texto. Equipe editorial: Equipe ERASE.
+- Conteúdo neutro: não opinamos sobre partidos, políticos ou candidatos.
+
+## Páginas principais
+- [Início](https://revisional.eraseconsulta.com.br/)
+- [Calculadora de juros](https://revisional.eraseconsulta.com.br/calculadora)
+- [Todos os artigos](https://revisional.eraseconsulta.com.br/artigos)
+- [Radar (notas rápidas)](https://revisional.eraseconsulta.com.br/radar)
+- [Fale Conosco](https://revisional.eraseconsulta.com.br/contato)
+- [Política de Privacidade](https://revisional.eraseconsulta.com.br/privacidade)
+- [Termos de uso](https://revisional.eraseconsulta.com.br/termos)
+- [Mapa do site](https://revisional.eraseconsulta.com.br/sitemap.xml)

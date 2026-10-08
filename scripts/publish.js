@@ -10,15 +10,12 @@ const DIST = path.join(ROOT, 'dist');
 fs.rmSync(DIST, { recursive: true, force: true });
 fs.mkdirSync(DIST);
 
-const raiz = fs.readdirSync(ROOT).filter((f) => /\.html$/.test(f) || ['robots.txt', 'sitemap.xml', '_redirects'].includes(f));
+const raiz = fs.readdirSync(ROOT).filter((f) => /\.html$/.test(f) || ['robots.txt', 'sitemap.xml', 'llms.txt', '_redirects'].includes(f));
 for (const f of raiz) fs.copyFileSync(path.join(ROOT, f), path.join(DIST, f));
 
-// Cabeçalhos do Cloudflare Pages. O arquivo é GERADO aqui (dist/_headers) e NÃO fica na raiz do
-// repositório de propósito: a Netlify publica a raiz e também lê um _headers de lá; as regras de
-// host abaixo (*.pages.dev) acabavam valendo para o site oficial e enviavam "x-robots-tag: noindex"
-// para o Google. Na Netlify os cabeçalhos vêm só do netlify.toml.
+// Cabeçalhos do Cloudflare Pages. O arquivo é GERADO aqui (dist/_headers), não fica na raiz do repositório.
 // ATENÇÃO: nunca coloque X-Robots-Tag em regra de caminho (/*): o domínio oficial tem de ser indexável.
-const HEADERS = `# Gerado por scripts/publish.js — equivalente ao [[headers]] do netlify.toml.
+const HEADERS = `# Gerado por scripts/publish.js.
 /assets/*
   Cache-Control: public, max-age=3600
 

@@ -1,18 +1,18 @@
-name: Atualizar série do Banco Central (mensal ou manual)
+name: Atualizar série do Banco Central
 
 on:
   schedule:
-    - cron: "0 12 6 * *" # dia 6 de cada mês (o BC publica com defasagem)
+    # Todo dia, do 5 ao 25 de cada mês: o BC publica a média do mês com defasagem. Se não há mês novo,
+    # nada muda e nada é gravado; quando sai dado novo, a série é gravada direto na main (sem Pull Request).
+    - cron: "0 12 5-25 * *"
   workflow_dispatch:
-    inputs:
-      direto:
-        description: "Gravar direto na branch escolhida, sem abrir Pull Request (para testar numa branch)"
-        type: boolean
-        default: false
 
 permissions:
   contents: write
-  pull-requests: write
+
+concurrency:
+  group: bcb
+  cancel-in-progress: false
 
 jobs:
   bcb:
@@ -22,22 +22,15 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 20
-      - name: Baixar série do Banco Central
+      - name: Baixar série do Banco Central (com travas contra dado parcial)
         run: node scripts/update-bcb.js
       - name: Reconstruir o site
         run: node scripts/build.js
-      - name: Gravar direto na branch
-        if: inputs.direto
+      - name: Gravar se houve mês novo
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add -A
-          git diff --cached --quiet || { git commit -m "Série histórica do Banco Central" && git push; }
-      - name: Abrir Pull Request
-        if: ${{ !inputs.direto }}
-        uses: peter-evans/create-pull-request@v7
-        with:
-          branch: bcb/atualizacao-${{ github.run_id }}
-          commit-message: "Atualiza série histórica do Banco Central"
-          title: "Atualiza série histórica do Banco Central"
-          body: "Série SGS 25471 (taxa média mensal de juros, pessoas físicas, aquisição de veículos, % a.m.) baixada do Banco Central pelo GitHub Actions. Confira o último mês antes do merge. Ao fazer o merge, a calculadora passa a comparar com a média do mês da assinatura."
+          if git diff --cached --quiet; then echo "Sem mês novo do Banco Central."; exit 0; fi
+          git commit -m "Atualiza série histórica do Banco Central"
+          for i in 1 2 3; do git pull --rebase origin "${GITHUB_REF_NAME}" && git push origin "HEAD:${GITHUB_REF_NAME}" && break; sleep 5; done

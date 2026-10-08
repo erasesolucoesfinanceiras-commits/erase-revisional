@@ -395,3 +395,12 @@ fieldset.field { border: 0; padding: 0; margin: 0 0 18px; min-width: 0; }
 .calc-warn::before { content: "⚠"; font-weight: 800; flex-shrink: 0; }
 
 .newsletter-note { max-width: 520px; margin: 0 auto 8px; text-align: center; }
+
+/* Radar (notas rápidas) */
+.nota-list, .nota-grid { display: grid; gap: 14px; }
+.nota-grid { grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); }
+.nota { background: var(--surface); border: 1.5px solid var(--border); border-radius: var(--radius); padding: 16px 18px; }
+.nota-meta { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; } .nota-meta .tag { margin-bottom: 4px; } .nota-meta time { color: var(--muted); font-size: .85rem; }
+.nota h3 { font-size: 1.05rem; margin: 2px 0 6px; } .nota p { margin: 0 0 8px; }
+.nota .nota-src { color: var(--muted); font-size: .85rem; margin: 0; }
+.radar-home { margin-top: 32px; }

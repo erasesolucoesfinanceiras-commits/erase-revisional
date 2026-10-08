@@ -17,6 +17,7 @@ const out = (rel, content) => {
 };
 
 const articles = S.loadArticles();
+const notas = S.loadNotas();
 const SITE = C.siteNome;
 const hasBcb = fs.existsSync(path.join(S.ROOT, 'assets', 'data', 'bcb-veiculos.json')); // série histórica do Banco Central presente?
 const urls = []; // para o sitemap
@@ -33,6 +34,37 @@ const nl = `<form class="newsletter" id="newsletter-form" novalidate>
 <p class="fine newsletter-note">Ao se inscrever, você concorda em receber e-mails da ERASE e pode cancelar quando quiser. <a href="/privacidade.html">Política de Privacidade</a></p>
 <p class="form-msg" id="newsletter-msg" role="status" aria-live="polite"></p>
 `;
+// ---------------------------------------------------------------- RADAR (notas rápidas)
+const notaHtml = (n) => `<article class="nota" id="${esc(n.id)}">
+<div class="nota-meta"><a class="tag" href="${catUrl(n.categoria)}">${esc(catNome(n.categoria))}</a><time datetime="${n.data}">${fmtData(n.data)}</time></div>
+<h3>${esc(n.titulo)}</h3>
+<p>${esc(n.texto)}</p>
+<p class="nota-src">Fontes: ${n.fontes.map((f) => `<a href="${esc(f.url)}" target="_blank" rel="noopener noreferrer nofollow">${esc(f.nome)}</a>`).join(' · ')}</p>
+</article>`;
+function radarHome() {
+  if (!notas.length) return '';
+  return `<section class="container radar-home" aria-label="Radar">
+<div class="section-head"><h2>Radar</h2><a href="/radar.html">Ver todas as notas</a></div>
+<div class="nota-grid">${notas.slice(0, 4).map(notaHtml).join('\n')}</div>
+</section>`;
+}
+function radar() {
+  const body = `
+<section class="page-head"><div class="container">
+<h1>Radar</h1><p class="lead">Notas rápidas sobre crédito e financiamento, publicadas só quando há novidade. Toda nota cita as fontes.</p>
+</div></section>
+<section class="container home-grid">
+<div class="nota-list">${notas.length ? notas.map(notaHtml).join('\n') : '<p>Em breve, novas notas.</p>'}</div>
+<div class="sticky-col">${S.promoCard()}</div>
+</section>
+${S.ctaBanner()}`;
+  out('radar.html', S.page({
+    meta: { title: `Radar: notas rápidas sobre crédito e financiamento | ${SITE}`, desc: 'Notas rápidas e atualizadas sobre financiamento de veículos, crédito, juros e regras do sistema financeiro, sempre com a fonte citada.', path: '/radar.html' },
+    active: 'radar', body,
+  }));
+  urls.push(['/radar.html', '0.7', notas.length ? notas[0].data : undefined]);
+}
+
 function home() {
   const [feat, ...rest] = articles;
   const INICIAL = 4;
@@ -72,6 +104,7 @@ ${rest.length > INICIAL ? '<button class="btn btn-outline btn-block more-btn" id
 <div class="sticky-col">${S.promoCard()}</div>
 </section>
 
+${radarHome()}
 ${S.ctaBanner()}
 ${S.trustBadges()}
 <section class="container nl-section" aria-label="Newsletter">
@@ -92,16 +125,16 @@ ${nl}
 }
 
 // ---------------------------------------------------------------- LISTAS
-function listPage({ file, title, desc, h1, intro, items, active, p }) {
+function listPage({ file, title, desc, h1, intro, items, active, p, cat }) {
   const body = `
 <section class="page-head"><div class="container">
 <h1>${esc(h1)}</h1>${intro ? `<p class="lead">${esc(intro)}</p>` : ''}
 </div></section>
 <section class="container home-grid">
 <div class="row-list">${items.length ? items.map((a) => S.rowCard(a)).join('\n') : '<p>Em breve, novos artigos nesta categoria.</p>'}</div>
-<div class="sticky-col">${S.promoCard()}</div>
+<div class="sticky-col">${S.promoCard(cat)}</div>
 </section>
-${S.ctaBanner()}`;
+${S.ctaBanner(cat)}`;
   out(file, S.page({ meta: { title, desc, path: p }, active, body }));
   urls.push([p, '0.7']);
 }
@@ -119,14 +152,16 @@ function lists() {
       title: `${catNome(slug)} | ${SITE}`,
       desc: C.categorias[slug].descricao,
       h1: catNome(slug), intro: C.categorias[slug].descricao,
-      items: articles.filter((a) => a.categoria === slug),
+      items: articles.filter((a) => a.categoria === slug), cat: slug,
     });
   }
 }
 
 // ---------------------------------------------------------------- ARTIGOS
-function injectCTA(corpo) {
-  const cta = `<aside class="inline-cta"><strong>Quanto você paga de juros?</strong><span>Descubra a taxa real do seu financiamento em pouco mais de um minuto.</span><a class="btn btn-primary btn-sm" href="/calculadora.html">Calcular minha taxa</a></aside>`;
+function injectCTA(corpo, cat) {
+  const cta = S.usaContato(cat)
+    ? `<aside class="inline-cta"><strong>Quer entender melhor o seu caso?</strong><span>ANÁLISE TOTALMENTE GRATUITA pela ERASE.</span><a class="btn btn-primary btn-sm" href="/contato.html">Falar com a ERASE</a></aside>`
+    : `<aside class="inline-cta"><strong>Quanto você paga de juros?</strong><span>Descubra a taxa real do seu financiamento em pouco mais de um minuto. ANÁLISE TOTALMENTE GRATUITA.</span><a class="btn btn-primary btn-sm" href="/calculadora.html">Calcular minha taxa</a></aside>`;
   const parts = corpo.split('</p>');
   if (parts.length < 3) return corpo + cta;
   const at = Math.ceil((parts.length - 1) / 2);
@@ -135,9 +170,9 @@ function injectCTA(corpo) {
 
 function artigos() {
   for (const a of articles) {
-    const f = a.fonte || {};
-    const fonteHtml = f.nome
-      ? `<p class="source">Fonte: ${f.url ? `<a href="${esc(f.url)}" target="_blank" rel="noopener noreferrer nofollow">${esc(f.nome)}</a>` : esc(f.nome)}</p>`
+    const fs_ = a.fontes && a.fontes.length ? a.fontes : a.fonte && a.fonte.nome ? [a.fonte] : [];
+    const fonteHtml = fs_.length
+      ? `<p class="source">${fs_.length > 1 ? 'Fontes' : 'Fonte'}: ${fs_.map((f) => f.url ? `<a href="${esc(f.url)}" target="_blank" rel="noopener noreferrer nofollow">${esc(f.nome)}</a>` : esc(f.nome)).join(' · ')}</p>`
       : '';
     const jsonld = {
       '@context': 'https://schema.org',
@@ -150,7 +185,7 @@ function artigos() {
       mainEntityOfPage: { '@type': 'WebPage', '@id': absUrl(artUrl(a)) },
       articleSection: catNome(a.categoria),
       inLanguage: 'pt-BR',
-      author: { '@type': 'Organization', name: C.empresa.razaoSocial },
+      author: { '@type': 'Organization', name: 'Equipe ERASE' },
       publisher: {
         '@type': 'Organization', name: C.empresa.razaoSocial,
         logo: { '@type': 'ImageObject', url: absUrl('/assets/img/apple-touch-icon.png') },
@@ -162,15 +197,15 @@ function artigos() {
 <a class="tag" href="${catUrl(a.categoria)}">${esc(catNome(a.categoria))}</a>
 <h1>${esc(a.titulo)}</h1>
 <p class="lead">${esc(a.resumo)}</p>
-<p class="meta"><time datetime="${a.data}">${fmtData(a.data)}</time></p>
+<p class="meta">Por Equipe ERASE · <time datetime="${a.data}">${fmtData(a.data)}</time></p>
 <figure class="article-fig">${coverImg(a, { width: 860, height: 430, sizes: '(max-width: 860px) 100vw, 860px', eager: true, cls: 'article-cover' })}${a.foto ? `<figcaption>Foto: <a href="${esc(a.foto.autorUrl)}" target="_blank" rel="noopener noreferrer">${esc(a.foto.autor)}</a> / <a href="${esc(a.foto.pagina)}" target="_blank" rel="noopener noreferrer">Pixabay</a></figcaption>` : ''}</figure>
 <div class="article-body">
-${injectCTA(a.corpo)}
+${injectCTA(a.corpo, a.categoria)}
 </div>
 ${fonteHtml}
 <p class="disclaimer">Conteúdo informativo. Não constitui parecer jurídico ou financeiro nem promessa de resultado.</p>
 </article>
-${S.ctaBanner()}`;
+${S.ctaBanner(a.categoria)}`;
     out(`noticias/${a.slug}.html`, S.page({
       meta: {
         title: `${a.titulo} | ${SITE}`, desc: a.resumo, path: artUrl(a), type: 'article',
@@ -433,5 +468,5 @@ ${urls.map(([p, prio, d]) => `  <url><loc>${absUrl(p)}</loc><lastmod>${d || LAST
   out('robots.txt', `User-agent: *\nAllow: /\n\nSitemap: ${absUrl('/sitemap.xml')}\n`);
 }
 
-home(); lists(); artigos(); calculadora(); legais(); contato(); notFound(); seo();
+home(); lists(); radar(); artigos(); calculadora(); legais(); contato(); notFound(); seo();
 console.log(`OK — ${articles.length} artigos, ${urls.length} URLs no sitemap.`);

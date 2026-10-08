@@ -8,6 +8,7 @@
     "endereco": "Rua Pedro Barreto, 20, Centro, Lagoa dos Gatos - PE, 55.450-000"
   },
   "whatsapp": "5581991547396",
+  "gaId": "G-XXXXXXXXXX",
   "social": {
     "x": "",
     "instagram": "https://www.instagram.com/erasesolucoesfinanceiras",
@@ -25,15 +26,53 @@
   "categorias": {
     "revisional": {
       "nome": "Revisional de juros",
-      "descricao": "Entenda como funcionam os juros do seu financiamento e quando vale a pena revisar."
-    },
-    "financeiro": {
-      "nome": "Sistema financeiro",
-      "descricao": "Taxas, CET, portabilidade e as regras do crédito para veículos."
+      "descricao": "Juros de financiamento de carro, moto e máquinas agrícolas, busca e apreensão, seguro prestamista e direitos do consumidor.",
+      "cta": "calculadora"
     },
     "mercado": {
-      "nome": "Mercado de carros",
-      "descricao": "O que acontece no mercado de veículos e como isso afeta o seu bolso."
+      "nome": "Lançamentos e mercado",
+      "descricao": "Novos carros, motos e máquinas agrícolas, preços, elétricos e híbridos, tecnologia e o mercado de veículos.",
+      "cta": "calculadora"
+    },
+    "financeiro": {
+      "nome": "Bancos e sistema financeiro",
+      "descricao": "Regras do Banco Central e do CMN, Pix, tarifas, juros médios e inadimplência no país.",
+      "cta": "contato"
+    },
+    "energia-solar": {
+      "nome": "Energia solar",
+      "descricao": "Mercado, geração distribuída, tarifas de energia e financiamento de sistemas solares.",
+      "cta": "contato"
+    },
+    "imoveis": {
+      "nome": "Mercado imobiliário",
+      "descricao": "Financiamento habitacional, juros do crédito imobiliário, programas habitacionais e regras dos bancos e da Caixa.",
+      "cta": "contato"
+    },
+    "consorcio-seguros": {
+      "nome": "Consórcio e seguros",
+      "descricao": "Consórcio de veículo e imóvel, seguros embutidos em financiamentos e venda casada.",
+      "cta": "contato"
+    },
+    "credito-pessoal": {
+      "nome": "Crédito pessoal e dívidas",
+      "descricao": "Cartão, cheque especial, consignado, score, nome sujo, renegociação de dívidas e golpes financeiros.",
+      "cta": "contato"
+    },
+    "credito-rural": {
+      "nome": "Crédito rural e agronegócio",
+      "descricao": "Plano Safra, financiamento de máquinas e insumos e juros do crédito rural.",
+      "cta": "contato"
+    },
+    "empresas-mei": {
+      "nome": "Empresas e MEI",
+      "descricao": "Capital de giro, crédito para pequenos negócios, Pronampe e endividamento empresarial.",
+      "cta": "contato"
+    },
+    "economia": {
+      "nome": "Economia e política monetária",
+      "descricao": "Selic, inflação, decisões do Banco Central, STJ e STF e o que isso muda para quem tem ou vai fazer um financiamento.",
+      "cta": "contato"
     }
   }
 }

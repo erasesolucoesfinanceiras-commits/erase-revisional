@@ -1,64 +1,69 @@
-name: Gerar notícia (a cada 3 dias)
+name: Notícias automáticas
 
 on:
   schedule:
-    # Roda TODO dia; o passo "decidir" só segue 1 a cada 3 (dia do ano % 3 == 0).
-    # Evita o erro de usar */3 no cron, que "reinicia" na virada do mês.
+    # Todo dia às 08h de Brasília. O script decide: nota ("Radar") todo dia, artigo completo a cada 2 dias.
     - cron: "0 11 * * *"
   workflow_dispatch:
     inputs:
-      categoria:
-        description: "Categoria (vazio = rodízio automático)"
-        required: false
+      modo:
+        description: "publicar = vai ao ar na main · amostra = gera 3 artigos + 1 nota SEM publicar (arquivos em amostras/ na branch escolhida)"
         type: choice
-        default: ""
-        options: ["", revisional, financeiro, mercado]
+        default: publicar
+        options: [publicar, amostra]
+      forcar_artigo:
+        description: "Gerar artigo hoje mesmo que não seja o dia (continua valendo 1 por dia)"
+        type: boolean
+        default: false
 
 permissions:
   contents: write
-  pull-requests: write
+  actions: read
+
+concurrency:
+  group: noticias
+  cancel-in-progress: false
 
 jobs:
-  noticia:
+  noticias:
     runs-on: ubuntu-latest
+    timeout-minutes: 60
     steps:
       - uses: actions/checkout@v4
-
-      - name: Decidir se roda hoje
-        id: decidir
-        run: |
-          DOY=$((10#$(date -u +%j)))
-          if [ "${{ github.event_name }}" = "workflow_dispatch" ] || [ $((DOY % 3)) -eq 0 ]; then
-            echo "rodar=true" >> "$GITHUB_OUTPUT"
-          else
-            echo "rodar=false" >> "$GITHUB_OUTPUT"
-            echo "Dia do ano $DOY: não é dia de publicar."
-          fi
-
       - uses: actions/setup-node@v4
-        if: steps.decidir.outputs.rodar == 'true'
         with:
           node-version: 20
 
-      - name: Gerar artigo (Gemini gratuito + Google Search)
-        if: steps.decidir.outputs.rodar == 'true'
+      - name: Gerar, verificar e revisar
+        id: gerar
+        continue-on-error: true
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           PIXABAY_API_KEY: ${{ secrets.PIXABAY_API_KEY }}
+          MODO: ${{ inputs.modo || 'publicar' }}
+          FORCAR_ARTIGO: ${{ inputs.forcar_artigo && '1' || '0' }}
         run: |
           npm i --no-save sharp
-          node scripts/generate-article.js "${{ github.event.inputs.categoria }}"
+          node scripts/noticias/run.js
 
-      - name: Abrir Pull Request para revisão
-        if: steps.decidir.outputs.rodar == 'true'
-        uses: peter-evans/create-pull-request@v7
-        with:
-          branch: noticia/auto-${{ github.run_id }}
-          commit-message: "Nova notícia automática (revisar antes de publicar)"
-          title: "Nova notícia automática — revisar antes de publicar"
-          body: |
-            Artigo gerado automaticamente (Gemini gratuito + Google Search).
+      - name: Gravar na branch (sem Pull Request)
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          if git diff --cached --quiet; then echo "Nada novo para gravar."; exit 0; fi
+          git commit -m "Notícias automáticas (${{ inputs.modo || 'publicar' }}) $(date -u +%F)"
+          for i in 1 2 3; do git pull --rebase origin "${GITHUB_REF_NAME}" && git push origin "HEAD:${GITHUB_REF_NAME}" && break; sleep 5; done
 
-            **Revise antes de aceitar:** fatos, tom, ausência de promessa de resultado e a fonte citada.
-            Ao fazer o merge na main, o site é publicado automaticamente com o artigo, o card na home e na categoria e o sitemap atualizado.
-          labels: noticia-automatica
+      - name: Falhar se houve erro
+        if: steps.gerar.outcome == 'failure'
+        run: exit 1
+
+      - name: Avisar por e-mail (3 falhas seguidas)
+        if: failure()
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
+          ALERTA_EMAIL_PARA: ${{ secrets.ALERTA_EMAIL_PARA }}
+          ALERTA_EMAIL_DE: ${{ secrets.ALERTA_EMAIL_DE }}
+        run: node scripts/noticias/alerta.js

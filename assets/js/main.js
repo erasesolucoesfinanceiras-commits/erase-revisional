@@ -3,10 +3,10 @@
  */
 
 // =====================================================================
-// ENVIO DE LEADS — CRM da ERASE (único destino; o Netlify Forms foi removido).
+// ENVIO DE LEADS — CRM da ERASE (único destino).
 // A chave abaixo é a "chave do site": por natureza fica visível no navegador, e o
 // CRM só aceita envios vindos de *.eraseconsulta.com.br. Teste real:
-// https://revisional.eraseconsulta.com.br (prévias *.netlify.app podem ser bloqueadas).
+// https://revisional.eraseconsulta.com.br (prévias *.pages.dev podem ser bloqueadas).
 // Estas constantes também são usadas por calculator.js.
 // =====================================================================
 const CRM_ENDPOINT = "https://lqxwdyjctsmirinvvyow.supabase.co/functions/v1/entrada-site";
@@ -98,8 +98,13 @@ async function enviarLead(form, dados, { comAtribuicao = true, campanha = false,
   // `comLeadId`: só o lead_id (mesmo formato da calculadora/pop-up); fica igual nas novas tentativas do mesmo envio.
   if (!comAtribuicao && comLeadId) extra.lead_id = idDoEnvio(form, JSON.stringify(dados));
   const ok = await enviarParaCRM(form, { ...dados, ...extra });
-  if (ok) delete idsPendentes[form];
+  if (ok) { delete idsPendentes[form]; rastrear(form); }
   return ok;
+}
+// Google Analytics (GA4): só dispara depois que o CRM confirmou e só se o gtag foi carregado (ID em data/config.json).
+const EVENTOS_GA = { calculadora: 'envio_calculadora', 'popup-entrada': 'envio_popup', newsletter: 'envio_newsletter', contato: 'envio_contato' };
+function rastrear(form) {
+  try { if (typeof gtag === 'function' && EVENTOS_GA[form]) gtag('event', EVENTOS_GA[form], { formulario: form, pagina: location.pathname }); } catch (e) { /* analytics nunca atrapalha o envio */ }
 }
 try { localStorage.removeItem('erase-outbox'); } catch (e) { /* fila antiga, se existir */ }
 

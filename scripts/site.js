@@ -15,6 +15,10 @@ try {
 } catch (e) { if (e.code !== 'ENOENT') throw e; }
 // Versão do CSS na URL: evita que um style.css antigo em cache (1h) quebre o HTML novo.
 const cssVer = require('crypto').createHash('md5').update(fs.readFileSync(path.join(ROOT, 'assets/css/style.css'))).digest('hex').slice(0, 8);
+const loadNotas = () => {
+  try { return readJSON('data/notas.json').sort((a, b) => (a.data < b.data ? 1 : a.data > b.data ? -1 : a.id < b.id ? 1 : -1)); }
+  catch (e) { if (e.code === 'ENOENT') return []; throw e; }
+};
 const loadArticles = () =>
   readJSON('data/articles.json').sort((a, b) => (a.data < b.data ? 1 : a.data > b.data ? -1 : 0));
 
@@ -31,7 +35,7 @@ const fmtData = (iso) =>
 const catNome = (slug) => config.categorias[slug].nome;
 const catUrl = (slug) => `/categoria-${slug}.html`;
 const artUrl = (a) => `/noticias/${a.slug}.html`;
-// URLs públicas sem ".html" (o Cloudflare Pages redireciona /x.html -> /x; a Netlify serve /x direto).
+// URLs públicas sem ".html" (o Cloudflare Pages redireciona /x.html -> /x).
 const semHtml = (p) => p.replace(/\.html$/, '');
 const absUrl = (p) => config.siteUrl.replace(/\/$/, '') + semHtml(p);
 const coverUrl = (a) => `/assets/img/cover-${a.categoria}.svg`;
@@ -56,6 +60,12 @@ const ICON = {
   calc: '<svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="2" width="16" height="20" rx="2"/><path d="M8 6h8M8 11h2M14 11h2M8 15h2M14 15h2M8 19h2M14 19h2"/></svg>',
   people: '<svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="8" r="3.500"/><path d="M2.500 20c.5-3.500 3-5.500 6.500-5.500s6 2 6.500 5.500"/><path d="M16 4.500a3.500 3.500 0 0 1 0 7M18 14.800c1.800.7 3 2.400 3.500 5.200"/></svg>',
 };
+
+// Google Analytics 4: o ID fica só em data/config.json ("gaId"). Com o marcador G-XXXXXXXXXX (ou vazio) nada é carregado.
+const gaOk = /^G-[A-Z0-9]{6,}$/.test(config.gaId || '') && !/^G-X+$/.test(config.gaId);
+const gaSnippet = () => gaOk
+  ? `<script async src="https://www.googletagmanager.com/gtag/js?id=${config.gaId}"></script>\n<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config','${config.gaId}');</script>\n`
+  : '';
 
 function head({ title, desc, path: p, image, type = 'website', jsonld, noindex }) {
   const url = absUrl(p);
@@ -89,7 +99,7 @@ ${noindex ? '<meta name="robots" content="noindex">\n' : ''}<link rel="canonical
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/assets/css/style.css?v=${cssVer}">
-${jsonld ? `<script type="application/ld+json">${JSON.stringify(jsonld)}</script>\n` : ''}</head>`;
+${gaSnippet()}${jsonld ? `<script type="application/ld+json">${JSON.stringify(jsonld)}</script>\n` : ''}</head>`;
 }
 
 function header(active) {
@@ -104,6 +114,7 @@ function header(active) {
 <nav class="nav-links" id="menu" aria-label="Principal">
 <a href="/"${cur('home')}>Início</a>
 <a href="/artigos.html"${cur('artigos')}>Artigos</a>
+<a href="/radar.html"${cur('radar')}>Radar</a>
 <div class="dropdown">
 <button class="dropdown-btn" type="button" aria-expanded="false" aria-haspopup="true">Categorias <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.500" stroke-linecap="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button>
 <div class="dropdown-menu">${cats}</div>
@@ -135,7 +146,7 @@ function footer() {
 </div>
 <div>
 <h3>Navegação</h3>
-<ul><li><a href="/">Início</a></li><li><a href="/calculadora.html">Calculadora</a></li><li><a href="/contato.html">Fale Conosco</a></li></ul>
+<ul><li><a href="/">Início</a></li><li><a href="/calculadora.html">Calculadora</a></li><li><a href="/radar.html">Radar</a></li><li><a href="/contato.html">Fale Conosco</a></li></ul>
 </div>
 <div>
 <h3>Categorias</h3>
@@ -144,7 +155,6 @@ function footer() {
 </div>
 <div class="legal">
 <p>ERASE Revisional é uma ferramenta de simulação operada pela ERASE Soluções Financeiras. Não somos uma instituição financeira, correspondente bancário nem escritório de advocacia. O resultado é uma estimativa baseada em médias de mercado e nos dados informados, e não constitui parecer, consultoria ou promessa de resultado. Os percentuais de referência têm como fonte a taxa média de juros divulgada pelo Banco Central do Brasil para crédito livre, pessoas físicas, aquisição de veículos. A análise do contrato é realizada pela ERASE Soluções Financeiras.</p>
-<!-- TODO: CNPJ e endereço da empresa — preencha "empresa.cnpj" e "empresa.endereco" em data/config.json e rode: node scripts/build.js -->
 ${dados ? `<p class="company">${esc(dados)}</p>` : ''}
 <p class="legal-links"><a href="/termos.html">Termos de uso</a> · <a href="/privacidade.html">Política de Privacidade</a></p>
 <p class="copy">© ERASE Soluções Financeiras</p>
@@ -182,11 +192,21 @@ function rowCard(a, hidden) {
 </article>`;
 }
 
-function promoCard() {
+// Veículos e lançamentos levam à calculadora; os demais temas levam à análise gratuita da ERASE (Fale Conosco).
+const usaContato = (cat) => !!cat && (config.categorias[cat] || {}).cta === 'contato';
+
+function promoCard(cat) {
+  if (usaContato(cat)) return `<aside class="promo" aria-label="Análise gratuita da ERASE">
+<span class="badge">Análise gratuita</span>
+<h3>Tem dúvida sobre o seu contrato ou a sua dívida?</h3>
+<p>Conte o seu caso para a ERASE. <strong>ANÁLISE TOTALMENTE GRATUITA</strong>, sem compromisso.</p>
+<a class="btn btn-primary btn-block" href="/contato.html">Falar com a ERASE</a>
+<small>Informação geral. Não é análise jurídica nem promessa de resultado.</small>
+</aside>`;
   return `<aside class="promo" aria-label="Calculadora de juros">
 <span class="badge">Simulação gratuita</span>
 <h3>Quanto você paga de juros no seu financiamento?</h3>
-<p>Descubra a taxa mensal real do seu contrato em pouco mais de um minuto e compare com a referência do Banco Central.</p>
+<p>Descubra a taxa mensal real do seu contrato em pouco mais de um minuto e compare com a referência do Banco Central. <strong>ANÁLISE TOTALMENTE GRATUITA</strong>.</p>
 <a class="btn btn-primary btn-block" href="/calculadora.html">Calcular minha taxa agora</a>
 <small>Resultado estimado. Não é análise jurídica nem indica valores a receber.</small>
 </aside>`;
@@ -200,9 +220,13 @@ function trustBadges() {
 </section>`;
 }
 
-function ctaBanner() {
+function ctaBanner(cat) {
+  if (usaContato(cat)) return `<section class="container"><div class="cta-banner">
+<div><h2>Quer entender melhor o seu contrato ou a sua dívida?</h2><p>Conte o seu caso para a ERASE. <strong>ANÁLISE TOTALMENTE GRATUITA</strong>, sem compromisso e sem promessa de resultado.</p></div>
+<a class="btn btn-primary btn-lg" href="/contato.html">Falar com a ERASE</a>
+</div></section>`;
   return `<section class="container"><div class="cta-banner">
-<div><h2>Será que seu financiamento está acima da média?</h2><p>Informe parcela, valor financiado e prazo. A calculadora mostra a taxa mensal embutida e como ela se compara à referência.</p></div>
+<div><h2>Será que seu financiamento está acima da média?</h2><p>Informe parcela, valor financiado e prazo. A calculadora mostra a taxa mensal embutida e como ela se compara à referência. <strong>ANÁLISE TOTALMENTE GRATUITA</strong>.</p></div>
 <a class="btn btn-primary btn-lg" href="/calculadora.html">Calcular minha taxa agora</a>
 </div></section>`;
 }
@@ -212,6 +236,6 @@ const freeBadge = (cls = '') => `<p class="free-badge ${cls}" role="note">${FREE
 
 module.exports = {
   FREE_TXT, freeBadge,
-  ROOT, config, loadArticles, esc, fmtPct, fmtData, catNome, catUrl, artUrl, absUrl, coverUrl, coverImg,
+  ROOT, config, loadArticles, loadNotas, usaContato, esc, fmtPct, fmtData, catNome, catUrl, artUrl, absUrl, coverUrl, coverImg,
   ICON, page, rowCard, promoCard, trustBadges, ctaBanner,
 };

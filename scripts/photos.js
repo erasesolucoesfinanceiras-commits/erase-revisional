@@ -10,7 +10,12 @@ const ROOT = path.join(__dirname, '..');
 const ARTICLES = path.join(ROOT, 'data', 'articles.json');
 const DIR = path.join(ROOT, 'assets', 'img', 'news');
 const WIDTHS = [480, 960, 1280]; // manter igual a PHOTO_WIDTHS em site.js
-const FALLBACK_Q = { revisional: 'contract signing documents', financeiro: 'calculator money finance', mercado: 'cars parked dealership' };
+const FALLBACK_Q = {
+  revisional: 'contract signing documents', financeiro: 'bank building finance', mercado: 'cars parked dealership',
+  'energia-solar': 'solar panels roof', imoveis: 'house keys real estate', 'consorcio-seguros': 'insurance documents desk',
+  'credito-pessoal': 'credit card payment', 'credito-rural': 'tractor farm field', 'empresas-mei': 'small business owner',
+  economia: 'economy finance chart',
+};
 
 async function fetchPhoto(slug, consulta, usadas = []) {
   const key = process.env.PIXABAY_API_KEY;
