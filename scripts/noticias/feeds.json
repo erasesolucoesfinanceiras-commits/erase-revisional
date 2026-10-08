@@ -1,0 +1,7 @@
+[
+  { "nome": "Agência Brasil", "url": "https://agenciabrasil.ebc.com.br/rss/economia/feed.xml" },
+  { "nome": "Agência Câmara", "url": "https://www.camara.leg.br/noticias/rss/ultimas-noticias" },
+  { "nome": "G1 Economia", "url": "https://g1.globo.com/rss/g1/economia/" },
+  { "nome": "G1 Carros", "url": "https://g1.globo.com/rss/g1/carros/" },
+  { "nome": "Agência Gov", "url": "https://www.gov.br/pt-br/noticias/RSS" }
+]

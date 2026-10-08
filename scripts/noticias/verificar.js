@@ -1,6 +1,5 @@
 // Verificações automáticas (determinísticas) de um rascunho, ANTES da revisão por IA.
 // Cada função devolve uma lista de motivos de reprovação (vazia = passou).
-const { abrir } = require('./web');
 
 const norm = (s) => String(s).toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^a-z0-9]+/g, ' ').trim();
 const STOP = new Set('para como mais pelo pela pelos pelas sobre entre quando onde qual quais essa esse esta este isso isto seus suas uma uns umas com sem por que dos das nos nas aos ser tem ter foi sao ainda tambem apos ate'.split(' '));
@@ -66,41 +65,25 @@ function trechoCopiado(corpoTxt, textosFontes, N = 9) {
 }
 
 /**
- * Fontes: ≥2 em sites diferentes, links que abrem, encontradas pela busca do Google (não inventadas),
- * recentes (notícia) ou oficiais (guia). Troca a URL pela final (depois dos redirecionamentos).
- * Devolve { motivos, textos } — textos = conteúdo das páginas, para conferir cópia e fatos.
+ * Fontes: o modelo só devolve os NÚMEROS das fontes que usou (fontes_usadas); links, datas e textos vêm de fontes.js
+ * (páginas que abriram de verdade). Exige ≥2 sites diferentes, recentes (notícia) ou oficiais (guia).
+ * Preenche r.fontes e devolve { motivos, textos } (textos = conteúdo das páginas, para conferir cópia e fatos).
  */
-async function checarFontes(r, tipo, modo, chunks, hoje) {
+function checarFontes(r, tipo, modo, cands, hoje, diasMax) {
   const motivos = [], textos = [];
-  const fontes = Array.isArray(r.fontes) ? r.fontes : [];
-  if (fontes.length < 2) return { motivos: ['menos de 2 fontes'], textos };
-
-  // Sites que a busca do Google realmente devolveu (título do resultado = domínio; o link é um redirecionamento).
-  const dominiosBusca = new Set(chunks.map((c) => String(c.title || '').toLowerCase().replace(/^www\./, '')).filter(Boolean));
-  for (const c of chunks.slice(0, 12)) {
-    if (!/vertexaisearch|grounding-api-redirect/.test(c.uri || '')) { const h = host(c.uri); if (h) dominiosBusca.add(h); continue; }
-    const p = await abrir(c.uri, 12000); const h = host(p.urlFinal); if (h && !/vertexaisearch|google\./.test(h)) dominiosBusca.add(h);
+  const ids = [...new Set((Array.isArray(r.fontes_usadas) ? r.fontes_usadas : []).map(Number))];
+  const usadas = ids.map((i) => cands.find((c) => c.id === i)).filter(Boolean);
+  if (usadas.length !== ids.length) motivos.push('citou fonte que não existe na lista fornecida');
+  r.fontes = usadas.map((c) => ({ nome: c.nome, url: c.url, data: c.data, texto: c.texto, lida: true }));
+  usadas.forEach((c) => textos.push(c.texto));
+  const hosts = new Set(usadas.map((c) => c.host));
+  if (usadas.length < 2 || hosts.size < 2) motivos.push('menos de 2 fontes de sites diferentes');
+  if (modo === 'guia') { if (usadas.filter((c) => ehOficial(c.url)).length < 2) motivos.push('guia exige pelo menos 2 fontes oficiais (.gov.br, .jus.br, Banco Central...)'); }
+  else {
+    const limite = new Date(hoje + 'T12:00:00Z'); limite.setUTCDate(limite.getUTCDate() - diasMax);
+    const recentes = usadas.filter((c) => c.data && new Date(c.data + 'T12:00:00Z') >= limite).length;
+    if (recentes < 2) motivos.push(`menos de 2 fontes publicadas nos últimos ${diasMax} dias`);
   }
-  const daBusca = (h) => [...dominiosBusca].some((d) => h === d || h.endsWith('.' + d) || d.endsWith('.' + h));
-
-  const limite = new Date(hoje + 'T12:00:00Z'); limite.setUTCDate(limite.getUTCDate() - 60);
-  let recentes = 0, oficiais = 0; const hosts = new Set();
-  for (const f of fontes) {
-    if (!f || !/^https?:\/\//.test(f.url || '') || !f.nome) { motivos.push('fonte sem nome ou link válido'); continue; }
-    const p = await abrir(f.url);
-    if (!p.ok) { motivos.push(`link da fonte não abre (${f.url}: ${p.status || p.erro})`); continue; }
-    if (!/vertexaisearch|google\./.test(host(p.urlFinal))) f.url = p.urlFinal;
-    const h = host(f.url);
-    if (!daBusca(h)) { motivos.push(`fonte não encontrada pela busca do Google (${h}): possível invenção`); continue; }
-    hosts.add(h); f.texto = p.texto; if (p.texto) textos.push(p.texto);
-    f.lida = !!p.texto; // false = site bloqueia robôs; o revisor confere pela busca
-    if (ehOficial(f.url)) oficiais++;
-    const d = new Date((f.data || '') + 'T12:00:00Z');
-    if (!isNaN(d) && d >= limite && d <= new Date(hoje + 'T12:00:00Z').getTime() + 864e5) recentes++;
-  }
-  if (hosts.size < 2) motivos.push('menos de 2 fontes reais de sites diferentes');
-  if (modo === 'guia') { if (oficiais < 2) motivos.push('guia exige pelo menos 2 fontes oficiais (.gov.br, .jus.br, Banco Central...)'); }
-  else if (recentes < 2) motivos.push('menos de 2 fontes recentes (últimos 60 dias, com data informada)');
   return { motivos, textos };
 }
 

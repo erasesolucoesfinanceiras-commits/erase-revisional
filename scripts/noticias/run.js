@@ -12,6 +12,7 @@ const { TEMAS, ordemDeTemas } = require('./temas');
 const P = require('./prompts');
 const V = require('./verificar');
 const { revisar } = require('./revisor');
+const { coletar } = require('./fontes');
 const { fetchPhoto, FALLBACK_Q } = require('../photos');
 
 const ROOT = path.join(__dirname, '..', '..');
@@ -58,9 +59,13 @@ function recentesDe(artigos, notas) {
 /** Escreve, verifica e revisa (até 2 vezes: original + 1 reescrita). Devolve { status: aprovado|sem_novidade|reprovado, rascunho? }. */
 async function tentarTema(tipo, tema, modo, recentes) {
   const T = TEMAS[tema];
+  const diasMax = tipo === 'nota' ? 3 : 14;
+  const cands = await coletar(tema, T, { hoje, diasMax, oficial: modo === 'guia' });
+  const minimo = modo === 'guia' ? 2 : 2;
+  if (cands.length < minimo) { log('pulado', { tipo, tema, motivo: `sem novidade: só ${cands.length} fonte(s) legível(is) dos últimos ${diasMax} dias` }); return { status: 'sem_novidade' }; }
   let anterior = null, motivosAnt = [];
   for (let tentativa = 1; tentativa <= 2; tentativa++) {
-    const { texto, chunks } = await chamar({ prompt: P.escritor({ tipo, modo, tema: T, hoje, recentes, anterior, motivos: motivosAnt }), temperatura: 0.6 });
+    const { texto } = await chamar({ prompt: P.escritor({ tipo, modo, tema: T, hoje, recentes, anterior, motivos: motivosAnt, cands }), temperatura: 0.6 });
     let r;
     try { r = extrairJSON(texto); } catch (e) { r = null; }
     if (r && r.sem_novidade === true) {
@@ -73,9 +78,8 @@ async function tentarTema(tipo, tema, modo, recentes) {
       r.titulo = String(r.titulo).trim();
       if (tipo === 'nota') r.texto = String(r.texto || '').replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
       else { r.corpo = sanitizar(r.corpo || ''); r.resumo = String(r.resumo || '').trim(); }
-      r.fontes = (Array.isArray(r.fontes) ? r.fontes : []).map((f) => ({ nome: String((f && f.nome) || '').trim(), url: String((f && f.url) || '').trim(), data: String((f && f.data) || '').trim() }));
+      const fo = V.checarFontes(r, tipo, modo, cands, hoje, diasMax);
       motivos = V.checarRegras(r, tipo, { recentes });
-      const fo = await V.checarFontes(r, tipo, modo, chunks, hoje);
       motivos.push(...fo.motivos);
       const copia = V.trechoCopiado(tipo === 'nota' ? r.texto : V.semHtml(r.corpo), fo.textos);
       if (copia) motivos.push(`copia trecho da fonte ("${copia}...")`);
@@ -83,7 +87,7 @@ async function tentarTema(tipo, tema, modo, recentes) {
     }
     if (!motivos.length) return { status: 'aprovado', rascunho: r };
     log('reprovado', { tipo, tema, tentativa, titulo: r && r.titulo, motivos });
-    anterior = r ? { ...r, fontes: (r.fontes || []).map(({ nome, url, data }) => ({ nome, url, data })) } : null;
+    anterior = r ? { titulo: r.titulo, resumo: r.resumo, corpo: r.corpo, texto: r.texto, fontes_usadas: r.fontes_usadas } : null;
     motivosAnt = motivos;
     if (!anterior) break;
   }

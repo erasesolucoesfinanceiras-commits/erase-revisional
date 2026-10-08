@@ -7,7 +7,7 @@ on:
   workflow_dispatch:
     inputs:
       modo:
-        description: "publicar = vai ao ar na main · amostra = gera 3 artigos + 1 nota SEM publicar (arquivos em amostras/ na branch escolhida) · diagnostico = testa os modelos do Gemini"
+        description: "publicar = vai ao ar na main · amostra = gera 3 artigos + 1 nota SEM publicar (arquivos em amostras/ na branch escolhida) · diagnostico = testa modelos do Gemini e a coleta de notícias"
         type: choice
         default: publicar
         options: [publicar, amostra, diagnostico]

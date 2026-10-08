@@ -1,7 +1,7 @@
 // Chamada à API GRATUITA do Gemini (gemini-2.5-flash) com limite de ritmo e novas tentativas.
 // Camada GRATUITA — não trocar por modelo pago. O 2.5-flash foi encerrado para chaves novas (404); troque aqui
 // ou pela variável GEMINI_MODEL (Settings > Secrets and variables > Actions > Variables) se o Google descontinuar este também.
-const MODEL = process.env.GEMINI_MODEL || 'gemini-3.8-flash';
+const MODEL = process.env.GEMINI_MODEL || "gemini-3.8-flash";
 const BASE = process.env.GEMINI_BASE || 'https://generativelanguage.googleapis.com/v1beta';
 const INTERVALO_MS = Number(process.env.GEMINI_INTERVALO_MS ?? 7000); // camada gratuita ≈ 10 pedidos/min
 const ESPERA_ERRO_MS = Number(process.env.GEMINI_ESPERA_ERRO_MS ?? 20000);
@@ -11,7 +11,7 @@ const dorme = (ms) => new Promise((r) => setTimeout(r, ms));
 class ErroGemini extends Error {}
 
 /** Devolve { texto, chunks:[{uri,title}] }. Lança ErroGemini quando a API falha mesmo após as tentativas. */
-async function chamar({ prompt, sistema, busca = true, temperatura = 0.5 }) {
+async function chamar({ prompt, sistema, busca = false, temperatura = 0.5 }) {
   const key = process.env.GEMINI_API_KEY;
   if (!key) throw new ErroGemini('GEMINI_API_KEY ausente');
   let erro;
@@ -26,7 +26,7 @@ async function chamar({ prompt, sistema, busca = true, temperatura = 0.5 }) {
         body: JSON.stringify({
           ...(sistema && { systemInstruction: { parts: [{ text: sistema }] } }),
           contents: [{ role: 'user', parts: [{ text: prompt }] }],
-          ...(busca && { tools: [{ google_search: {} }] }), // JSON mode não combina com tools: o parse é manual
+          ...(busca && { tools: [{ google_search: {} }] }), // desligada: o plano gratuito recusa a busca do Google (429); as fontes vêm de fontes.js
           generationConfig: { temperature: temperatura },
         }),
       });
