@@ -1,5 +1,7 @@
 // Chamada à API GRATUITA do Gemini (gemini-2.5-flash) com limite de ritmo e novas tentativas.
-const MODEL = 'gemini-2.5-flash'; // camada gratuita — não trocar por modelo pago
+// Camada GRATUITA — não trocar por modelo pago. O 2.5-flash foi encerrado para chaves novas (404); troque aqui
+// ou pela variável GEMINI_MODEL (Settings > Secrets and variables > Actions > Variables) se o Google descontinuar este também.
+const MODEL = process.env.GEMINI_MODEL || 'gemini-3.8-flash';
 const BASE = process.env.GEMINI_BASE || 'https://generativelanguage.googleapis.com/v1beta';
 const INTERVALO_MS = Number(process.env.GEMINI_INTERVALO_MS ?? 7000); // camada gratuita ≈ 10 pedidos/min
 const ESPERA_ERRO_MS = Number(process.env.GEMINI_ESPERA_ERRO_MS ?? 20000);

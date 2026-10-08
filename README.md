@@ -32,7 +32,7 @@ A calculadora compara a taxa de **carros** com a média do Banco Central do **m�
 - Cada branch gera uma prévia; para economizar builds, desligue as prévias de branches em *Settings > Builds*. O CRM só aceita `*.eraseconsulta.com.br`: os formulários não funcionam em `*.pages.dev`.
 
 ## Notícias automáticas (sem Pull Request)
-`.github/workflows/noticias.yml` roda todo dia às 08h (Brasília) e grava direto na `main`; o Cloudflare publica sozinho. Código em `scripts/noticias/`. Usa `gemini-2.5-flash` + Google Search (camada gratuita).
+`.github/workflows/noticias.yml` roda todo dia às 08h (Brasília) e grava direto na `main`; o Cloudflare publica sozinho. Código em `scripts/noticias/`. Usa `gemini-3.8-flash` + Google Search (camada gratuita; o modelo pode ser trocado pela variável `GEMINI_MODEL` do GitHub se o Google descontinuar este).
 - **Ritmo:** 1 **artigo completo a cada 2 dias** e 1 **nota do Radar por dia** (2 a 4 linhas, só com novidade real). Máximo 1 artigo e 1 nota por dia. Notas ficam em `data/notas.json` e aparecem em `/radar` e na home.
 - **Temas** (`scripts/noticias/temas.js`, 10 categorias em `data/config.json`): veículos (revisional + lançamentos/tecnologia) saem em ~metade das vezes; o resto reveza entre energia solar, mercado imobiliário, consórcio e seguros, crédito pessoal e dívidas, crédito rural, empresas e MEI, bancos e sistema financeiro, economia e política monetária. Sem novidade no tema da vez, pula para o próximo da lista. Só se NENHUM tiver novidade, o artigo vira um guia explicativo com fontes oficiais; nota sem novidade não é publicada.
 - **Calibragem automática** (no lugar da aprovação manual), em duas camadas:

@@ -40,6 +40,7 @@ jobs:
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           PIXABAY_API_KEY: ${{ secrets.PIXABAY_API_KEY }}
+          GEMINI_MODEL: ${{ vars.GEMINI_MODEL }}
           MODO: ${{ inputs.modo || 'publicar' }}
           FORCAR_ARTIGO: ${{ inputs.forcar_artigo && '1' || '0' }}
         run: |
