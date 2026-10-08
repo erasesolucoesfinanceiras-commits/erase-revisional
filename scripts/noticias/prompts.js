@@ -4,6 +4,8 @@ const REGRAS_COMUNS = `REGRAS OBRIGATÓRIAS
 - Texto 100% PRÓPRIO, com suas palavras: não copie trechos das fontes.
 - NÚMEROS: use cada número, percentual, valor em reais e data EXATAMENTE como está nas fontes (sem arredondar, converter ou calcular). Não misture números de assuntos, anos, regiões ou produtos diferentes: cite o que o número mede (ex.: "taxa média de veículos" é diferente de "taxa do cartão").
 - Prefira fontes de ÓRGÃO OFICIAL e de GRANDE VEÍCULO/SETORIAL. Fonte REGIONAL serve só de complemento e nunca como única base.
+- NÃO traga fatos, comparações ou números de outros assuntos, países ou setores que não sejam o tema central das fontes usadas (por exemplo, trechos de notícias relacionadas que aparecem na mesma página). Fique no fato principal.
+- Impacto prático: baseie-se no que as fontes dizem. Quando for inferência geral, deixe claro que é um efeito possível ("pode", "tende a") e não a apresente como fato nem como regra.
 - Cite quem decidiu ("o Copom decidiu", "a Câmara aprovou", "o STJ entendeu") e explique o impacto prático para quem financia, sem opinar nem usar adjetivos de valor.
 - Use no mínimo 2 das fontes numeradas, de sites diferentes, que tratem do MESMO fato. Informe só os números delas em "fontes_usadas" (os links e as datas são preenchidos pelo sistema). Se não houver 2 fontes sobre o mesmo fato recente, responda sem_novidade.
 - NEUTRALIDADE POLÍTICA ABSOLUTA (estamos em período eleitoral): nunca opine sobre partidos, políticos ou candidatos, não elogie nem critique governo ou oposição e não cite nomes de políticos nem de partidos. Atribua medidas a instituições ("o Governo Federal", "o Congresso", "o Banco Central", "o STJ"). Explique o fato e o que ele muda para quem tem ou vai fazer um financiamento.
@@ -55,7 +57,7 @@ ${blocoPares}
 
 ASSUNTOS PUBLICADOS NOS ÚLTIMOS 15 DIAS: ${recentes.map((x) => `"${x.titulo}"`).join('; ') || '(nenhum)'}
 
-Avalie CADA critério (ok = true só se estiver inequivocamente atendido):
+Avalie CADA critério. REGRA: ok = true SOMENTE se estiver inequivocamente atendido e SEM nenhuma ressalva. Se a sua própria observação tiver qualquer "porém", "embora", "apesar", contexto diferente ou dúvida, marque ok = false. Reprove também afirmações gerais ou comparações que não estão nas fontes.
 1. "fontes": há pelo menos 2 fontes reais e recentes, confiáveis (órgãos oficiais, empresas ou imprensa confiável), e elas tratam mesmo do assunto do texto?
 2. "fatos": TODO número, data, preço, percentual, nome de lei ou decisão do texto aparece nas fontes? Liste no motivo qualquer item que NÃO esteja nelas.
 3. "original": o texto é próprio, sem trechos copiados das fontes?
@@ -80,7 +82,7 @@ ${texto}
 
 ${ev}
 
-Aplique esta lista e responda se CADA item está ok (true) ou não (false):
+Aplique esta lista e responda se CADA item está ok (true) ou não (false). Se a sua observação tiver qualquer ressalva, marque false:
 1. "sem_adjetivo_politico": o texto NÃO cita partido, político ou candidato com adjetivo, elogio ou crítica?
 2. "sem_merito_culpa": o texto NÃO atribui mérito ou culpa a governo ou oposição (nem sugere que uma medida é boa ou ruim por quem a tomou)?
 3. "sem_termos_carregados": o texto NÃO usa termos carregados ou valorativos (ex.: "desastre", "acerto histórico", "manobra", "escândalo")?
