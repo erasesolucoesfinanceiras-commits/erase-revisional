@@ -87,4 +87,4 @@ function checarFontes(r, tipo, modo, cands, hoje, diasMax) {
   return { motivos, textos };
 }
 
-module.exports = { checarRegras, checarFontes, trechoCopiado, semHtml, norm, host };
+module.exports = { POLITICA, checarRegras, checarFontes, trechoCopiado, semHtml, norm, host };

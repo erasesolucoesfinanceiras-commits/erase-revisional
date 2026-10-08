@@ -2,6 +2,7 @@
 // Fontes: buscas de notícias em RSS (Bing News) por tema + feeds de órgãos e veículos (feeds.json).
 // O Gemini só escolhe entre estas fontes (por número): os links, as datas e os textos vêm daqui, nunca do modelo.
 const { abrir } = require('./web');
+const { POLITICA } = require('./verificar');
 const FEEDS = require('./feeds.json');
 
 const BING = process.env.NOTICIAS_RSS_BASE || 'https://www.bing.com/news/search';
@@ -9,7 +10,8 @@ const UA = 'Mozilla/5.0 (compatible; EraseRevisionalBot/1.0; +https://revisional
 const norm = (s) => String(s).toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
 const host = (u) => { try { return new URL(u).hostname.replace(/^www\./, '').toLowerCase(); } catch (e) { return ''; } };
 
-const desfazer = (s) => String(s || '').replace(/<!\[CDATA\[([\s\S]*?)\]\]>/g, '$1').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '"').replace(/&#0?39;/g, "'").replace(/&amp;/g, '&');
+const desfazer = (s) => String(s || '').replace(/<!\[CDATA\[([\s\S]*?)\]\]>/g, '$1').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '"').replace(/&#0?39;/g, "'").replace(/&amp;/g, '&')
+  .replace(/&#x([0-9a-f]+);/gi, (m, h) => String.fromCodePoint(parseInt(h, 16))).replace(/&#(\d+);/g, (m, d) => String.fromCodePoint(Number(d)));
 const tag = (bloco, nome) => { const m = new RegExp(`<${nome}[^>]*>([\\s\\S]*?)</${nome}>`, 'i').exec(bloco); return m ? desfazer(m[1]).trim() : ''; };
 const semTags = (s) => String(s).replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
 
@@ -60,7 +62,8 @@ async function coletar(tema, T, { hoje, diasMax, oficial = false, maxCands = 8, 
   }
   // recentes, sem repetir link, no máx. 2 por site, mais novos primeiro
   const vistos = new Set(), porSite = {};
-  const ordenados = itens.filter((i) => oficial ? true : i.data && i.data >= corte).sort((a, b) => (a.data < b.data ? 1 : a.data > b.data ? -1 : 0)).filter((i) => {
+  // notícias de campanha/política partidária nem entram no banco de fontes (neutralidade no período eleitoral)
+  const ordenados = itens.filter((i) => !POLITICA.test(i.titulo)).filter((i) => oficial ? true : i.data && i.data >= corte).sort((a, b) => (a.data < b.data ? 1 : a.data > b.data ? -1 : 0)).filter((i) => {
     const h = host(i.link); if (!h || vistos.has(i.link) || (porSite[h] || 0) >= 2) return false;
     vistos.add(i.link); porSite[h] = (porSite[h] || 0) + 1; return true;
   }).slice(0, 14);
