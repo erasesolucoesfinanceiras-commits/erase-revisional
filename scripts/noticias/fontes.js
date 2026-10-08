@@ -50,10 +50,10 @@ async function coletar(tema, T, { hoje, diasMax, oficial = false, maxCands = 8, 
   for (const q of consultas) {
     const r = await baixarRSS(`${BING}?q=${encodeURIComponent(q)}&format=rss&setmkt=pt-BR&mkt=pt-BR`);
     if (relatorio) relatorio.push(`bing "${q.slice(0, 50)}": ${r.itens.length} itens${r.erro ? ' (' + r.erro + ')' : ''}`);
-    itens.push(...r.itens);
+    itens.push(...r.itens.map((i) => ({ ...i, bonus: 2 }))); // veio de uma busca do próprio tema
   }
+  const kw = norm(T.palavras).split(/\s+/).filter((w) => w.length > 3);
   if (!oficial) {
-    const kw = norm(T.palavras).split(/\s+/).filter((w) => w.length > 3);
     for (const f of process.env.NOTICIAS_SEM_FEEDS ? [] : FEEDS) {
       const r = await baixarRSS(f.url);
       if (relatorio) relatorio.push(`feed ${f.nome}: ${r.itens.length} itens${r.erro ? ' (' + r.erro + ')' : ''}`);
@@ -63,7 +63,9 @@ async function coletar(tema, T, { hoje, diasMax, oficial = false, maxCands = 8, 
   // recentes, sem repetir link, no máx. 2 por site, mais novos primeiro
   const vistos = new Set(), porSite = {};
   // notícias de campanha/política partidária nem entram no banco de fontes (neutralidade no período eleitoral)
-  const ordenados = itens.filter((i) => !POLITICA.test(i.titulo)).filter((i) => oficial ? true : i.data && i.data >= corte).sort((a, b) => (a.data < b.data ? 1 : a.data > b.data ? -1 : 0)).filter((i) => {
+  const ordenados = itens.filter((i) => !POLITICA.test(i.titulo)).filter((i) => oficial ? true : i.data && i.data >= corte).map((i) => ({ ...i, nota: (i.bonus || 0) + kw.filter((w) => norm(i.titulo + ' ' + i.descricao).includes(w)).length }))
+    // mais relevantes ao tema primeiro, depois os mais novos
+    .sort((a, b) => b.nota - a.nota || (a.data < b.data ? 1 : a.data > b.data ? -1 : 0)).filter((i) => {
     const h = host(i.link); if (!h || vistos.has(i.link) || (porSite[h] || 0) >= 2) return false;
     vistos.add(i.link); porSite[h] = (porSite[h] || 0) + 1; return true;
   }).slice(0, 14);

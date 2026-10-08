@@ -28,6 +28,8 @@ const epochDay = Math.floor(Date.parse(hoje + 'T00:00:00Z') / 864e5);
 const lerJSON = (f, vazio) => { try { return JSON.parse(fs.readFileSync(f, 'utf8')); } catch (e) { if (e.code === 'ENOENT') return vazio; throw e; } };
 const gravarJSON = (f, v) => fs.writeFileSync(f, JSON.stringify(v, null, 2) + '\n');
 let houveErro = false;
+const PRAZO = Date.now() + Number(process.env.NOTICIAS_MINUTOS || (MODO === 'amostra' ? 40 : 25)) * 60e3; // orçamento de tempo do job
+const semTempo = () => Date.now() > PRAZO;
 
 function log(evento, dados) {
   const linha = { quando: new Date().toISOString(), data: hoje, evento, ...dados };
@@ -98,6 +100,7 @@ async function tentarTema(tipo, tema, modo, recentes) {
 async function produzir(tipo, ordem, recentes) {
   let houveNovidade = false;
   for (const tema of ordem) {
+    if (semTempo()) { log('sem_publicacao', { tipo, motivo: 'orçamento de tempo do dia esgotado' }); return null; }
     const r = await tentarTema(tipo, tema, 'noticia', recentes);
     if (r.status === 'aprovado') return { tema, modo: 'noticia', rascunho: r.rascunho };
     if (r.status === 'reprovado') houveNovidade = true;
