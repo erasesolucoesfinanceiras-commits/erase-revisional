@@ -5,6 +5,7 @@ Portal de notícias sobre financiamento de veículos + calculadora de juros (isc
 ## Como editar
 - **Tudo é gerado** por `node scripts/build.js` a partir de `data/config.json` e `data/articles.json`. Não edite os `.html` à mão.
 - `data/config.json`: URL do site, WhatsApp, redes sociais, CNPJ/endereço (rodapé), taxa média do Banco Central + mês (`bc`), limites por tipo de veículo.
+- Testes dos formulários (Playwright + CRM simulado): `tests/formularios/` (veja o cabeçalho de cada arquivo).
 - Imagens (capas, favicon, og-image): `node scripts/make-images.js` (precisa de Playwright/Chromium).
 
 ## Leads
