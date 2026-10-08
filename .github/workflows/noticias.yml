@@ -7,10 +7,10 @@ on:
   workflow_dispatch:
     inputs:
       modo:
-        description: "publicar = vai ao ar na main · amostra = gera 3 artigos + 1 nota SEM publicar (arquivos em amostras/ na branch escolhida) · diagnostico = testa modelos do Gemini e a coleta de notícias"
+        description: "publicar = vai ao ar na main · amostra = gera 3 artigos + 1 nota SEM publicar (arquivos em amostras/ na branch escolhida) · diagnostico = testa modelos do Gemini e a coleta de notícias · resumo_teste = manda por e-mail o resumo semanal de teste (com as amostras)"
         type: choice
         default: publicar
-        options: [publicar, amostra, diagnostico]
+        options: [publicar, amostra, diagnostico, resumo_teste]
       forcar_artigo:
         description: "Gerar artigo hoje mesmo que não seja o dia (continua valendo 1 por dia)"
         type: boolean
@@ -26,13 +26,13 @@ concurrency:
 
 jobs:
   noticias:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 60
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
         with:
-          node-version: 20
+          node-version: 22
 
       - name: Diagnóstico do Gemini (só modo diagnostico)
         if: inputs.modo == 'diagnostico'
@@ -40,9 +40,18 @@ jobs:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
         run: node scripts/noticias/diagnostico.js
 
+      - name: Resumo semanal de teste (só modo resumo_teste)
+        if: inputs.modo == 'resumo_teste'
+        env:
+          TESTE: "1"
+          RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
+          ALERTA_EMAIL_PARA: ${{ secrets.ALERTA_EMAIL_PARA }}
+          ALERTA_EMAIL_DE: ${{ secrets.ALERTA_EMAIL_DE }}
+        run: node scripts/noticias/resumo-semanal.js
+
       - name: Gerar, verificar e revisar
         id: gerar
-        if: inputs.modo != 'diagnostico'
+        if: inputs.modo != 'diagnostico' && inputs.modo != 'resumo_teste'
         continue-on-error: true
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}

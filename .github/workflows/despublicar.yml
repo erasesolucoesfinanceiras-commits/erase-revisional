@@ -1,0 +1,42 @@
+name: Despublicar texto
+
+# Tira um artigo ou nota do ar (site, home, Radar e sitemap) e impede o robô de republicar o mesmo assunto.
+on:
+  workflow_dispatch:
+    inputs:
+      endereco:
+        description: "Endereço do artigo (ex.: https://revisional.eraseconsulta.com.br/noticias/nome-do-artigo) ou da nota (…/radar#id)"
+        required: true
+        type: string
+      motivo:
+        description: "Motivo (opcional, fica registrado)"
+        required: false
+        type: string
+
+permissions:
+  contents: write
+
+concurrency:
+  group: noticias
+  cancel-in-progress: false
+
+jobs:
+  despublicar:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+      - name: Tirar do ar
+        env:
+          ENDERECO: ${{ inputs.endereco }}
+          MOTIVO: ${{ inputs.motivo }}
+        run: node scripts/noticias/despublicar.js
+      - name: Gravar na branch
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "Despublica texto (manual)"
+          for i in 1 2 3; do git pull --rebase origin "${GITHUB_REF_NAME}" && git push origin "HEAD:${GITHUB_REF_NAME}" && break; sleep 5; done

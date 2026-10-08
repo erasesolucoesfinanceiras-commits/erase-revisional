@@ -23,6 +23,7 @@ const PROMESSA = [
 ];
 const PARCEIRO = /escrit[oó]rio\s+parceiro|advogad[oa]s?\s+parceir|parceir[oa]s?\s+(jur[ií]dic|da\s+erase)|nossos?\s+parceiros?\s+(jur[ií]dic|advogad)/i;
 const POLITICA = /\b(lula|bolsonaro|tarc[ií]sio|haddad|ciro gomes|mar[cç]al|alckmin|janja|petista|bolsonarista|lulista|esquerdista|direitista|candidat[oa]s?|eleitor(?:es|al|ais)?|elei[cç](?:[aã]o|[oõ]es)|partid(?:o|os|[aá]rio|[aá]ria)|psdb|psol|mdb|uni[aã]o brasil|centr[aã]o|oposi[cç][aã]o|palanque|presidenci[aá]vel)\b|\bPT\b/i;
+const CARREGADO = /\b(desastre|desastroso|ac?erto hist[óo]rico|manobra|esc[âa]ndalo|vergonha|vergonhoso|fiasco|fracasso (do|da) governo|ca[oó]s|absurdo|omiss[ãa]o|c[ií]nic[oa]|populis(?:mo|ta)|armaç[ãa]o|heroi[ck][oa]|trag[ée]dia nacional)\b|campanha eleitoral|pesquisa eleitoral|pr[ée]-candidat|urnas?\b/i;
 const ASSINATURA = /^\s*(por|autor|autoria|texto de|escrito por|reda[cç][aã]o de)\b/i;
 
 /** Regras de forma e conteúdo, sem rede. `ctx.recentes` = itens dos últimos 15 dias [{titulo, resumo|texto, fontes}]. */
@@ -43,6 +44,8 @@ function checarRegras(r, tipo, ctx) {
   if (PARCEIRO.test(todo)) m.push('cita escritório/advogado parceiro');
   const pol = POLITICA.exec(todo);
   if (pol) m.push(`menção política/partidária ("${pol[0]}")`);
+  const car = CARREGADO.exec(todo);
+  if (car) m.push(`termo carregado/eleitoral ("${car[0]}")`);
   if (ASSINATURA.test(corpoTxt)) m.push('texto com assinatura/autor');
   // repetição (últimos 15 dias)
   const tt = tokens(r.titulo), tc = tokens(`${r.titulo} ${r.resumo || ''} ${corpoTxt.slice(0, 400)}`);
@@ -54,13 +57,17 @@ function checarRegras(r, tipo, ctx) {
   return m;
 }
 
-/** Maior trecho (em palavras) que o texto copia de alguma fonte; devolve o trecho se tiver ≥ N palavras. */
-function trechoCopiado(corpoTxt, textosFontes, N = 9) {
+/**
+ * Trecho que o texto copia de alguma fonte: ≥12 palavras seguidas iguais. Janelas feitas só de números/datas/percentuais
+ * ou de listas curtas (tabela do IPCA, lista de preços) não contam como cópia — o texto em si tem de ser próprio.
+ */
+function trechoCopiado(corpoTxt, textosFontes, N = 12) {
   const a = norm(corpoTxt).split(' ');
   if (a.length < N) return null;
+  const pobre = (w) => w.filter((x) => /^\d+$/.test(x) || x.length <= 3).length / w.length >= 0.4; // muitos números/palavras curtas = dado, não prosa
   const grams = new Set();
-  for (const t of textosFontes) { const w = norm(t).split(' '); for (let i = 0; i + N <= w.length; i++) grams.add(w.slice(i, i + N).join(' ')); }
-  for (let i = 0; i + N <= a.length; i++) { const g = a.slice(i, i + N).join(' '); if (grams.has(g)) return g; }
+  for (const t of textosFontes) { const w = norm(t).split(' '); for (let i = 0; i + N <= w.length; i++) { const j = w.slice(i, i + N); if (!pobre(j)) grams.add(j.join(' ')); } }
+  for (let i = 0; i + N <= a.length; i++) { const j = a.slice(i, i + N); if (pobre(j)) continue; const g = j.join(' '); if (grams.has(g)) return g; }
   return null;
 }
 
@@ -78,6 +85,7 @@ function checarFontes(r, tipo, modo, cands, hoje, diasMax) {
   usadas.forEach((c) => textos.push(c.texto));
   const hosts = new Set(usadas.map((c) => c.host));
   if (usadas.length < 2 || hosts.size < 2) motivos.push('menos de 2 fontes de sites diferentes');
+  if (modo !== 'guia' && usadas.length && !usadas.some((c) => c.peso >= 2)) motivos.push('só fontes regionais/pequenas: é preciso ao menos um órgão oficial ou grande veículo (regionais só como complemento)');
   if (modo === 'guia') { if (usadas.filter((c) => ehOficial(c.url)).length < 2) motivos.push('guia exige pelo menos 2 fontes oficiais (.gov.br, .jus.br, Banco Central...)'); }
   else {
     const limite = new Date(hoje + 'T12:00:00Z'); limite.setUTCDate(limite.getUTCDate() - diasMax);

@@ -11,13 +11,14 @@ const { chamar, extrairJSON, ErroGemini } = require('./gemini');
 const { TEMAS, ordemDeTemas } = require('./temas');
 const P = require('./prompts');
 const V = require('./verificar');
-const { revisar } = require('./revisor');
+const { revisar, revisarNeutralidade } = require('./revisor');
+const N = require('./numeros');
 const { coletar } = require('./fontes');
 const { fetchPhoto, FALLBACK_Q } = require('../photos');
 
 const ROOT = path.join(__dirname, '..', '..');
 const DATA_DIR = process.env.DADOS_DIR || path.join(ROOT, 'data');
-const F_ART = path.join(DATA_DIR, 'articles.json'), F_NOTAS = path.join(DATA_DIR, 'notas.json');
+const F_ART = path.join(DATA_DIR, 'articles.json'), F_NOTAS = path.join(DATA_DIR, 'notas.json'), F_DESP = path.join(DATA_DIR, 'despublicados.json');
 const MODO = process.env.MODO === 'amostra' ? 'amostra' : 'publicar';
 const AMOSTRAS = path.join(ROOT, 'amostras');
 const F_LOG = MODO === 'amostra' ? path.join(AMOSTRAS, 'log.jsonl') : path.join(DATA_DIR, 'noticias-log.jsonl');
@@ -51,18 +52,26 @@ function sanitizar(html) {
 }
 const slugify = (s) => s.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '').slice(0, 80);
 
+// Despublicados (data/despublicados.json) ficam na lista de "assuntos já tratados" para sempre: o robô não republica o mesmo assunto.
+const despublicados = lerJSON(F_DESP, []);
+const urlsBloqueadas = new Set(despublicados.flatMap((d) => d.urls || []));
 function recentesDe(artigos, notas) {
   const lim = new Date(hoje + 'T12:00:00Z'); lim.setUTCDate(lim.getUTCDate() - 15);
   const corte = lim.toISOString().slice(0, 10);
-  return [...artigos, ...notas].filter((x) => x.data >= corte)
+  return [...[...artigos, ...notas].filter((x) => x.data >= corte), ...despublicados.map((d) => ({ ...d, fontes: (d.urls || []).map((url) => ({ url })) }))]
     .map((x) => ({ titulo: x.titulo, resumo: x.resumo, texto: x.texto, fontes: x.fontes || (x.fonte && x.fonte.url ? [x.fonte] : []) }));
 }
+
+const TEMAS_SEM_POLITICA = ['revisional', 'mercado'];
+const FALA_DE_GOVERNO = /governo|congresso|c[âa]mara|senado|ministr|presidente|projeto de lei|medida provis|decreto|stf|supremo|stj|banco central|copom|cmn|eleiç|lei n/i;
+/** Temas de política/economia (e qualquer texto que fale de governo/Congresso/Judiciário) passam também pela revisão de neutralidade. */
+const precisaNeutralidade = (tema, txt) => !TEMAS_SEM_POLITICA.includes(tema) || FALA_DE_GOVERNO.test(txt);
 
 /** Escreve, verifica e revisa (até 2 vezes: original + 1 reescrita). Devolve { status: aprovado|sem_novidade|reprovado, rascunho? }. */
 async function tentarTema(tipo, tema, modo, recentes) {
   const T = TEMAS[tema];
   const diasMax = tipo === 'nota' ? 3 : 14;
-  const cands = await coletar(tema, T, { hoje, diasMax, oficial: modo === 'guia' });
+  const cands = (await coletar(tema, T, { hoje, diasMax, oficial: modo === 'guia' })).filter((c) => !urlsBloqueadas.has(c.url));
   const minimo = modo === 'guia' ? 2 : 2;
   if (cands.length < minimo) { log('pulado', { tipo, tema, motivo: `sem novidade: só ${cands.length} fonte(s) legível(is) dos últimos ${diasMax} dias` }); return { status: 'sem_novidade' }; }
   let anterior = null, motivosAnt = [];
@@ -75,6 +84,7 @@ async function tentarTema(tipo, tema, modo, recentes) {
       log('reprovado', { tipo, tema, tentativa, motivos: ['reescrita impossível com as fontes reais'] }); return { status: 'reprovado' };
     }
     let motivos = [];
+    const revisoes = {};
     if (!r || !r.titulo) motivos = ['resposta fora do formato JSON esperado'];
     else {
       r.titulo = String(r.titulo).trim();
@@ -85,10 +95,21 @@ async function tentarTema(tipo, tema, modo, recentes) {
       motivos.push(...fo.motivos);
       const copia = V.trechoCopiado(tipo === 'nota' ? r.texto : V.semHtml(r.corpo), fo.textos);
       if (copia) motivos.push(`copia trecho da fonte ("${copia}...")`);
-      if (!motivos.length) { const rev = await revisar({ tipo, hoje, rascunho: r, recentes }); motivos = rev.motivos; }
+      // números: todo número/percentual/valor/data do texto tem de aparecer nas fontes coletadas
+      const textoArtigo = tipo === 'nota' ? `${r.titulo}. ${r.texto}` : `${r.titulo}. ${r.resumo}. ${r.corpo}`;
+      const num = N.conferir(textoArtigo, r.fontes, [...r.fontes.map((f) => f.data), hoje].join(' '), hoje);
+      if (num.faltando.length) motivos.push(`número(s) que não aparecem nas fontes: ${num.faltando.slice(0, 6).map((x) => `"${x.raw}" (em: ${x.frase.slice(0, 90)})`).join('; ')}`);
+      if (!motivos.length) {
+        const rev = await revisar({ tipo, hoje, rascunho: r, recentes, pares: num.pares });
+        revisoes.geral = rev.criterios; motivos = rev.motivos;
+        if (!motivos.length && precisaNeutralidade(tema, textoArtigo)) {
+          const neu = await revisarNeutralidade({ tipo, rascunho: r });
+          revisoes.neutralidade = neu.criterios; motivos = neu.motivos.map((m) => 'neutralidade/' + m);
+        }
+      }
     }
-    if (!motivos.length) return { status: 'aprovado', rascunho: r };
-    log('reprovado', { tipo, tema, tentativa, titulo: r && r.titulo, motivos });
+    if (!motivos.length) { r.revisoes = revisoes; return { status: 'aprovado', rascunho: r }; }
+    log('reprovado', { tipo, tema, tentativa, titulo: r && r.titulo, motivos, revisao: revisoes });
     anterior = r ? { titulo: r.titulo, resumo: r.resumo, corpo: r.corpo, texto: r.texto, fontes_usadas: r.fontes_usadas } : null;
     motivosAnt = motivos;
     if (!anterior) break;
@@ -97,7 +118,7 @@ async function tentarTema(tipo, tema, modo, recentes) {
 }
 
 /** Percorre os temas na ordem; só se NENHUM tiver novidade (artigo) cai no guia explicativo. */
-async function produzir(tipo, ordem, recentes) {
+async function produzir(tipo, ordem, recentes, { semGuia = false } = {}) {
   let houveNovidade = false;
   for (const tema of ordem) {
     if (semTempo()) { log('sem_publicacao', { tipo, motivo: 'orçamento de tempo do dia esgotado' }); return null; }
@@ -105,7 +126,7 @@ async function produzir(tipo, ordem, recentes) {
     if (r.status === 'aprovado') return { tema, modo: 'noticia', rascunho: r.rascunho };
     if (r.status === 'reprovado') houveNovidade = true;
   }
-  if (tipo === 'artigo' && !houveNovidade) {
+  if (tipo === 'artigo' && !houveNovidade && !semGuia) {
     log('guia', { tipo, motivo: 'nenhum tema tem novidade: tentando artigo explicativo com fontes oficiais' });
     for (const tema of ordem.slice(0, 3)) {
       const r = await tentarTema(tipo, tema, 'guia', recentes);
@@ -144,7 +165,9 @@ function salvarAmostra(i, item) {
   fs.mkdirSync(AMOSTRAS, { recursive: true });
   const r = item.rascunho, nome = `${String(i).padStart(2, '0')}-${item.tipo}-${item.tema}`;
   fs.writeFileSync(path.join(AMOSTRAS, nome + '.json'), JSON.stringify({ ...item, rascunho: { ...r, fontes: limparFontes(r.fontes) } }, null, 2) + '\n');
-  const md = [`## ${item.tipo.toUpperCase()} · ${TEMAS[item.tema].nome} (${item.tema}) · ${item.modo}`, `**${r.titulo}**`, r.resumo ? `_${r.resumo}_` : '', item.tipo === 'nota' ? r.texto : V.semHtml(r.corpo).replace(/ (?=[A-ZÁÉÍÓÚ][a-zá-ú]+ )/g, ' '), 'Fontes: ' + r.fontes.map((f) => `${f.nome} <${f.url}> (${f.data})`).join(' · '), ''].filter(Boolean).join('\n\n');
+  const txt = item.tipo === 'nota' ? r.texto : String(r.corpo).replace(/<h[23]>/g, '\n### ').replace(/<\/(h[23]|p|li|ul|ol)>/g, '\n').replace(/<li>/g, '- ').replace(/<[^>]+>/g, '').replace(/\n{3,}/g, '\n\n').trim();
+  const rev = Object.entries(r.revisoes || {}).map(([etapa, cs]) => `**Revisão ${etapa}:**\n` + Object.entries(cs).map(([k, v]) => `- ${k}: ${v.ok ? 'OK' : 'REPROVA'} — ${v.obs}`).join('\n')).join('\n\n');
+  const md = [`## ${item.tipo.toUpperCase()} · ${TEMAS[item.tema].nome} (${item.tema}) · ${item.modo}`, `**${r.titulo}**`, r.resumo ? `_${r.resumo}_` : '', txt, 'Fontes: ' + r.fontes.map((f) => `${f.nome} <${f.url}> (${f.data})`).join(' · '), rev, ''].filter(Boolean).join('\n\n');
   fs.appendFileSync(path.join(AMOSTRAS, 'AMOSTRAS.md'), md + '\n\n---\n\n');
 }
 
@@ -157,10 +180,10 @@ function salvarAmostra(i, item) {
   if (MODO === 'amostra') {
     fs.rmSync(AMOSTRAS, { recursive: true, force: true });
     let i = 1;
-    for (const inicio of ['revisional', 'energia-solar', 'economia']) {
+    // amostra ESTRITA: cada artigo é do tema pedido (ou nada) — assim o resultado mostra se o tema passa na calibragem
+    for (const inicio of (process.env.AMOSTRA_TEMAS || 'economia,financeiro,energia-solar').split(',')) {
       try {
-        const base = ordemDeTemas(0).indexOf(inicio); const ordem = ordemDeTemas(0); const rot = [...ordem.slice(base), ...ordem.slice(0, base)].filter((t) => !temasUsados.includes(t));
-        const r = await produzir('artigo', rot, recentes);
+        const r = await produzir('artigo', [inicio], recentes, { semGuia: true });
         if (r) { salvarAmostra(i++, { tipo: 'artigo', ...r }); temasUsados.push(r.tema); recentes.push({ titulo: r.rascunho.titulo, resumo: r.rascunho.resumo, fontes: r.rascunho.fontes }); }
       } catch (e) { houveErro = true; log('erro', { tipo: 'artigo', tema: inicio, motivo: e.message }); }
     }
@@ -188,7 +211,7 @@ function salvarAmostra(i, item) {
           const art = await publicarArtigo(r, artigos);
           gravarJSON(F_ART, artigos);
           execFileSync('node', [path.join(__dirname, '..', 'build.js')], { stdio: 'inherit' });
-          log('publicado', { tipo: 'artigo', tema: r.tema, titulo: art.titulo, modo: r.modo, slug: art.slug, fontes: art.fontes.map((f) => f.url) });
+          log('publicado', { tipo: 'artigo', tema: r.tema, titulo: art.titulo, modo: r.modo, slug: art.slug, fontes: art.fontes.map((f) => f.url), revisao: r.rascunho.revisoes });
           publicouArtigo = r.tema; recentes.push({ titulo: art.titulo, resumo: art.resumo, fontes: art.fontes });
         } catch (e) { desfazer(); artigos.shift(); throw e; }
       }
@@ -205,7 +228,7 @@ function salvarAmostra(i, item) {
           const nota = criarNota(r, notas);
           gravarJSON(F_NOTAS, notas);
           execFileSync('node', [path.join(__dirname, '..', 'build.js')], { stdio: 'inherit' });
-          log('publicado', { tipo: 'nota', tema: r.tema, titulo: nota.titulo, id: nota.id, fontes: nota.fontes.map((f) => f.url) });
+          log('publicado', { tipo: 'nota', tema: r.tema, titulo: nota.titulo, id: nota.id, fontes: nota.fontes.map((f) => f.url), revisao: r.rascunho.revisoes });
         } catch (e) { desfazer(); throw e; }
       }
     } catch (e) { houveErro = true; log('erro', { tipo: 'nota', motivo: String(e.message).slice(0, 300) }); }

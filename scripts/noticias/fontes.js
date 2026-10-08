@@ -36,6 +36,16 @@ async function baixarRSS(url) {
   } catch (e) { return { itens: [], erro: e.message }; } finally { clearTimeout(t); }
 }
 
+// Peso da fonte: 3 = órgão oficial, 2 = grande veículo ou veículo setorial reconhecido, 0 = regional/pequeno (só complemento).
+const OFICIAL = /(^|\.)(gov|leg|jus|mil)\.br$|(^|\.)ebc\.com\.br$/;
+const GRANDES = ['g1.globo.com', 'globo.com', 'oglobo.globo.com', 'valor.globo.com', 'globorural.globo.com', 'autoesporte.globo.com', 'folha.uol.com.br', 'noticias.uol.com.br', 'uol.com.br', 'estadao.com.br', 'einvestidor.estadao.com.br', 'exame.com', 'infomoney.com.br', 'cnnbrasil.com.br', 'poder360.com.br', 'correiobraziliense.com.br', 'gazetadopovo.com.br', 'istoedinheiro.com.br', 'moneytimes.com.br', 'bloomberglinea.com.br', 'reuters.com', 'bbc.com', 'veja.abril.com.br', 'forbes.com.br', 'r7.com', 'terra.com.br', 'metropoles.com', 'migalhas.com.br', 'conjur.com.br', 'jota.info', 'canalrural.com.br', 'canalsolar.com.br', 'absolar.org.br', 'portalsolar.com.br', 'fenabrave.org.br', 'anfavea.com.br', 'quatrorodas.abril.com.br', 'motor1.com.br', 'febraban.org.br', 'cnc.org.br', 'cni.com.br', 'sebrae.com.br', 'agenciasebrae.com.br'];
+const EXTRAS = (process.env.NOTICIAS_HOSTS_GRANDES || '').split(',').filter(Boolean); // só para testes
+function pesoDoHost(h) {
+  if (EXTRAS.includes(h)) return 2;
+  if (OFICIAL.test(h)) return 3;
+  return GRANDES.some((g) => h === g || h.endsWith('.' + g)) ? 2 : 0;
+}
+
 const cache = new Map();
 /** Notícias candidatas de um tema: lidas (texto da página), recentes e sem duplicatas. */
 async function coletar(tema, T, { hoje, diasMax, oficial = false, maxCands = 8, relatorio = null }) {
@@ -54,16 +64,16 @@ async function coletar(tema, T, { hoje, diasMax, oficial = false, maxCands = 8, 
   }
   const kw = norm(T.palavras).split(/\s+/).filter((w) => w.length > 3);
   if (!oficial) {
-    for (const f of process.env.NOTICIAS_SEM_FEEDS ? [] : FEEDS) {
+    for (const f of process.env.NOTICIAS_SEM_FEEDS ? [] : FEEDS.filter((x) => !x.temas || x.temas.includes(tema))) {
       const r = await baixarRSS(f.url);
       if (relatorio) relatorio.push(`feed ${f.nome}: ${r.itens.length} itens${r.erro ? ' (' + r.erro + ')' : ''}`);
-      itens.push(...r.itens.filter((i) => { const t = norm(i.titulo + ' ' + i.descricao); return kw.some((w) => t.includes(w)); }).map((i) => ({ ...i, fonte: i.fonte || f.nome })));
+      itens.push(...r.itens.filter((i) => { const t = norm(i.titulo + ' ' + i.descricao); return f.temas || kw.some((w) => t.includes(w)); }).map((i) => ({ ...i, fonte: i.fonte || f.nome, bonus: f.temas ? 2 : 0 })));
     }
   }
   // recentes, sem repetir link, no máx. 2 por site, mais novos primeiro
   const vistos = new Set(), porSite = {};
   // notícias de campanha/política partidária nem entram no banco de fontes (neutralidade no período eleitoral)
-  const ordenados = itens.filter((i) => !POLITICA.test(i.titulo)).filter((i) => oficial ? true : i.data && i.data >= corte).map((i) => ({ ...i, nota: (i.bonus || 0) + kw.filter((w) => norm(i.titulo + ' ' + i.descricao).includes(w)).length }))
+  const ordenados = itens.filter((i) => !POLITICA.test(i.titulo)).filter((i) => !T.exige || T.exige.test(norm(i.titulo + ' ' + i.descricao))).filter((i) => oficial ? true : i.data && i.data >= corte).map((i) => ({ ...i, nota: (i.bonus || 0) + kw.filter((w) => norm(i.titulo + ' ' + i.descricao).includes(w)).length + pesoDoHost(host(i.link)) }))
     // mais relevantes ao tema primeiro, depois os mais novos
     .sort((a, b) => b.nota - a.nota || (a.data < b.data ? 1 : a.data > b.data ? -1 : 0)).filter((i) => {
     const h = host(i.link); if (!h || vistos.has(i.link) || (porSite[h] || 0) >= 2) return false;
@@ -75,7 +85,7 @@ async function coletar(tema, T, { hoje, diasMax, oficial = false, maxCands = 8, 
     for (const { it, p } of lote) {
       if (!p.ok || p.texto.length < 800) { if (relatorio) relatorio.push(`  descartada (${p.status || p.erro}, ${p.texto.length} caracteres): ${it.link.slice(0, 90)}`); continue; }
       const url = /vertexaisearch|google\.com|bing\.com/.test(host(p.urlFinal)) ? it.link : p.urlFinal;
-      cands.push({ titulo: it.titulo, url, host: host(url), data: it.data || '', nome: it.fonte || host(url), texto: p.texto });
+      cands.push({ titulo: it.titulo, url, host: host(url), peso: pesoDoHost(host(url)), data: it.data || '', nome: it.fonte || host(url), texto: p.texto });
     }
   }
   cands.forEach((c, n) => { c.id = n + 1; });
@@ -83,4 +93,4 @@ async function coletar(tema, T, { hoje, diasMax, oficial = false, maxCands = 8, 
   return cands;
 }
 
-module.exports = { coletar, lerRSS, host };
+module.exports = { coletar, lerRSS, host, pesoDoHost };

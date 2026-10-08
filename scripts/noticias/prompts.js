@@ -2,6 +2,9 @@
 const REGRAS_COMUNS = `REGRAS OBRIGATÓRIAS
 - Baseie-se SOMENTE em fatos que estão nas FONTES numeradas abaixo. Não invente números, datas, preços, leis, decisões ou citações. Todo número, data, preço ou decisão do texto tem de estar em pelo menos uma das fontes usadas.
 - Texto 100% PRÓPRIO, com suas palavras: não copie trechos das fontes.
+- NÚMEROS: use cada número, percentual, valor em reais e data EXATAMENTE como está nas fontes (sem arredondar, converter ou calcular). Não misture números de assuntos, anos, regiões ou produtos diferentes: cite o que o número mede (ex.: "taxa média de veículos" é diferente de "taxa do cartão").
+- Prefira fontes de ÓRGÃO OFICIAL e de GRANDE VEÍCULO/SETORIAL. Fonte REGIONAL serve só de complemento e nunca como única base.
+- Cite quem decidiu ("o Copom decidiu", "a Câmara aprovou", "o STJ entendeu") e explique o impacto prático para quem financia, sem opinar nem usar adjetivos de valor.
 - Use no mínimo 2 das fontes numeradas, de sites diferentes, que tratem do MESMO fato. Informe só os números delas em "fontes_usadas" (os links e as datas são preenchidos pelo sistema). Se não houver 2 fontes sobre o mesmo fato recente, responda sem_novidade.
 - NEUTRALIDADE POLÍTICA ABSOLUTA (estamos em período eleitoral): nunca opine sobre partidos, políticos ou candidatos, não elogie nem critique governo ou oposição e não cite nomes de políticos nem de partidos. Atribua medidas a instituições ("o Governo Federal", "o Congresso", "o Banco Central", "o STJ"). Explique o fato e o que ele muda para quem tem ou vai fazer um financiamento.
 - Não prometa resultado, não diga que o leitor "vai recuperar", "tem valores a receber" ou "garantido", e não dê conselho jurídico individual (nada de "você deve entrar com ação"). Não afirme que juros acima da média são ilegais por si só.
@@ -9,7 +12,7 @@ const REGRAS_COMUNS = `REGRAS OBRIGATÓRIAS
 - Não escreva chamada para ação ou propaganda no texto: o site acrescenta a chamada final.`;
 
 function listaFontes(cands) {
-  return cands.map((c) => `[${c.id}] ${c.titulo} — ${c.nome} (${c.host}) — publicada em ${c.data || 'data não informada'}\n${c.texto.slice(0, 3500)}`).join('\n\n');
+  return cands.map((c) => `[${c.id}] ${c.titulo} — ${c.nome} (${c.host}) [${c.peso >= 3 ? 'ÓRGÃO OFICIAL' : c.peso >= 2 ? 'GRANDE VEÍCULO/SETORIAL' : 'REGIONAL: só complemento'}] — publicada em ${c.data || 'data não informada'}\n${c.texto.slice(0, 3500)}`).join('\n\n');
 }
 
 function escritor({ tipo, modo, tema, hoje, recentes, anterior, motivos, cands }) {
@@ -37,7 +40,8 @@ Responda APENAS com um objeto JSON (sem markdown):
 
 const SISTEMA_REVISOR = 'Você é um revisor editorial INDEPENDENTE, cético e rigoroso. Você NÃO escreveu o texto. Seu trabalho é achar motivos para reprovar; só aprove se tudo estiver comprovado. Responda apenas JSON.';
 
-function revisor({ tipo, hoje, rascunho, fontes, recentes }) {
+function revisor({ tipo, hoje, rascunho, fontes, recentes, pares = [] }) {
+  const blocoPares = pares.length ? 'PARES NÚMERO-CONTEXTO (o código já confirmou que cada número aparece nas fontes; confira se o SENTIDO é o mesmo):\n' + pares.slice(0, 14).map((q, i) => `${i + 1}. Número "${q.numero}"\n   No texto: ${q.frase.slice(0, 300)}\n   Na fonte (${q.fonte}): ${q.trecho}`).join('\n') : 'PARES NÚMERO-CONTEXTO: (o texto não traz números a conferir)';
   const texto = tipo === 'nota' ? rascunho.texto : rascunho.corpo;
   const ev = fontes.map((f, i) => `FONTE ${i + 1}: ${f.nome} — ${f.url} (data informada: ${f.data || 'sem data'})\n${f.lida ? 'CONTEÚDO DA PÁGINA (trecho):\n' + f.trecho : '[conteúdo indisponível]'}`).join('\n\n');
   return `Data de hoje: ${hoje}. Tipo de texto: ${tipo === 'nota' ? 'NOTA RÁPIDA (2 a 4 linhas)' : 'ARTIGO'}.
@@ -46,6 +50,8 @@ ${tipo === 'nota' ? '' : 'RESUMO: ' + rascunho.resumo + '\n'}TEXTO:
 ${texto}
 
 ${ev}
+
+${blocoPares}
 
 ASSUNTOS PUBLICADOS NOS ÚLTIMOS 15 DIAS: ${recentes.map((x) => `"${x.titulo}"`).join('; ') || '(nenhum)'}
 
@@ -57,9 +63,33 @@ Avalie CADA critério (ok = true só se estiver inequivocamente atendido):
 5. "sem_promessa": sem prometer resultado ("você vai recuperar", "garantido"), sem dizer que o leitor tem valores a receber, sem conselho jurídico individual e sem citar escritório/advogado parceiro?
 6. "neutro": sem opinião política ou partidária, sem elogio ou crítica a governo, oposição, partido ou político, sem tom de campanha?
 7. "sem_autor": sem autor inventado, sem nome de jornalista, sem assinatura (a assinatura é "Equipe ERASE")?
+8. "contexto_numeros": em CADA par acima, o número é usado com o mesmo sentido da fonte (mesma grandeza, produto, período, ano e região)? Reprove se, por exemplo, uma taxa de cartão for apresentada como taxa de veículo, ou um dado de outro ano ou de outra região for tratado como o atual/local.
 Responda APENAS com JSON (sem markdown):
-{"criterios": {"fontes": {"ok": true, "obs": ""}, "fatos": {"ok": true, "obs": ""}, "original": {"ok": true, "obs": ""}, "sem_repeticao": {"ok": true, "obs": ""}, "sem_promessa": {"ok": true, "obs": ""}, "neutro": {"ok": true, "obs": ""}, "sem_autor": {"ok": true, "obs": ""}}}
-Em "obs" explique de forma objetiva o problema quando ok for false.`;
+{"criterios": {"fontes": {"ok": true, "obs": ""}, "fatos": {"ok": true, "obs": ""}, "original": {"ok": true, "obs": ""}, "sem_repeticao": {"ok": true, "obs": ""}, "sem_promessa": {"ok": true, "obs": ""}, "neutro": {"ok": true, "obs": ""}, "sem_autor": {"ok": true, "obs": ""}, "contexto_numeros": {"ok": true, "obs": ""}}}
+Em "obs" escreva SEMPRE uma observação objetiva (o que conferiu e por que aprovou ou reprovou).`;
 }
 
-module.exports = { escritor, revisor, SISTEMA_REVISOR };
+const SISTEMA_NEUTRALIDADE = 'Você é um revisor de NEUTRALIDADE política de um portal de notícias financeiras, em período eleitoral. Você NÃO escreveu o texto. Aplique a lista de forma objetiva e literal; na dúvida, reprove. Responda apenas JSON.';
+
+function neutralidade({ tipo, rascunho, fontes }) {
+  const texto = tipo === 'nota' ? rascunho.texto : rascunho.corpo;
+  const ev = fontes.map((f, i) => `FONTE ${i + 1} (${f.nome}): ${String(f.texto || '').slice(0, 3500)}`).join('\n\n');
+  return `TÍTULO: ${rascunho.titulo}
+TEXTO:
+${texto}
+
+${ev}
+
+Aplique esta lista e responda se CADA item está ok (true) ou não (false):
+1. "sem_adjetivo_politico": o texto NÃO cita partido, político ou candidato com adjetivo, elogio ou crítica?
+2. "sem_merito_culpa": o texto NÃO atribui mérito ou culpa a governo ou oposição (nem sugere que uma medida é boa ou ruim por quem a tomou)?
+3. "sem_termos_carregados": o texto NÃO usa termos carregados ou valorativos (ex.: "desastre", "acerto histórico", "manobra", "escândalo")?
+4. "dois_lados": se as FONTES trazem posições diferentes sobre o assunto, o texto apresenta todas elas (e não só um lado)? Se as fontes não divergem, marque true.
+5. "sem_eleicao": o texto NÃO fala de eleição, campanha, pesquisa eleitoral ou candidatos?
+6. "quem_decidiu_e_impacto": o texto diz QUEM decidiu (ex.: "o Copom decidiu", "a Câmara aprovou") e explica o impacto prático para quem tem ou vai fazer um financiamento, sem opinar?
+Responda APENAS com JSON (sem markdown):
+{"criterios": {"sem_adjetivo_politico": {"ok": true, "obs": ""}, "sem_merito_culpa": {"ok": true, "obs": ""}, "sem_termos_carregados": {"ok": true, "obs": ""}, "dois_lados": {"ok": true, "obs": ""}, "sem_eleicao": {"ok": true, "obs": ""}, "quem_decidiu_e_impacto": {"ok": true, "obs": ""}}}
+Em "obs" escreva SEMPRE uma observação objetiva (o que verificou e por que aprovou ou reprovou).`;
+}
+
+module.exports = { escritor, revisor, neutralidade, SISTEMA_REVISOR, SISTEMA_NEUTRALIDADE };

@@ -1,7 +1,66 @@
 [
-  { "nome": "Agência Brasil", "url": "https://agenciabrasil.ebc.com.br/rss/economia/feed.xml" },
-  { "nome": "Agência Câmara", "url": "https://www.camara.leg.br/noticias/rss/ultimas-noticias" },
-  { "nome": "G1 Economia", "url": "https://g1.globo.com/rss/g1/economia/" },
-  { "nome": "G1 Carros", "url": "https://g1.globo.com/rss/g1/carros/" },
-  { "nome": "Agência Gov", "url": "https://www.gov.br/pt-br/noticias/RSS" }
+  {
+    "nome": "Agência Brasil",
+    "url": "https://agenciabrasil.ebc.com.br/rss/economia/feed.xml"
+  },
+  {
+    "nome": "Agência Câmara",
+    "url": "https://www.camara.leg.br/noticias/rss/ultimas-noticias"
+  },
+  {
+    "nome": "G1 Economia",
+    "url": "https://g1.globo.com/rss/g1/economia/"
+  },
+  {
+    "nome": "G1 Carros",
+    "url": "https://g1.globo.com/rss/g1/carros/",
+    "temas": [
+      "mercado",
+      "revisional"
+    ]
+  },
+  {
+    "nome": "Agência Gov",
+    "url": "https://www.gov.br/pt-br/noticias/RSS"
+  },
+  {
+    "nome": "Canal Solar",
+    "url": "https://canalsolar.com.br/feed/",
+    "temas": [
+      "energia-solar"
+    ]
+  },
+  {
+    "nome": "ABSOLAR",
+    "url": "https://www.absolar.org.br/feed/",
+    "temas": [
+      "energia-solar"
+    ]
+  },
+  {
+    "nome": "Portal Solar",
+    "url": "https://www.portalsolar.com.br/feed",
+    "temas": [
+      "energia-solar"
+    ]
+  },
+  {
+    "nome": "ANEEL",
+    "url": "https://www.gov.br/aneel/pt-br/assuntos/noticias/RSS",
+    "temas": [
+      "energia-solar"
+    ]
+  },
+  {
+    "nome": "Agência Senado",
+    "url": "https://www12.senado.leg.br/noticias/rss",
+    "temas": [
+      "economia",
+      "financeiro",
+      "credito-pessoal",
+      "imoveis",
+      "empresas-mei",
+      "credito-rural"
+    ]
+  }
 ]

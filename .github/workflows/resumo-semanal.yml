@@ -1,0 +1,24 @@
+name: Resumo semanal das notícias (e-mail)
+
+on:
+  schedule:
+    - cron: "0 11 * * 1" # toda segunda-feira, 08h de Brasília
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  resumo:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+      - name: Enviar resumo da semana
+        env:
+          RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
+          ALERTA_EMAIL_PARA: ${{ secrets.ALERTA_EMAIL_PARA }}
+          ALERTA_EMAIL_DE: ${{ secrets.ALERTA_EMAIL_DE }}
+        run: node scripts/noticias/resumo-semanal.js
