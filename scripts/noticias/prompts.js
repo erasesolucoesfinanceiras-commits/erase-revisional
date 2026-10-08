@@ -6,6 +6,7 @@ const REGRAS_COMUNS = `REGRAS OBRIGATÓRIAS
 - Prefira fontes de ÓRGÃO OFICIAL e de GRANDE VEÍCULO/SETORIAL. Fonte REGIONAL serve só de complemento e nunca como única base.
 - NÃO traga fatos, comparações ou números de outros assuntos, países ou setores que não sejam o tema central das fontes usadas (por exemplo, trechos de notícias relacionadas que aparecem na mesma página). Fique no fato principal.
 - Impacto prático: baseie-se no que as fontes dizem. Quando for inferência geral, deixe claro que é um efeito possível ("pode", "tende a") e não a apresente como fato nem como regra.
+- PROIBIDO atribuição genérica: não escreva "especialistas destacam", "analistas apontam", "o mercado avalia", "muitos acreditam" nem equivalentes. Ou diga QUEM disse (nome da pessoa ou instituição, como aparece nas fontes: "segundo o Banco Central", "para o economista Fulano, do Banco X"), ou retire a frase.
 - Cite quem decidiu ("o Copom decidiu", "a Câmara aprovou", "o STJ entendeu") e explique o impacto prático para quem financia, sem opinar nem usar adjetivos de valor.
 - Use no mínimo 2 das fontes numeradas, de sites diferentes, que tratem do MESMO fato. Informe só os números delas em "fontes_usadas" (os links e as datas são preenchidos pelo sistema). Se não houver 2 fontes sobre o mesmo fato recente, responda sem_novidade.
 - NEUTRALIDADE POLÍTICA ABSOLUTA (estamos em período eleitoral): nunca opine sobre partidos, políticos ou candidatos, não elogie nem critique governo ou oposição e não cite nomes de políticos nem de partidos. Atribua medidas a instituições ("o Governo Federal", "o Congresso", "o Banco Central", "o STJ"). Explique o fato e o que ele muda para quem tem ou vai fazer um financiamento.
@@ -66,8 +67,9 @@ Avalie CADA critério. REGRA: ok = true SOMENTE se estiver inequivocamente atend
 6. "neutro": sem opinião política ou partidária, sem elogio ou crítica a governo, oposição, partido ou político, sem tom de campanha?
 7. "sem_autor": sem autor inventado, sem nome de jornalista, sem assinatura (a assinatura é "Equipe ERASE")?
 8. "contexto_numeros": em CADA par acima, o número é usado com o mesmo sentido da fonte (mesma grandeza, produto, período, ano e região)? Reprove se, por exemplo, uma taxa de cartão for apresentada como taxa de veículo, ou um dado de outro ano ou de outra região for tratado como o atual/local.
+9. "sem_generico": o texto NÃO tem frases de atribuição genérica sem fonte (\"especialistas destacam\", \"analistas apontam\", \"o mercado avalia\", \"muitos acreditam\")? Toda opinião, previsão ou avaliação precisa dizer QUEM disse (nome ou instituição presente nas fontes); se a fonte não nomeia, a frase deve sair.
 Responda APENAS com JSON (sem markdown):
-{"criterios": {"fontes": {"ok": true, "obs": ""}, "fatos": {"ok": true, "obs": ""}, "original": {"ok": true, "obs": ""}, "sem_repeticao": {"ok": true, "obs": ""}, "sem_promessa": {"ok": true, "obs": ""}, "neutro": {"ok": true, "obs": ""}, "sem_autor": {"ok": true, "obs": ""}, "contexto_numeros": {"ok": true, "obs": ""}}}
+{"criterios": {"fontes": {"ok": true, "obs": ""}, "fatos": {"ok": true, "obs": ""}, "original": {"ok": true, "obs": ""}, "sem_repeticao": {"ok": true, "obs": ""}, "sem_promessa": {"ok": true, "obs": ""}, "neutro": {"ok": true, "obs": ""}, "sem_autor": {"ok": true, "obs": ""}, "contexto_numeros": {"ok": true, "obs": ""}, "sem_generico": {"ok": true, "obs": ""}}}
 Em "obs" escreva SEMPRE uma observação objetiva (o que conferiu e por que aprovou ou reprovou).`;
 }
 

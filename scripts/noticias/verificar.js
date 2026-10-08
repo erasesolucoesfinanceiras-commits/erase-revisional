@@ -24,6 +24,30 @@ const PROMESSA = [
 const PARCEIRO = /escrit[oó]rio\s+parceiro|advogad[oa]s?\s+parceir|parceir[oa]s?\s+(jur[ií]dic|da\s+erase)|nossos?\s+parceiros?\s+(jur[ií]dic|advogad)/i;
 const POLITICA = /\b(lula|bolsonaro|tarc[ií]sio|haddad|ciro gomes|mar[cç]al|alckmin|janja|petista|bolsonarista|lulista|esquerdista|direitista|candidat[oa]s?|eleitor(?:es|al|ais)?|elei[cç](?:[aã]o|[oõ]es)|partid(?:o|os|[aá]rio|[aá]ria)|psdb|psol|mdb|uni[aã]o brasil|centr[aã]o|oposi[cç][aã]o|palanque|presidenci[aá]vel)\b|\bPT\b/i;
 const CARREGADO = /\b(desastre|desastroso|ac?erto hist[óo]rico|manobra|esc[âa]ndalo|vergonha|vergonhoso|fiasco|fracasso (do|da) governo|ca[oó]s|absurdo|omiss[ãa]o|c[ií]nic[oa]|populis(?:mo|ta)|armaç[ãa]o|heroi[ck][oa]|trag[ée]dia nacional)\b|campanha eleitoral|pesquisa eleitoral|pr[ée]-candidat|urnas?\b/i;
+// Atribuição genérica ("especialistas destacam", "analistas apontam", "o mercado avalia"): ou diz QUEM disse (nome ou instituição
+// presente nas fontes) ou a frase sai.
+const GENERICO = /\b(?:especialistas?|analistas?|economistas?|investidores|observadores|estudiosos|operadores|consultores|o mercado|os mercados|o mercado financeiro|o setor financeiro|o sistema financeiro|fontes do setor|fontes ligadas)\s+(?:do setor\s+\w+\s+|do mercado\s+)?(?:\w+\s+)?(?:destac\w+|apont\w+|avali\w+|dizem|diz|afirm\w+|prev[eê]\w*|espera\w*|acredit\w+|alert\w+|ressalt\w+|consider\w+|v[eê]m?|entend\w+|estim\w+|sugere\w*|indic\w+|defend\w+|recomend\w+)|\b(?:segundo|de acordo com|para|na avalia[cç][aã]o d[eo]s?|na vis[aã]o d[eo]s?)\s+(?:especialistas|analistas|economistas|o mercado|observadores)\b|\bmuitos (?:acreditam|especialistas|analistas)|\bh[aá] quem (?:diga|aponte|avalie)|\bsabe-se que\b|\bcostuma-se (?:dizer|afirmar)\b/i;
+const frasesDe = (t) => t.split(/(?<=[.!?:;])\s+/);
+/** Frases com atribuição genérica sem atribuição explícita ("do Itaú", "pelo Valor", "segundo o Banco Central") a nome presente nas fontes. */
+const CABECA = new Set(['banco', 'instituto', 'ministerio', 'agencia', 'conselho', 'tribunal', 'camara', 'senado', 'governo', 'associacao', 'federacao', 'universidade', 'fundacao', 'empresa', 'grupo']);
+function frasesGenericas(texto, textosFontes) {
+  const fontes = norm(textosFontes.join(' '));
+  const ATRIB = /\b(?:[Dd][oae]s?|[Pp]el[oa]s?|[Cc]onforme|[Ss]egundo|[Dd]e acordo com)\s+(?:o |a |os |as )?((?:[A-ZÁÉÍÓÚÂÊÔÃÕÇ][\wÀ-ÿ]+|[A-Z]{2,})(?:\s+(?:[A-ZÁÉÍÓÚÂÊÔÃÕÇ][\wÀ-ÿ]+|[A-Z]{2,}))*)/g;
+  const achouNome = (seq) => { // o nome inteiro, ou o maior começo dele, tem de estar nas fontes (uma palavra genérica como "Banco" sozinha não vale)
+    const w = seq.split(/\s+/);
+    for (let n = w.length; n >= 1; n--) { const p = w.slice(0, n).join(' '); if (fontes.includes(norm(p)) && (n > 1 || !CABECA.has(norm(p)))) return true; }
+    return false;
+  };
+  const achadas = [];
+  for (const f of frasesDe(texto)) {
+    if (!GENERICO.test(f)) continue;
+    let atribuida = false, m;
+    ATRIB.lastIndex = 0;
+    while ((m = ATRIB.exec(f))) if (achouNome(m[1])) { atribuida = true; break; }
+    if (!atribuida) achadas.push(f.trim().slice(0, 140));
+  }
+  return achadas;
+}
 const ASSINATURA = /^\s*(por|autor|autoria|texto de|escrito por|reda[cç][aã]o de)\b/i;
 
 /** Regras de forma e conteúdo, sem rede. `ctx.recentes` = itens dos últimos 15 dias [{titulo, resumo|texto, fontes}]. */
@@ -44,6 +68,8 @@ function checarRegras(r, tipo, ctx) {
   if (PARCEIRO.test(todo)) m.push('cita escritório/advogado parceiro');
   const pol = POLITICA.exec(todo);
   if (pol) m.push(`menção política/partidária ("${pol[0]}")`);
+  const gen = frasesGenericas(corpoTxt, (ctx.textosFontes || []));
+  if (gen.length) m.push(`frase genérica sem dizer quem disse (nome ou instituição das fontes): "${gen[0]}"`);
   const car = CARREGADO.exec(todo);
   if (car) m.push(`termo carregado/eleitoral ("${car[0]}")`);
   if (ASSINATURA.test(corpoTxt)) m.push('texto com assinatura/autor');
@@ -95,4 +121,4 @@ function checarFontes(r, tipo, modo, cands, hoje, diasMax) {
   return { motivos, textos };
 }
 
-module.exports = { POLITICA, checarRegras, checarFontes, trechoCopiado, semHtml, norm, host };
+module.exports = { frasesGenericas, POLITICA, checarRegras, checarFontes, trechoCopiado, semHtml, norm, host };

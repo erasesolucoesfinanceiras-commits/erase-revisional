@@ -91,7 +91,7 @@ async function tentarTema(tipo, tema, modo, recentes) {
       if (tipo === 'nota') r.texto = String(r.texto || '').replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
       else { r.corpo = sanitizar(r.corpo || ''); r.resumo = String(r.resumo || '').trim(); }
       const fo = V.checarFontes(r, tipo, modo, cands, hoje, diasMax);
-      motivos = V.checarRegras(r, tipo, { recentes });
+      motivos = V.checarRegras(r, tipo, { recentes, textosFontes: fo.textos });
       motivos.push(...fo.motivos);
       const copia = V.trechoCopiado(tipo === 'nota' ? r.texto : V.semHtml(r.corpo), fo.textos);
       if (copia) motivos.push(`copia trecho da fonte ("${copia}...")`);
