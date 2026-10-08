@@ -4,33 +4,21 @@
   "modo": "noticia",
   "rascunho": {
     "sem_novidade": false,
-    "titulo": "Eletrificados atingem 19,8% das vendas em setembro de 2026",
-    "texto": "Dados da ABVE e da Anfavea confirmam que a participação de veículos híbridos e elétricos no mercado brasileiro saltou para 19,8% em setembro de 2026. O setor atingiu a marca de 1 milhão de unidades em circulação, com o BYD Dolphin Mini liderando os emplacamentos da categoria no mês, que totalizaram 53.126 registros.",
+    "titulo": "Mercado automotivo registra alta nas vendas e avanço dos eletrificados",
+    "texto": "O mercado de veículos novos teve em setembro o melhor resultado da série histórica, com 509.686 emplacamentos. O segmento de eletrificados também ganha espaço, representando 17,7% das vendas acumuladas no ano, impulsionado por modelos como o BYD Dolphin Mini, que liderou a categoria no mês com 9.385 unidades comercializadas.",
     "fontes_usadas": [
-      2,
-      3,
-      4,
-      5
+      1,
+      3
     ],
     "fontes": [
       {
-        "nome": "Valor Econômico",
-        "url": "https://valor.globo.com/impresso/noticia/2026/10/07/pais-tem-1-milhao-de-carros-eletrificados-que-ja-respondem-por-quase-20-das-vendas.ghtml",
-        "data": "2026-10-06"
+        "nome": "G1 Carros",
+        "url": "https://g1.globo.com/carros/noticia/2026/10/05/vendas-veiculos-novos-setembro-fenabrave.ghtml",
+        "data": "2026-10-05"
       },
       {
         "nome": "Autoesporte",
         "url": "https://autoesporte.globo.com/setor-automotivo/mercado-automotivo/noticia/2026/10/carros-eletricos-hibridos-mais-vendidos-brasil-setembro-2026.ghtml",
-        "data": "2026-10-07"
-      },
-      {
-        "nome": "Valor Econômico",
-        "url": "https://valor.globo.com/empresas/noticia/2026/10/07/eletricos-e-hibridos-dobram-fatia-nas-vendas-em-um-ano.ghtml",
-        "data": "2026-10-07"
-      },
-      {
-        "nome": "G1 Carros",
-        "url": "https://g1.globo.com/carros/noticia/2026/10/07/producao-de-veiculos-cai-em-setembro-mas-vendas-sobem.ghtml",
         "data": "2026-10-07"
       }
     ],
@@ -38,35 +26,35 @@
       "geral": {
         "fontes": {
           "ok": true,
-          "obs": "As fontes Valor Econômico e Autoesporte são veículos de imprensa confiáveis e tratam diretamente do tema."
+          "obs": "As fontes G1 e Autoesporte são veículos de imprensa confiáveis e tratam diretamente dos dados de emplacamentos de setembro de 2026."
         },
         "fatos": {
           "ok": true,
-          "obs": "Todos os dados numéricos (19,8%, 1 milhão, 53.126) e datas (setembro de 2026) estão presentes nas fontes citadas."
+          "obs": "Todos os dados numéricos (509.686 emplacamentos, 17,7% de participação e 9.385 unidades do Dolphin Mini) constam nas fontes citadas."
         },
         "original": {
           "ok": true,
-          "obs": "O texto foi redigido de forma autoral, sintetizando as informações das fontes sem cópia literal."
+          "obs": "O texto apresenta uma síntese autoral dos dados, sem cópia literal de trechos das fontes."
         },
         "sem_repeticao": {
           "ok": true,
-          "obs": "O tema sobre eletrificados é inédito na lista de publicações dos últimos 15 dias."
+          "obs": "O assunto trata de mercado automotivo (vendas), enquanto os textos anteriores focavam em financiamento, juros e crédito."
         },
         "sem_promessa": {
           "ok": true,
-          "obs": "O texto é puramente informativo, sem promessas ou orientações financeiras."
+          "obs": "O texto é puramente informativo e não faz promessas ou ofertas de serviços."
         },
         "neutro": {
           "ok": true,
-          "obs": "O texto apresenta dados de mercado sem emitir juízo de valor ou viés político."
+          "obs": "O texto mantém tom jornalístico neutro, sem juízo de valor ou viés político."
         },
         "sem_autor": {
           "ok": true,
-          "obs": "Não há assinatura de autor ou jornalista no texto."
+          "obs": "Não há menção a autores ou assinaturas no texto."
         },
         "contexto_numeros": {
           "ok": true,
-          "obs": "Os números foram utilizados com os mesmos significados e recortes temporais/geográficos das fontes."
+          "obs": "Os números foram conferidos e aplicados corretamente conforme o contexto das fontes (setembro de 2026)."
         }
       }
     }

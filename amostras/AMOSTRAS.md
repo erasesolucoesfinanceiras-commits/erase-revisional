@@ -1,151 +1,146 @@
 ## ARTIGO · Economia e política monetária (economia) · noticia
 
-**IPCA-15 sobe 0,7% em setembro: o impacto da inflação no crédito e financiamento**
+**Impactos do IPCA-15 e novas regras de crédito no orçamento familiar**
 
-_A prévia da inflação oficial avançou 0,7% em setembro e levou o acumulado em 12 meses a 4,47%, aproximando o índice do teto da meta e influenciando as taxas de financiamento._
+_A aceleração da prévia da inflação em setembro e o avanço de projetos de transparência no crédito trazem novos pontos de atenção para quem planeja financiar bens._
 
-O Índice Nacional de Preços ao Consumidor Amplo 15 (IPCA-15), considerado a prévia da inflação oficial do país, registrou avanço de 0,7% no mês de setembro, de acordo com dados apurados pelo Instituto Brasileiro de Geografia e Estatística (IBGE). Com essa variação, o indicador acumulou uma taxa de 3,82% no ano e atingiu 4,47% na medição em 12 meses.
+O cenário econômico brasileiro apresentou movimentações recentes que impactam diretamente o planejamento financeiro de quem possui ou pretende contratar um financiamento. Dados do Índice Nacional de Preços ao Consumidor Amplo 15 (IPCA-15), divulgados pelo Instituto Brasileiro de Geografia e Estatística (IBGE), indicaram uma aceleração de 0,70% em setembro de 2026. Este resultado reflete uma mudança de trajetória em comparação aos meses anteriores, elevando o acumulado em 12 meses para 4,47%.
+A alta do índice foi observada em todos os grupos pesquisados, com destaque para o setor de Habitação, que registrou variação de 2,07%. O principal fator de pressão foi o aumento de 7,42% na energia elétrica residencial, decorrente do fim da incorporação do bônus de Itaipu. Além disso, o grupo de Alimentação e Bebidas subiu 0,40%, interrompendo o ciclo de deflação observado em julho e agosto. Para o consumidor, esse aumento no custo de vida reduz a renda disponível, o que pode comprometer a capacidade de pagamento de parcelas de financiamentos vigentes.
 
-### Grupos que mais pressionaram o índice em setembro
-O aumento de preços observado na prévia da inflação ocorreu de maneira disseminada entre as nove categorias acompanhadas pelo levantamento do IBGE. O maior destaque e principal pressão sobre o resultado geral partiram do grupo Habitação, que apresentou valorização média de 2,07% no mês.
-Dentro dessa classe de despesas, o item de energia elétrica residencial registrou alta de 7,42%, impulsionado pelo término do abatimento do Bônus de Itaipu, que havia entrado nas contas de luz do mês anterior, somado à permanência da bandeira tarifária amarela, que adiciona R$ 1,885 a cada 100 kWh consumidos.
-Outros setores de peso no consumo das famílias também mostraram aceleração:
-- Transportes: registrou elevação de 0,60%, influenciado pelas passagens aéreas (9,82%), além de acréscimos na gasolina (0,30%) e no gás veicular (1,56%), mesmo diante de retrações no óleo diesel (-0,78%) e no etanol (-0,22%).
-- Alimentação e bebidas: teve alta de 0,40% no período, com a alimentação no domicílio avançando 0,38%, impulsionada por itens como tomate (20,76%), arroz (2,39%) e carnes (1,30%).
-- Despesas pessoais: grupo que avançou 0,96%, sob influência do reajuste de 14% nos cigarros.
-- Educação: apresentou a menor variação entre as divisões analisadas, marcando 0,03%.
+### Mudanças na análise e transparência de crédito
+Paralelamente ao cenário inflacionário, tramita na Câmara dos Deputados o Projeto de Lei 3360/26, que busca ampliar a transparência nas operações de crédito. A proposta estabelece que as instituições financeiras forneçam informações claras sobre os dados positivos e negativos utilizados para compor o histórico de crédito do consumidor. Caso um pedido de financiamento seja negado, limitado ou condicionado, a instituição deverá informar, de forma gratuita e simplificada, os principais fatores que motivaram a decisão.
+Essa medida, caso aprovada, permitirá que o consumidor compreenda melhor os critérios adotados pelos bancos em suas avaliações de risco, sem que as empresas sejam obrigadas a revelar modelos matemáticos ou segredos empresariais. Para quem busca um novo financiamento, o acesso a essas informações pode auxiliar na identificação de pontos de melhoria no perfil financeiro, facilitando o planejamento de longo prazo.
 
-### A proximidade do teto da meta e o custo do dinheiro
-A meta de inflação estabelecida pelo Conselho Monetário Nacional (CMN) para o país é de 3% ao ano, permitindo um intervalo de tolerância com limite superior estabelecido em 4,5%. Com a medição do IPCA-15 alcançando 4,47% em 12 meses, a inflação acumulada passou a encostar no patamar limite tolerado pelas diretrizes oficiais.
-Para a dinâmica de política monetária conduzida pelo Banco Central, a persistência de preços em patamares elevados tende a exigir taxas de juros mais restritivas para conter a demanda. Como reflexo direto, as expectativas para o comportamento dos juros nos mercados futuros costumam ser ajustadas para cima, encarecendo a captação de recursos pelas instituições financeiras que concedem crédito no país.
+### Inadimplência e gestão de riscos
+O Banco Central tem monitorado com cautela o endividamento das famílias, que atingiu 49,75% da renda acumulada em 12 meses em junho. O comprometimento de renda com dívidas chegou a 28,85%, sendo que 37,6% desse valor é destinado ao pagamento de juros. Em relação ao cartão de crédito, modalidade que apresenta inadimplência de 65% no rotativo, a autoridade monetária avalia medidas preventivas, como a exigência de maior reserva de capital pelos bancos para linhas de crédito de maior risco.
+Para quem possui financiamento de veículos, a manutenção de uma reserva de emergência torna-se ainda mais relevante diante da volatilidade dos preços e da possibilidade de ajustes nas condições de crédito. O monitoramento constante do custo efetivo total e a compreensão dos fatores que compõem a análise de risco das instituições financeiras são ferramentas importantes para manter a saúde financeira em um ambiente de incertezas econômicas.
 
-### O que esse cenário altera para quem busca ou possui financiamento
-O comportamento dos indicadores de inflação afeta diretamente as condições operacionais de crédito, sobretudo em modalidades de longo prazo como o financiamento de veículos e empréstimos parcelados:
-- Para novos contratos de financiamento: Com o índice de preços pressionado próximo ao teto da meta, os bancos tendem a manter as taxas nominais de juros e o Custo Efetivo Total (CET) em patamares elevados. Esse movimento encarece o valor das prestações mensais e exige entradas maiores para viabilizar a aprovação da ficha cadastral.
-- Para contratos já em andamento: A maioria das operações de crédito para aquisição de veículos é contratada com parcelas prefixadas. Embora o valor nominal da mensalidade permaneça inalterado até o término do contrato, a aceleração nos custos de itens essenciais como energia, combustíveis e alimentação reduz a parcela da renda líquida familiar disponível para manter o pagamento das dívidas em dia.
-
-Fontes: Valor Econômico <https://valor.globo.com/brasil/noticia/2026/09/27/ipca-15-volta-a-acelerar-e-afasta-inflao-da-meta-apontam-economistas.ghtml> (2026-09-27) · VEJA <https://veja.abril.com.br/economia/previa-da-inflacao-de-setembro-ipca-15-sobe-07-e-fica-acima-do-esperado/> (2026-09-25)
+Fontes: Câmara dos Deputados <https://www.camara.leg.br/noticias/1304402-projeto-amplia-transparencia-sobre-dados-usados-na-analise-de-credito> (2026-10-05) · Valor Econômico <https://valor.globo.com/brasil/noticia/2026/09/27/ipca-15-volta-a-acelerar-e-afasta-inflao-da-meta-apontam-economistas.ghtml> (2026-09-27) · Notícias R7 <https://noticias.r7.com/economia/ipca-15-setembro-2026-25092026/> (2026-09-25) · VEJA <https://veja.abril.com.br/economia/previa-da-inflacao-de-setembro-ipca-15-sobe-07-e-fica-acima-do-esperado/> (2026-09-25) · O GLOBO <https://oglobo.globo.com/blogs/miriam-leitao/post/2026/09/alimentos-e-transportes-surpreendem-no-ipca-15-e-economistas-dizem-ser-fim-de-sequencia-de-boas-noticias-para-a-inflacao.ghtml> (2026-09-25) · Valor Investe <https://valorinveste.globo.com/produtos/credito/noticia/2026/09/24/galipolo-defende-medidas-contra-endividamento-e-aponta-para-problemas-no-cartao-rotativo.ghtml> (2026-09-24)
 
 **Revisão geral:**
-- fontes: OK — As fontes são veículos de imprensa reais (Valor e Veja) e tratam do IPCA-15 de setembro de 2026, condizente com a data do texto.
-- fatos: OK — Todos os dados numéricos, incluindo inflação geral (0,7%), acumulados (4,47% e 3,82%), variações de grupos (Habitação 2,07%, Transportes 0,60%, etc.) e itens específicos (energia 7,42%, tomate 20,76%, etc.) estão presentes nas fontes.
-- original: OK — O texto é original e organiza as informações das fontes de forma analítica voltada para o crédito.
-- sem_repeticao: OK — O assunto (IPCA-15/Inflação) não consta na lista de temas publicados nos últimos 15 dias.
-- sem_promessa: OK — O texto limita-se a explicar impactos econômicos sem prometer resultados financeiros ou oferecer consultoria.
-- neutro: OK — O texto mantém tom técnico e informativo, sem juízo de valor político ou partidário.
-- sem_autor: OK — O texto não apresenta assinatura ou nome de autor.
-- contexto_numeros: OK — Todos os pares número-contexto foram verificados e estão em conformidade com as fontes (mesmo período, produto e grandeza).
+- fontes: OK — Foram utilizadas 6 fontes confiáveis e recentes (Câmara dos Deputados, Valor Econômico, R7, Veja, O Globo e Valor Investe) que cobrem os temas de inflação e transparência de crédito.
+- fatos: OK — Todos os dados numéricos, datas e referências legislativas (PL 3360/26) foram verificados e constam nas fontes fornecidas.
+- original: OK — O texto apresenta redação própria, sintetizando as informações das fontes sem cópia literal de trechos extensos.
+- sem_repeticao: OK — O tema aborda o impacto macroeconômico do IPCA-15 e novas legislações de crédito, diferenciando-se dos artigos técnicos sobre financiamento de veículos e taxas de juros publicados anteriormente.
+- sem_promessa: OK — O texto é informativo e não faz promessas de ganhos, recuperação de valores ou aconselhamento jurídico individualizado.
+- neutro: OK — O texto mantém tom jornalístico e imparcial, relatando dados econômicos e tramitação legislativa sem juízo de valor político.
+- sem_autor: OK — O texto não apresenta assinatura de autor ou jornalista.
+- contexto_numeros: OK — Todos os números foram conferidos e aplicados com o mesmo sentido, período e contexto das fontes originais.
 
 **Revisão neutralidade:**
-- sem_adjetivo_politico: OK — O texto não menciona partidos, políticos ou candidatos, focando exclusivamente em dados econômicos e instituições técnicas.
-- sem_merito_culpa: OK — A variação de preços é atribuída a fatores técnicos e de mercado (energia, clima, tarifas), sem imputar responsabilidade política ao governo ou oposição.
-- sem_termos_carregados: OK — O vocabulário é técnico e condizente com o jornalismo financeiro (ex: 'pressionou', 'aceleração', 'patamar limite').
-- dois_lados: OK — As fontes convergem sobre os dados do IBGE e as projeções de mercado; o texto reflete esse consenso técnico.
-- sem_eleicao: OK — Não há qualquer menção ao processo eleitoral, candidatos ou pesquisas.
-- quem_decidiu_e_impacto: OK — O texto identifica o IBGE, CMN e Banco Central como órgãos responsáveis e explica didaticamente o impacto da inflação no custo do crédito.
+- sem_adjetivo_politico: OK — O texto menciona o deputado Jonas Donizette apenas como autor do projeto, sem adjetivação.
+- sem_merito_culpa: OK — O texto relata fatos econômicos e tramitação legislativa sem atribuir mérito ou culpa a agentes políticos.
+- sem_termos_carregados: OK — A linguagem é técnica e descritiva, evitando juízos de valor.
+- dois_lados: OK — As fontes apresentam dados técnicos convergentes sobre inflação e regulação de crédito.
+- sem_eleicao: OK — O texto não menciona o processo eleitoral, campanhas ou candidatos.
+- quem_decidiu_e_impacto: OK — O texto identifica as instituições responsáveis (IBGE, Câmara, Banco Central) e detalha os impactos práticos para o consumidor.
 
 ---
 
 ## ARTIGO · Bancos e sistema financeiro (financeiro) · noticia
 
-**Inadimplência das famílias atinge recorde e Banco Central anuncia novas regras para o Pix**
+**Inadimplência das famílias e novas diretrizes do Pix: o cenário do crédito**
 
-_Dados recentes indicam recorde na inadimplência das famílias brasileiras em agosto. Paralelamente, o Banco Central oficializou novas diretrizes para o sistema Pix._
+_Dados recentes do Banco Central apontam recorde na inadimplência das famílias em agosto, enquanto novas regras para o sistema Pix visam aprimorar a segurança e as funcionalidades financeiras._
 
-### Cenário de crédito e inadimplência
-O cenário econômico recente apresenta desafios para o orçamento das famílias brasileiras. Segundo dados divulgados pelo Banco Central, a inadimplência das famílias atingiu 6,0% em agosto de 2026, um patamar que não era registrado desde março de 2011. Em julho, o índice estava em 5,8%. O avanço dos atrasos ocorre mesmo com a existência de programas governamentais voltados à renegociação de dívidas, como as versões anteriores do Desenrola.
-Os indicadores de endividamento e comprometimento de renda das famílias também permanecem em níveis elevados. Em julho de 2026, o comprometimento da renda com o pagamento de dívidas manteve-se no recorde da série histórica, atingindo 28,7%. Já o endividamento total das famílias, que considera a relação entre o montante das dívidas e a renda geral, subiu de 49,7% para 49,9% no mesmo período. Sem considerar o crédito habitacional, esse percentual de endividamento ficou em 30,8%.
-No segmento de crédito livre, onde as taxas de juros são pactuadas diretamente entre as instituições financeiras e os tomadores, a inadimplência passou de 7,8% em julho para 8,0% em agosto, alcançando a maior taxa da série histórica. Para o crédito direcionado, a inadimplência das pessoas físicas subiu de 3,4% para 3,6%.
+### O cenário atual do crédito e da inadimplência
+Dados divulgados pelo Banco Central indicam um momento de atenção para o orçamento das famílias brasileiras. Em agosto de 2026, a inadimplência das famílias alcançou 6,0%, renovando o recorde da série histórica e superando o patamar de 5,8% registrado em julho. Este nível de atraso não era visto desde março de 2011. O fenômeno ocorre em um contexto onde o comprometimento da renda das famílias com o pagamento de dívidas atingiu 28,7% em julho, mantendo-se no maior patamar da série histórica.
+No segmento de crédito livre, onde as taxas são pactuadas diretamente entre instituições financeiras e tomadores, a inadimplência avançou de 7,8% para 8,0%. Paralelamente, o endividamento total das famílias, que considera o percentual de dívidas em relação à renda, também atingiu a marca de 49,9% em julho. Especialistas do setor financeiro destacam que, embora o cenário macroeconômico seja desafiador, a busca por taxas de juros mais acessíveis e a manutenção de um histórico de pagamentos saudável permanecem como pontos centrais para a sustentabilidade do crédito.
 
-### Novas diretrizes para o Pix
-Enquanto o mercado de crédito enfrenta pressões, o Banco Central oficializou, por meio da Resolução BCB nº 587, de 18 de setembro de 2026, um conjunto de novas regras para o Pix. As mudanças visam ampliar as funcionalidades do sistema e reforçar os mecanismos de segurança e fiscalização. A aplicação das normas ocorrerá de forma fatiada, com início imediato para algumas medidas e prazos entre fevereiro e julho de 2027 para outras.
-Entre as principais alterações previstas estão:
-- Pix Automático: A partir de 1º de julho de 2027, contas-salário poderão utilizar essa modalidade para pagamentos recorrentes previamente autorizados, como mensalidades e serviços contínuos.
-- Cobrança Híbrida: A partir de fevereiro de 2027, novas regras para a cobrança que combina código de barras de boletos e QR Code do Pix passarão a vigorar, visando evitar pagamentos duplicados por meio da liquidação síncrona.
-- Segurança e Contestação: O regulamento estabelece novos direitos para clientes com suspeita de fraude no Diretório de Identificadores de Contas Transacionais (DICT), obrigando as instituições financeiras a oferecerem canais de contestação com prazo máximo de sete dias para análise. A notificação ao usuário sobre essa marcação torna-se obrigatória a partir de 1º de fevereiro de 2027.
-- Sanções Institucionais: O Banco Central reforçou as penalidades para instituições financeiras, permitindo a exclusão sumária do ecossistema Pix para entidades que descumprirem as normas, eliminando prazos de adaptação anteriores.
+### Mudanças no sistema Pix
+Para acompanhar a evolução das operações financeiras e reforçar a segurança dos usuários, o Banco Central oficializou, por meio da Resolução BCB nº 587, novas diretrizes para o Pix. As alterações possuem um cronograma de implementação gradual, com efeitos que se estendem até julho de 2027.
+Entre as principais atualizações previstas, destacam-se:
+- Pix Automático: A partir de 1º de julho de 2027, contas-salário poderão utilizar esta modalidade para pagamentos recorrentes, como serviços contínuos e mensalidades, mediante autorização prévia.
+- Cobrança Híbrida: A partir de fevereiro de 2027, o formato que combina boleto e QR Code passará por ajustes para evitar pagamentos duplicados, com a previsão de cancelamento automático do boleto após a quitação via Pix.
+- Segurança e Contestação: O regulamento estabelece novos direitos para clientes com suspeita de fraude no Diretório de Identificadores de Contas Transacionais (DICT). As instituições financeiras deverão oferecer canais para contestação, com prazo máximo de sete dias para análise.
 
-Essas mudanças buscam dar maior transparência e segurança aos procedimentos operacionais, impactando a forma como usuários e empresas gerenciam seus pagamentos e recebimentos no cotidiano financeiro.
+Essas medidas buscam fechar brechas operacionais e aumentar a transparência nos procedimentos de segurança. Para as instituições financeiras, o Banco Central também reforçou as sanções, permitindo a exclusão sumária de entidades do ecossistema Pix em casos específicos de descumprimento das normas.
+
+### Impactos para o consumidor
+Para quem possui financiamentos ou utiliza o crédito com frequência, o momento exige cautela no planejamento financeiro. O aumento da inadimplência e a manutenção de taxas elevadas reforçam a necessidade de um acompanhamento rigoroso das despesas. Com as novas regras do Pix entrando em vigor nos próximos meses, o sistema financeiro espera oferecer ferramentas mais seguras para a gestão de pagamentos, o que pode auxiliar o consumidor a organizar melhor suas obrigações mensais e evitar o acúmulo de atrasos.
 
 Fontes: O GLOBO <https://oglobo.globo.com/economia/noticia/2026/09/29/inadimplencia-das-familias-sobe-e-renova-recorde-em-agosto-diz-banco-central.ghtml> (2026-09-29) · ISTOÉ DINHEIRO <https://istoedinheiro.com.br/novas-regras-pix-banco-central-2027> (2026-10-06)
 
 **Revisão geral:**
-- fontes: OK — As duas fontes citadas são veículos de imprensa de grande circulação e tratam diretamente dos temas abordados.
-- fatos: OK — Todos os dados numéricos, datas e referências normativas foram verificados e constam nas fontes fornecidas.
+- fontes: OK — As fontes são veículos de imprensa reconhecidos (O Globo e Istoé Dinheiro) e tratam diretamente dos temas abordados.
+- fatos: OK — Todos os dados numéricos, datas e referências normativas citados no texto estão presentes nas fontes fornecidas.
 - original: OK — O texto apresenta redação própria, sintetizando as informações das fontes sem cópia literal de trechos extensos.
-- sem_repeticao: OK — O tema (inadimplência e novas regras do Pix) é distinto dos artigos publicados nos últimos 15 dias, que focavam em educação financeira e financiamento de veículos.
-- sem_promessa: OK — O texto é informativo e não faz promessas de ganhos, resultados ou indica serviços jurídicos.
-- neutro: OK — O texto mantém tom jornalístico e informativo, sem juízo de valor sobre as políticas governamentais citadas.
-- sem_autor: OK — Não há assinatura de autor ou jornalista no texto.
-- contexto_numeros: OK — Todos os números foram utilizados com o mesmo sentido, período e contexto das fontes originais.
+- sem_repeticao: OK — O tema aborda inadimplência e novas regras do Pix, diferenciando-se dos artigos publicados anteriormente que focavam em educação financeira sobre financiamentos e juros.
+- sem_promessa: OK — O texto é informativo e não faz promessas de ganhos, recuperação de valores ou aconselhamento jurídico.
+- neutro: OK — O texto mantém tom jornalístico e neutro, relatando dados do Banco Central e normas sem juízo de valor político.
+- sem_autor: OK — O texto não apresenta assinatura de autor ou jornalista.
+- contexto_numeros: OK — Todos os números foram verificados e estão aplicados no mesmo contexto e período temporal das fontes.
 
 **Revisão neutralidade:**
-- sem_adjetivo_politico: OK — O texto menciona o Banco Central e programas governamentais de forma técnica, sem adjetivar partidos ou políticos.
-- sem_merito_culpa: OK — O texto relata os dados de inadimplência e as medidas do governo de forma factual, sem atribuir mérito ou culpa a gestões.
-- sem_termos_carregados: OK — A linguagem é neutra e descritiva, focada em dados econômicos e resoluções normativas.
-- dois_lados: OK — As fontes apresentam dados convergentes sobre o cenário econômico e as normas do Pix; não há divergência de opinião a ser equilibrada.
-- sem_eleicao: OK — O texto não faz menção a pleitos, campanhas ou candidatos, mantendo-se estritamente no âmbito financeiro.
-- quem_decidiu_e_impacto: OK — O texto identifica o Banco Central como autor das normas e detalha os impactos práticos para os usuários do Pix e o cenário de crédito.
+- sem_adjetivo_politico: OK — O texto não menciona partidos, políticos ou candidatos, mantendo-se estritamente técnico.
+- sem_merito_culpa: OK — O texto descreve os dados de inadimplência e as normas do Banco Central sem atribuir responsabilidade ou mérito a gestões governamentais.
+- sem_termos_carregados: OK — A linguagem utilizada é neutra, técnica e informativa, sem o uso de adjetivos valorativos.
+- dois_lados: OK — As fontes tratam de temas distintos (dados econômicos e normas técnicas) e não apresentam divergências de opinião que exijam contraponto.
+- sem_eleicao: OK — O texto não faz qualquer menção ao processo eleitoral, apesar de as fontes originais citarem o contexto de eleições.
+- quem_decidiu_e_impacto: OK — O texto identifica o Banco Central como autor das normas e descreve os impactos práticos para o consumidor de forma objetiva.
 
 ---
 
 ## ARTIGO · Energia solar (energia-solar) · noticia
 
-**Excedente de energia solar pode ser contabilizado no mercado de curto prazo**
+**ANEEL avalia mudanças na contabilização de excedentes de energia solar**
 
-_A ANEEL estuda permitir a liquidação do excedente de energia solar no mercado de curto prazo para equilibrar tarifas, após impactos financeiros acumulados no setor._
+_A agência reguladora estuda novas formas de contabilizar o excedente de energia da geração distribuída, visando maior equilíbrio financeiro e tarifário no setor._
 
-O setor de energia solar no Brasil enfrenta um momento de adaptação regulatória. A Agência Nacional de Energia Elétrica (ANEEL) está avaliando uma proposta que visa permitir que o excedente de energia gerado por sistemas de micro e minigeração distribuída (MMGD) seja contabilizado no mercado de curto prazo. A medida busca corrigir distorções que surgiram com o rápido crescimento dessa modalidade, que não era prevista quando as regras atuais de comercialização foram estabelecidas.
+O crescimento acelerado da micro e minigeração distribuída (MMGD) no Brasil tem provocado uma reavaliação nas regras de contabilização de energia. Com o aumento expressivo de sistemas solares, o fluxo de eletricidade nas redes foi alterado, exigindo que a Agência Nacional de Energia Elétrica (ANEEL) busque mecanismos para lidar com o excedente de energia que não é plenamente reconhecido pelas regras atuais do mercado de curto prazo.
 
-### O desafio contábil da geração distribuída
-Atualmente, o excedente de energia injetado na rede por consumidores que produzem a própria eletricidade muitas vezes não é reconhecido como um recurso da distribuidora nas regras de contabilização da Câmara de Comercialização de Energia Elétrica (CCEE). Esse cenário causa uma redução artificial do consumo contabilizado e pode gerar perdas negativas na Rede Básica. Segundo a CCEE, entre janeiro de 2025 e junho de 2026, o impacto financeiro acumulado dessa energia não contabilizada foi de R$ 394,59 milhões, associado a um montante médio de 98,14 MW médios no período.
-Em outra análise, focada especificamente no ano de 2025, o impacto financeiro decorrente desse problema contábil foi estimado em R$ 225 milhões, com um volume médio de 109 MW médios que ficaram fora do processo de fechamento de contas do mercado elétrico. A proposta em estudo pela ANEEL prevê a utilização do Preço de Liquidação das Diferenças (PLD) como referência para essa liquidação, visando reverter o resultado econômico em benefício dos consumidores ou para o equilíbrio tarifário.
+### A necessidade de ajustes regulatórios
+Historicamente, as normas de comercialização foram desenhadas em um cenário onde a geração distribuída era incipiente. Atualmente, parte da energia injetada na rede pelas unidades consumidoras não é contabilizada como um recurso das distribuidoras, o que pode gerar distorções nos cálculos de consumo e perdas na Rede Básica. Para corrigir esses efeitos, a ANEEL analisa uma proposta que permitiria liquidar esse excedente no mercado de curto prazo, utilizando o Preço de Liquidação das Diferenças (PLD) como referência.
+Estudos técnicos apontam um impacto financeiro relevante. Entre janeiro de 2025 e junho de 2026, o montante acumulado associado à falta de contabilização adequada desse excedente atingiu R$ 394,59 milhões. Somente no ano de 2025, o impacto estimado foi de R$ 225 milhões, evidenciando a necessidade de uma atualização normativa para garantir o equilíbrio do sistema.
 
-### Status da proposta e próximos passos
-A discussão ainda está em fase inicial e não se trata de uma regra aprovada. A Procuradoria Federal junto à ANEEL, em parecer disponibilizado em 23 de setembro de 2026, indicou que existe espaço jurídico e regulatório para o avanço da medida, desde que acompanhada de uma fundamentação técnica consistente e novas etapas de análise regulatória. A CCEE detalhou o problema em uma Nota Técnica, propondo a incorporação da produção da MMGD à apuração da geração total do sistema e ao balanço energético das distribuidoras.
+### Impactos no setor e próximos passos
+A proposta, que ainda se encontra em fase de estudos, sugere que o resultado econômico obtido com essa liquidação seja revertido em benefício dos consumidores ou aplicado para auxiliar no equilíbrio tarifário. A Procuradoria Federal junto à ANEEL indicou que há viabilidade jurídica para o avanço das discussões, desde que sustentadas por uma base técnica sólida.
+Além da questão contábil, o setor de energia solar enfrenta outros desafios operacionais que impactam o planejamento de investimentos:
+- Mapeamento de capacidade: O Operador Nacional do Sistema Elétrico (ONS) está desenvolvendo ferramentas para mapear quanto da geração distribuída a rede básica consegue suportar, visando maior controle sobre o escoamento de energia.
+- Gestão descentralizada: O ONS propôs um sandbox regulatório com cinco distribuidoras para testar a gestão e o despacho de recursos energéticos distribuídos em tempo real, buscando otimizar a interface entre o operador e as concessionárias.
+- Desafios de mercado: O setor tem lidado com o fenômeno do curtailment, que consiste na restrição ou limitação da geração por razões operacionais, como excesso de oferta ou limitações na rede de transmissão.
 
-### Impacto para o setor
-Para quem investe em sistemas de energia solar, a mudança reflete a necessidade de um sistema elétrico mais integrado e tecnologicamente avançado. Enquanto a Alemanha, por exemplo, simplificou regras para inversores de até 800 VA, o Brasil mantém diretrizes normativas rígidas, exigindo homologação formal junto às distribuidoras para qualquer injeção de carga. A iniciativa da ANEEL em mapear a capacidade de suporte da rede básica, em conjunto com o Operador Nacional do Sistema Elétrico (ONS), reforça que o foco atual das autoridades é garantir a segurança e a flexibilidade do sistema diante da crescente oferta de energia limpa distribuída pelo país.
+Para quem possui ou pretende investir em sistemas de energia solar, o cenário regulatório indica uma tendência de maior integração e monitoramento. Embora a geração própria permaneça como uma alternativa para a busca de eficiência energética, as mudanças em curso visam adaptar o sistema elétrico nacional a um volume de geração distribuída muito superior ao observado na última década. Acompanhar essas definições é fundamental para entender como os novos mecanismos de contabilização poderão influenciar a viabilidade econômica de futuros projetos de energia limpa no país.
 
 Fontes: Canal Solar <https://canalsolar.com.br/excedente-mmgd-pode-entrar-contabilizacao-energia/> (2026-09-28) · Click Petróleo e Gás <https://clickpetroleoegas.com.br/aneel-estuda-permitir-venda-de-excedente-de-energia-solar-no-mercado-de-curto-prazo-rmrm97/> (2026-09-30)
 
 **Revisão geral:**
-- fontes: OK — As fontes Canal Solar e Click Petróleo e Gás são veículos especializados no setor elétrico e tratam diretamente do tema proposto.
-- fatos: OK — Todos os dados numéricos e datas citados no texto foram verificados e constam nas fontes fornecidas.
-- original: OK — O texto apresenta redação própria, sintetizando as informações das fontes sem cópia literal de trechos extensos.
-- sem_repeticao: OK — O tema aborda regulação do setor elétrico, distinto dos assuntos de finanças pessoais e crédito publicados nos últimos 15 dias.
-- sem_promessa: OK — O texto é informativo e não faz promessas de ganhos ou orientações jurídicas individuais.
-- neutro: OK — O tom é técnico e imparcial, focando na discussão regulatória da ANEEL.
-- sem_autor: OK — O texto não apresenta assinatura de autor ou jornalista.
-- contexto_numeros: OK — Todos os números foram conferidos e possuem o mesmo sentido e contexto nas fontes, incluindo o valor de 800 VA referente à norma alemã, que embora apareça em contexto diferente na fonte, é citado corretamente no texto como exemplo comparativo.
+- fontes: OK — As duas fontes citadas são veículos especializados no setor elétrico e abordam diretamente o tema da contabilização de excedentes de MMGD pela ANEEL.
+- fatos: OK — Todos os dados numéricos (R$ 394,59 milhões, R$ 225 milhões, períodos de 2025-2026) estão presentes nas fontes fornecidas.
+- original: OK — O texto apresenta redação própria, sintetizando as informações das fontes sem cópia literal de parágrafos.
+- sem_repeticao: OK — O tema (energia solar/ANEEL) difere dos assuntos financeiros/crédito listados nos últimos 15 dias.
+- sem_promessa: OK — O texto é informativo e não faz promessas de ganhos ou orientação jurídica individual.
+- neutro: OK — O texto mantém tom jornalístico e neutro sobre as discussões regulatórias.
+- sem_autor: OK — O texto não apresenta assinatura ou nome de autor.
+- contexto_numeros: OK — Os números foram conferidos e estão aplicados corretamente conforme o contexto das fontes (impactos financeiros e períodos temporais).
 
 **Revisão neutralidade:**
-- sem_adjetivo_politico: OK — O texto limita-se a tratar de questões regulatórias da ANEEL e CCEE, sem menção a partidos ou políticos.
-- sem_merito_culpa: OK — O texto descreve uma falha técnica/contábil e a proposta de correção, sem atribuir mérito ou culpa a gestões governamentais.
-- sem_termos_carregados: OK — A linguagem é técnica e informativa, sem uso de adjetivos valorativos ou termos carregados.
-- dois_lados: OK — As fontes apresentam a mesma perspectiva técnica sobre o problema contábil e a proposta de solução, não havendo divergência de posições.
-- sem_eleicao: OK — Não há qualquer menção a processos eleitorais, campanhas ou candidatos.
-- quem_decidiu_e_impacto: OK — O texto identifica a ANEEL como o órgão avaliador e explica o impacto financeiro e regulatório da medida, mantendo tom neutro.
+- sem_adjetivo_politico: OK — O texto não menciona partidos, políticos ou candidatos.
+- sem_merito_culpa: OK — O texto descreve uma questão técnica e regulatória sem atribuir mérito ou culpa a gestões governamentais.
+- sem_termos_carregados: OK — A linguagem é técnica e neutra, focada em dados de mercado e regulação.
+- dois_lados: OK — As fontes apresentam a mesma perspectiva técnica sobre a necessidade de ajuste regulatório, sem divergências políticas.
+- sem_eleicao: OK — Não há menção a processos eleitorais ou campanhas.
+- quem_decidiu_e_impacto: OK — O texto identifica a ANEEL como o órgão avaliador e explica o impacto financeiro e regulatório para o setor e consumidores.
 
 ---
 
 ## NOTA · Lançamentos e tecnologia (veículos) (mercado) · noticia
 
-**Eletrificados atingem 19,8% das vendas em setembro de 2026**
+**Mercado automotivo registra alta nas vendas e avanço dos eletrificados**
 
-Dados da ABVE e da Anfavea confirmam que a participação de veículos híbridos e elétricos no mercado brasileiro saltou para 19,8% em setembro de 2026. O setor atingiu a marca de 1 milhão de unidades em circulação, com o BYD Dolphin Mini liderando os emplacamentos da categoria no mês, que totalizaram 53.126 registros.
+O mercado de veículos novos teve em setembro o melhor resultado da série histórica, com 509.686 emplacamentos. O segmento de eletrificados também ganha espaço, representando 17,7% das vendas acumuladas no ano, impulsionado por modelos como o BYD Dolphin Mini, que liderou a categoria no mês com 9.385 unidades comercializadas.
 
-Fontes: Valor Econômico <https://valor.globo.com/impresso/noticia/2026/10/07/pais-tem-1-milhao-de-carros-eletrificados-que-ja-respondem-por-quase-20-das-vendas.ghtml> (2026-10-06) · Autoesporte <https://autoesporte.globo.com/setor-automotivo/mercado-automotivo/noticia/2026/10/carros-eletricos-hibridos-mais-vendidos-brasil-setembro-2026.ghtml> (2026-10-07) · Valor Econômico <https://valor.globo.com/empresas/noticia/2026/10/07/eletricos-e-hibridos-dobram-fatia-nas-vendas-em-um-ano.ghtml> (2026-10-07) · G1 Carros <https://g1.globo.com/carros/noticia/2026/10/07/producao-de-veiculos-cai-em-setembro-mas-vendas-sobem.ghtml> (2026-10-07)
+Fontes: G1 Carros <https://g1.globo.com/carros/noticia/2026/10/05/vendas-veiculos-novos-setembro-fenabrave.ghtml> (2026-10-05) · Autoesporte <https://autoesporte.globo.com/setor-automotivo/mercado-automotivo/noticia/2026/10/carros-eletricos-hibridos-mais-vendidos-brasil-setembro-2026.ghtml> (2026-10-07)
 
 **Revisão geral:**
-- fontes: OK — As fontes Valor Econômico e Autoesporte são veículos de imprensa confiáveis e tratam diretamente do tema.
-- fatos: OK — Todos os dados numéricos (19,8%, 1 milhão, 53.126) e datas (setembro de 2026) estão presentes nas fontes citadas.
-- original: OK — O texto foi redigido de forma autoral, sintetizando as informações das fontes sem cópia literal.
-- sem_repeticao: OK — O tema sobre eletrificados é inédito na lista de publicações dos últimos 15 dias.
-- sem_promessa: OK — O texto é puramente informativo, sem promessas ou orientações financeiras.
-- neutro: OK — O texto apresenta dados de mercado sem emitir juízo de valor ou viés político.
-- sem_autor: OK — Não há assinatura de autor ou jornalista no texto.
-- contexto_numeros: OK — Os números foram utilizados com os mesmos significados e recortes temporais/geográficos das fontes.
+- fontes: OK — As fontes G1 e Autoesporte são veículos de imprensa confiáveis e tratam diretamente dos dados de emplacamentos de setembro de 2026.
+- fatos: OK — Todos os dados numéricos (509.686 emplacamentos, 17,7% de participação e 9.385 unidades do Dolphin Mini) constam nas fontes citadas.
+- original: OK — O texto apresenta uma síntese autoral dos dados, sem cópia literal de trechos das fontes.
+- sem_repeticao: OK — O assunto trata de mercado automotivo (vendas), enquanto os textos anteriores focavam em financiamento, juros e crédito.
+- sem_promessa: OK — O texto é puramente informativo e não faz promessas ou ofertas de serviços.
+- neutro: OK — O texto mantém tom jornalístico neutro, sem juízo de valor ou viés político.
+- sem_autor: OK — Não há menção a autores ou assinaturas no texto.
+- contexto_numeros: OK — Os números foram conferidos e aplicados corretamente conforme o contexto das fontes (setembro de 2026).
 
 ---
 
