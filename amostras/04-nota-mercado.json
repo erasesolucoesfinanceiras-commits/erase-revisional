@@ -1,0 +1,26 @@
+{
+  "tipo": "nota",
+  "tema": "mercado",
+  "modo": "noticia",
+  "rascunho": {
+    "sem_novidade": false,
+    "titulo": "Setembro registra recorde histórico de emplacamentos de veículos no Brasil",
+    "texto": "O mercado automotivo alcançou 509.686 novos emplacamentos em setembro de 2026, o melhor resultado da série histórica para o mês. Segundo a Fenabrave, programas de incentivo e a disputa entre marcas sustentam a demanda, que já acumula alta de 14,41% no ano, apesar das condições complexas de crédito.",
+    "fontes_usadas": [
+      1,
+      2
+    ],
+    "fontes": [
+      {
+        "nome": "conexaomarilia",
+        "url": "https://conexaomarilia.com.br/2026/10/07/emplacamentos-batem-recorde-em-setembro-fenabrave-projeta-alta-de-86-no-ano/",
+        "data": "2026-10-06"
+      },
+      {
+        "nome": "Poder360",
+        "url": "https://www.poder360.com.br/poder-economia/vendas-de-veiculos-tem-o-melhor-setembro-da-serie-historia-diz-fenabrave/",
+        "data": "2026-10-06"
+      }
+    ]
+  }
+}

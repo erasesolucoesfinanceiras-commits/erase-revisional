@@ -1,0 +1,28 @@
+{
+  "tipo": "artigo",
+  "tema": "revisional",
+  "modo": "noticia",
+  "rascunho": {
+    "sem_novidade": false,
+    "titulo": "Atenção aos riscos em contratos de financiamento de veículos",
+    "resumo": "Decisões judiciais recentes e investigações policiais destacam a importância de conferir taxas e custos embutidos na contratação de financiamentos automotivos.",
+    "corpo": "<p>A contratação de um financiamento de veículo exige atenção redobrada do consumidor, tanto no momento da assinatura do contrato quanto na verificação da idoneidade das instituições e dos intermediários envolvidos. Recentemente, o setor de crédito automotivo tem sido alvo de atenção devido a práticas que podem onerar indevidamente o consumidor final ou comprometer sua segurança de dados.</p><h2>Venda casada e abusividade em taxas</h2><p>Uma decisão recente do Tribunal de Justiça do Paraná (TJPR) ilustra como custos adicionais podem ser contestados judicialmente. Em um caso envolvendo o financiamento de uma motocicleta, o tribunal reconheceu a ocorrência de venda casada ao identificar que seguros foram impostos ao cliente sob a premissa de obrigatoriedade para a concessão do crédito. A justiça determinou o recálculo das parcelas e a devolução em dobro dos valores pagos indevidamente.</p><p>Além da questão dos seguros, a decisão também considerou abusiva a taxa de juros aplicada, que superava em uma vez e meia a média de mercado estabelecida pelo Banco Central para o período. Esse precedente reforça a importância de o consumidor analisar atentamente o Custo Efetivo Total (CET) e verificar se as taxas contratadas estão em consonância com as médias praticadas pelo mercado financeiro.</p><h2>Segurança de dados e fraudes</h2><p>Outro ponto crítico é a segurança das informações pessoais. Operações policiais recentes, como a ocorrida em Uberlândia, revelaram grupos que utilizam estratégias fraudulentas para obter dados de vítimas. Sob o pretexto de oferecer brindes, os criminosos coletam fotos e biometria facial para contratar financiamentos de veículos sem o consentimento dos titulares. Esses casos alertam para o perigo de fornecer dados cadastrais ou realizar procedimentos de reconhecimento facial em abordagens informais ou suspeitas.</p><h3>Orientações de segurança para o consumidor</h3><ul><li><strong>Desconfie de ofertas excessivas:</strong> A promessa de brindes em troca de dados pessoais ou biometria pode ser um indício de tentativa de fraude.</li><li><strong>Verifique os termos do contrato:</strong> Antes de assinar, certifique-se de que não há seguros ou serviços incluídos sem a sua solicitação expressa (venda casada).</li><li><strong>Atenção às taxas:</strong> Compare a taxa de juros oferecida com as médias de mercado divulgadas por órgãos oficiais.</li><li><strong>Proteja seus dados:</strong> Evite compartilhar documentos e realizar biometria facial em situações que não sejam ambientes oficiais e seguros de instituições financeiras reconhecidas.</li></ul><p>O cenário atual exige que o consumidor seja um agente ativo na verificação de seus contratos. A transparência nas negociações é um direito garantido pelo Código de Defesa do Consumidor, e a cautela na entrega de informações pessoais é a principal ferramenta para evitar que dados sejam utilizados para a criação de dívidas fraudulentas.</p>",
+    "fontes_usadas": [
+      1,
+      2
+    ],
+    "foto_busca": "car loan document",
+    "fontes": [
+      {
+        "nome": "g1",
+        "url": "https://g1.globo.com/mg/triangulo-mineiro/noticia/2026/10/08/pf-investiga-grupo-que-oferecia-brindes-para-obter-dados-e-financiar-veiculos-em-nome-de-vitimas-em-uberlandia.ghtml",
+        "data": "2026-10-08"
+      },
+      {
+        "nome": "Toledo News",
+        "url": "https://www.toledonews.com.br/noticia/banco-tera-de-devolver-em-dobro-juros-e-seguros-de-financiamento-de-moto-decide-tjpr-em-acao-de-toledo",
+        "data": "2026-10-05"
+      }
+    ]
+  }
+}
