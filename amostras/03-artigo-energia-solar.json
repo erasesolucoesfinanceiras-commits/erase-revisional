@@ -4,14 +4,14 @@
   "modo": "noticia",
   "rascunho": {
     "sem_novidade": false,
-    "titulo": "Excedente de energia solar pode ser contabilizado no mercado de curto prazo",
-    "resumo": "A ANEEL estuda permitir a liquidação do excedente de energia solar no mercado de curto prazo para equilibrar tarifas, após impactos financeiros acumulados no setor.",
-    "corpo": "<p>O setor de energia solar no Brasil enfrenta um momento de adaptação regulatória. A Agência Nacional de Energia Elétrica (ANEEL) está avaliando uma proposta que visa permitir que o excedente de energia gerado por sistemas de micro e minigeração distribuída (MMGD) seja contabilizado no mercado de curto prazo. A medida busca corrigir distorções que surgiram com o rápido crescimento dessa modalidade, que não era prevista quando as regras atuais de comercialização foram estabelecidas.</p><h2>O desafio contábil da geração distribuída</h2><p>Atualmente, o excedente de energia injetado na rede por consumidores que produzem a própria eletricidade muitas vezes não é reconhecido como um recurso da distribuidora nas regras de contabilização da Câmara de Comercialização de Energia Elétrica (CCEE). Esse cenário causa uma redução artificial do consumo contabilizado e pode gerar perdas negativas na Rede Básica. Segundo a CCEE, entre janeiro de 2025 e junho de 2026, o impacto financeiro acumulado dessa energia não contabilizada foi de R$ 394,59 milhões, associado a um montante médio de 98,14 MW médios no período.</p><p>Em outra análise, focada especificamente no ano de 2025, o impacto financeiro decorrente desse problema contábil foi estimado em R$ 225 milhões, com um volume médio de 109 MW médios que ficaram fora do processo de fechamento de contas do mercado elétrico. A proposta em estudo pela ANEEL prevê a utilização do Preço de Liquidação das Diferenças (PLD) como referência para essa liquidação, visando reverter o resultado econômico em benefício dos consumidores ou para o equilíbrio tarifário.</p><h3>Status da proposta e próximos passos</h3><p>A discussão ainda está em fase inicial e não se trata de uma regra aprovada. A Procuradoria Federal junto à ANEEL, em parecer disponibilizado em 23 de setembro de 2026, indicou que existe espaço jurídico e regulatório para o avanço da medida, desde que acompanhada de uma fundamentação técnica consistente e novas etapas de análise regulatória. A CCEE detalhou o problema em uma Nota Técnica, propondo a incorporação da produção da MMGD à apuração da geração total do sistema e ao balanço energético das distribuidoras.</p><h3>Impacto para o setor</h3><p>Para quem investe em sistemas de energia solar, a mudança reflete a necessidade de um sistema elétrico mais integrado e tecnologicamente avançado. Enquanto a Alemanha, por exemplo, simplificou regras para inversores de até 800 VA, o Brasil mantém diretrizes normativas rígidas, exigindo homologação formal junto às distribuidoras para qualquer injeção de carga. A iniciativa da ANEEL em mapear a capacidade de suporte da rede básica, em conjunto com o Operador Nacional do Sistema Elétrico (ONS), reforça que o foco atual das autoridades é garantir a segurança e a flexibilidade do sistema diante da crescente oferta de energia limpa distribuída pelo país.</p>",
+    "titulo": "ANEEL avalia mudanças na contabilização de excedentes de energia solar",
+    "resumo": "A agência reguladora estuda novas formas de contabilizar o excedente de energia da geração distribuída, visando maior equilíbrio financeiro e tarifário no setor.",
+    "corpo": "<p>O crescimento acelerado da micro e minigeração distribuída (MMGD) no Brasil tem provocado uma reavaliação nas regras de contabilização de energia. Com o aumento expressivo de sistemas solares, o fluxo de eletricidade nas redes foi alterado, exigindo que a Agência Nacional de Energia Elétrica (ANEEL) busque mecanismos para lidar com o excedente de energia que não é plenamente reconhecido pelas regras atuais do mercado de curto prazo.</p><h2>A necessidade de ajustes regulatórios</h2><p>Historicamente, as normas de comercialização foram desenhadas em um cenário onde a geração distribuída era incipiente. Atualmente, parte da energia injetada na rede pelas unidades consumidoras não é contabilizada como um recurso das distribuidoras, o que pode gerar distorções nos cálculos de consumo e perdas na Rede Básica. Para corrigir esses efeitos, a ANEEL analisa uma proposta que permitiria liquidar esse excedente no mercado de curto prazo, utilizando o Preço de Liquidação das Diferenças (PLD) como referência.</p><p>Estudos técnicos apontam um impacto financeiro relevante. Entre janeiro de 2025 e junho de 2026, o montante acumulado associado à falta de contabilização adequada desse excedente atingiu R$ 394,59 milhões. Somente no ano de 2025, o impacto estimado foi de R$ 225 milhões, evidenciando a necessidade de uma atualização normativa para garantir o equilíbrio do sistema.</p><h3>Impactos no setor e próximos passos</h3><p>A proposta, que ainda se encontra em fase de estudos, sugere que o resultado econômico obtido com essa liquidação seja revertido em benefício dos consumidores ou aplicado para auxiliar no equilíbrio tarifário. A Procuradoria Federal junto à ANEEL indicou que há viabilidade jurídica para o avanço das discussões, desde que sustentadas por uma base técnica sólida.</p><p>Além da questão contábil, o setor de energia solar enfrenta outros desafios operacionais que impactam o planejamento de investimentos:</p><ul><li><strong>Mapeamento de capacidade:</strong> O Operador Nacional do Sistema Elétrico (ONS) está desenvolvendo ferramentas para mapear quanto da geração distribuída a rede básica consegue suportar, visando maior controle sobre o escoamento de energia.</li><li><strong>Gestão descentralizada:</strong> O ONS propôs um sandbox regulatório com cinco distribuidoras para testar a gestão e o despacho de recursos energéticos distribuídos em tempo real, buscando otimizar a interface entre o operador e as concessionárias.</li><li><strong>Desafios de mercado:</strong> O setor tem lidado com o fenômeno do <em>curtailment</em>, que consiste na restrição ou limitação da geração por razões operacionais, como excesso de oferta ou limitações na rede de transmissão.</li></ul><p>Para quem possui ou pretende investir em sistemas de energia solar, o cenário regulatório indica uma tendência de maior integração e monitoramento. Embora a geração própria permaneça como uma alternativa para a busca de eficiência energética, as mudanças em curso visam adaptar o sistema elétrico nacional a um volume de geração distribuída muito superior ao observado na última década. Acompanhar essas definições é fundamental para entender como os novos mecanismos de contabilização poderão influenciar a viabilidade econômica de futuros projetos de energia limpa no país.</p>",
     "fontes_usadas": [
       3,
       8
     ],
-    "foto_busca": "solar panels grid connection",
+    "foto_busca": "solar panels on roof",
     "fontes": [
       {
         "nome": "Canal Solar",
@@ -28,61 +28,61 @@
       "geral": {
         "fontes": {
           "ok": true,
-          "obs": "As fontes Canal Solar e Click Petróleo e Gás são veículos especializados no setor elétrico e tratam diretamente do tema proposto."
+          "obs": "As duas fontes citadas são veículos especializados no setor elétrico e abordam diretamente o tema da contabilização de excedentes de MMGD pela ANEEL."
         },
         "fatos": {
           "ok": true,
-          "obs": "Todos os dados numéricos e datas citados no texto foram verificados e constam nas fontes fornecidas."
+          "obs": "Todos os dados numéricos (R$ 394,59 milhões, R$ 225 milhões, períodos de 2025-2026) estão presentes nas fontes fornecidas."
         },
         "original": {
           "ok": true,
-          "obs": "O texto apresenta redação própria, sintetizando as informações das fontes sem cópia literal de trechos extensos."
+          "obs": "O texto apresenta redação própria, sintetizando as informações das fontes sem cópia literal de parágrafos."
         },
         "sem_repeticao": {
           "ok": true,
-          "obs": "O tema aborda regulação do setor elétrico, distinto dos assuntos de finanças pessoais e crédito publicados nos últimos 15 dias."
+          "obs": "O tema (energia solar/ANEEL) difere dos assuntos financeiros/crédito listados nos últimos 15 dias."
         },
         "sem_promessa": {
           "ok": true,
-          "obs": "O texto é informativo e não faz promessas de ganhos ou orientações jurídicas individuais."
+          "obs": "O texto é informativo e não faz promessas de ganhos ou orientação jurídica individual."
         },
         "neutro": {
           "ok": true,
-          "obs": "O tom é técnico e imparcial, focando na discussão regulatória da ANEEL."
+          "obs": "O texto mantém tom jornalístico e neutro sobre as discussões regulatórias."
         },
         "sem_autor": {
           "ok": true,
-          "obs": "O texto não apresenta assinatura de autor ou jornalista."
+          "obs": "O texto não apresenta assinatura ou nome de autor."
         },
         "contexto_numeros": {
           "ok": true,
-          "obs": "Todos os números foram conferidos e possuem o mesmo sentido e contexto nas fontes, incluindo o valor de 800 VA referente à norma alemã, que embora apareça em contexto diferente na fonte, é citado corretamente no texto como exemplo comparativo."
+          "obs": "Os números foram conferidos e estão aplicados corretamente conforme o contexto das fontes (impactos financeiros e períodos temporais)."
         }
       },
       "neutralidade": {
         "sem_adjetivo_politico": {
           "ok": true,
-          "obs": "O texto limita-se a tratar de questões regulatórias da ANEEL e CCEE, sem menção a partidos ou políticos."
+          "obs": "O texto não menciona partidos, políticos ou candidatos."
         },
         "sem_merito_culpa": {
           "ok": true,
-          "obs": "O texto descreve uma falha técnica/contábil e a proposta de correção, sem atribuir mérito ou culpa a gestões governamentais."
+          "obs": "O texto descreve uma questão técnica e regulatória sem atribuir mérito ou culpa a gestões governamentais."
         },
         "sem_termos_carregados": {
           "ok": true,
-          "obs": "A linguagem é técnica e informativa, sem uso de adjetivos valorativos ou termos carregados."
+          "obs": "A linguagem é técnica e neutra, focada em dados de mercado e regulação."
         },
         "dois_lados": {
           "ok": true,
-          "obs": "As fontes apresentam a mesma perspectiva técnica sobre o problema contábil e a proposta de solução, não havendo divergência de posições."
+          "obs": "As fontes apresentam a mesma perspectiva técnica sobre a necessidade de ajuste regulatório, sem divergências políticas."
         },
         "sem_eleicao": {
           "ok": true,
-          "obs": "Não há qualquer menção a processos eleitorais, campanhas ou candidatos."
+          "obs": "Não há menção a processos eleitorais ou campanhas."
         },
         "quem_decidiu_e_impacto": {
           "ok": true,
-          "obs": "O texto identifica a ANEEL como o órgão avaliador e explica o impacto financeiro e regulatório da medida, mantendo tom neutro."
+          "obs": "O texto identifica a ANEEL como o órgão avaliador e explica o impacto financeiro e regulatório para o setor e consumidores."
         }
       }
     }
