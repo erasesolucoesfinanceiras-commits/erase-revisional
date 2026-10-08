@@ -1,0 +1,90 @@
+{
+  "tipo": "artigo",
+  "tema": "energia-solar",
+  "modo": "noticia",
+  "rascunho": {
+    "sem_novidade": false,
+    "titulo": "Excedente de energia solar pode ser contabilizado no mercado de curto prazo",
+    "resumo": "A ANEEL estuda permitir a liquidação do excedente de energia solar no mercado de curto prazo para equilibrar tarifas, após impactos financeiros acumulados no setor.",
+    "corpo": "<p>O setor de energia solar no Brasil enfrenta um momento de adaptação regulatória. A Agência Nacional de Energia Elétrica (ANEEL) está avaliando uma proposta que visa permitir que o excedente de energia gerado por sistemas de micro e minigeração distribuída (MMGD) seja contabilizado no mercado de curto prazo. A medida busca corrigir distorções que surgiram com o rápido crescimento dessa modalidade, que não era prevista quando as regras atuais de comercialização foram estabelecidas.</p><h2>O desafio contábil da geração distribuída</h2><p>Atualmente, o excedente de energia injetado na rede por consumidores que produzem a própria eletricidade muitas vezes não é reconhecido como um recurso da distribuidora nas regras de contabilização da Câmara de Comercialização de Energia Elétrica (CCEE). Esse cenário causa uma redução artificial do consumo contabilizado e pode gerar perdas negativas na Rede Básica. Segundo a CCEE, entre janeiro de 2025 e junho de 2026, o impacto financeiro acumulado dessa energia não contabilizada foi de R$ 394,59 milhões, associado a um montante médio de 98,14 MW médios no período.</p><p>Em outra análise, focada especificamente no ano de 2025, o impacto financeiro decorrente desse problema contábil foi estimado em R$ 225 milhões, com um volume médio de 109 MW médios que ficaram fora do processo de fechamento de contas do mercado elétrico. A proposta em estudo pela ANEEL prevê a utilização do Preço de Liquidação das Diferenças (PLD) como referência para essa liquidação, visando reverter o resultado econômico em benefício dos consumidores ou para o equilíbrio tarifário.</p><h3>Status da proposta e próximos passos</h3><p>A discussão ainda está em fase inicial e não se trata de uma regra aprovada. A Procuradoria Federal junto à ANEEL, em parecer disponibilizado em 23 de setembro de 2026, indicou que existe espaço jurídico e regulatório para o avanço da medida, desde que acompanhada de uma fundamentação técnica consistente e novas etapas de análise regulatória. A CCEE detalhou o problema em uma Nota Técnica, propondo a incorporação da produção da MMGD à apuração da geração total do sistema e ao balanço energético das distribuidoras.</p><h3>Impacto para o setor</h3><p>Para quem investe em sistemas de energia solar, a mudança reflete a necessidade de um sistema elétrico mais integrado e tecnologicamente avançado. Enquanto a Alemanha, por exemplo, simplificou regras para inversores de até 800 VA, o Brasil mantém diretrizes normativas rígidas, exigindo homologação formal junto às distribuidoras para qualquer injeção de carga. A iniciativa da ANEEL em mapear a capacidade de suporte da rede básica, em conjunto com o Operador Nacional do Sistema Elétrico (ONS), reforça que o foco atual das autoridades é garantir a segurança e a flexibilidade do sistema diante da crescente oferta de energia limpa distribuída pelo país.</p>",
+    "fontes_usadas": [
+      3,
+      8
+    ],
+    "foto_busca": "solar panels grid connection",
+    "fontes": [
+      {
+        "nome": "Canal Solar",
+        "url": "https://canalsolar.com.br/excedente-mmgd-pode-entrar-contabilizacao-energia/",
+        "data": "2026-09-28"
+      },
+      {
+        "nome": "Click Petróleo e Gás",
+        "url": "https://clickpetroleoegas.com.br/aneel-estuda-permitir-venda-de-excedente-de-energia-solar-no-mercado-de-curto-prazo-rmrm97/",
+        "data": "2026-09-30"
+      }
+    ],
+    "revisoes": {
+      "geral": {
+        "fontes": {
+          "ok": true,
+          "obs": "As fontes Canal Solar e Click Petróleo e Gás são veículos especializados no setor elétrico e tratam diretamente do tema proposto."
+        },
+        "fatos": {
+          "ok": true,
+          "obs": "Todos os dados numéricos e datas citados no texto foram verificados e constam nas fontes fornecidas."
+        },
+        "original": {
+          "ok": true,
+          "obs": "O texto apresenta redação própria, sintetizando as informações das fontes sem cópia literal de trechos extensos."
+        },
+        "sem_repeticao": {
+          "ok": true,
+          "obs": "O tema aborda regulação do setor elétrico, distinto dos assuntos de finanças pessoais e crédito publicados nos últimos 15 dias."
+        },
+        "sem_promessa": {
+          "ok": true,
+          "obs": "O texto é informativo e não faz promessas de ganhos ou orientações jurídicas individuais."
+        },
+        "neutro": {
+          "ok": true,
+          "obs": "O tom é técnico e imparcial, focando na discussão regulatória da ANEEL."
+        },
+        "sem_autor": {
+          "ok": true,
+          "obs": "O texto não apresenta assinatura de autor ou jornalista."
+        },
+        "contexto_numeros": {
+          "ok": true,
+          "obs": "Todos os números foram conferidos e possuem o mesmo sentido e contexto nas fontes, incluindo o valor de 800 VA referente à norma alemã, que embora apareça em contexto diferente na fonte, é citado corretamente no texto como exemplo comparativo."
+        }
+      },
+      "neutralidade": {
+        "sem_adjetivo_politico": {
+          "ok": true,
+          "obs": "O texto limita-se a tratar de questões regulatórias da ANEEL e CCEE, sem menção a partidos ou políticos."
+        },
+        "sem_merito_culpa": {
+          "ok": true,
+          "obs": "O texto descreve uma falha técnica/contábil e a proposta de correção, sem atribuir mérito ou culpa a gestões governamentais."
+        },
+        "sem_termos_carregados": {
+          "ok": true,
+          "obs": "A linguagem é técnica e informativa, sem uso de adjetivos valorativos ou termos carregados."
+        },
+        "dois_lados": {
+          "ok": true,
+          "obs": "As fontes apresentam a mesma perspectiva técnica sobre o problema contábil e a proposta de solução, não havendo divergência de posições."
+        },
+        "sem_eleicao": {
+          "ok": true,
+          "obs": "Não há qualquer menção a processos eleitorais, campanhas ou candidatos."
+        },
+        "quem_decidiu_e_impacto": {
+          "ok": true,
+          "obs": "O texto identifica a ANEEL como o órgão avaliador e explica o impacto financeiro e regulatório da medida, mantendo tom neutro."
+        }
+      }
+    }
+  }
+}

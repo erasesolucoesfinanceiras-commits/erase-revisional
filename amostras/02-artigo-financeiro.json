@@ -1,0 +1,90 @@
+{
+  "tipo": "artigo",
+  "tema": "financeiro",
+  "modo": "noticia",
+  "rascunho": {
+    "sem_novidade": false,
+    "titulo": "Inadimplência das famílias atinge recorde e Banco Central anuncia novas regras para o Pix",
+    "resumo": "Dados recentes indicam recorde na inadimplência das famílias brasileiras em agosto. Paralelamente, o Banco Central oficializou novas diretrizes para o sistema Pix.",
+    "corpo": "<h2>Cenário de crédito e inadimplência</h2><p>O cenário econômico recente apresenta desafios para o orçamento das famílias brasileiras. Segundo dados divulgados pelo Banco Central, a inadimplência das famílias atingiu 6,0% em agosto de 2026, um patamar que não era registrado desde março de 2011. Em julho, o índice estava em 5,8%. O avanço dos atrasos ocorre mesmo com a existência de programas governamentais voltados à renegociação de dívidas, como as versões anteriores do Desenrola.</p><p>Os indicadores de endividamento e comprometimento de renda das famílias também permanecem em níveis elevados. Em julho de 2026, o comprometimento da renda com o pagamento de dívidas manteve-se no recorde da série histórica, atingindo 28,7%. Já o endividamento total das famílias, que considera a relação entre o montante das dívidas e a renda geral, subiu de 49,7% para 49,9% no mesmo período. Sem considerar o crédito habitacional, esse percentual de endividamento ficou em 30,8%.</p><p>No segmento de crédito livre, onde as taxas de juros são pactuadas diretamente entre as instituições financeiras e os tomadores, a inadimplência passou de 7,8% em julho para 8,0% em agosto, alcançando a maior taxa da série histórica. Para o crédito direcionado, a inadimplência das pessoas físicas subiu de 3,4% para 3,6%.</p><h3>Novas diretrizes para o Pix</h3><p>Enquanto o mercado de crédito enfrenta pressões, o Banco Central oficializou, por meio da Resolução BCB nº 587, de 18 de setembro de 2026, um conjunto de novas regras para o Pix. As mudanças visam ampliar as funcionalidades do sistema e reforçar os mecanismos de segurança e fiscalização. A aplicação das normas ocorrerá de forma fatiada, com início imediato para algumas medidas e prazos entre fevereiro e julho de 2027 para outras.</p><p>Entre as principais alterações previstas estão:</p><ul><li><strong>Pix Automático:</strong> A partir de 1º de julho de 2027, contas-salário poderão utilizar essa modalidade para pagamentos recorrentes previamente autorizados, como mensalidades e serviços contínuos.</li><li><strong>Cobrança Híbrida:</strong> A partir de fevereiro de 2027, novas regras para a cobrança que combina código de barras de boletos e QR Code do Pix passarão a vigorar, visando evitar pagamentos duplicados por meio da liquidação síncrona.</li><li><strong>Segurança e Contestação:</strong> O regulamento estabelece novos direitos para clientes com suspeita de fraude no Diretório de Identificadores de Contas Transacionais (DICT), obrigando as instituições financeiras a oferecerem canais de contestação com prazo máximo de sete dias para análise. A notificação ao usuário sobre essa marcação torna-se obrigatória a partir de 1º de fevereiro de 2027.</li><li><strong>Sanções Institucionais:</strong> O Banco Central reforçou as penalidades para instituições financeiras, permitindo a exclusão sumária do ecossistema Pix para entidades que descumprirem as normas, eliminando prazos de adaptação anteriores.</li></ul><p>Essas mudanças buscam dar maior transparência e segurança aos procedimentos operacionais, impactando a forma como usuários e empresas gerenciam seus pagamentos e recebimentos no cotidiano financeiro.</p>",
+    "fontes_usadas": [
+      1,
+      2
+    ],
+    "foto_busca": "banking finance technology",
+    "fontes": [
+      {
+        "nome": "O GLOBO",
+        "url": "https://oglobo.globo.com/economia/noticia/2026/09/29/inadimplencia-das-familias-sobe-e-renova-recorde-em-agosto-diz-banco-central.ghtml",
+        "data": "2026-09-29"
+      },
+      {
+        "nome": "ISTOÉ DINHEIRO",
+        "url": "https://istoedinheiro.com.br/novas-regras-pix-banco-central-2027",
+        "data": "2026-10-06"
+      }
+    ],
+    "revisoes": {
+      "geral": {
+        "fontes": {
+          "ok": true,
+          "obs": "As duas fontes citadas são veículos de imprensa de grande circulação e tratam diretamente dos temas abordados."
+        },
+        "fatos": {
+          "ok": true,
+          "obs": "Todos os dados numéricos, datas e referências normativas foram verificados e constam nas fontes fornecidas."
+        },
+        "original": {
+          "ok": true,
+          "obs": "O texto apresenta redação própria, sintetizando as informações das fontes sem cópia literal de trechos extensos."
+        },
+        "sem_repeticao": {
+          "ok": true,
+          "obs": "O tema (inadimplência e novas regras do Pix) é distinto dos artigos publicados nos últimos 15 dias, que focavam em educação financeira e financiamento de veículos."
+        },
+        "sem_promessa": {
+          "ok": true,
+          "obs": "O texto é informativo e não faz promessas de ganhos, resultados ou indica serviços jurídicos."
+        },
+        "neutro": {
+          "ok": true,
+          "obs": "O texto mantém tom jornalístico e informativo, sem juízo de valor sobre as políticas governamentais citadas."
+        },
+        "sem_autor": {
+          "ok": true,
+          "obs": "Não há assinatura de autor ou jornalista no texto."
+        },
+        "contexto_numeros": {
+          "ok": true,
+          "obs": "Todos os números foram utilizados com o mesmo sentido, período e contexto das fontes originais."
+        }
+      },
+      "neutralidade": {
+        "sem_adjetivo_politico": {
+          "ok": true,
+          "obs": "O texto menciona o Banco Central e programas governamentais de forma técnica, sem adjetivar partidos ou políticos."
+        },
+        "sem_merito_culpa": {
+          "ok": true,
+          "obs": "O texto relata os dados de inadimplência e as medidas do governo de forma factual, sem atribuir mérito ou culpa a gestões."
+        },
+        "sem_termos_carregados": {
+          "ok": true,
+          "obs": "A linguagem é neutra e descritiva, focada em dados econômicos e resoluções normativas."
+        },
+        "dois_lados": {
+          "ok": true,
+          "obs": "As fontes apresentam dados convergentes sobre o cenário econômico e as normas do Pix; não há divergência de opinião a ser equilibrada."
+        },
+        "sem_eleicao": {
+          "ok": true,
+          "obs": "O texto não faz menção a pleitos, campanhas ou candidatos, mantendo-se estritamente no âmbito financeiro."
+        },
+        "quem_decidiu_e_impacto": {
+          "ok": true,
+          "obs": "O texto identifica o Banco Central como autor das normas e detalha os impactos práticos para os usuários do Pix e o cenário de crédito."
+        }
+      }
+    }
+  }
+}

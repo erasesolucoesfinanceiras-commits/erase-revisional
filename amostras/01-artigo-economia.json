@@ -1,0 +1,90 @@
+{
+  "tipo": "artigo",
+  "tema": "economia",
+  "modo": "noticia",
+  "rascunho": {
+    "sem_novidade": false,
+    "titulo": "IPCA-15 sobe 0,7% em setembro: o impacto da inflação no crédito e financiamento",
+    "resumo": "A prévia da inflação oficial avançou 0,7% em setembro e levou o acumulado em 12 meses a 4,47%, aproximando o índice do teto da meta e influenciando as taxas de financiamento.",
+    "corpo": "<p>O Índice Nacional de Preços ao Consumidor Amplo 15 (IPCA-15), considerado a prévia da inflação oficial do país, registrou avanço de 0,7% no mês de setembro, de acordo com dados apurados pelo Instituto Brasileiro de Geografia e Estatística (IBGE). Com essa variação, o indicador acumulou uma taxa de 3,82% no ano e atingiu 4,47% na medição em 12 meses.</p><h2>Grupos que mais pressionaram o índice em setembro</h2><p>O aumento de preços observado na prévia da inflação ocorreu de maneira disseminada entre as nove categorias acompanhadas pelo levantamento do IBGE. O maior destaque e principal pressão sobre o resultado geral partiram do grupo <strong>Habitação</strong>, que apresentou valorização média de 2,07% no mês.</p><p>Dentro dessa classe de despesas, o item de energia elétrica residencial registrou alta de 7,42%, impulsionado pelo término do abatimento do Bônus de Itaipu, que havia entrado nas contas de luz do mês anterior, somado à permanência da bandeira tarifária amarela, que adiciona R$ 1,885 a cada 100 kWh consumidos.</p><p>Outros setores de peso no consumo das famílias também mostraram aceleração:</p><ul><li><strong>Transportes:</strong> registrou elevação de 0,60%, influenciado pelas passagens aéreas (9,82%), além de acréscimos na gasolina (0,30%) e no gás veicular (1,56%), mesmo diante de retrações no óleo diesel (-0,78%) e no etanol (-0,22%).</li><li><strong>Alimentação e bebidas:</strong> teve alta de 0,40% no período, com a alimentação no domicílio avançando 0,38%, impulsionada por itens como tomate (20,76%), arroz (2,39%) e carnes (1,30%).</li><li><strong>Despesas pessoais:</strong> grupo que avançou 0,96%, sob influência do reajuste de 14% nos cigarros.</li><li><strong>Educação:</strong> apresentou a menor variação entre as divisões analisadas, marcando 0,03%.</li></ul><h2>A proximidade do teto da meta e o custo do dinheiro</h2><p>A meta de inflação estabelecida pelo Conselho Monetário Nacional (CMN) para o país é de 3% ao ano, permitindo um intervalo de tolerância com limite superior estabelecido em 4,5%. Com a medição do IPCA-15 alcançando 4,47% em 12 meses, a inflação acumulada passou a encostar no patamar limite tolerado pelas diretrizes oficiais.</p><p>Para a dinâmica de política monetária conduzida pelo Banco Central, a persistência de preços em patamares elevados tende a exigir taxas de juros mais restritivas para conter a demanda. Como reflexo direto, as expectativas para o comportamento dos juros nos mercados futuros costumam ser ajustadas para cima, encarecendo a captação de recursos pelas instituições financeiras que concedem crédito no país.</p><h2>O que esse cenário altera para quem busca ou possui financiamento</h2><p>O comportamento dos indicadores de inflação afeta diretamente as condições operacionais de crédito, sobretudo em modalidades de longo prazo como o financiamento de veículos e empréstimos parcelados:</p><ul><li><strong>Para novos contratos de financiamento:</strong> Com o índice de preços pressionado próximo ao teto da meta, os bancos tendem a manter as taxas nominais de juros e o Custo Efetivo Total (CET) em patamares elevados. Esse movimento encarece o valor das prestações mensais e exige entradas maiores para viabilizar a aprovação da ficha cadastral.</li><li><strong>Para contratos já em andamento:</strong> A maioria das operações de crédito para aquisição de veículos é contratada com parcelas prefixadas. Embora o valor nominal da mensalidade permaneça inalterado até o término do contrato, a aceleração nos custos de itens essenciais como energia, combustíveis e alimentação reduz a parcela da renda líquida familiar disponível para manter o pagamento das dívidas em dia.</li></ul>",
+    "fontes_usadas": [
+      5,
+      7
+    ],
+    "foto_busca": "calculator finance coins budget",
+    "fontes": [
+      {
+        "nome": "Valor Econômico",
+        "url": "https://valor.globo.com/brasil/noticia/2026/09/27/ipca-15-volta-a-acelerar-e-afasta-inflao-da-meta-apontam-economistas.ghtml",
+        "data": "2026-09-27"
+      },
+      {
+        "nome": "VEJA",
+        "url": "https://veja.abril.com.br/economia/previa-da-inflacao-de-setembro-ipca-15-sobe-07-e-fica-acima-do-esperado/",
+        "data": "2026-09-25"
+      }
+    ],
+    "revisoes": {
+      "geral": {
+        "fontes": {
+          "ok": true,
+          "obs": "As fontes são veículos de imprensa reais (Valor e Veja) e tratam do IPCA-15 de setembro de 2026, condizente com a data do texto."
+        },
+        "fatos": {
+          "ok": true,
+          "obs": "Todos os dados numéricos, incluindo inflação geral (0,7%), acumulados (4,47% e 3,82%), variações de grupos (Habitação 2,07%, Transportes 0,60%, etc.) e itens específicos (energia 7,42%, tomate 20,76%, etc.) estão presentes nas fontes."
+        },
+        "original": {
+          "ok": true,
+          "obs": "O texto é original e organiza as informações das fontes de forma analítica voltada para o crédito."
+        },
+        "sem_repeticao": {
+          "ok": true,
+          "obs": "O assunto (IPCA-15/Inflação) não consta na lista de temas publicados nos últimos 15 dias."
+        },
+        "sem_promessa": {
+          "ok": true,
+          "obs": "O texto limita-se a explicar impactos econômicos sem prometer resultados financeiros ou oferecer consultoria."
+        },
+        "neutro": {
+          "ok": true,
+          "obs": "O texto mantém tom técnico e informativo, sem juízo de valor político ou partidário."
+        },
+        "sem_autor": {
+          "ok": true,
+          "obs": "O texto não apresenta assinatura ou nome de autor."
+        },
+        "contexto_numeros": {
+          "ok": true,
+          "obs": "Todos os pares número-contexto foram verificados e estão em conformidade com as fontes (mesmo período, produto e grandeza)."
+        }
+      },
+      "neutralidade": {
+        "sem_adjetivo_politico": {
+          "ok": true,
+          "obs": "O texto não menciona partidos, políticos ou candidatos, focando exclusivamente em dados econômicos e instituições técnicas."
+        },
+        "sem_merito_culpa": {
+          "ok": true,
+          "obs": "A variação de preços é atribuída a fatores técnicos e de mercado (energia, clima, tarifas), sem imputar responsabilidade política ao governo ou oposição."
+        },
+        "sem_termos_carregados": {
+          "ok": true,
+          "obs": "O vocabulário é técnico e condizente com o jornalismo financeiro (ex: 'pressionou', 'aceleração', 'patamar limite')."
+        },
+        "dois_lados": {
+          "ok": true,
+          "obs": "As fontes convergem sobre os dados do IBGE e as projeções de mercado; o texto reflete esse consenso técnico."
+        },
+        "sem_eleicao": {
+          "ok": true,
+          "obs": "Não há qualquer menção ao processo eleitoral, candidatos ou pesquisas."
+        },
+        "quem_decidiu_e_impacto": {
+          "ok": true,
+          "obs": "O texto identifica o IBGE, CMN e Banco Central como órgãos responsáveis e explica didaticamente o impacto da inflação no custo do crédito."
+        }
+      }
+    }
+  }
+}
