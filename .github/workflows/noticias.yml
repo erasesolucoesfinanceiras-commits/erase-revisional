@@ -7,10 +7,10 @@ on:
   workflow_dispatch:
     inputs:
       modo:
-        description: "publicar = vai ao ar na main · amostra = gera 3 artigos + 1 nota SEM publicar (arquivos em amostras/ na branch escolhida)"
+        description: "publicar = vai ao ar na main · amostra = gera 3 artigos + 1 nota SEM publicar (arquivos em amostras/ na branch escolhida) · diagnostico = testa os modelos do Gemini"
         type: choice
         default: publicar
-        options: [publicar, amostra]
+        options: [publicar, amostra, diagnostico]
       forcar_artigo:
         description: "Gerar artigo hoje mesmo que não seja o dia (continua valendo 1 por dia)"
         type: boolean
@@ -34,8 +34,15 @@ jobs:
         with:
           node-version: 20
 
+      - name: Diagnóstico do Gemini (só modo diagnostico)
+        if: inputs.modo == 'diagnostico'
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: node scripts/noticias/diagnostico.js
+
       - name: Gerar, verificar e revisar
         id: gerar
+        if: inputs.modo != 'diagnostico'
         continue-on-error: true
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}

@@ -32,6 +32,7 @@ async function chamar({ prompt, sistema, busca = true, temperatura = 0.5 }) {
       });
       if (!res.ok) {
         const corpo = (await res.text()).slice(0, 300);
+        if (res.status === 429 && t >= 2) throw new ErroGemini(`Gemini sem cota (HTTP 429): ${corpo}`); // cota esgotada/zerada: insistir só gasta tempo
         if ([429, 500, 502, 503, 504].includes(res.status)) throw new Error(`HTTP ${res.status} ${corpo}`);
         throw new ErroGemini(`Gemini HTTP ${res.status}: ${corpo}`); // 400/401/403: não adianta repetir
       }
