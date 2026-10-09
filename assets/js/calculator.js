@@ -54,14 +54,19 @@ const FREE_BADGE_TXT = 'ANÁLISE DO CONTRATO 100% GRATUITA';
     if (i === 0) return pv / n;
     return (pv * i) / (1 - Math.pow(1 + i, -n));
   }
-  /** Taxa mensal (decimal) por bisseção; null se não houver taxa positiva coerente. */
-  function resolverTaxa(pv, pmt, n) {
+  /** Tabela Price ANTECIPADA (1ª parcela paga no ato da assinatura): PMT_no_ato = PMT / (1 + i), como na Calculadora do Cidadão do BC. */
+  function pmtPriceNoAto(pv, i, n) {
+    return pmtPrice(pv, i, n) / (1 + i);
+  }
+  /** Taxa mensal (decimal) por bisseção; null se não houver taxa positiva coerente. `noAto`: 1ª parcela paga no ato. */
+  function resolverTaxa(pv, pmt, n, noAto = false) {
+    const prest = noAto ? pmtPriceNoAto : pmtPrice;
     if (pmt * n <= pv) return null;
     let lo = 1e-9, hi = 1;
-    if (pmtPrice(pv, hi, n) < pmt) return null;
+    if (prest(pv, hi, n) < pmt) return null;
     for (let k = 0; k < 200; k++) {
       const mid = (lo + hi) / 2;
-      if (pmtPrice(pv, mid, n) < pmt) lo = mid; else hi = mid;
+      if (prest(pv, mid, n) < pmt) lo = mid; else hi = mid;
       if (hi - lo < 1e-13) break;
     }
     return (lo + hi) / 2;
@@ -117,7 +122,7 @@ const FREE_BADGE_TXT = 'ANÁLISE DO CONTRATO 100% GRATUITA';
     const sit = radio('situacao');
     const n = parseInt(f.n.value, 10);
     const pagas = sit === QUITADO ? n : (f.pagas.value === '' ? NaN : parseInt(f.pagas.value, 10));
-    return { pv: parseMoney(f.pv.value), parcela: parseMoney(f.parcela.value), n, pagas, sit, ...estimarData(pagas) };
+    return { pv: parseMoney(f.pv.value), parcela: parseMoney(f.parcela.value), n, pagas, sit, noAto: radio('primeira_no_ato') === 'Sim', ...estimarData(pagas) };
   }
   const contato = () => ({ nome: c.nome.value.trim().replace(/\s+/g, ' '), whatsapp: c.wa.value.trim(), lgpd: c.lgpd.checked });
 
@@ -209,7 +214,7 @@ const FREE_BADGE_TXT = 'ANÁLISE DO CONTRATO 100% GRATUITA';
     }
     const k = contato(), t = tipo(), sit = SITUACAO[d.sit];
     const completo = d.pv > 0 && d.parcela > 0 && d.n > 0;
-    const pv = d.pv, i = completo ? resolverTaxa(pv, d.parcela, d.n) : null;
+    const pv = d.pv, i = completo ? resolverTaxa(pv, d.parcela, d.n, d.noAto) : null;
     const num = (v, dec = 2) => (v > 0 ? v.toFixed(dec) : '');
     const baseLead = {
       nome: k.nome, whatsapp: k.whatsapp, lgpd_aceite: 'sim', tipo: t,
@@ -247,8 +252,9 @@ const FREE_BADGE_TXT = 'ANÁLISE DO CONTRATO 100% GRATUITA';
     const mensal = i * 100, anual = (Math.pow(1 + i, 12) - 1) * 100, acima = mensal > limite;
     const quitado = d.sit === QUITADO, restantes = quitado ? 0 : d.n - d.pagas; // sem parcelas pagas: NaN → sem estimativa de economia
     let economia = 0, porParcela = 0;
-    if (acima && restantes > 0) { porParcela = d.parcela - pmtPrice(pv, limite / 100, d.n); economia = porParcela * restantes; }
+    if (acima && restantes > 0) { porParcela = d.parcela - (d.noAto ? pmtPriceNoAto : pmtPrice)(pv, limite / 100, d.n); economia = porParcela * restantes; }
 
+    const totalPago = d.parcela * d.n, totalJuros = totalPago - pv; // contrato inteiro, com os números informados
     const escala = Math.max(limite * 2, mensal * 1.15);
     const wFill = Math.min(100, (mensal / escala) * 100), wMark = (limite / escala) * 100;
     const nota = ref.historico && !d.ano
@@ -274,6 +280,11 @@ const FREE_BADGE_TXT = 'ANÁLISE DO CONTRATO 100% GRATUITA';
         <p class="small-note" style="margin:0">Taxa de juros calculada (${NOMES[t]})</p>
         <div class="rate-big">${pct(mensal)}% <small style="font-size:1rem;font-weight:600;color:var(--muted)">ao mês</small></div>
         <p style="margin:2px 0 0">≈ ${pct(anual)}% ao ano · financiado ${brl(pv)}</p>
+        <div class="totais" aria-label="Quanto custa o contrato inteiro">
+          <div><small>Total pago no contrato</small><b>${brl(totalPago)}</b><span>${d.n} parcelas de ${brl(d.parcela)}</span></div>
+          <div><small>Total de juros</small><b>${brl(totalJuros)}</b><span>é o que você paga além dos ${brl(pv)} financiados</span></div>
+        </div>
+        <p class="fine" style="margin:0 0 6px">Em palavras simples: se você pagar todas as parcelas no valor informado, o contrato custa ${brl(totalPago)} no total, dos quais ${brl(totalJuros)} são juros.${d.noAto ? ' Cálculo com a 1ª parcela paga no ato da assinatura.' : ''}</p>
         <div class="cmp ${acima ? 'over' : ''}" aria-label="Comparação com a referência">
           <div class="cmp-track"><div class="cmp-fill" style="width:0" data-w="${wFill}"></div><div class="cmp-mark" style="left:${wMark}%" title="Referência"></div></div>
           <div class="cmp-labels"><span>0%</span><span>Referência: ${pct(limite)}% a.m.</span><span>${pct(escala)}%</span></div>
@@ -291,7 +302,7 @@ const FREE_BADGE_TXT = 'ANÁLISE DO CONTRATO 100% GRATUITA';
         ${acima && restantes > 0 ? `<div class="saving"><small>Economia estimada nas parcelas restantes (${restantes})</small><b>${brl(economia)}</b>
           <p>≈ ${brl(porParcela)} por parcela, caso o contrato estivesse na taxa de referência. É uma estimativa comparativa: <strong>não indica valores a receber</strong> e a diferença não é devida a você por qualquer instituição.</p></div>` : ''}
         ${acima && quitado ? '<p class="fine">Como o financiamento já foi quitado, não há parcelas restantes para estimar. A diferença acima é apenas uma comparação de taxas e não indica valores a receber.</p>' : ''}
-        <p class="fine">Cálculo pelo sistema Price com os números informados. Não considera IOF, tarifas, seguros (inclusive seguro prestamista) ou encargos. Não é análise jurídica.</p>`;
+        <p class="fine"><strong>Isto é uma estimativa e não substitui a análise do contrato.</strong> Cálculo pelo sistema Price${d.noAto ? ' (1ª parcela no ato)' : ''} com os números informados. Não considera IOF, tarifas, seguros (inclusive seguro prestamista) ou encargos. Não é análise jurídica.</p>`;
 
       const msgWa = acima
         ? `Olá! Meu nome é ${k.nome}. Fiz a simulação na ERASE Revisional para ${NOMES[t]} e a taxa calculada foi de ${pct(mensal)}% ao mês. Gostaria de falar com um especialista.`

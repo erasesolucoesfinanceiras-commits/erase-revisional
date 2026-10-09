@@ -12,8 +12,8 @@ const ROOT = path.join(__dirname, '..', '..');
 const src = fs.readFileSync(path.join(ROOT, 'assets', 'js', 'calculator.js'), 'utf8');
 const trecho = src.slice(src.indexOf('function pmtPrice'), src.indexOf('// ---- Formatação'));
 const ctx = {};
-vm.runInNewContext(`${trecho};this.pmtPrice=pmtPrice;this.resolverTaxa=resolverTaxa;`, ctx);
-const { pmtPrice, resolverTaxa } = ctx;
+vm.runInNewContext(`${trecho};this.pmtPrice=pmtPrice;this.resolverTaxa=resolverTaxa;this.pmtPriceNoAto=pmtPriceNoAto;`, ctx);
+const { pmtPrice, resolverTaxa, pmtPriceNoAto } = ctx;
 
 const TOL_REAIS = 0.05, TOL_PP = 0.01;
 const perto = (obtido, esperado, tol, rotulo) => assert.ok(Math.abs(obtido - esperado) <= tol, `${rotulo}: obtido ${obtido.toFixed(4)}, esperado ${esperado} (tolerância ${tol})`);
@@ -41,15 +41,25 @@ test('ida e volta: a taxa encontrada reproduz a parcela informada', () => {
 });
 test('sem juros (parcela × prazo ≤ valor financiado) não devolve taxa', () => assert.strictEqual(resolverTaxa(10000, 200, 48), null));
 
-// 1ª parcela NO ATO: a calculadora do portal NÃO tem essa opção (hoje trata sempre a 1ª parcela 1 mês depois).
-// Marcados como "todo": documentam a divergência sem derrubar a suíte. Quando houver suporte, remova o `todo`.
-const noAto = typeof ctx.pmtPrecoNoAto === 'function' ? ctx.pmtPrecoNoAto : null;
+// 1ª parcela NO ATO (Tabela Price antecipada, como na Calculadora do Cidadão): PMT_no_ato = PMT / (1 + i)
 for (const c of PRESTACAO) {
-  test(`prestação com 1ª parcela no ato: PV ${c.pv}, ${c.i}% a.m., ${c.n}x = ${c.noAto}`, { todo: 'o portal ainda não calcula 1ª parcela no ato' }, () => {
-    assert.ok(noAto, 'função de 1ª parcela no ato não existe em assets/js/calculator.js');
-    perto(noAto(c.pv, c.i / 100, c.n), c.noAto, TOL_REAIS, 'prestação no ato');
-  });
+  test(`prestação com 1ª parcela no ato: PV ${c.pv}, ${c.i}% a.m., ${c.n}x = ${c.noAto}`, () => perto(pmtPriceNoAto(c.pv, c.i / 100, c.n), c.noAto, TOL_REAIS, 'prestação no ato'));
 }
+// Taxa com a 1ª parcela no ato: mesmas parcelas, taxa maior (valores calculados pela mesma fórmula antecipada)
+const TAXA_NO_ATO = [
+  { pv: 50000, parcela: 1650, n: 48, taxa: 2.1663 },
+  { pv: 30000, parcela: 1300, n: 36, taxa: 2.8158 },
+  { pv: 80000, parcela: 1900, n: 60, taxa: 1.2923 },
+];
+for (const c of TAXA_NO_ATO) {
+  test(`taxa com 1ª parcela no ato: PV ${c.pv}, parcela ${c.parcela}, ${c.n}x = ${c.taxa}% a.m.`, () => perto(resolverTaxa(c.pv, c.parcela, c.n, true) * 100, c.taxa, TOL_PP, 'taxa no ato'));
+}
+test('ida e volta da taxa com 1ª parcela no ato', () => {
+  for (const c of TAXA_NO_ATO) perto(pmtPriceNoAto(c.pv, resolverTaxa(c.pv, c.parcela, c.n, true), c.n), c.parcela, 0.005, 'parcela no ato');
+});
+test('o padrão (sem 1º argumento "no ato") continua sendo a Price comum', () => {
+  for (const c of TAXA) assert.strictEqual(resolverTaxa(c.pv, c.parcela, c.n), resolverTaxa(c.pv, c.parcela, c.n, false));
+});
 
 // Referência de mercado: série SGS 25471 (taxa média mensal, PF, aquisição de veículos) do Banco Central
 test('série do Banco Central: SGS 25471, mensal, valores plausíveis', () => {

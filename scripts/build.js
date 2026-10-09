@@ -249,9 +249,9 @@ function calculadora() {
     mainEntity: faq.map(([q, a]) => ({ '@type': 'Question', name: q, acceptedAnswer: { '@type': 'Answer', text: a } })),
   };
   // Opções curtas (≤ 9 caracteres) ficam lado a lado também no celular; as longas empilham.
-  const choices = (name, legend, opts, { req = false } = {}) => {
+  const choices = (name, legend, opts, { req = false, padrao = '', opt = true } = {}) => {
     const curtas = Math.max(...opts.map((o) => o.length)) <= 9;
-    return `<fieldset class="field choices${curtas ? ' short' : ''}${curtas && opts.length === 2 ? ' two' : ''}" data-group="${name}"><legend>${legend}${req ? ' <span class="req">*</span>' : ' <span class="opt">(opcional)</span>'}</legend><div class="choice-grid">${opts.map((o) => `<label class="choice"><input type="radio" name="${name}" value="${esc(o)}"><span>${esc(o)}</span></label>`).join('')}</div><small class="err" data-err="${name}">Escolha uma opção</small></fieldset>`;
+    return `<fieldset class="field choices${curtas ? ' short' : ''}${curtas && opts.length === 2 ? ' two' : ''}" data-group="${name}"><legend>${legend}${req ? ' <span class="req">*</span>' : opt ? ' <span class="opt">(opcional)</span>' : ''}</legend><div class="choice-grid">${opts.map((o) => `<label class="choice"><input type="radio" name="${name}" value="${esc(o)}"${o === padrao ? ' checked' : ''}><span>${esc(o)}</span></label>`).join('')}</div><small class="err" data-err="${name}">Escolha uma opção</small></fieldset>`;
   };
   const MESES = ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'];
   const parcelasOpts = [12, 18, 24, 30, 36, 42, 48, 54, 60, 66, 72, 84, 96]
@@ -290,6 +290,7 @@ function calculadora() {
 <div class="money suffix"><input id="pagas" name="pagas" type="number" inputmode="numeric" min="0" step="1" placeholder="0"><span>meses</span></div><small class="err" data-err="pagas">Informe quantas parcelas já pagou</small></div>
 </div>
 <div class="form-section"><h3>Sobre o seu financiamento</h3>
+${choices('primeira_no_ato', 'A 1ª parcela foi paga no ato da assinatura?', ['Não', 'Sim'], { padrao: 'Não', opt: false })}
 ${choices('situacao', 'Como está seu financiamento hoje?', ['Em dia', 'Atrasado', 'Busca e apreensão', 'Já quitei'], { req: true })}
 </div>
 
