@@ -1,21 +1,38 @@
 name: Verificar artigo recente
 
+# Rede de segurança do sistema de artigos (todo dia às 16h30 de Brasília, depois das 3 rodadas de geração):
+# dispara a geração se o agendamento falhou, confere a capa do site no ar (e pede novo deploy ao Cloudflare Pages se faltar),
+# falha se o último artigo tem mais de 3 dias e registra atividade diária para o GitHub não desativar os workflows agendados.
 on:
   schedule:
-    # Todo dia às 12h de Brasília, depois do run de notícias (08h): fica vermelho se o último artigo tem mais de 3 dias.
-    - cron: "0 15 * * *"
+    - cron: "30 19 * * *"
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write
+  actions: write
+
+concurrency:
+  group: verificar-artigo
+  cancel-in-progress: false
 
 jobs:
   verificar:
     runs-on: ubuntu-24.04
-    timeout-minutes: 5
+    timeout-minutes: 120
     steps:
       - uses: actions/checkout@v5
       - uses: actions/setup-node@v5
         with:
           node-version: 22
-      - run: node scripts/noticias/checar-atraso.js
+      - name: Verificar (gerar se faltou, conferir o site, registrar atividade)
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          CF_DEPLOY_HOOK_URL: ${{ secrets.CF_DEPLOY_HOOK_URL }}
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          CLOUDFLARE_PAGES_PROJECT: ${{ vars.CLOUDFLARE_PAGES_PROJECT }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          node scripts/noticias/verificar-dia.js

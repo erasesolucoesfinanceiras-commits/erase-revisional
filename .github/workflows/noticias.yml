@@ -2,8 +2,11 @@ name: Notícias automáticas
 
 on:
   schedule:
-    # Todo dia às 08h de Brasília. O script decide: nota ("Radar") todo dia, artigo completo quando o último tem 2 dias ou mais (dia que falha é recuperado no seguinte).
+    # Três rodadas por dia (08h, 11h e 14h30 de Brasília). O script decide: nota ("Radar") todo dia, artigo completo quando o último
+    # tem 2 dias ou mais. As rodadas 2 e 3 só fazem algo se a anterior não publicou o artigo; só a 3ª pode deixar o run vermelho.
     - cron: "0 11 * * *"
+    - cron: "0 14 * * *"
+    - cron: "30 17 * * *"
   workflow_dispatch:
     inputs:
       modo:
@@ -11,6 +14,11 @@ on:
         type: choice
         default: publicar
         options: [publicar, amostra, diagnostico, resumo_teste]
+      rodada:
+        description: "Rodada do dia (execução manual vale como rodada final: se falhar, o run fica vermelho)"
+        type: choice
+        default: final
+        options: [final, "1", "2"]
       forcar_artigo:
         description: "Gerar artigo hoje mesmo que não seja o dia (continua valendo 1 por dia)"
         type: boolean
@@ -27,7 +35,7 @@ concurrency:
 jobs:
   noticias:
     runs-on: ubuntu-24.04
-    timeout-minutes: 60
+    timeout-minutes: 75
     steps:
       - uses: actions/checkout@v5
       - uses: actions/setup-node@v5
@@ -58,6 +66,7 @@ jobs:
           PIXABAY_API_KEY: ${{ secrets.PIXABAY_API_KEY }}
           GEMINI_MODEL: ${{ vars.GEMINI_MODEL }}
           MODO: ${{ inputs.modo || 'publicar' }}
+          RODADA: ${{ inputs.rodada || (github.event.schedule == '0 11 * * *' && '1' || github.event.schedule == '0 14 * * *' && '2' || 'final') }}
           FORCAR_ARTIGO: ${{ inputs.forcar_artigo && '1' || '0' }}
         run: |
           npm i --no-save sharp
@@ -67,20 +76,18 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add -A
-          if git diff --cached --quiet; then echo "Nada novo para gravar."; exit 0; fi
-          git commit -m "Notícias automáticas (${{ inputs.modo || 'publicar' }}) $(date -u +%F)"
-          for i in 1 2 3; do git pull --rebase origin "${GITHUB_REF_NAME}" && git push origin "HEAD:${GITHUB_REF_NAME}" && break; sleep 5; done
+          bash scripts/noticias/gravar.sh "Notícias automáticas (${{ inputs.modo || 'publicar' }}) $(date -u +%F)"
 
       - name: Falhar se houve erro
         if: steps.gerar.outcome == 'failure'
         run: exit 1
 
-      - name: Avisar por e-mail (3 falhas seguidas)
+      - name: Avisar por e-mail (problema que exige uma pessoa, ou 3 dias seguidos com falha)
         if: failure()
         env:
           GITHUB_TOKEN: ${{ github.token }}
           RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
           ALERTA_EMAIL_PARA: ${{ secrets.ALERTA_EMAIL_PARA }}
           ALERTA_EMAIL_DE: ${{ secrets.ALERTA_EMAIL_DE }}
+          CAUSA_HUMANA: ${{ steps.gerar.outputs.humano == '1' && steps.gerar.outputs.causa || '' }}
         run: node scripts/noticias/alerta.js

@@ -28,12 +28,18 @@ function lerRSS(xml) {
 }
 
 async function baixarRSS(url) {
-  const ctrl = new AbortController(); const t = setTimeout(() => ctrl.abort(), 20000);
-  try {
-    const r = await fetch(url, { signal: ctrl.signal, headers: { 'User-Agent': UA, Accept: 'application/rss+xml,application/xml,text/xml,*/*' } });
-    if (!r.ok) return { itens: [], erro: `HTTP ${r.status}` };
-    return { itens: lerRSS(await r.text()) };
-  } catch (e) { return { itens: [], erro: e.message }; } finally { clearTimeout(t); }
+  let ultimo = { itens: [], erro: 'sem resposta' };
+  for (let t = 1; t <= 2; t++) { // fonte fora do ar: uma nova tentativa depois de uma pausa; se persistir, o coletor segue com as outras fontes/temas
+    const ctrl = new AbortController(); const timer = setTimeout(() => ctrl.abort(), 20000);
+    try {
+      const r = await fetch(url, { signal: ctrl.signal, headers: { 'User-Agent': UA, Accept: 'application/rss+xml,application/xml,text/xml,*/*' } });
+      if (r.ok) return { itens: lerRSS(await r.text()) };
+      ultimo = { itens: [], erro: `HTTP ${r.status}` };
+      if (r.status >= 400 && r.status < 500 && r.status !== 429) return ultimo; // 404/403: repetir não adianta
+    } catch (e) { ultimo = { itens: [], erro: e.message }; } finally { clearTimeout(timer); }
+    if (t === 1) await new Promise((ok) => setTimeout(ok, Number(process.env.FONTES_ESPERA_MS ?? 3000)));
+  }
+  return ultimo;
 }
 
 // Peso da fonte: 3 = órgão oficial, 2 = grande veículo ou veículo setorial reconhecido, 0 = regional/pequeno (só complemento).

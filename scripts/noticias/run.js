@@ -7,7 +7,7 @@
 const fs = require('fs');
 const path = require('path');
 const { execFileSync } = require('child_process');
-const { chamar, extrairJSON, ErroGemini } = require('./gemini');
+const { chamar, extrairJSON, ErroGemini, definirLog, definirPrazo } = require('./gemini');
 const { TEMAS, ordemDeTemas } = require('./temas');
 const P = require('./prompts');
 const V = require('./verificar');
@@ -31,16 +31,24 @@ const gravarJSON = (f, v) => fs.writeFileSync(f, JSON.stringify(v, null, 2) + '\
 let houveErro = false;
 let PRAZO = Date.now() + Number(process.env.NOTICIAS_MINUTOS || (MODO === 'amostra' ? 40 : 30)) * 60e3; // orçamento de tempo do artigo; a nota ganha o seu depois
 const semTempo = () => Date.now() > PRAZO;
+definirPrazo(() => PRAZO);
 const TENTATIVAS_ARTIGO = Number(process.env.TENTATIVAS_ARTIGO || 4); // reescritas após reprovação (mesmos critérios); nota segue com 2
+// Rodadas do dia (cron 1, 2 e a final): só a última (ou uma execução manual) pode deixar o run vermelho; antes dela uma falha só agenda nova tentativa.
+const RODADA = process.env.RODADA || 'final';
+const FINAL = RODADA === 'final' || Number(RODADA) >= 3;
+const etapas = []; // diagnóstico de cada etapa tentada nesta execução (vai para o log se o dia falhar)
 const reprovacoes = []; // resumo das reprovações/pulos da execução, para o log de falha
 
 function log(evento, dados) {
   const linha = { quando: new Date().toISOString(), data: hoje, evento, ...dados };
   fs.mkdirSync(path.dirname(F_LOG), { recursive: true });
   fs.appendFileSync(F_LOG, JSON.stringify(linha) + '\n');
+  if (['gemini', 'tema_trocado', 'pulado', 'reprovado', 'guia', 'sem_publicacao', 'erro'].includes(evento)) etapas.push({ evento, tipo: dados.tipo, tema: dados.tema, tentativa: dados.tentativa, modelo: dados.modelo, status: dados.status, acao: dados.acao, motivo: String([].concat(dados.motivos || dados.motivo || '').join(' ; ')).slice(0, 160) });
   if (evento === 'reprovado' || evento === 'pulado') reprovacoes.push({ tipo: dados.tipo, tema: dados.tema, tentativa: dados.tentativa, motivos: dados.motivos || [dados.motivo] });
   console.log(`[${evento}] ${dados.tipo || ''} ${dados.tema || ''} ${dados.titulo ? '— ' + dados.titulo : ''} ${dados.motivos ? '| ' + [].concat(dados.motivos).join(' ; ') : dados.motivo || ''}`);
 }
+
+definirLog((evento, dados) => log(evento, dados)); // esperas, novas tentativas e trocas de modelo do Gemini ficam no log
 
 const PERMITIDAS = new Set(['p', 'h2', 'h3', 'ul', 'ol', 'li', 'strong', 'em', 'a', 'blockquote', 'br']);
 /** Só tags simples, sem atributos (nem links dentro do corpo: as fontes ficam no rodapé do artigo). */
@@ -125,11 +133,23 @@ async function tentarTema(tipo, tema, modo, recentes) {
 /** Percorre os temas na ordem; só se NENHUM tiver novidade (artigo) cai no guia explicativo. */
 async function produzir(tipo, ordem, recentes, { semGuia = false } = {}) {
   let houveNovidade = false;
-  for (const tema of ordem) {
+  const proximo = (i) => ordem[i + 1];
+  for (let i = 0; i < ordem.length; i++) {
+    const tema = ordem[i];
     if (semTempo()) { log('sem_publicacao', { tipo, motivo: 'orçamento de tempo do dia esgotado' }); return null; }
-    const r = await tentarTema(tipo, tema, 'noticia', recentes);
+    let r;
+    try { r = await tentarTema(tipo, tema, 'noticia', recentes); }
+    catch (e) {
+      if (e instanceof ErroGemini) throw e; // falha da IA vale para todos os temas: sobe para o escalonamento do dia
+      log('erro', { tipo, tema, motivo: 'falha inesperada no tema: ' + String(e.message).slice(0, 200) }); r = { status: 'erro' };
+    }
     if (r.status === 'aprovado') return { tema, modo: 'noticia', rascunho: r.rascunho };
     if (r.status === 'reprovado') houveNovidade = true;
+    if (proximo(i)) {
+      const ult = reprovacoes.filter((x) => x.tipo === tipo && x.tema === tema).pop();
+      const motivo = r.status === 'reprovado' ? 'revisor reprovou em todas as tentativas' : r.status === 'sem_novidade' ? 'fontes insuficientes ou sem novidade real' : 'falha inesperada';
+      log('tema_trocado', { tipo, de: tema, para: proximo(i), motivo, ultimos_motivos: ult ? [].concat(ult.motivos).slice(0, 4) : [] });
+    }
   }
   if (tipo === 'artigo' && !houveNovidade && !semGuia) {
     log('guia', { tipo, motivo: 'nenhum tema tem novidade: tentando artigo explicativo com fontes oficiais' });
@@ -140,6 +160,14 @@ async function produzir(tipo, ordem, recentes, { semGuia = false } = {}) {
   }
   log('sem_publicacao', { tipo, motivo: houveNovidade ? 'todos os textos foram reprovados' : 'nenhum tema com novidade real' });
   return null;
+}
+
+/** Temas de artigo que já foram tentados hoje (rodadas anteriores): vão para o fim da fila, para a nova rodada começar por temas ainda não tentados. */
+function temasTentadosHoje(tipo) {
+  try {
+    return [...new Set(fs.readFileSync(F_LOG, 'utf8').split('\n').filter(Boolean).map((l) => { try { return JSON.parse(l); } catch (e) { return {}; } })
+      .filter((x) => x.data === hoje && x.tipo === tipo && ['reprovado', 'pulado'].includes(x.evento) && x.tema).map((x) => x.tema))];
+  } catch (e) { return []; }
 }
 
 const limparFontes = (fs_) => fs_.map(({ nome, url, data }) => ({ nome, url, ...(data && { data }) }));
@@ -176,6 +204,24 @@ function salvarAmostra(i, item) {
   fs.appendFileSync(path.join(AMOSTRAS, 'AMOSTRAS.md'), md + '\n\n---\n\n');
 }
 
+/** Fecha o dia: falha só quando TODAS as saídas se esgotaram (rodada final) ou quando só uma pessoa resolve; a causa em linguagem simples vai na última linha do log. */
+function encerrar(falha) {
+  if (falha) {
+    const humano = !!falha.humano;
+    if (FINAL || humano) {
+      const causa = humano ? falha.causa : 'Nenhuma saída automática funcionou hoje: o Gemini, os temas e as fontes foram tentados nas 3 rodadas, e o revisor reprovou ou faltaram notícias reais. Nada foi publicado para não baixar a qualidade.';
+      const acao = humano ? falha.acao : 'Ver as linhas "tema_trocado", "reprovado" e "gemini" deste dia em data/noticias-log.jsonl; amanhã o sistema tenta de novo sozinho.';
+      log('diagnostico_final', { tipo: 'artigo', rodada: RODADA, precisa_de_humano: humano, causa, acao, motivo: falha.motivo, etapas: etapas.slice(-40) });
+      console.log(`::error::${causa} ${acao}`);
+      if (process.env.GITHUB_OUTPUT) fs.appendFileSync(process.env.GITHUB_OUTPUT, `humano=${humano ? 1 : 0}\ncausa=${causa.replace(/[\r\n]+/g, ' ')}\n`);
+      houveErro = true;
+    } else {
+      log('rodada_falhou', { tipo: 'artigo', rodada: RODADA, motivo: falha.motivo, proximo_passo: 'nova rodada algumas horas depois (e, se o agendamento falhar, a verificação diária dispara a geração)', etapas: etapas.slice(-40) });
+    }
+  }
+  process.exit(houveErro ? 1 : 0);
+}
+
 (async () => {
   const artigos = lerJSON(F_ART, []), notas = lerJSON(F_NOTAS, []);
   for (const t of Object.keys(TEMAS)) if (!config.categorias[t]) throw new Error(`Categoria "${t}" não existe em data/config.json`);
@@ -210,9 +256,10 @@ function salvarAmostra(i, item) {
   if (!devoArtigo) console.log(artigoHoje ? 'Já existe artigo de hoje: limite de 1 por dia.' : `Último artigo é de ${ultimoArtigo} (${diasDesdeUltimo} dia(s)): ainda não é hora de outro.`);
   let publicouArtigo = null;
 
+  let falhaArtigo = null; // { motivo, humano, causa, acao }
   if (devoArtigo) {
     try {
-      const r = await produzir('artigo', ordemDeTemas(Math.floor(epochDay / 2)), recentes);
+      const r = await produzir('artigo', ordemDeTemas(Math.floor(epochDay / 2), temasTentadosHoje('artigo')), recentes);
       if (r) {
         const desfazer = reconstruir(arquivos);
         try {
@@ -222,16 +269,16 @@ function salvarAmostra(i, item) {
           log('publicado', { tipo: 'artigo', tema: r.tema, titulo: art.titulo, modo: r.modo, slug: art.slug, fontes: art.fontes.map((f) => f.url), revisao: r.rascunho.revisoes });
           publicouArtigo = r.tema; recentes.push({ titulo: art.titulo, resumo: art.resumo, fontes: art.fontes });
         } catch (e) { desfazer(); artigos.shift(); throw e; }
-      } else {
-        // dia de artigo sem artigo: o run deve ficar vermelho e o log guarda o porquê
-        houveErro = true;
-        log('artigo_nao_publicado', { tipo: 'artigo', ultimo_artigo: ultimoArtigo, motivo: 'dia de artigo terminou sem publicar', reprovacoes: reprovacoes.filter((x) => x.tipo === 'artigo').slice(-12) });
-      }
-    } catch (e) { houveErro = true; log('erro', { tipo: 'artigo', motivo: String(e.message).slice(0, 300) }); }
+      } else falhaArtigo = { motivo: 'todos os temas foram reprovados pelo revisor ou não tinham fontes suficientes' };
+    } catch (e) {
+      falhaArtigo = { motivo: String(e.message).slice(0, 300), humano: !!e.humano, causa: e.causa, acao: e.acao };
+      log('erro', { tipo: 'artigo', motivo: falhaArtigo.motivo });
+    }
   }
 
   PRAZO = Date.now() + 15 * 60e3; // a nota tem o seu próprio tempo, mesmo que o artigo tenha usado o dele
   if (notas.some((n) => n.data === hoje)) console.log('Já existe nota de hoje: limite de 1 por dia.');
+  else if (falhaArtigo && falhaArtigo.humano) console.log('Nota não tentada: o problema da IA exige uma pessoa.');
   else {
     try {
       const r = await produzir('nota', ordemDeTemas(epochDay, publicouArtigo ? [publicouArtigo] : []), recentes);
@@ -244,7 +291,7 @@ function salvarAmostra(i, item) {
           log('publicado', { tipo: 'nota', tema: r.tema, titulo: nota.titulo, id: nota.id, fontes: nota.fontes.map((f) => f.url), revisao: r.rascunho.revisoes });
         } catch (e) { desfazer(); throw e; }
       }
-    } catch (e) { houveErro = true; log('erro', { tipo: 'nota', motivo: String(e.message).slice(0, 300) }); }
+    } catch (e) { if (FINAL) houveErro = true; log('erro', { tipo: 'nota', motivo: String(e.message).slice(0, 300) }); }
   }
-  process.exit(houveErro ? 1 : 0);
+  encerrar(falhaArtigo);
 })().catch((e) => { console.error(e); try { log('erro', { motivo: String(e.message).slice(0, 300) }); } catch (x) { /* ignore */ } process.exit(1); });
