@@ -24,8 +24,8 @@ const urls = []; // para o sitemap
 const LEGAL_DATE = '2026-10-01'; // data de vigência dos textos legais (altere ao revisá-los)
 // Datas do sitemap: SÓ datas reais (publicação ou revisão de verdade). Sem data real, sem <lastmod>.
 const maiorData = (...ds) => ds.flat().filter(Boolean).sort().pop();
-let BCB_ATUALIZADO = ''; // data real em que a série do Banco Central foi gravada (scripts/update-bcb.js)
-try { BCB_ATUALIZADO = S.readJSON('assets/data/bcb-veiculos.json').atualizado_em || ''; } catch (e) { /* sem série */ }
+let BCB_ATUALIZADO = '', BCB_CONFERIDO = ''; // datas REAIS (scripts/update-bcb.js): última alteração da série e última consulta ao BCB que funcionou
+try { const b = S.readJSON('assets/data/bcb-veiculos.json'); BCB_ATUALIZADO = b.atualizado_em || ''; BCB_CONFERIDO = b.conferido_em || ''; } catch (e) { /* sem série */ }
 
 // ---------------------------------------------------------------- HOME
 const nl = `<form class="newsletter" id="newsletter-form" novalidate>
@@ -74,7 +74,7 @@ function home() {
   const INICIAL = 4;
   const list = resto.map((it, i) => S.cardDe(it.tipo ? it : { ...it, a: it }, i >= INICIAL)).join('\n');
   const ultima = S.ultimaPublicacao(articles, notas);
-  const faixa = `<div class="pub-strip" role="note"><div class="container">Última publicação: <time datetime="${ultima}">${fmtData(ultima)}</time>${BCB_ATUALIZADO ? ` · Taxas do Banco Central atualizadas em <time datetime="${BCB_ATUALIZADO}">${fmtData(BCB_ATUALIZADO)}</time>` : ''}</div></div>`;
+  const faixa = `<div class="pub-strip" role="note"><div class="container">Última publicação: <time datetime="${ultima}">${fmtData(ultima)}</time>${BCB_CONFERIDO ? ` · <span${BCB_ATUALIZADO ? ` title="Última alteração da série do Banco Central: ${fmtData(BCB_ATUALIZADO)}"` : ''}>Taxas conferidas com o Banco Central em <time datetime="${BCB_CONFERIDO}">${fmtData(BCB_CONFERIDO)}</time>${BCB_ATUALIZADO ? ` <small>(série alterada em <time datetime="${BCB_ATUALIZADO}">${fmtData(BCB_ATUALIZADO)}</time>)</small>` : ''}</span>` : ''}</div></div>`;
   const fa = feat.a || feat.n, fHref = feat.tipo === 'radar' ? `/radar.html#${esc(feat.n.id)}` : artUrl(feat.a);
   const fImg = feat.tipo === 'radar' ? S.coverImg({ categoria: fa.categoria, slug: fa.id }, { width: 1160, height: 460, sizes: '(max-width: 1200px) 100vw, 1160px', eager: true }) : S.coverImg(feat.a, { width: 1160, height: 460, sizes: '(max-width: 1200px) 100vw, 1160px', eager: true });
   const fTxt = feat.tipo === 'radar' ? feat.n.texto : feat.a.resumo;
@@ -381,7 +381,7 @@ ${faq.map(([q, a]) => `<details><summary>${esc(q)}</summary><p>${esc(a)}</p></de
     },
     active: 'calc', body, scripts: ['/assets/js/calculator.js'],
   }));
-  urls.push(['/calculadora.html', '0.9', BCB_ATUALIZADO || undefined]);
+  urls.push(['/calculadora.html', '0.9', BCB_ATUALIZADO || undefined]); // lastmod = última ALTERAÇÃO real da série, não a conferência
 }
 
 // ---------------------------------------------------------------- LEGAIS / CONTATO

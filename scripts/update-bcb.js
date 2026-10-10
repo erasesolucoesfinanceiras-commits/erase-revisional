@@ -8,8 +8,8 @@ const fs = require('fs');
 const path = require('path');
 
 const SERIE_SGS = Number(process.env.BCB_SERIE || 25471);
-const OUT = path.join(__dirname, '..', 'assets', 'data', 'bcb-veiculos.json');
-const URL = `https://api.bcb.gov.br/dados/serie/bcdata.sgs.${SERIE_SGS}/dados?formato=json`;
+const OUT = process.env.BCB_SAIDA || path.join(__dirname, '..', 'assets', 'data', 'bcb-veiculos.json'); // BCB_SAIDA/BCB_URL: só para testes
+const URL = process.env.BCB_URL || `https://api.bcb.gov.br/dados/serie/bcdata.sgs.${SERIE_SGS}/dados?formato=json`;
 
 async function baixar() {
   let erro;
@@ -23,10 +23,11 @@ async function baixar() {
   throw new Error(`Não foi possível baixar ${URL}: ${erro && erro.message}`);
 }
 
+const hojeBR = () => new Date(Date.now() - 3 * 3600e3).toISOString().slice(0, 10);
 /** Se a série baixada é igual à gravada, mantém a data antiga (nada mudou); se mudou, é a data de hoje (Brasília). */
 function dataDaAtualizacao(valores) {
   try { const antigo = JSON.parse(fs.readFileSync(OUT, 'utf8')); if (JSON.stringify(antigo.valores) === JSON.stringify(valores) && antigo.atualizado_em) return antigo.atualizado_em; } catch (e) { /* primeira gravação */ }
-  return new Date(Date.now() - 3 * 3600e3).toISOString().slice(0, 10);
+  return hojeBR();
 }
 
 (async () => {
@@ -51,6 +52,7 @@ function dataDaAtualizacao(valores) {
     serie: SERIE_SGS,
     descricao: 'Taxa média mensal de juros - pessoas físicas - aquisição de veículos (% ao mês)',
     fonte: `Banco Central do Brasil — SGS ${SERIE_SGS}`,
+    conferido_em: hojeBR(), // data da última consulta ao BCB que funcionou e trouxe dados (se a consulta falhar, o script sai antes e a anterior fica)
     atualizado_em: dataDaAtualizacao(valores), // data REAL em que a série mudou (a capa mostra "Taxas do Banco Central atualizadas em ...")
     primeiro_mes: meses[0], ultimo_mes: meses[meses.length - 1],
     valores,

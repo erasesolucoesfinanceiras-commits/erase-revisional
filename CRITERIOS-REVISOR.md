@@ -10,9 +10,10 @@ Legenda: **SEG** = segurança de conteúdo · **EXA** = exatidão · **EST** = e
 | `sem_promessa`: nada de resultado garantido, "valores a receber", conselho jurídico individual | código + IA | SEG | mantido |
 | Sem escritório/advogado parceiro | código | SEG | mantido |
 | `sem_autor`: sem autor inventado, sem assinatura ("Equipe ERASE") | código + IA | SEG | mantido |
-| `neutro`: sem opinião política/partidária; **opinião de terceiros permitida se atribuída a quem disse e sem endosso** | IA | SEG | **reforçado** (esclarecido) |
-| Menção política/partidária e termos carregados/eleitorais | código | SEG | mantido |
-| Neutralidade (6 itens: adjetivo político, mérito/culpa, termos carregados, dois lados, eleição, quem decidiu e impacto) | IA (3ª etapa) | SEG | mantido |
+| `neutro`: sem opinião política/partidária. **Citar autoridades (juízes, órgãos, Banco Central, ministérios, parlamentares) com declaração atribuída e factual é permitido, sem endosso** | IA | SEG | **afrouxado (resposta do dono)** |
+| Propaganda eleitoral/partidária e rótulos partidários (candidato, eleição, voto em…, petista/bolsonarista…, centrão); ataques pessoais (lista de assédio) | código | SEG | mantido (nomes de políticos e siglas de partido **deixaram** de ser barrados por si só) |
+| Termos carregados: **só passam dentro de citação atribuída** ("segundo X, '…'"); na voz do texto reprovam | código + IA | SEG | **afrouxado (resposta do dono)** |
+| Neutralidade (6 itens: adjetivo político, mérito/culpa, termos carregados, dois lados, eleição, quem decidiu e impacto) | IA (3ª etapa) | SEG | mantido; citação atribuída permitida; `quem_decidiu_e_impacto` virou estilo (sugestão) |
 | `fontes`: ≥2 fontes de sites diferentes, reais e recentes (notícia: últimos 14 dias; guia: 2 oficiais) | código + IA | EXA | mantido |
 | Só fontes regionais não bastam (precisa oficial ou grande veículo) | código | EXA | mantido |
 | `fatos`: todo número/data/preço/lei/decisão está nas fontes | código (`numeros.js`) + IA | EXA | mantido |
@@ -20,15 +21,12 @@ Legenda: **SEG** = segurança de conteúdo · **EXA** = exatidão · **EST** = e
 | `original`: nenhum trecho copiado (≥12 palavras seguidas) | código + IA | EXA | mantido |
 | `sem_generico`: sem opinião de atribuição vaga ("especialistas destacam"); **número agregado das fontes ("mediana das projeções") não exige listar instituições** | código + IA | EST | **afrouxado** |
 | IA não reprova por "interpretação do revisor" que a fonte/texto não diz (cita a frase do texto que reprova) | IA | EST | **afrouxado** |
-| `sem_repeticao`: assunto diferente dos últimos 15 dias; mesma fonte de outro texto reprova | código + IA | EST | mantido (ver perguntas) |
+| `sem_repeticao`: assunto diferente dos últimos 15 dias. **Mesma fonte só reprova se for a MESMA URL e o assunto for parecido** (o mesmo veículo serve a assuntos diferentes) | código + IA | EST | **afrouxado (resposta do dono)** |
 | Tamanhos: título, nota (80–520 caracteres), artigo (400–900 palavras), resumo | código | EST | mantido |
-| "Ressalva reprova": qualquer "porém/dúvida" na observação do revisor reprova | IA | EST | mantido (ver perguntas) |
+| Ressalva do revisor: **só reprova** se for sobre fato, número, promessa/garantia ou segurança (e fontes, originalidade, neutralidade, autor); ressalva de **estilo** (`sem_repeticao`, `sem_generico`, `quem_decidiu_e_impacto`) vira SUGESTÃO registrada no log (`sugestao_revisor`) e não reprova | IA | EST | **afrouxado (resposta do dono)** |
 
-## Perguntas (não mudei: na dúvida, não afrouxo)
-1. **Citar autoridades/políticos com declaração atribuída** (ex.: "segundo o ministro X") hoje reprova por `POLITICA`/neutralidade. Quer permitir só declarações atribuídas, sem adjetivo nem endosso?
-2. **Termos carregados** ("caos", "absurdo"…) reprovam até quando estão dentro de uma citação atribuída. Quer exceção para citação entre aspas atribuída?
-3. **Mesma fonte** de outro texto dos últimos 15 dias reprova (mesmo que o assunto seja outro). Quer limitar a "mesma URL e mesmo assunto"?
-4. **"Ressalva reprova"** (qualquer ressalva do revisor reprova) é a regra que mais reprova texto bom. Quer exigir ressalva só em fatos/números/segurança?
+## Perguntas respondidas (2026-10-10)
+As 4 perguntas anteriores foram respondidas "sim" e aplicadas (linhas marcadas acima). Continuam sem exceção: números iguais aos da fonte, nenhuma promessa/garantia, ≥2 sites diferentes, nada copiado, sem autor fictício, segurança de conteúdo.
 
 ## Registro
-Cada avaliação grava uma linha `avaliacao` em `data/noticias-log.jsonl` e soma em `data/revisor-stats.json` (por dia, tipo — `artigo`, `nota`, `guia_revisao` — e critério). Toda segunda-feira a verificação diária grava `resumo_revisor_semana` no log (e no resumo do run).
+Sugestões de estilo do revisor ficam em linhas `sugestao_revisor`. Cada avaliação grava uma linha `avaliacao` em `data/noticias-log.jsonl` e soma em `data/revisor-stats.json` (por dia, tipo — `artigo`, `nota`, `guia_revisao` — e critério). Toda segunda-feira a verificação diária grava `resumo_revisor_semana` no log (e no resumo do run).

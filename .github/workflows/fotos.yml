@@ -23,6 +23,7 @@ jobs:
       - name: Buscar fotos
         env:
           PIXABAY_API_KEY: ${{ secrets.PIXABAY_API_KEY }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }} # filtro visual da foto (sem imagem sexual/violenta/perturbadora, ligada ao assunto)
         run: node scripts/photos.js
       - name: Salvar no branch
         run: |

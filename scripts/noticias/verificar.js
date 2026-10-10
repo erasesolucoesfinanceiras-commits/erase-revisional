@@ -24,7 +24,9 @@ const PROMESSA = [
 // Aviso em NEGATIVA ("não há resultado garantido", "não prometemos valores a receber") não é promessa: sai do texto antes de procurar promessas.
 const AVISO_NEGATIVO = /n[aã]o\s+(?:h[aá]|existe|existem|tem|temos|oferece|oferecemos|prometemos|garantimos|significa|[eé])(?=\s)(?=[^.!?<]*(?:garant|promess|valores?\s+a\s+(?:receber|recuperar|restituir)))[^.!?<]*/gi;
 const PARCEIRO = /escrit[oó]rio\s+parceiro|advogad[oa]s?\s+parceir|parceir[oa]s?\s+(jur[ií]dic|da\s+erase)|nossos?\s+parceiros?\s+(jur[ií]dic|advogad)/i;
-const POLITICA = /\b(lula|bolsonaro|tarc[ií]sio|haddad|ciro gomes|mar[cç]al|alckmin|janja|petista|bolsonarista|lulista|esquerdista|direitista|candidat[oa]s?|eleitor(?:es|al|ais)?|elei[cç](?:[aã]o|[oõ]es)|partid(?:o|os|[aá]rio|[aá]ria)|psdb|psol|mdb|uni[aã]o brasil|centr[aã]o|oposi[cç][aã]o|palanque|presidenci[aá]vel)\b|\bPT\b/i;
+// Propaganda eleitoral/partidária e rótulos partidários. Citar autoridades (juízes, órgãos, Banco Central, ministérios, parlamentares, com nome e partido
+// só como identificação) com declaração ATRIBUÍDA e FACTUAL é permitido; a neutralidade (sem elogio/crítica/endosso) é conferida pela revisão por IA.
+const POLITICA = /\b(petistas?|bolsonaristas?|lulistas?|esquerdistas?|direitistas?|centr[aã]o|candidat[oa]s?|pr[ée]-candidat\w*|eleitor(?:es|al|ais)?|elei[cç](?:[aã]o|[oõ]es)|palanque|presidenci[aá]vel|vote\s+(?:em|no|na)|voto\s+(?:em|no|na)\s+\w+|hor[aá]rio eleitoral|propaganda (?:eleitoral|partid[aá]ria)|campanha eleitoral)\b/i;
 const CARREGADO = /\b(desastre|desastroso|ac?erto hist[óo]rico|manobra|esc[âa]ndalo|vergonha|vergonhoso|fiasco|fracasso (do|da) governo|ca[oó]s|absurdo|omiss[ãa]o|c[ií]nic[oa]|populis(?:mo|ta)|armaç[ãa]o|heroi[ck][oa]|trag[ée]dia nacional)\b|campanha eleitoral|pesquisa eleitoral|pr[ée]-candidat|urnas?\b/i;
 // Atribuição genérica ("especialistas destacam", "analistas apontam", "o mercado avalia"): ou diz QUEM disse (nome ou instituição
 // presente nas fontes) ou a frase sai.
@@ -41,6 +43,9 @@ function inseguro(texto) { for (const [cat, re] of SEGURANCA) { const m = re.exe
 // Descrição de número agregado das fontes ("mediana das projeções", "consenso do Focus"): não é atribuição genérica de opinião.
 const AGREGADO = /\b(mediana|m[eé]dia das (?:proje|previs)\w+|consenso|boletim focus|\bfocus\b|pesquisa|levantamento)\b/i;
 const GENERICO = /\b(?:especialistas?|analistas?|economistas?|investidores|observadores|estudiosos|operadores|consultores|o mercado|os mercados|o mercado financeiro|o setor financeiro|o sistema financeiro|fontes do setor|fontes ligadas)\s+(?:do setor\s+\w+\s+|do mercado\s+)?(?:\w+\s+)?(?:destac\w+|apont\w+|avali\w+|dizem|diz|afirm\w+|prev[eê]\w*|espera\w*|acredit\w+|alert\w+|ressalt\w+|consider\w+|v[eê]m?|entend\w+|estim\w+|sugere\w*|indic\w+|defend\w+|recomend\w+)|\b(?:segundo|de acordo com|para|na avalia[cç][aã]o d[eo]s?|na vis[aã]o d[eo]s?)\s+(?:especialistas|analistas|economistas|o mercado|observadores)\b|\bmuitos (?:acreditam|especialistas|analistas)|\bh[aá] quem (?:diga|aponte|avalie)|\bsabe-se que\b|\bcostuma-se (?:dizer|afirmar)\b/i;
+// Termos carregados só passam DENTRO de citação atribuída ("segundo X, '...'", "X afirmou: '...'"); na voz do texto, reprovam.
+const ATRIBUICAO = /\b(segundo|de acordo com|conforme|afirm\w+|disse|diz|declar\w+|avali\w+|criticou|defendeu|ressaltou|apontou|alertou|para (?:o|a|os|as))\b/i;
+const semCitacoesAtribuidas = (t) => String(t).split(/(?<=[.!?])\s+/).map((f) => (ATRIBUICAO.test(f) ? f.replace(/[“"«][^”"»]{1,300}[”"»]/g, ' ') : f)).join(' ');
 const frasesDe = (t) => t.split(/(?<=[.!?:;])\s+/);
 /** Frases com atribuição genérica sem atribuição explícita ("do Itaú", "pelo Valor", "segundo o Banco Central") a nome presente nas fontes. */
 const CABECA = new Set(['banco', 'instituto', 'ministerio', 'agencia', 'conselho', 'tribunal', 'camara', 'senado', 'governo', 'associacao', 'federacao', 'universidade', 'fundacao', 'empresa', 'grupo']);
@@ -87,7 +92,7 @@ function checarRegras(r, tipo, ctx) {
   if (ins) m.push(`conteúdo inseguro (${ins})`);
   const gen = frasesGenericas(corpoTxt, (ctx.textosFontes || []));
   if (gen.length) m.push(`frase genérica sem dizer quem disse (nome ou instituição das fontes): "${gen[0]}"`);
-  const car = CARREGADO.exec(todo);
+  const car = CARREGADO.exec(semCitacoesAtribuidas(todo));
   if (car) m.push(`termo carregado/eleitoral ("${car[0]}")`);
   if (ASSINATURA.test(corpoTxt)) m.push('texto com assinatura/autor');
   // repetição (últimos 15 dias)
@@ -95,7 +100,8 @@ function checarRegras(r, tipo, ctx) {
   const urls = new Set((r.fontes || []).map((f) => f.url));
   for (const x of ctx.recentes) {
     if (jaccard(tt, tokens(x.titulo)) >= 0.5 || jaccard(tc, tokens(`${x.titulo} ${x.resumo || x.texto || ''}`)) >= 0.4) { m.push(`repete assunto já publicado: "${x.titulo}"`); break; }
-    if ((x.fontes || []).some((f) => urls.has(f.url))) { m.push(`usa a mesma fonte de "${x.titulo}" (assunto repetido)`); break; }
+    // mesma fonte só reprova se for a MESMA URL e o assunto for parecido; o mesmo veículo (ou até a mesma página) pode servir a assuntos diferentes
+    if ((x.fontes || []).some((f) => urls.has(f.url)) && (jaccard(tt, tokens(x.titulo)) >= 0.2 || jaccard(tc, tokens(`${x.titulo} ${x.resumo || x.texto || ''}`)) >= 0.15)) { m.push(`usa a mesma fonte (mesma URL) de "${x.titulo}" com assunto parecido`); break; }
   }
   return m;
 }
@@ -138,4 +144,4 @@ function checarFontes(r, tipo, modo, cands, hoje, diasMax) {
   return { motivos, textos };
 }
 
-module.exports = { inseguro, frasesGenericas, POLITICA, checarRegras, checarFontes, trechoCopiado, semHtml, norm, host };
+module.exports = { semCitacoesAtribuidas, inseguro, frasesGenericas, POLITICA, checarRegras, checarFontes, trechoCopiado, semHtml, norm, host };

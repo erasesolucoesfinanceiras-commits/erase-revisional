@@ -14,6 +14,9 @@ try {
   config.bc = { taxaMedia: valores[m], mesReferencia: mes };
 } catch (e) { if (e.code !== 'ENOENT') throw e; }
 // Versão do CSS na URL: evita que um style.css antigo em cache (1h) quebre o HTML novo.
+// Versão (hash do conteúdo) dos .js na URL: um main.js antigo em cache (1h, no navegador ou na borda) nunca atende uma página nova.
+const assetVer = (rel) => { try { return require('crypto').createHash('md5').update(fs.readFileSync(path.join(ROOT, rel.replace(/^\//, '')))).digest('hex').slice(0, 8); } catch (e) { return ''; } };
+const jsUrl = (p) => `${p}?v=${assetVer(p)}`;
 const cssVer = require('crypto').createHash('md5').update(fs.readFileSync(path.join(ROOT, 'assets/css/style.css'))).digest('hex').slice(0, 8);
 const loadNotas = () => {
   try { return readJSON('data/notas.json').sort((a, b) => (a.data < b.data ? 1 : a.data > b.data ? -1 : a.id < b.id ? 1 : -1)); }
@@ -172,8 +175,8 @@ ${header(active)}
 ${body}
 </main>
 ${footer()}
-<script src="/assets/js/main.js" defer></script>
-${scripts.map((s) => `<script src="${s}" defer></script>`).join('\n')}
+<script src="${jsUrl('/assets/js/main.js')}" defer></script>
+${scripts.map((s) => `<script src="${jsUrl(s)}" defer></script>`).join('\n')}
 </body>
 </html>
 `;

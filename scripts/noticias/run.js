@@ -107,7 +107,7 @@ async function tentarTema(tipo, tema, modo, recentes) {
       log('reprovado', { tipo, tema, tentativa, motivos: ['reescrita impossível com as fontes reais'] }); return { status: 'reprovado' };
     }
     let motivos = [];
-    const revisoes = {};
+    const revisoes = {}, sugestoes = []; // sugestões de estilo do revisor: ficam no log e não reprovam
     if (!r || !r.titulo) motivos = ['resposta fora do formato JSON esperado'];
     else {
       r.titulo = String(r.titulo).trim();
@@ -124,13 +124,14 @@ async function tentarTema(tipo, tema, modo, recentes) {
       if (num.faltando.length) motivos.push(`número(s) que não aparecem nas fontes: ${num.faltando.slice(0, 6).map((x) => `"${x.raw}" (em: ${x.frase.slice(0, 90)})`).join('; ')}`);
       if (!motivos.length) {
         const rev = await revisar({ tipo, hoje, rascunho: r, recentes, pares: num.pares });
-        revisoes.geral = rev.criterios; motivos = rev.motivos;
+        revisoes.geral = rev.criterios; motivos = rev.motivos; sugestoes.push(...(rev.sugestoes || []));
         if (!motivos.length && precisaNeutralidade(tema, textoArtigo)) {
           const neu = await revisarNeutralidade({ tipo, rascunho: r });
-          revisoes.neutralidade = neu.criterios; motivos = neu.motivos.map((m) => 'neutralidade/' + m);
+          revisoes.neutralidade = neu.criterios; motivos = neu.motivos.map((m) => 'neutralidade/' + m); sugestoes.push(...(neu.sugestoes || []).map((x) => 'neutralidade/' + x));
         }
       }
     }
+    if (sugestoes.length) log('sugestao_revisor', { tipo, tema, tentativa, sugestoes: sugestoes.slice(0, 6) });
     contar(tipo, tema, tentativa, motivos, !motivos.length);
     if (!motivos.length) { r.revisoes = revisoes; return { status: 'aprovado', rascunho: r }; }
     log('reprovado', { tipo, tema, tentativa, titulo: r && r.titulo, motivos, revisao: revisoes });

@@ -57,3 +57,6 @@ Cada falha tem saídas automáticas em sequência antes de chamar uma pessoa: (1
 
 ### Datas honestas, guias e capa
 Cada artigo tem `tipo`: `noticia` (atual) ou `guia` (atemporal). Guias não mostram data nos cards nem na capa (selo "Guia"); a página do guia só mostra "Atualizado em" se `atualizado` existir, e isso só acontece quando a revisão automática (`scripts/noticias/revisar-guia.js`, a cada 3 dias, 1 por dia, mesmas regras do revisor) muda o texto de verdade e é aprovada. A data de publicação (`data`) nunca é alterada e nunca se usa "data de hoje" automática. O JSON-LD (`datePublished` sempre; `dateModified` só com revisão real) e o sitemap (`lastmod`) usam só datas reais. A capa mistura artigos e notas do Radar por data real (selos Artigo/Radar/Guia, destaque "Mais recente", faixa "Última publicação"). Critérios do revisor: `CRITERIOS-REVISOR.md`. Testes: `node tests/noticias/conteudo-test.js`.
+
+### Faixa do Banco Central
+`assets/data/bcb-veiculos.json` guarda duas datas reais: `conferido_em` (última consulta ao BCB que funcionou e trouxe dados; a consulta que falha não mexe nela) e `atualizado_em` (última vez que a série mudou). A capa mostra "Taxas conferidas com o Banco Central em …" e, em letra menor e no `title`, a data da última alteração da série.

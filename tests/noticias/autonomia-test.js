@@ -59,14 +59,15 @@ const ultimaLinha = (f) => { const l = fs.readFileSync(f, 'utf8').trim().split('
   }
 
   // ---------- verificação diária (GitHub, site e Cloudflare falsos)
-  async function verificar(nome, { runs = [], siteTem = false, hookRestaura = false, dataArtigo = '2026-10-02', hoje = '2026-10-02', hook = true, guiaRevisadoHoje = false }) {
+  async function verificar(nome, { runs = [], siteTem = false, hookRestaura = false, dataArtigo = '2026-10-02', hoje = '2026-10-02', hook = true, guiaRevisadoHoje = false, versaoAntiga = false }) {
     const d = tmp(); fs.cpSync(path.join(ROOT, 'data'), d, { recursive: true });
     const arts = JSON.parse(fs.readFileSync(path.join(d, 'articles.json'), 'utf8')); arts[0].data = dataArtigo; if (guiaRevisadoHoje) arts.forEach((a) => { a.data = dataArtigo; a.atualizado = hoje; }); fs.writeFileSync(path.join(d, 'articles.json'), JSON.stringify(arts));
     const slug = arts[0].slug; const ev = { dispatch: 0, hook: 0 }; let site = siteTem; let runsAtuais = runs.slice();
     const gh = await servidor((q, s) => { s.setHeader('content-type', 'application/json');
       if (q.method === 'POST' && q.url.includes('/dispatches')) { ev.dispatch++; runsAtuais = [{ id: 9, status: 'completed', conclusion: 'success', created_at: new Date().toISOString() }]; s.statusCode = 204; return s.end(); }
       s.end(JSON.stringify({ workflow_runs: runsAtuais })); });
-    const st = await servidor((q, s) => s.end(site ? `<a href="/noticias/${slug}">x</a>` : '<p>sem artigo</p>'));
+    const versoes = ((fs.readFileSync(path.join(ROOT, 'index.html'), 'utf8').match(/\/assets\/(?:js\/main\.js|css\/style\.css)\?v=[0-9a-f]+/g)) || []).join(' ');
+    const st = await servidor((q, s) => s.end(site ? (versaoAntiga && !ev.hook ? `<a href="/noticias/${slug}">x</a> /assets/js/main.js?v=00000000` : `<a href="/noticias/${slug}">x</a> ${versoes}`) : '<p>sem artigo</p>'));
     const hk = await servidor((q, s) => { ev.hook++; if (hookRestaura) site = true; s.end('{}'); });
     const r = await rodar(['scripts/noticias/verificar-dia.js'], { GITHUB_TOKEN: 't', GITHUB_REPOSITORY: 'o/r', GITHUB_API: `http://localhost:${gh.address().port}`, SITE_URL: `http://localhost:${st.address().port}`, ...(hook ? { CF_DEPLOY_HOOK_URL: `http://localhost:${hk.address().port}` } : { CF_DEPLOY_HOOK_URL: '' }), DADOS_DIR: d, DATA: hoje, SEM_GIT: '1', VERIF_ESPERA_MS: '30', VERIF_ESCALA: '0.002' });
     [gh, st, hk].forEach((x) => x.close());
@@ -82,6 +83,8 @@ const ultimaLinha = (f) => { const l = fs.readFileSync(f, 'utf8').trim().split('
   t('verificação: artigo com mais de 3 dias → vermelho com causa na última linha', v.r.code === 1 && v.u.evento === 'diagnostico_final' && /dias que não sai artigo/.test(v.u.causa), JSON.stringify(v.u).slice(0, 250));
   v = await verificar('guia revisado hoje não zera o atraso', { runs: [{ id: 1, status: 'completed', conclusion: 'failure', created_at: '2026-10-09T11:00:00Z' }], siteTem: true, hoje: '2026-10-09', guiaRevisadoHoje: true });
   t('verificação: guia revisado (atualizado = hoje) NÃO conta como artigo novo: segue vermelho por atraso', v.r.code === 1 && /dias que não sai artigo/.test(v.u.causa), JSON.stringify(v.u).slice(0, 200));
+  v = await verificar('site com artigo mas versão antiga do CSS/JS', { runs: [{ id: 1, status: 'completed', conclusion: 'success', created_at: '2026-10-02T11:00:00Z' }], siteTem: true, versaoAntiga: true, hookRestaura: true });
+  t('verificação: capa no ar com versão antiga do site (CSS/JS) → pede novo deploy', v.ev.hook === 1, v.r.o.slice(-300));
   v = await verificar('site nunca mostra o artigo, sem gancho', { runs: [{ id: 1, status: 'completed', conclusion: 'success', created_at: '2026-10-02T11:00:00Z' }], siteTem: false, hook: false });
   t('verificação: deploy esgotado (sem gancho, só commit) → vermelho, exige pessoa, causa simples', v.r.code === 1 && v.u.precisa_de_humano === true && /Cloudflare Pages/.test(v.u.causa), JSON.stringify(v.u).slice(0, 250));
   console.log(`${ok} ok, ${bad} falha(s)`); process.exit(bad ? 1 : 0);

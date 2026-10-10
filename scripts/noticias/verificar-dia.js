@@ -65,10 +65,17 @@ async function disparar(motivo) {
   return t0;
 }
 
+/** Versões (hash) do CSS e do JS que a capa do repositório referencia: o site no ar tem de servir as mesmas, senão ainda é uma versão antiga. */
+function versoesDoRepositorio() {
+  try { const h = fs.readFileSync(path.join(ROOT, 'index.html'), 'utf8'); return [/\/assets\/js\/main\.js\?v=[0-9a-f]+/.exec(h), /\/assets\/css\/style\.css\?v=[0-9a-f]+/.exec(h)].filter(Boolean).map((m) => m[0]); } catch (e) { return []; }
+}
+/** A capa no ar mostra o artigo mais recente E a versão atual do site (CSS/JS)? */
 async function siteTemArtigo(slug) {
   try {
     const r = await fetch(`${SITE}/?v=${Date.now()}`, { headers: { 'Cache-Control': 'no-cache', 'User-Agent': 'erase-verificacao-diaria' } });
-    return r.ok && (await r.text()).includes(`/noticias/${slug}`);
+    if (!r.ok) return false;
+    const html = await r.text();
+    return html.includes(`/noticias/${slug}`) && versoesDoRepositorio().every((v) => html.includes(v));
   } catch (e) { return false; }
 }
 async function esperarSite(slug, minutos) {
@@ -123,7 +130,7 @@ function registrarAtividade(motivo) {
 
   // 3: o artigo está na capa do site no ar?
   if (ult && !(await esperarSite(ult.slug, 1))) {
-    log('verificacao', { acao: 'artigo_fora_do_site', motivo: `o artigo "${ult.slug}" está no repositório mas não aparece na capa de ${SITE}` });
+    log('verificacao', { acao: 'artigo_fora_do_site', motivo: `a capa de ${SITE} não mostra o artigo "${ult.slug}" ou ainda serve uma versão antiga do site (CSS/JS)` });
     let apareceu = false;
     for (const [nome, executar] of await pedirDeploy()) {
       let ok = false; try { ok = await executar(); } catch (e) { /* tenta o próximo */ }
@@ -133,7 +140,7 @@ function registrarAtividade(motivo) {
       log('verificacao', { acao: 'conferiu_site_apos_' + nome, motivo: apareceu ? 'artigo já aparece na capa' : 'ainda não aparece' });
       if (apareceu) break;
     }
-    if (!apareceu) problemas.push({ humano: true, causa: 'O artigo está no repositório, mas a capa do site no ar não o mostra, mesmo depois de pedir novo deploy ao Cloudflare Pages.', acao: 'Abrir o projeto no Cloudflare Pages: ver se o último build falhou, se a integração com o GitHub está ativa e se o domínio revisional.eraseconsulta.com.br aponta para este projeto. Para pedir novo deploy sem commit, criar o secret CF_DEPLOY_HOOK_URL (Settings > Builds > Deploy hooks).' });
+    if (!apareceu) problemas.push({ humano: true, causa: 'O repositório está atualizado, mas a capa do site no ar não mostra o artigo mais recente ou a versão atual do site, mesmo depois de pedir novo deploy ao Cloudflare Pages.', acao: 'Abrir o projeto no Cloudflare Pages: ver se o último build falhou, se a integração com o GitHub está ativa e se o domínio revisional.eraseconsulta.com.br aponta para este projeto. Para pedir novo deploy sem commit, criar o secret CF_DEPLOY_HOOK_URL (Settings > Builds > Deploy hooks).' });
   }
 
   // resumo semanal do revisor (segundas-feiras, ou sempre que RESUMO_REVISOR estiver definido): aprovados/reprovados por critério

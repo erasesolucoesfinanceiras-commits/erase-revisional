@@ -10,7 +10,7 @@ const REGRAS_COMUNS = `REGRAS OBRIGATÓRIAS
 - SEGURANÇA DE CONTEÚDO (o que Google e as redes sociais reprovariam): nada de conteúdo sexual ou erótico, mutilação ou violência gráfica, racismo, discurso de ódio ou ofensa a grupos, assédio ou xingamento a pessoas, instruções de algo perigoso ou ilegal, nem divulgação, venda ou incentivo a golpes ("dinheiro fácil", "renda extra garantida", "lucro garantido"). Reportar ou alertar sobre um golpe, sem ensinar nem promover, é permitido.
 - Cite quem decidiu ("o Copom decidiu", "a Câmara aprovou", "o STJ entendeu") e explique o impacto prático para quem financia, sem opinar nem usar adjetivos de valor.
 - Use no mínimo 2 das fontes numeradas, de sites diferentes, que tratem do MESMO fato. Informe só os números delas em "fontes_usadas" (os links e as datas são preenchidos pelo sistema). Se não houver 2 fontes sobre o mesmo fato recente, responda sem_novidade.
-- NEUTRALIDADE POLÍTICA ABSOLUTA (estamos em período eleitoral): nunca opine sobre partidos, políticos ou candidatos, não elogie nem critique governo ou oposição e não cite nomes de políticos nem de partidos. Atribua medidas a instituições ("o Governo Federal", "o Congresso", "o Banco Central", "o STJ"). Explique o fato e o que ele muda para quem tem ou vai fazer um financiamento.
+- NEUTRALIDADE POLÍTICA (período eleitoral): nunca opine nem faça propaganda eleitoral ou partidária, não elogie nem critique governo, oposição, partido, político ou candidato e não faça ataques pessoais. É PERMITIDO citar autoridades (juízes, órgãos, Banco Central, ministérios, parlamentares) com declaração ATRIBUÍDA e FACTUAL ("segundo o ministro X, a medida muda ..."), sem endossar e sem adjetivo. Termos carregados só dentro de citação atribuída, nunca na voz do texto. Sempre que der, atribua medidas a instituições ("o Banco Central", "o STJ"). Explique o fato e o que ele muda para quem tem ou vai fazer um financiamento.
 - Não prometa resultado, não diga que o leitor "vai recuperar", "tem valores a receber" ou "garantido", e não dê conselho jurídico individual (nada de "você deve entrar com ação"). Não afirme que juros acima da média são ilegais por si só.
 - Não cite escritório ou advogado parceiro. Não invente autor nem cite nomes de jornalistas: o texto é da "Equipe ERASE" (a assinatura é colocada pelo site; não escreva "Por ...").
 - Não escreva chamada para ação ou propaganda no texto: o site acrescenta a chamada final.`;
@@ -72,13 +72,13 @@ ${blocoPares}
 
 ASSUNTOS PUBLICADOS NOS ÚLTIMOS 15 DIAS: ${recentes.map((x) => `"${x.titulo}"`).join('; ') || '(nenhum)'}
 
-Avalie CADA critério. REGRA: ok = true SOMENTE se estiver inequivocamente atendido e SEM nenhuma ressalva. Se a sua própria observação tiver qualquer "porém", "embora", "apesar", contexto diferente ou dúvida, marque ok = false. Reprove também afirmações gerais ou comparações que não estão nas fontes.
+Avalie CADA critério. REGRA GERAL: ok = true SOMENTE se estiver inequivocamente atendido. Para os critérios 1, 2, 3, 5, 6, 7, 8 e 10 (fontes, FATOS, originalidade, PROMESSA/GARANTIA, neutralidade, autor, NÚMEROS e SEGURANÇA), qualquer ressalva, dúvida ou contexto diferente na sua observação = ok = false; reprove também afirmações gerais ou comparações que não estão nas fontes. Para os critérios 4 e 9 (repetição e atribuição vaga), que são de ESTILO, uma ressalva menor NÃO reprova: marque ok = true e comece a observação com "SUGESTÃO:"; marque ok = false só se for um defeito claro.
 1. "fontes": há pelo menos 2 fontes reais e recentes, confiáveis (órgãos oficiais, empresas ou imprensa confiável), e elas tratam mesmo do assunto do texto?
 2. "fatos": TODO número, data, preço, percentual, nome de lei ou decisão do texto aparece nas fontes? Liste no motivo qualquer item que NÃO esteja nelas.
 3. "original": o texto é próprio, sem trechos copiados das fontes?
 4. "sem_repeticao": o assunto é diferente dos publicados nos últimos 15 dias?
 5. "sem_promessa": sem prometer resultado ("você vai recuperar", "garantido"), sem dizer que o leitor tem valores a receber, sem conselho jurídico individual e sem citar escritório/advogado parceiro?
-6. "neutro": sem opinião política ou partidária, sem elogio ou crítica a governo, oposição, partido ou político, sem tom de campanha? (Opinião de TERCEIROS sobre temas econômicos é permitida quando atribuída a quem a disse e sem que o texto a endosse; o que continua proibido é o texto adotar posição política.)
+6. "neutro": sem opinião política ou partidária, sem elogio ou crítica a governo, oposição, partido ou político, sem tom de campanha? (Opinião e declaração de TERCEIROS, inclusive de autoridades (juízes, órgãos, Banco Central, ministérios, parlamentares), é permitida quando atribuída a quem a disse, factual e sem que o texto a endosse; continua proibido o texto adotar posição política, fazer propaganda eleitoral ou partidária ou atacar pessoas.)
 7. "sem_autor": sem autor inventado, sem nome de jornalista, sem assinatura (a assinatura é "Equipe ERASE")?
 8. "contexto_numeros": em CADA par acima, o número é usado com o mesmo sentido da fonte (mesma grandeza, produto, período, ano e região)? Reprove se, por exemplo, uma taxa de cartão for apresentada como taxa de veículo, ou um dado de outro ano ou de outra região for tratado como o atual/local.
 9. "sem_generico": o texto NÃO tem frases de opinião, previsão ou avaliação com atribuição vaga e sem fonte (\"especialistas destacam\", \"analistas apontam\", \"muitos acreditam\")? Opinião de terceiros precisa dizer QUEM disse (nome ou instituição presente nas fontes). NÃO reprove a descrição de um número agregado que está nas fontes (\"mediana das projeções\", \"média das previsões\", \"consenso do Boletim Focus\") só porque não lista cada instituição, nem frases cujo autor a fonte não nomeia mas o texto não apresenta como opinião de alguém.
@@ -89,7 +89,7 @@ Responda APENAS com JSON (sem markdown):
 Em "obs" escreva SEMPRE uma observação objetiva (o que conferiu e por que aprovou ou reprovou).`;
 }
 
-const SISTEMA_NEUTRALIDADE = 'Você é um revisor de NEUTRALIDADE política de um portal de notícias financeiras, em período eleitoral. Você NÃO escreveu o texto. Aplique a lista de forma objetiva e literal; na dúvida, reprove. Responda apenas JSON.';
+const SISTEMA_NEUTRALIDADE = 'Você é um revisor de NEUTRALIDADE política de um portal de notícias financeiras, em período eleitoral. Você NÃO escreveu o texto. Aplique a lista de forma objetiva e literal; na dúvida sobre neutralidade política, reprove. Responda apenas JSON.';
 
 function neutralidade({ tipo, rascunho, fontes }) {
   const texto = tipo === 'nota' ? rascunho.texto : rascunho.corpo;
@@ -101,12 +101,12 @@ ${texto}
 ${ev}
 
 Aplique esta lista e responda se CADA item está ok (true) ou não (false). Se a sua observação tiver qualquer ressalva, marque false:
-1. "sem_adjetivo_politico": o texto NÃO cita partido, político ou candidato com adjetivo, elogio ou crítica?
+1. "sem_adjetivo_politico": o texto NÃO usa, na voz do texto, adjetivo, elogio ou crítica a partido, político ou candidato? (Declaração factual de autoridade, atribuída e sem endosso, é permitida; propaganda eleitoral/partidária e ataque pessoal não.)
 2. "sem_merito_culpa": o texto NÃO atribui mérito ou culpa a governo ou oposição (nem sugere que uma medida é boa ou ruim por quem a tomou)?
-3. "sem_termos_carregados": o texto NÃO usa termos carregados ou valorativos (ex.: "desastre", "acerto histórico", "manobra", "escândalo")?
+3. "sem_termos_carregados": o texto NÃO usa, na voz do texto, termos carregados ou valorativos (ex.: "desastre", "acerto histórico", "manobra", "escândalo")? (Dentro de citação atribuída a quem disse, é permitido.)
 4. "dois_lados": se as FONTES trazem posições diferentes sobre o assunto, o texto apresenta todas elas (e não só um lado)? Se as fontes não divergem, marque true.
 5. "sem_eleicao": o texto NÃO fala de eleição, campanha, pesquisa eleitoral ou candidatos?
-6. "quem_decidiu_e_impacto": o texto diz QUEM decidiu (ex.: "o Copom decidiu", "a Câmara aprovou") e explica o impacto prático para quem tem ou vai fazer um financiamento, sem opinar?
+6. "quem_decidiu_e_impacto": o texto diz QUEM decidiu (ex.: "o Copom decidiu", "a Câmara aprovou") e explica o impacto prático para quem tem ou vai fazer um financiamento, sem opinar? (Critério de estilo: uma ressalva menor não reprova; marque ok = true e comece a observação com "SUGESTÃO:".)
 Responda APENAS com JSON (sem markdown):
 {"criterios": {"sem_adjetivo_politico": {"ok": true, "obs": ""}, "sem_merito_culpa": {"ok": true, "obs": ""}, "sem_termos_carregados": {"ok": true, "obs": ""}, "dois_lados": {"ok": true, "obs": ""}, "sem_eleicao": {"ok": true, "obs": ""}, "quem_decidiu_e_impacto": {"ok": true, "obs": ""}}}
 Em "obs" escreva SEMPRE uma observação objetiva (o que verificou e por que aprovou ou reprovou).`;
