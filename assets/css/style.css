@@ -250,7 +250,9 @@ input:focus, select:focus, textarea:focus { border-color: var(--blue); outline: 
 .popup { --popup-art-a: #1b8be0; position: relative; width: 100%; max-width: 820px; max-height: calc(100vh - 2 * var(--m)); max-height: calc(100dvh - 2 * var(--m)); overflow: auto; display: grid; grid-template-columns: 5fr 6fr; background: var(--surface); color: var(--text); border-radius: 24px; box-shadow: 0 24px 60px rgba(3, 8, 14, .35); animation: pop .35s cubic-bezier(.2,.9,.3,1.1); }
 .popup-art { display: flex; flex-direction: column; justify-content: space-between; gap: var(--g); padding: clamp(14px, calc(var(--vh) * 3.5), 28px) clamp(16px, 2.5vw, 26px); color: #fff; background: radial-gradient(120% 90% at 0% 0%, #5cbcf8 0%, #1b8be0 48%, #0b4f8a 100%); }
 .popup-logo { align-self: flex-start; box-sizing: content-box; height: 26px; width: auto; padding: 8px 12px; border-radius: 12px; background: #fff; }
-.popup-illus { width: 100%; max-width: 280px; max-height: 32vh; max-height: calc(var(--vh) * 32); height: auto; align-self: center; }
+.popup-photo-wrap { position: relative; width: 100%; align-self: center; border-radius: 18px; overflow: hidden; background: #0b4f8a; box-shadow: 0 10px 24px rgba(3, 8, 14, .3); }
+.popup-photo { display: block; width: 100%; height: auto; aspect-ratio: 640 / 622; object-fit: cover; }
+.popup-photo-wrap::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(27, 139, 224, .5) 0%, rgba(27, 139, 224, .08) 45%, rgba(11, 79, 138, .55) 100%); pointer-events: none; }
 .popup .popup-art-text { margin: 0; color: #fff; font-size: clamp(.95rem, calc(var(--vh) * 2.4), 1.15rem); font-weight: 700; line-height: 1.3; }
 .popup-main { padding: clamp(12px, calc(var(--vh) * 3.4), 30px) clamp(16px, 2.6vw, 28px) clamp(10px, calc(var(--vh) * 2.6), 24px); min-width: 0; }
 .popup-close { position: absolute; top: 8px; right: 8px; z-index: 2; width: 44px; height: 44px; border-radius: 50%; border: 1.5px solid var(--border); background: var(--surface); color: var(--muted); font-size: 1.4rem; line-height: 1; cursor: pointer; }
@@ -284,7 +286,7 @@ input:focus, select:focus, textarea:focus { border-color: var(--blue); outline: 
 @media (max-width: 700px) {
   .popup { grid-template-columns: 1fr; border-radius: 20px; }
   .popup-art { flex-direction: row; align-items: center; padding: 10px 56px 10px 14px; }
-  .popup-illus, .popup .popup-art-text { display: none; }
+  .popup-photo-wrap, .popup .popup-art-text { display: none; }
   .popup-logo { height: 20px; padding: 6px 10px; }
   .popup-close { background: #fff; }
   .popup .free-badge { gap: 6px; letter-spacing: .03em; font-size: .7rem; }
@@ -292,7 +294,7 @@ input:focus, select:focus, textarea:focus { border-color: var(--blue); outline: 
 }
 @media (max-width: 700px) and (max-height: 740px) { .popup-art { display: none; } .popup-close { background: var(--surface); } }
 /* ilustração some antes de qualquer corte no resto */
-@media (min-width: 701px) and (max-height: 600px) { .popup-illus { display: none; } }
+@media (min-width: 701px) and (max-height: 600px) { .popup-photo-wrap { display: none; } }
 /* tela baixa e larga (celular deitado): sem coluna da imagem; o formulário se divide em duas colunas */
 @media (min-width: 640px) and (max-height: 480px) {
   .popup { grid-template-columns: 1fr; }

@@ -208,6 +208,11 @@ if (ct) {
   if (location.pathname.includes('calculadora')) return; // quem já está no formulário não precisa do pop-up
   try { if (sessionStorage.getItem('erase-popup')) return; } catch (e) { /* sem storage: mostra */ }
 
+  // Foto do pop-up: baixa em segundo plano (depois do carregamento da página e com o navegador ocioso) para já estar pronta quando ele abrir.
+  const aquecer = () => { const i = new Image(); i.decoding = 'async'; i.src = '/assets/img/popup-carro.webp'; };
+  const quandoOcioso = () => ('requestIdleCallback' in window ? requestIdleCallback(aquecer, { timeout: 1500 }) : setTimeout(aquecer, 300));
+  if (document.readyState === 'complete') quandoOcioso(); else addEventListener('load', quandoOcioso, { once: true });
+
   function open() {
     try { sessionStorage.setItem('erase-popup', '1'); } catch (e) { /* ignore */ }
     const prevFocus = document.activeElement;
@@ -218,7 +223,7 @@ if (ct) {
         <button class="popup-close" type="button" aria-label="Fechar">&times;</button>
         <aside class="popup-art" aria-hidden="true">
           <img class="popup-logo" src="/assets/img/logo-erase.webp" alt="" width="147" height="26">
-          <svg class="popup-illus" viewBox="0 0 240 150" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M18 104h204"/><path d="M34 104V86c0-6 4-10 9-11l30-8 22-22c3-3 6-4 10-4h46c5 0 9 2 12 6l17 24 14 4c6 2 9 6 9 12v17"/><path d="M82 66h30V45M122 66h48l-14-20h-34"/><circle cx="66" cy="106" r="15" fill="var(--popup-art-a)"/><circle cx="176" cy="106" r="15" fill="var(--popup-art-a)"/><path d="M196 24l10 10 18-20" stroke-width="5"/></svg>
+          <div class="popup-photo-wrap"><img class="popup-photo" src="/assets/img/popup-carro.webp" alt="" width="640" height="622" decoding="async"></div>
           <p class="popup-art-text">Entenda o que está dentro do seu contrato de financiamento.</p>
         </aside>
         <div class="popup-main">
