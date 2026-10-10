@@ -145,11 +145,11 @@ function footer() {
 <div>
 <a class="logo" href="/" aria-label="ERASE Revisional — início"><img class="logo-img logo-light" src="/assets/img/logo-erase.webp" alt="" width="147" height="26"><img class="logo-img logo-dark" src="/assets/img/logo-erase-dark.webp" alt="" width="147" height="26"><span class="logo-sep" aria-hidden="true"></span><span class="logo-sub">REVISIONAL</span></a>
 <p class="footer-desc">Notícias sobre financiamento de veículos e uma calculadora gratuita para você descobrir a taxa de juros real do seu contrato.</p>
-<div class="socials">${soc('x', 'X')}${soc('instagram', 'Instagram')}${soc('facebook', 'Facebook')}</div>
+${(() => { const r = `${soc('x', 'X')}${soc('instagram', 'Instagram')}${soc('facebook', 'Facebook')}`; return r ? `<div class="socials">${r}</div>` : ''; })()}
 </div>
 <div>
 <h3>Navegação</h3>
-<ul><li><a href="/">Início</a></li><li><a href="/calculadora.html">Calculadora</a></li><li><a href="/radar.html">Radar</a></li><li><a href="/contato.html">Fale Conosco</a></li></ul>
+<ul><li><a href="/">Início</a></li><li><a href="/calculadora.html">Calculadora</a></li><li><a href="/radar.html">Radar</a></li><li><a href="/como-produzimos.html">Como produzimos nosso conteúdo</a></li><li><a href="/contato.html">Fale Conosco</a></li></ul>
 </div>
 <div>
 <h3>Categorias</h3>
@@ -159,7 +159,7 @@ function footer() {
 <div class="legal">
 <p>ERASE Revisional é uma ferramenta de simulação operada pela ERASE Soluções Financeiras. Não somos uma instituição financeira, correspondente bancário nem escritório de advocacia. O resultado é uma estimativa baseada em médias de mercado e nos dados informados, e não constitui parecer, consultoria ou promessa de resultado. Os percentuais de referência têm como fonte a taxa média de juros divulgada pelo Banco Central do Brasil para crédito livre, pessoas físicas, aquisição de veículos. A análise do contrato é realizada pela ERASE Soluções Financeiras.</p>
 ${dados ? `<p class="company">${esc(dados)}</p>` : ''}
-<p class="legal-links"><a href="/termos.html">Termos de uso</a> · <a href="/privacidade.html">Política de Privacidade</a></p>
+<p class="legal-links"><a href="/termos.html">Termos de Uso</a> · <a href="/privacidade.html">Política de Privacidade</a> · <a href="/como-produzimos.html">Como produzimos nosso conteúdo</a></p>
 <p class="copy">© ERASE Soluções Financeiras</p>
 </div>
 </div>
@@ -257,6 +257,156 @@ function trustBadges() {
 </section>`;
 }
 
+
+// ---------------------------------------------------------------- Portal: itens, cards verticais, carrossel, categorias, barra lateral
+const dadosCache = {};
+const dados = () => (dadosCache.d = dadosCache.d || { artigos: loadArticles(), notas: loadNotas() });
+/** Normaliza artigo, nota ou guia para um "item" de card: href, título, data (só real), selo e imagem. Guias não têm data. */
+function itemDe(x) {
+  if (x.tipo === 'radar') return { tipo: 'radar', href: `/radar.html#${esc(x.n.id)}`, titulo: x.n.titulo, resumo: x.n.texto, data: x.n.data, cat: x.n.categoria, ref: { categoria: x.n.categoria, slug: x.n.id }, selo: 'Radar', cls: 'selo-radar' };
+  const a = x.a || x;
+  return ehGuia(a)
+    ? { tipo: 'guia', href: artUrl(a), titulo: a.titulo, resumo: a.resumo, data: '', atualizado: a.atualizado || '', cat: a.categoria, ref: a, selo: 'Guia', cls: 'selo-guia' }
+    : { tipo: 'artigo', href: artUrl(a), titulo: a.titulo, resumo: a.resumo, data: a.data, cat: a.categoria, ref: a, selo: 'Artigo', cls: 'selo-artigo' };
+}
+const dataHtml = (i) => (i.tipo === 'guia' ? (i.atualizado ? `<time datetime="${i.atualizado}">Atualizado em ${fmtData(i.atualizado)}</time>` : '') : `<time datetime="${i.data}">${fmtData(i.data)}</time>`);
+/** Os N itens mais recentes por data real (artigos de notícia e notas do Radar; guias ficam de fora). */
+const maisRecentes = (n, artigos = dados().artigos, notas = dados().notas) => ordenarConteudo(artigos, notas).datados.slice(0, n);
+
+/** Card vertical (Escolha da equipe, Relacionados). */
+function cardV(x) {
+  const i = itemDe(x);
+  return `<article class="card-v">
+<a class="card-v-img" href="${i.href}" tabindex="-1" aria-hidden="true">${coverImg(i.ref, { width: 360, height: 240, sizes: '(max-width: 600px) 100vw, 360px' })}</a>
+<div class="card-v-body">
+<div class="row-tags">${selo(i.selo, i.cls)}<a class="tag" href="${catUrl(i.cat)}">${esc(catNome(i.cat))}</a></div>
+<h3><a href="${i.href}">${esc(i.titulo)}</a></h3>
+${dataHtml(i)}
+</div>
+</article>`;
+}
+/** Item pequeno (barra lateral "Destaques"). */
+function miniItem(x) {
+  const i = itemDe(x);
+  return `<li class="mini">
+<a class="mini-thumb" href="${i.href}" tabindex="-1" aria-hidden="true">${coverImg(i.ref, { width: 88, height: 66, sizes: '88px' })}</a>
+<div class="mini-body">${selo(i.selo, i.cls)}<a class="mini-title" href="${i.href}">${esc(i.titulo)}</a>${dataHtml(i)}</div>
+</li>`;
+}
+
+/** Carrossel de destaques (sem script externo; funciona sem JS como faixa rolável). Autoplay DESLIGADO de propósito. */
+function carrossel(itens) {
+  const n = itens.length;
+  const slides = itens.map((x, k) => {
+    const i = itemDe(x);
+    const img = coverImg(i.ref, { width: 1160, height: 440, sizes: '(max-width: 1200px) 100vw, 1160px', eager: k === 0, cls: 'slide-img' });
+    return `<li class="slide" id="slide-${k + 1}" role="group" aria-roledescription="slide" aria-label="${k + 1} de ${n}">
+${img}
+<a class="slide-cover" href="${i.href}" tabindex="-1" aria-hidden="true"></a>
+<div class="slide-text">
+<div class="row-tags">${k === 0 ? selo('Mais recente', 'selo-destaque') : ''}${selo(i.selo, i.cls)}<span class="tag tag-on-img">${esc(catNome(i.cat))}</span></div>
+<h2><a class="slide-link" href="${i.href}">${esc(i.titulo)}</a></h2>
+<p>${esc(i.resumo.length > 170 ? i.resumo.slice(0, 167).replace(/\s+\S*$/, '') + '…' : i.resumo)}</p>
+<time class="featured-date" datetime="${i.data}">${fmtData(i.data)}</time>
+</div>
+</li>`;
+  }).join('\n');
+  const dots = itens.map((x, k) => `<button type="button" class="car-dot" data-i="${k}" aria-label="Ir para o slide ${k + 1} de ${n}: ${esc(itemDe(x).titulo)}" aria-controls="slide-${k + 1}"${k === 0 ? ' aria-current="true"' : ''}><span aria-hidden="true"></span></button>`).join('');
+  return `<section class="container carousel" aria-roledescription="carrossel" aria-label="Destaques recentes" data-total="${n}">
+<div class="carousel-viewport">
+<ul class="carousel-track" id="car-track">
+${slides}
+</ul>
+</div>
+${n > 1 ? `<div class="car-nav" hidden>
+<button type="button" class="car-btn car-prev" aria-label="Slide anterior"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg></button>
+<div class="car-dots" role="group" aria-label="Escolher slide">${dots}</div>
+<span class="car-count" aria-hidden="true"><span class="car-cur">1</span> / ${n}</span>
+<button type="button" class="car-btn car-next" aria-label="Próximo slide"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></button>
+</div>` : ''}
+</section>`;
+}
+
+/** Imagem de uma categoria: foto do artigo mais novo dela, ou o desenho (degradê com ícone) que já existe no repositório. */
+function imgDaCategoria(slug) {
+  const a = dados().artigos.filter((x) => x.categoria === slug && x.foto).sort((x, y) => (x.data < y.data ? 1 : -1))[0];
+  return coverImg(a || { categoria: slug }, { width: 480, height: 320, sizes: '(max-width: 600px) 50vw, 240px' });
+}
+/** "Explore tópicos": um quadro por categoria existente (nome em texto sobre a imagem). */
+function exploreTopicos() {
+  const { artigos, notas } = dados();
+  const quadros = Object.keys(config.categorias).map((s) => {
+    const n = artigos.filter((a) => a.categoria === s).length + notas.filter((x) => x.categoria === s).length;
+    return `<li><a class="cat-tile" href="${catUrl(s)}">${imgDaCategoria(s)}<span class="cat-tile-text"><strong>${esc(catNome(s))}</strong><small>${n} ${n === 1 ? 'item' : 'itens'}</small></span></a></li>`;
+  }).join('\n');
+  return `<section class="container explore" aria-labelledby="explore-t">
+<div class="section-head"><h2 id="explore-t">Explore tópicos</h2></div>
+<ul class="cat-grid">
+${quadros}
+</ul>
+</section>`;
+}
+
+/** "Escolha da equipe": até 3 itens fixos de data/escolha-da-equipe.json (slug de artigo/guia, "radar:ID" ou {tipo, slug|id}). Vazio = sem seção. */
+function escolhaDaEquipe() {
+  let cfg; try { cfg = readJSON('data/escolha-da-equipe.json'); } catch (e) { return ''; }
+  const { artigos, notas } = dados();
+  const itens = (Array.isArray(cfg) ? cfg : cfg.itens || []).map((e) => {
+    const chave = typeof e === 'string' ? e : e.id || e.slug || '';
+    const radar = (typeof e === 'object' && e.tipo === 'radar') || String(chave).startsWith('radar:');
+    if (radar) { const n = notas.find((x) => x.id === String(chave).replace(/^radar:/, '')); return n && { tipo: 'radar', n, data: n.data }; }
+    const a = artigos.find((x) => x.slug === chave); return a && { tipo: ehGuia(a) ? 'guia' : 'artigo', a, data: a.data };
+  }).filter(Boolean).slice(0, 3);
+  if (!itens.length) return '';
+  return `<section class="container team" aria-labelledby="team-t">
+<div class="section-head"><h2 id="team-t">Escolha da equipe</h2></div>
+<div class="card-grid">${itens.map((x) => cardV(x.tipo === 'guia' ? x.a : x)).join('\n')}</div>
+</section>`;
+}
+
+/** Artigos relacionados (fim do artigo): 3 da mesma categoria por data real; se faltar, completa com os mais recentes. */
+function relacionados(a) {
+  const { artigos } = dados();
+  const outros = artigos.filter((x) => x.slug !== a.slug);
+  const ord = (lista) => { const o = ordenarConteudo(lista); return [...o.datados.map((d) => d.a), ...o.guias]; };
+  const mesma = ord(outros.filter((x) => x.categoria === a.categoria));
+  const resto = ord(outros.filter((x) => x.categoria !== a.categoria));
+  const tres = [...mesma, ...resto].slice(0, 3);
+  if (!tres.length) return '';
+  return `<section class="related" aria-labelledby="rel-t">
+<h2 id="rel-t">Artigos relacionados</h2>
+<div class="card-grid">${tres.map((x) => cardV(x)).join('\n')}</div>
+</section>`;
+}
+
+/** Redes sociais: só os perfis que existem em data/config.json (campo vazio = nada é mostrado). */
+const socialLinks = () => ['x', 'instagram', 'facebook'].filter((k) => config.social[k])
+  .map((k) => `<a class="social" href="${esc(config.social[k])}" target="_blank" rel="noopener noreferrer" aria-label="${{ x: 'X', instagram: 'Instagram', facebook: 'Facebook' }[k]} da ERASE (abre em nova aba)">${ICON[k]}</a>`).join('');
+
+/** Barra lateral completa: cartão (calculadora ou análise), Destaques, Sobre (+ redes) e newsletter. */
+function sidebar(cat) {
+  const dest = maisRecentes(4);
+  const redes = socialLinks();
+  return `<div class="side-col">
+${promoCard(cat)}
+${dest.length ? `<section class="side-box" aria-labelledby="sb-dest"><h2 id="sb-dest">Destaques</h2><ul class="mini-list">${dest.map(miniItem).join('\n')}</ul></section>` : ''}
+<section class="side-box" aria-labelledby="sb-sobre"><h2 id="sb-sobre">Sobre</h2>
+<p>Portal de notícias e guias sobre financiamento de veículos, produzido pela Equipe ERASE e revisado com fontes citadas.</p>
+<p><a href="/como-produzimos.html">Como produzimos nosso conteúdo</a></p>
+${redes ? `<div class="socials" aria-label="Redes sociais">${redes}</div>` : ''}
+</section>
+<section class="side-box" aria-labelledby="sb-news"><h2 id="sb-news">Receba as novidades</h2>
+<form id="sb-news-form" class="side-news" novalidate>
+<div class="field" data-campo="email"><label for="sb-email">E-mail <span class="req">*</span></label><input id="sb-email" name="email" type="email" inputmode="email" autocomplete="email" placeholder="seu@email.com" aria-required="true" aria-describedby="sb-err-email"><small class="err" id="sb-err-email">Informe um e-mail válido</small></div>
+<input type="text" name="bot-field" class="hp" tabindex="-1" autocomplete="off" aria-hidden="true">
+<div class="field check" data-campo="lgpd"><label><input type="checkbox" id="sb-lgpd" name="lgpd" aria-required="true" aria-describedby="sb-err-lgpd"><span>Autorizo a ERASE a me enviar o resumo semanal por e-mail, conforme a <a href="/privacidade.html" target="_blank" rel="noopener">Política de Privacidade</a>. <span class="req">*</span></span></label><small class="err" id="sb-err-lgpd">Marque para autorizar o envio</small></div>
+<button class="btn btn-primary btn-block" type="submit" aria-disabled="true">Preencha para receber</button>
+<p class="form-msg" id="sb-msg" role="status" aria-live="polite"></p>
+</form>
+</section>
+</div>`;
+}
+
 function ctaBanner(cat) {
   if (usaContato(cat)) return `<section class="container"><div class="cta-banner">
 <div><h2>Quer entender melhor o seu contrato ou a sua dívida?</h2><p>Conte o seu caso para a ERASE. <strong>ANÁLISE TOTALMENTE GRATUITA</strong>, sem compromisso e sem promessa de resultado.</p></div>
@@ -273,6 +423,6 @@ const freeBadge = (cls = '') => `<p class="free-badge ${cls}" role="note">${FREE
 
 module.exports = {
   FREE_TXT, freeBadge,
-  ROOT, config, loadArticles, loadNotas, ehGuia, selo, seloTxt, ordenarConteudo, ultimaPublicacao, rowCardNota, cardDe, readJSON, usaContato, esc, fmtPct, fmtData, catNome, catUrl, artUrl, absUrl, coverUrl, coverImg,
+  ROOT, config, loadArticles, loadNotas, ehGuia, selo, seloTxt, ordenarConteudo, ultimaPublicacao, rowCardNota, cardDe, readJSON, itemDe, dataHtml, maisRecentes, cardV, miniItem, carrossel, exploreTopicos, escolhaDaEquipe, relacionados, sidebar, socialLinks, usaContato, esc, fmtPct, fmtData, catNome, catUrl, artUrl, absUrl, coverUrl, coverImg,
   ICON, page, rowCard, promoCard, trustBadges, ctaBanner,
 };

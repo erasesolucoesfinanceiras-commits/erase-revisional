@@ -1,0 +1,4 @@
+{
+  "_leia": "Escolha da equipe (capa): até 3 itens fixos. Coloque em \"itens\" o slug de um artigo ou guia (ex.: \"o-que-e-revisao-de-contrato-de-financiamento\") ou \"radar:ID-da-nota\". Vazio = a seção não aparece. Depois de editar, rode: node scripts/build.js",
+  "itens": []
+}

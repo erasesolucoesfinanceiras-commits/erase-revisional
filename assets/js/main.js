@@ -187,6 +187,36 @@ if (nl) {
   });
 }
 
+// ---- Newsletter da barra lateral (e-mail + consentimento LGPD) ------------
+// Usa o MESMO envio da newsletter da capa: origem "newsletter" e os mesmos campos (e-mail, lgpd_aceite, campanha), sem campos de urgência.
+const sbn = $('#sb-news-form');
+if (sbn) {
+  const btn = $('button[type=submit]', sbn), msg = $('#sb-msg');
+  const pend = () => { const p = []; if (!emailOk(sbn.email.value.trim())) p.push({ campo: 'email', rotulo: 'e-mail válido', foco: sbn.email }); if (!sbn.lgpd.checked) p.push({ campo: 'lgpd', rotulo: 'a autorização de envio', foco: sbn.lgpd }); return p; };
+  const atualizar = () => {
+    const p = pend(), ok = !p.length;
+    btn.setAttribute('aria-disabled', ok ? 'false' : 'true');
+    if (!btn.dataset.enviando) btn.textContent = ok ? 'Receber novidades' : 'Preencha para receber';
+    $$('.field[data-campo]', sbn).forEach((c) => { if (c.classList.contains('invalid') && !p.some((x) => x.campo === c.dataset.campo)) c.classList.remove('invalid'); });
+    if (ok && msg.classList.contains('bad')) setMsg(msg, '');
+  };
+  sbn.addEventListener('input', atualizar); sbn.addEventListener('change', atualizar); atualizar();
+  sbn.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    if (sbn['bot-field'].value) return;
+    const p = pend();
+    if (p.length) {
+      $$('.field[data-campo]', sbn).forEach((c) => c.classList.toggle('invalid', p.some((x) => x.campo === c.dataset.campo)));
+      setMsg(msg, `Falta preencher: ${p.map((x) => x.rotulo).join(' e ')}.`, 'bad'); p[0].foco.focus(); return;
+    }
+    btn.disabled = true; btn.dataset.enviando = '1'; btn.textContent = 'Enviando…'; setMsg(msg, 'Enviando…');
+    const ok = await enviarLead('newsletter', { email: sbn.email.value.trim(), lgpd_aceite: 'sim', 'bot-field': sbn['bot-field'].value }, { comAtribuicao: false, campanha: true });
+    btn.disabled = false; delete btn.dataset.enviando;
+    if (!ok) { atualizar(); return setMsg(msg, MSG_FALHA, 'bad'); }
+    sbn.reset(); atualizar(); setMsg(msg, 'Pronto! Você vai receber o resumo semanal por e-mail.', 'ok');
+  });
+}
+
 const ct = $('#contact-form');
 if (ct) {
   ct.addEventListener('submit', async (e) => {

@@ -58,7 +58,7 @@ function radar() {
 </div></section>
 <section class="container home-grid">
 <div class="nota-list">${notas.length ? notas.map(notaHtml).join('\n') : '<p>Em breve, novas notas.</p>'}</div>
-<div class="sticky-col">${S.promoCard()}</div>
+${S.sidebar()}
 </section>
 ${S.ctaBanner()}`;
   out('radar.html', S.page({
@@ -70,14 +70,12 @@ ${S.ctaBanner()}`;
 
 function home() {
   const { datados, guias } = S.ordenarConteudo(articles, notas);
-  const feat = datados[0], resto = [...datados.slice(1, 13), ...guias.slice(0, 6)];
+  const destaques = datados.slice(0, 5); // carrossel: os 5 mais recentes por data real (artigos e Radar; guias fora)
+  const resto = [...datados.slice(0, 12), ...guias.slice(0, 6)];
   const INICIAL = 4;
   const list = resto.map((it, i) => S.cardDe(it.tipo ? it : { ...it, a: it }, i >= INICIAL)).join('\n');
   const ultima = S.ultimaPublicacao(articles, notas);
   const faixa = `<div class="pub-strip" role="note"><div class="container">Última publicação: <time datetime="${ultima}">${fmtData(ultima)}</time>${BCB_CONFERIDO ? ` · <span${BCB_ATUALIZADO ? ` title="Última alteração da série do Banco Central: ${fmtData(BCB_ATUALIZADO)}"` : ''}>Taxas conferidas com o Banco Central em <time datetime="${BCB_CONFERIDO}">${fmtData(BCB_CONFERIDO)}</time>${BCB_ATUALIZADO ? ` <small>(série alterada em <time datetime="${BCB_ATUALIZADO}">${fmtData(BCB_ATUALIZADO)}</time>)</small>` : ''}</span>` : ''}</div></div>`;
-  const fa = feat.a || feat.n, fHref = feat.tipo === 'radar' ? `/radar.html#${esc(feat.n.id)}` : artUrl(feat.a);
-  const fImg = feat.tipo === 'radar' ? S.coverImg({ categoria: fa.categoria, slug: fa.id }, { width: 1160, height: 460, sizes: '(max-width: 1200px) 100vw, 1160px', eager: true }) : S.coverImg(feat.a, { width: 1160, height: 460, sizes: '(max-width: 1200px) 100vw, 1160px', eager: true });
-  const fTxt = feat.tipo === 'radar' ? feat.n.texto : feat.a.resumo;
   const body = `
 <div class="free-strip" role="note"><div class="container">${S.FREE_TXT} <span>Descubra se você tem valores a recuperar</span></div></div>
 <section class="hero">
@@ -90,17 +88,8 @@ function home() {
 </section>
 
 ${faixa}
-<section class="container featured-wrap" aria-label="Destaque">
-<a class="featured" href="${fHref}">
-${fImg}
-<div class="featured-text">
-<div class="row-tags">${S.selo('Mais recente', 'selo-destaque')}${S.selo(feat.tipo === 'radar' ? 'Radar' : 'Artigo', feat.tipo === 'radar' ? 'selo-radar' : 'selo-artigo')}<span class="tag tag-on-img">${esc(catNome(fa.categoria))}</span></div>
-<h2>${esc(fa.titulo)}</h2>
-<p>${esc(fTxt)}</p>
-<time class="featured-date" datetime="${feat.data}">${fmtData(feat.data)}</time>
-</div>
-</a>
-</section>
+${S.carrossel(destaques)}
+${S.exploreTopicos()}
 
 <section class="container home-grid">
 <div>
@@ -112,9 +101,9 @@ ${list}
 </div>
 ${resto.length > INICIAL ? '<button class="btn btn-outline btn-block more-btn" id="ver-mais" type="button">Veja mais</button>' : ''}
 </div>
-<div class="sticky-col">${S.promoCard()}</div>
+${S.sidebar()}
 </section>
-
+${S.escolhaDaEquipe()}
 ${radarHome()}
 ${S.ctaBanner()}
 ${S.trustBadges()}
@@ -130,24 +119,30 @@ ${nl}
       desc: 'Notícias sobre financiamento de veículos e uma calculadora gratuita para descobrir a taxa de juros real do seu contrato e comparar com a média do Banco Central.',
       path: '/',
     },
-    active: 'home', body,
+    active: 'home', body, scripts: ['/assets/js/carrossel.js'],
   }));
   urls.push(['/', '1.0', maiorData(S.ultimaPublicacao(articles, notas), articles.map((a) => a.atualizado))]);
 }
 
 // ---------------------------------------------------------------- LISTAS
-function listPage({ file, title, desc, h1, intro, items, active, p, cat }) {
+function listPage({ file, title, desc, h1, intro, items, notasDaLista = [], active, p, cat }) {
+  // itens por data real (artigos e, nas categorias, notas do Radar); guias depois, sem data; os 8 primeiros aparecem, o resto em "Ver mais"
+  const o = S.ordenarConteudo(items, notasDaLista), todos = [...o.datados, ...o.guias], INICIAL = 8;
+  const cards = todos.map((it, i) => S.cardDe(it.tipo ? it : { ...it, a: it }, i >= INICIAL)).join('\n');
   const body = `
 <section class="page-head"><div class="container">
 <h1>${esc(h1)}</h1>${intro ? `<p class="lead">${esc(intro)}</p>` : ''}
 </div></section>
 <section class="container home-grid">
-<div class="row-list">${items.length ? [...S.ordenarConteudo(items).datados.map((x) => x.a), ...S.ordenarConteudo(items).guias].map((a) => S.rowCard(a)).join('\n') : '<p>Em breve, novos artigos nesta categoria.</p>'}</div>
-<div class="sticky-col">${S.promoCard(cat)}</div>
+<div>
+<div class="row-list" id="lista-artigos">${todos.length ? cards : '<p>Em breve, novos artigos nesta categoria.</p>'}</div>
+${todos.length > INICIAL ? '<button class="btn btn-outline btn-block more-btn" id="ver-mais" type="button">Ver mais</button>' : ''}
+</div>
+${S.sidebar(cat)}
 </section>
 ${S.ctaBanner(cat)}`;
   out(file, S.page({ meta: { title, desc, path: p }, active, body }));
-  urls.push([p, '0.7', maiorData(items.map((a) => a.data), items.map((a) => a.atualizado))]);
+  urls.push([p, '0.7', maiorData(items.map((a) => a.data), items.map((a) => a.atualizado), notasDaLista.map((n) => n.data))]);
 }
 
 function lists() {
@@ -163,7 +158,7 @@ function lists() {
       title: `${catNome(slug)} | ${SITE}`,
       desc: C.categorias[slug].descricao,
       h1: catNome(slug), intro: C.categorias[slug].descricao,
-      items: articles.filter((a) => a.categoria === slug), cat: slug,
+      items: articles.filter((a) => a.categoria === slug), notasDaLista: notas.filter((n) => n.categoria === slug), cat: slug,
     });
   }
 }
@@ -203,7 +198,8 @@ function artigos() {
       },
     };
     const body = `
-<article class="container article">
+<div class="container article-grid">
+<article class="article">
 <nav class="crumbs" aria-label="Você está em"><a href="/">Início</a> / <a href="${catUrl(a.categoria)}">${esc(catNome(a.categoria))}</a></nav>
 <a class="tag" href="${catUrl(a.categoria)}">${esc(catNome(a.categoria))}</a>
 <h1>${esc(a.titulo)}</h1>
@@ -215,7 +211,10 @@ ${injectCTA(a.corpo, a.categoria)}
 </div>
 ${fonteHtml}
 <p class="disclaimer">Conteúdo informativo. Não constitui parecer jurídico ou financeiro nem promessa de resultado.</p>
+${S.relacionados(a)}
 </article>
+${S.sidebar(a.categoria)}
+</div>
 ${S.ctaBanner(a.categoria)}`;
     out(`noticias/${a.slug}.html`, S.page({
       meta: {
@@ -436,6 +435,42 @@ function legais() {
 <p>Controladora: ${razao}. Solicitações pela página <a href="/contato.html">Fale Conosco</a>.</p>`);
 }
 
+// ---------------------------------------------------------------- COMO PRODUZIMOS NOSSO CONTEÚDO
+const PRODUCAO_DATE = '2026-10-10'; // data real em que este texto foi escrito (atualize ao revisá-lo)
+function comoProduzimos() {
+  const body = `<article class="container article legal-doc">
+<nav class="crumbs" aria-label="Você está em"><a href="/">Início</a> / Como produzimos nosso conteúdo</nav>
+<h1>Como produzimos nosso conteúdo</h1>
+<p class="lead">Transparência sobre quem escreve, como revisamos e o que o ERASE Revisional não faz.</p>
+<p class="meta">Última atualização: <time datetime="${PRODUCAO_DATE}">${fmtData(PRODUCAO_DATE)}</time></p>
+<h2>Quem escreve</h2>
+<p>Os textos são assinados pela <strong>Equipe ERASE</strong>. Não usamos autores inventados nem fotos de pessoas para dar rosto ao conteúdo. Parte do trabalho é feita <strong>com apoio de inteligência artificial</strong>, que escreve um rascunho a partir de fontes reais e passa por revisão automática antes de ir ao ar.</p>
+<h2>Como cada texto é revisado</h2>
+<ul>
+<li><strong>Pelo menos 2 fontes citadas</strong>, de sites diferentes, abertas e lidas de verdade; os links ficam no fim do texto. Notícias usam fontes recentes; guias usam fontes oficiais.</li>
+<li><strong>Números iguais aos da fonte</strong>: todo número, data, preço ou decisão citado precisa aparecer nas fontes, com o mesmo sentido.</li>
+<li><strong>Texto próprio</strong>: não copiamos trechos de outros sites.</li>
+<li><strong>Sem promessa de resultado</strong>: nenhum texto diz que você vai recuperar dinheiro, que tem valores a receber ou que algo é garantido, e nenhum dá conselho jurídico individual.</li>
+<li><strong>Segurança de conteúdo</strong>: não publicamos conteúdo sexual, violência gráfica, racismo ou discurso de ódio, assédio, instruções perigosas ou ilegais nem golpes.</li>
+<li><strong>Neutralidade</strong>: não fazemos propaganda eleitoral ou partidária nem elogiamos ou criticamos governo, partido ou político. Podemos citar autoridades com declaração atribuída e factual, sem endossá-la.</li>
+<li><strong>Uma segunda revisão independente</strong>, também automática, confere fatos, fontes e esses critérios; se algo não passa, o texto é reescrito ou não é publicado.</li>
+</ul>
+<h2>Datas, guias e atualizações</h2>
+<p>Mostramos sempre a data real de publicação. <strong>Guias</strong> são textos atemporais e não exibem data; só aparece "Atualizado em" quando o guia foi realmente revisado e o texto mudou. Nunca alteramos a data de um conteúdo antigo.</p>
+<h2>Fotos</h2>
+<p>As fotos vêm de bancos de imagens livres, com o crédito do autor na página do artigo. Quando não há foto adequada, usamos uma imagem padrão do site.</p>
+<h2>O que não somos</h2>
+<p>O ERASE Revisional é operado pela ${esc(C.empresa.razaoSocial)}, que não é instituição financeira, correspondente bancário nem escritório de advocacia. O conteúdo é informativo e não substitui a orientação de um profissional habilitado. A calculadora faz uma estimativa e não garante resultado.</p>
+<h2>Encontrou um erro?</h2>
+<p>Fale com a gente pela página <a href="/contato.html">Fale Conosco</a>: corrigimos ou retiramos o texto.</p>
+</article>`;
+  out('como-produzimos.html', S.page({
+    meta: { title: `Como produzimos nosso conteúdo | ${SITE}`, desc: 'Como a Equipe ERASE produz e revisa os textos: apoio de inteligência artificial, revisão automática, no mínimo 2 fontes citadas, números conferidos e nenhuma promessa de resultado.', path: '/como-produzimos.html' },
+    active: '', body,
+  }));
+  urls.push(['/como-produzimos.html', '0.5', PRODUCAO_DATE]);
+}
+
 function contato() {
   const body = `
 <section class="page-head"><div class="container"><h1>Fale Conosco</h1>
@@ -480,5 +515,5 @@ ${urls.map(([p, prio, d]) => `  <url><loc>${absUrl(p)}</loc>${d ? `<lastmod>${d}
   out('robots.txt', `User-agent: *\nAllow: /\n\nSitemap: ${absUrl('/sitemap.xml')}\n`);
 }
 
-home(); lists(); radar(); artigos(); calculadora(); legais(); contato(); notFound(); seo();
+home(); lists(); radar(); artigos(); calculadora(); legais(); comoProduzimos(); contato(); notFound(); seo();
 console.log(`OK — ${articles.length} artigos, ${urls.length} URLs no sitemap.`);
