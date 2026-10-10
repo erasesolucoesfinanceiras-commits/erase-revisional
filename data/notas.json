@@ -1,5 +1,24 @@
 [
   {
+    "id": "2026-10-10-anfavea-eleva-projecao-de-vendas-para-20",
+    "data": "2026-10-10",
+    "categoria": "mercado",
+    "titulo": "Anfavea eleva projeção de vendas para 2026 com melhor ritmo desde 2014",
+    "texto": "A Associação Nacional dos Fabricantes de Veículos Automotores elevou sua estimativa para o mercado interno em 2026, projetando crescimento de 15,2% nas vendas de veículos novos, patamar não visto desde 2014. A previsão para a produção nacional também teve alta de 6,7%, alcançando 2,82 milhões de unidades. O maior volume de veículos em circulação comercial pode ampliar opções aos consumidores, que devem comparar com atenção as taxas ao contratar crédito.",
+    "fontes": [
+      {
+        "nome": "G1 Carros",
+        "url": "https://g1.globo.com/carros/noticia/2026/10/07/producao-de-veiculos-cai-em-setembro-mas-vendas-sobem.ghtml",
+        "data": "2026-10-07"
+      },
+      {
+        "nome": "Valor Econômico",
+        "url": "https://valor.globo.com/empresas/noticia/2026/10/07/anfavea-preve-que-mercado-brasileiro-voltara-a-passar-de-3-milhoes-de-veiculos-em-2026.ghtml",
+        "data": "2026-10-07"
+      }
+    ]
+  },
+  {
     "id": "2026-10-09-brasil-atinge-1-milhao-de-carros-eletric",
     "data": "2026-10-09",
     "categoria": "mercado",
