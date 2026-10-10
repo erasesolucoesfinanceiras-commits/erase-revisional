@@ -286,6 +286,13 @@ input:focus, select:focus, textarea:focus { border-color: var(--blue); outline: 
 .popup .pp-fields .form-msg { margin: 2px 0 var(--g); font-size: .8rem; line-height: 1.2; }
 @keyframes fade { from { opacity: 0 } } @keyframes pop { from { opacity: 0; transform: translateY(18px) scale(.97) } }
 /* telas baixas: some o texto de apoio e os rótulos viram só leitor de tela (os campos têm placeholder) */
+/* asterisco dentro do campo: aparece quando o rótulo vira só leitor de tela (telas baixas), para o * nunca sumir */
+.popup .req-in { display: none; position: absolute; right: 14px; top: 0; height: var(--ctl); line-height: var(--ctl); font-weight: 800; font-size: 1.1rem; pointer-events: none; }
+@media (max-height: 700px) {
+  .popup .field[data-campo="nome"], .popup .field[data-campo="telefone"] { position: relative; }
+  .popup .field[data-campo="nome"] .req-in, .popup .field[data-campo="telefone"] .req-in { display: block; }
+  .popup .field[data-campo="nome"] > input, .popup .field[data-campo="telefone"] > input { padding-right: 34px; }
+}
 @media (max-height: 700px), (max-width: 700px) {
   .popup .popup-sub { display: none; }
   .popup .field:not(.check):not(.choices) > label { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; margin: 0; }
@@ -473,3 +480,16 @@ fieldset.field { border: 0; padding: 0; margin: 0 0 18px; min-width: 0; }
 .totais > div { background: var(--surface-2); border: 1px solid var(--border); border-radius: 12px; padding: 10px 12px; display: flex; flex-direction: column; gap: 2px; }
 .totais small { color: var(--muted); font-weight: 600; } .totais b { font-size: 1.15rem; } .totais span { color: var(--muted); font-size: .82rem; }
 @media (max-width: 480px) { .totais { grid-template-columns: 1fr; } }
+
+/* Selos de texto (nunca só cor): Artigo, Guia, Radar, Mais recente */
+.row-tags { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin-bottom: 4px; }
+.selo { display: inline-block; font-size: .7rem; font-weight: 800; letter-spacing: .05em; text-transform: uppercase; line-height: 1; padding: 4px 8px; border-radius: 999px; border: 1.5px solid currentColor; background: var(--surface); color: var(--text); }
+.selo-guia { border-style: dashed; color: var(--blue-ink); }
+.selo-radar { color: var(--ok); }
+.selo-destaque { background: var(--blue); color: var(--on-blue); border-color: var(--on-blue); }
+.featured-text .selo { background: #fff; color: #0f1720; border-color: #0f1720; }
+.featured-text .selo-destaque { background: var(--blue); color: #04121f; }
+.featured-date { display: block; margin-top: 8px; font-size: .88rem; font-weight: 600; color: #fff; }
+.pub-strip { background: var(--surface-2); border-block: 1px solid var(--border); font-size: .88rem; color: var(--text); }
+.pub-strip .container { padding-block: 8px; text-align: center; font-weight: 600; }
+.article .meta .selo { margin-right: 6px; vertical-align: 1px; }

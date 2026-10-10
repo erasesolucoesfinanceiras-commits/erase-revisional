@@ -16,6 +16,10 @@ let ok=0,bad=0;const t=(n,c,x='')=>{c?ok++:bad++;console.log(c?'OK   ':'FALHA',n
    t('texto GRATUITA em caixa alta e aviso',/TOTALMENTE GRATUITA/.test(await pg.innerText('.free-badge'))&&/não é análise jurídica|sem valor de análise jurídica/i.test(await pg.innerText('.popup-legal')));
    t('sem campo de e-mail',await pg.locator('.popup input[type=email],.popup input[name=email]').count()===0);
    t('título sem % nem R$',!/[%$]/.test(await pg.innerText('#popup-title')));}
+  if(sit==='Em dia'){
+   t('campos obrigatórios têm aria-required="true" (nome, WhatsApp, situação, autorização)',await pg.evaluate(()=>['#pp-nome','#pp-tel','#pp-lgpd','.popup .choice-grid[role=radiogroup]'].every(q=>document.querySelector(q).getAttribute('aria-required')==='true')));
+   t('asterisco em texto nos rótulos de nome e WhatsApp, na pergunta das parcelas e na autorização',await pg.evaluate(()=>['label[for=pp-nome] .req','label[for=pp-tel] .req','.popup legend .req'].every(q=>document.querySelector(q)&&document.querySelector(q).textContent==='*')&&/\*\s*$/.test(document.querySelector('.popup .check span').textContent)));
+  }
   if(sit==='Em dia'){ // validação: envio bloqueado, aviso listando o que falta, estado do botão antes/depois
    const btn=pg.locator('.popup-cta');
    t('botão incompleto: aria-disabled=true e texto "Preencha os dados para enviar"',await btn.getAttribute('aria-disabled')==='true'&&/Preencha os dados para enviar/.test(await btn.innerText()));

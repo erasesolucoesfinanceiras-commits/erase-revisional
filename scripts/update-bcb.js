@@ -23,6 +23,12 @@ async function baixar() {
   throw new Error(`Não foi possível baixar ${URL}: ${erro && erro.message}`);
 }
 
+/** Se a série baixada é igual à gravada, mantém a data antiga (nada mudou); se mudou, é a data de hoje (Brasília). */
+function dataDaAtualizacao(valores) {
+  try { const antigo = JSON.parse(fs.readFileSync(OUT, 'utf8')); if (JSON.stringify(antigo.valores) === JSON.stringify(valores) && antigo.atualizado_em) return antigo.atualizado_em; } catch (e) { /* primeira gravação */ }
+  return new Date(Date.now() - 3 * 3600e3).toISOString().slice(0, 10);
+}
+
 (async () => {
   const linhas = await baixar();
   if (!Array.isArray(linhas) || !linhas.length) throw new Error('Série vazia');
@@ -45,6 +51,7 @@ async function baixar() {
     serie: SERIE_SGS,
     descricao: 'Taxa média mensal de juros - pessoas físicas - aquisição de veículos (% ao mês)',
     fonte: `Banco Central do Brasil — SGS ${SERIE_SGS}`,
+    atualizado_em: dataDaAtualizacao(valores), // data REAL em que a série mudou (a capa mostra "Taxas do Banco Central atualizadas em ...")
     primeiro_mes: meses[0], ultimo_mes: meses[meses.length - 1],
     valores,
   };

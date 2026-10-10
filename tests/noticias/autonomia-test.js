@@ -49,7 +49,7 @@ const ultimaLinha = (f) => { const l = fs.readFileSync(f, 'utf8').trim().split('
   // ---------- run.js: rodadas (sem fontes → nenhum tema publica)
   for (const [rodada, esperaCodigo, ultimo] of [['1', 0, 'rodada_falhou'], ['final', 1, 'diagnostico_final']]) {
     const d = tmp(); fs.cpSync(path.join(ROOT, 'data'), d, { recursive: true });
-    const r = await rodar(['scripts/noticias/run.js'], { DADOS_DIR: d, DATA: '2026-10-10', RODADA: rodada, GEMINI_API_KEY: 'k', FONTES_ESPERA_MS: '0', HTTPS_PROXY: 'http://127.0.0.1:9', https_proxy: 'http://127.0.0.1:9' });
+    const r = await rodar(['scripts/noticias/run.js'], { DADOS_DIR: d, DATA: '2026-10-14', RODADA: rodada, GEMINI_API_KEY: 'k', FONTES_ESPERA_MS: '0', HTTPS_PROXY: 'http://127.0.0.1:9', https_proxy: 'http://127.0.0.1:9' });
     const f = path.join(d, 'noticias-log.jsonl'), u = ultimaLinha(f);
     const linhas = fs.readFileSync(f, 'utf8').split('\n').filter(Boolean).map((l) => JSON.parse(l));
     t(`run rodada ${rodada}: saída ${esperaCodigo}, última linha do log = ${ultimo}`, r.code === esperaCodigo && u.evento === ultimo, `code=${r.code} ${JSON.stringify(u).slice(0, 200)}`);
@@ -59,9 +59,9 @@ const ultimaLinha = (f) => { const l = fs.readFileSync(f, 'utf8').trim().split('
   }
 
   // ---------- verificação diária (GitHub, site e Cloudflare falsos)
-  async function verificar(nome, { runs = [], siteTem = false, hookRestaura = false, dataArtigo = '2026-10-02', hoje = '2026-10-02', hook = true }) {
+  async function verificar(nome, { runs = [], siteTem = false, hookRestaura = false, dataArtigo = '2026-10-02', hoje = '2026-10-02', hook = true, guiaRevisadoHoje = false }) {
     const d = tmp(); fs.cpSync(path.join(ROOT, 'data'), d, { recursive: true });
-    const arts = JSON.parse(fs.readFileSync(path.join(d, 'articles.json'), 'utf8')); arts[0].data = dataArtigo; fs.writeFileSync(path.join(d, 'articles.json'), JSON.stringify(arts));
+    const arts = JSON.parse(fs.readFileSync(path.join(d, 'articles.json'), 'utf8')); arts[0].data = dataArtigo; if (guiaRevisadoHoje) arts.forEach((a) => { a.data = dataArtigo; a.atualizado = hoje; }); fs.writeFileSync(path.join(d, 'articles.json'), JSON.stringify(arts));
     const slug = arts[0].slug; const ev = { dispatch: 0, hook: 0 }; let site = siteTem; let runsAtuais = runs.slice();
     const gh = await servidor((q, s) => { s.setHeader('content-type', 'application/json');
       if (q.method === 'POST' && q.url.includes('/dispatches')) { ev.dispatch++; runsAtuais = [{ id: 9, status: 'completed', conclusion: 'success', created_at: new Date().toISOString() }]; s.statusCode = 204; return s.end(); }
@@ -80,6 +80,8 @@ const ultimaLinha = (f) => { const l = fs.readFileSync(f, 'utf8').trim().split('
   t('verificação: dia normal → não dispara, não pede deploy, saída 0', v.ev.dispatch === 0 && v.ev.hook === 0 && v.r.code === 0, v.r.o.slice(-200));
   v = await verificar('artigo atrasado (7 dias)', { runs: [{ id: 1, status: 'completed', conclusion: 'failure', created_at: '2026-10-09T11:00:00Z' }], siteTem: true, hoje: '2026-10-09' });
   t('verificação: artigo com mais de 3 dias → vermelho com causa na última linha', v.r.code === 1 && v.u.evento === 'diagnostico_final' && /dias que não sai artigo/.test(v.u.causa), JSON.stringify(v.u).slice(0, 250));
+  v = await verificar('guia revisado hoje não zera o atraso', { runs: [{ id: 1, status: 'completed', conclusion: 'failure', created_at: '2026-10-09T11:00:00Z' }], siteTem: true, hoje: '2026-10-09', guiaRevisadoHoje: true });
+  t('verificação: guia revisado (atualizado = hoje) NÃO conta como artigo novo: segue vermelho por atraso', v.r.code === 1 && /dias que não sai artigo/.test(v.u.causa), JSON.stringify(v.u).slice(0, 200));
   v = await verificar('site nunca mostra o artigo, sem gancho', { runs: [{ id: 1, status: 'completed', conclusion: 'success', created_at: '2026-10-02T11:00:00Z' }], siteTem: false, hook: false });
   t('verificação: deploy esgotado (sem gancho, só commit) → vermelho, exige pessoa, causa simples', v.r.code === 1 && v.u.precisa_de_humano === true && /Cloudflare Pages/.test(v.u.causa), JSON.stringify(v.u).slice(0, 250));
   console.log(`${ok} ok, ${bad} falha(s)`); process.exit(bad ? 1 : 0);

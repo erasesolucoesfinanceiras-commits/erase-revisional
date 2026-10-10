@@ -21,11 +21,25 @@ const PROMESSA = [
   /valores?\s+a\s+(receber|recuperar|restituir)/i,
   /voc[eê]\s+deve\s+(entrar|ajuizar|processar|propor)|entre com (uma )?a[cç][aã]o/i,
 ];
+// Aviso em NEGATIVA ("não há resultado garantido", "não prometemos valores a receber") não é promessa: sai do texto antes de procurar promessas.
+const AVISO_NEGATIVO = /n[aã]o\s+(?:h[aá]|existe|existem|tem|temos|oferece|oferecemos|prometemos|garantimos|significa|[eé])(?=\s)(?=[^.!?<]*(?:garant|promess|valores?\s+a\s+(?:receber|recuperar|restituir)))[^.!?<]*/gi;
 const PARCEIRO = /escrit[oó]rio\s+parceiro|advogad[oa]s?\s+parceir|parceir[oa]s?\s+(jur[ií]dic|da\s+erase)|nossos?\s+parceiros?\s+(jur[ií]dic|advogad)/i;
 const POLITICA = /\b(lula|bolsonaro|tarc[ií]sio|haddad|ciro gomes|mar[cç]al|alckmin|janja|petista|bolsonarista|lulista|esquerdista|direitista|candidat[oa]s?|eleitor(?:es|al|ais)?|elei[cç](?:[aã]o|[oõ]es)|partid(?:o|os|[aá]rio|[aá]ria)|psdb|psol|mdb|uni[aã]o brasil|centr[aã]o|oposi[cç][aã]o|palanque|presidenci[aá]vel)\b|\bPT\b/i;
 const CARREGADO = /\b(desastre|desastroso|ac?erto hist[óo]rico|manobra|esc[âa]ndalo|vergonha|vergonhoso|fiasco|fracasso (do|da) governo|ca[oó]s|absurdo|omiss[ãa]o|c[ií]nic[oa]|populis(?:mo|ta)|armaç[ãa]o|heroi[ck][oa]|trag[ée]dia nacional)\b|campanha eleitoral|pesquisa eleitoral|pr[ée]-candidat|urnas?\b/i;
 // Atribuição genérica ("especialistas destacam", "analistas apontam", "o mercado avalia"): ou diz QUEM disse (nome ou instituição
 // presente nas fontes) ou a frase sai.
+// Segurança de conteúdo (o que Google e redes sociais reprovariam). Barreira de código além da revisão por IA; na dúvida, reprova.
+const SEGURANCA = [
+  ['sexual', /\b(porn[oô]\w*|sexo expl[ií]cito|nudez|nu[ae]s? em p[eê]lo|er[oó]tic[oa]s?|conte[uú]do adulto|estupr\w+|pedofil\w+|abuso sexual)\b/i],
+  ['violência gráfica', /\b(decapit\w+|esquartej\w+|mutil\w+|degolad\w+|desmembr\w+|tortur\w+|corpo carbonizado|poça de sangue)\b/i],
+  ['ódio ou racismo', /\b(crioul[oa]s?|neona[sz]i\w*|nazis(?:mo|t\w+)|supremacia (?:branca|racial)|ra[cç]a inferior|nego imundo|macaco[s]? (?:preto|negro)|judeus? (?:ganancios|usur[aá]ri)\w*|morte aos?\s+\w+)\b/i],
+  ['assédio', /\b(lixo humano|vagabund[oa]s?|retardad[oa]s?|imbecil(?:es)?|desgra[cç]ad[oa]s?|vadia|piranha)\b/i],
+  ['perigoso ou ilegal', /\b(como (?:fabricar|montar|fazer) (?:uma )?(?:bomba|explosivo|arma|droga|coquetel molotov)|como (?:clonar|fraudar|burlar|hackear)\b|passo a passo (?:para|de) (?:fraudar|clonar|sonegar|lavar dinheiro)|como lavar dinheiro)/i],
+  ['golpe promovido', /\b(ganhe dinheiro f[aá]cil|dinheiro f[aá]cil e r[aá]pido|renda extra garantida|lucro garantido|dobre (?:o )?seu (?:dinheiro|investimento)|multiplique seu dinheiro|enriqu\w+ r[aá]pido|cr[eé]dito aprovado (?:na hora )?sem consulta|empr[eé]stimo garantido sem comprovar|invista agora e (?:ganhe|lucre)|clique no link e (?:ganhe|receba))\b/i],
+];
+function inseguro(texto) { for (const [cat, re] of SEGURANCA) { const m = re.exec(texto); if (m) return `${cat}: "${m[0]}"`; } return null; }
+// Descrição de número agregado das fontes ("mediana das projeções", "consenso do Focus"): não é atribuição genérica de opinião.
+const AGREGADO = /\b(mediana|m[eé]dia das (?:proje|previs)\w+|consenso|boletim focus|\bfocus\b|pesquisa|levantamento)\b/i;
 const GENERICO = /\b(?:especialistas?|analistas?|economistas?|investidores|observadores|estudiosos|operadores|consultores|o mercado|os mercados|o mercado financeiro|o setor financeiro|o sistema financeiro|fontes do setor|fontes ligadas)\s+(?:do setor\s+\w+\s+|do mercado\s+)?(?:\w+\s+)?(?:destac\w+|apont\w+|avali\w+|dizem|diz|afirm\w+|prev[eê]\w*|espera\w*|acredit\w+|alert\w+|ressalt\w+|consider\w+|v[eê]m?|entend\w+|estim\w+|sugere\w*|indic\w+|defend\w+|recomend\w+)|\b(?:segundo|de acordo com|para|na avalia[cç][aã]o d[eo]s?|na vis[aã]o d[eo]s?)\s+(?:especialistas|analistas|economistas|o mercado|observadores)\b|\bmuitos (?:acreditam|especialistas|analistas)|\bh[aá] quem (?:diga|aponte|avalie)|\bsabe-se que\b|\bcostuma-se (?:dizer|afirmar)\b/i;
 const frasesDe = (t) => t.split(/(?<=[.!?:;])\s+/);
 /** Frases com atribuição genérica sem atribuição explícita ("do Itaú", "pelo Valor", "segundo o Banco Central") a nome presente nas fontes. */
@@ -40,7 +54,7 @@ function frasesGenericas(texto, textosFontes) {
   };
   const achadas = [];
   for (const f of frasesDe(texto)) {
-    if (!GENERICO.test(f)) continue;
+    if (!GENERICO.test(f) || (AGREGADO.test(f) && /\d/.test(f))) continue;
     let atribuida = false, m;
     ATRIB.lastIndex = 0;
     while ((m = ATRIB.exec(f))) if (achouNome(m[1])) { atribuida = true; break; }
@@ -64,10 +78,13 @@ function checarRegras(r, tipo, ctx) {
     if (n < 400 || n > 900) m.push(`artigo com ${n} palavras (esperado 450 a 700)`);
     if (!r.resumo || r.resumo.length < 40 || r.resumo.length > 230) m.push('resumo ausente ou fora do tamanho');
   }
-  if (PROMESSA.some((re) => re.test(todo))) m.push('promete resultado, valores a receber ou dá conselho jurídico individual');
+  const todoSemAviso = todo.replace(AVISO_NEGATIVO, ' ');
+  if (PROMESSA.some((re) => re.test(todoSemAviso))) m.push('promete resultado, valores a receber ou dá conselho jurídico individual');
   if (PARCEIRO.test(todo)) m.push('cita escritório/advogado parceiro');
   const pol = POLITICA.exec(todo);
   if (pol) m.push(`menção política/partidária ("${pol[0]}")`);
+  const ins = inseguro(todo);
+  if (ins) m.push(`conteúdo inseguro (${ins})`);
   const gen = frasesGenericas(corpoTxt, (ctx.textosFontes || []));
   if (gen.length) m.push(`frase genérica sem dizer quem disse (nome ou instituição das fontes): "${gen[0]}"`);
   const car = CARREGADO.exec(todo);
@@ -121,4 +138,4 @@ function checarFontes(r, tipo, modo, cands, hoje, diasMax) {
   return { motivos, textos };
 }
 
-module.exports = { frasesGenericas, POLITICA, checarRegras, checarFontes, trechoCopiado, semHtml, norm, host };
+module.exports = { inseguro, frasesGenericas, POLITICA, checarRegras, checarFontes, trechoCopiado, semHtml, norm, host };

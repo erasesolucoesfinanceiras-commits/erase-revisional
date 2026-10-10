@@ -47,7 +47,7 @@ function modelos(key) {
   return listaModelos;
 }
 
-async function umaChamada(modelo, key, { prompt, sistema, busca, temperatura }) {
+async function umaChamada(modelo, key, { prompt, sistema, busca, temperatura, imagem }) {
   const espera = ultima + INTERVALO_MS * ESCALA - Date.now();
   if (espera > 0) await new Promise((r) => setTimeout(r, espera));
   ultima = Date.now();
@@ -56,7 +56,7 @@ async function umaChamada(modelo, key, { prompt, sistema, busca, temperatura }) 
     headers: { 'Content-Type': 'application/json', 'x-goog-api-key': key },
     body: JSON.stringify({
       ...(sistema && { systemInstruction: { parts: [{ text: sistema }] } }),
-      contents: [{ role: 'user', parts: [{ text: prompt }] }],
+      contents: [{ role: 'user', parts: [{ text: prompt }, ...(imagem ? [{ inlineData: { mimeType: imagem.mime, data: imagem.base64 } }] : [])] }],
       ...(busca && { tools: [{ google_search: {} }] }), // desligada: o plano gratuito recusa a busca do Google (429); as fontes vêm de fontes.js
       generationConfig: { temperature: temperatura },
     }),
@@ -83,7 +83,7 @@ function exigeHumano(e) {
 const atrasoSugerido = (e) => { const m = /"retryDelay"\s*:\s*"(\d+(?:\.\d+)?)s"|retry in (\d+(?:\.\d+)?)s/i.exec(e.corpo || e.message); return m ? Number(m[1] || m[2]) * 1000 : 0; };
 
 /** Devolve { texto, modelo }. Lança ErroGemini quando nenhum modelo gratuito consegue responder (`humano` quando só uma pessoa resolve). */
-async function chamar({ prompt, sistema, busca = false, temperatura = 0.5 }) {
+async function chamar({ prompt, sistema, busca = false, temperatura = 0.5, imagem = null }) {
   const key = process.env.GEMINI_API_KEY;
   if (!key) throw new ErroGemini('GEMINI_API_KEY ausente', { humano: true, causa: 'O secret GEMINI_API_KEY não está configurado no GitHub.', acao: 'Criar o secret GEMINI_API_KEY em Settings > Secrets and variables > Actions.' });
   const falhas = []; let semCotaDoPlano = 0, tentados = 0;
@@ -91,7 +91,7 @@ async function chamar({ prompt, sistema, busca = false, temperatura = 0.5 }) {
     tentados++;
     for (let t = 1; t <= TENTATIVAS; t++) {
       if (Date.now() > prazoFn()) throw new ErroGemini('tempo do job esgotado esperando o Gemini');
-      try { return { texto: await umaChamada(m, key, { prompt, sistema, busca, temperatura }), modelo: m }; }
+      try { return { texto: await umaChamada(m, key, { prompt, sistema, busca, temperatura, imagem }), modelo: m }; }
       catch (e) {
         falhas.push(`${m}: ${e.message.slice(0, 120)}`); console.error(`Gemini ${m}, tentativa ${t}: ${e.message.slice(0, 160)}`);
         const h = exigeHumano(e);

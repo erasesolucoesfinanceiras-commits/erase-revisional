@@ -2,6 +2,7 @@
   {
     "slug": "pf-apura-fraude-em-financiamentos-veiculares-com-uso-de-biometria-em-mg",
     "categoria": "revisional",
+    "tipo": "noticia",
     "titulo": "PF apura fraude em financiamentos veiculares com uso de biometria em MG",
     "resumo": "A Operação Brinde Facial cumpriu sete mandados em Uberlândia contra grupo que colhia biometria facial de vítimas com falsos brindes para contratar financiamentos de veículos.",
     "data": "2026-10-10",
@@ -18,17 +19,12 @@
       }
     ],
     "corpo": "<p>A Polícia Federal deflagrou no município de Uberlândia, em Minas Gerais, a Operação Brinde Facial, que investiga um esquema criminoso especializado na obtenção irregular de financiamentos de veículos. A corporação cumpriu sete mandados de busca e apreensão na quinta-feira, 8 de outubro de 2026, com o objetivo de reunir elementos sobre o grupo suspeito de capturar dados cadastrais e registros de terceiros para contratar crédito automotivo sem o consentimento das vítimas.</p><p>Até a deflagração da operação, as apurações da autoridade policial confirmaram a ocorrência de pelo menos quatro financiamentos veiculares fraudulentos viabilizados por meio desse mecanismo. O avanço das investigações apontou como a estrutura operava, abrangendo desde a abordagem inicial aos cidadãos até a divisão dos montantes liberados pelas instituições financeiras.</p><h2>Como funcionava a abordagem com falso brinde e coleta de biometria</h2><p>Conforme as informações divulgadas pela Polícia Federal, os investigados abordavam as vítimas apresentando-se como entregadores de brindes ou de encomendas. Durante o contato presencial, os suspeitos afirmavam que a entrega do pacote exigia a confirmação de recebimento por parte de quem atendia.</p><p>Sob o pretexto dessa confirmação, os falsos entregadores capturavam a biometria facial, tiravam fotos e colhiam dados cadastrais completos dos cidadãos. As pessoas abordadas acreditavam que estavam apenas validando a entrega de um brinde, sem ciência de que seus registros seriam utilizados para outros fins.</p><p>De posse das fotos e das informações pessoais, os envolvidos davam entrada em contratos de crédito automotivo diretamente em nome das vítimas. Todo o procedimento para obter o financiamento veicular ocorria sem nenhuma autorização das pessoas cujos dados haviam sido captados.</p><h2>Destinação dos valores e identificação das operações ilícitas</h2><p>Segundo o inquérito da Polícia Federal, o dinheiro decorrente das contratações irregulares não permanecia centralizado. As investigações demonstraram que os recursos obtidos por meio dos financiamentos eram repassados, fracionados e distribuídos entre indivíduos ligados ao núcleo investigado.</p><p>Essa dinâmica de pulverização financeira era empregada para dividir os valores obtidos com o crédito entre as pessoas associadas ao grupo. Até o momento, quatro operações de crédito fraudulentas foram oficialmente identificadas pela apuração da polícia no município mineiro.</p><h2>Enquadramento penal e desdobramentos da apuração</h2><p>Os alvos da ação policial deflagrada em Uberlândia poderão responder perante a Justiça por crimes específicos vinculados à contratação irregular de recursos e à organização do grupo:</p><ul><li><strong>Obtenção fraudulenta de financiamento:</strong> imputação relativa à contratação de operações de crédito mediante uso de informações, documentos ou biometria de terceiros sem consentimento;</li><li><strong>Associação criminosa:</strong> referente à articulação estável entre os envolvidos para a prática continuada das fraudes financeiras.</li></ul><p>O cumprimento dos sete mandados de busca e apreensão visa fornecer novos subsídios materiais à investigação da Polícia Federal, permitindo verificar a dimensão total das movimentações e apurar se outros contratos de financiamento de veículos foram emitidos por meio do mesmo esquema.</p>",
-    "foto_busca": "car loan contract",
-    "foto": {
-      "id": 6688945,
-      "autor": "OleksandrPidvalnyi",
-      "autorUrl": "https://pixabay.com/users/OleksandrPidvalnyi-4638469/",
-      "pagina": "https://pixabay.com/photos/real-estate-homeownership-homebuying-6688945/"
-    }
+    "foto_busca": "car loan contract"
   },
   {
     "slug": "como-calcular-a-taxa-de-juros-do-seu-financiamento",
     "categoria": "revisional",
+    "tipo": "guia",
     "titulo": "Como descobrir a taxa de juros real do seu financiamento de veículo",
     "resumo": "O contrato mostra a parcela, mas nem sempre deixa claro o juro mensal embutido. Veja como a taxa é encontrada a partir do valor financiado, da parcela e do prazo.",
     "data": "2026-10-02",
@@ -48,6 +44,7 @@
   {
     "slug": "juros-acima-da-media-sao-abusivos-o-que-diz-o-stj",
     "categoria": "revisional",
+    "tipo": "guia",
     "titulo": "Juros acima da média são abusivos? O que diz a jurisprudência do STJ",
     "resumo": "Estar acima da média de mercado não significa, por si só, que o juro é ilegal. Entenda o critério usado pelos tribunais para avaliar a abusividade.",
     "data": "2026-10-02",
@@ -67,6 +64,7 @@
   {
     "slug": "o-que-e-revisao-de-contrato-de-financiamento",
     "categoria": "revisional",
+    "tipo": "guia",
     "titulo": "O que é a revisão de contrato de financiamento e quando ela faz sentido",
     "resumo": "Revisar um contrato é pedir a um profissional que analise as cláusulas e as taxas aplicadas. Veja em que situações essa análise costuma ser considerada.",
     "data": "2026-10-02",
@@ -86,6 +84,7 @@
   {
     "slug": "taxa-nominal-x-taxa-efetiva-entenda-a-diferenca",
     "categoria": "financeiro",
+    "tipo": "guia",
     "titulo": "Taxa nominal x taxa efetiva: entenda a diferença antes de assinar",
     "resumo": "A taxa anunciada nem sempre é a taxa que você paga. Entenda por que o cálculo da taxa efetiva é o que realmente importa na comparação entre propostas.",
     "data": "2026-10-02",
@@ -105,6 +104,7 @@
   {
     "slug": "cet-custo-efetivo-total-o-que-entra-na-conta",
     "categoria": "financeiro",
+    "tipo": "guia",
     "titulo": "CET: o que entra no Custo Efetivo Total do financiamento",
     "resumo": "O CET reúne juros, tarifas, tributos e outras despesas do contrato. Saiba por que ele é o melhor número para comparar propostas.",
     "data": "2026-10-02",
@@ -124,6 +124,7 @@
   {
     "slug": "portabilidade-de-credito-quando-vale-a-pena",
     "categoria": "financeiro",
+    "tipo": "noticia",
     "titulo": "Portabilidade de crédito: quando vale a pena trocar de banco",
     "resumo": "A portabilidade permite levar o financiamento para outra instituição com condições melhores. Veja o que avaliar antes de pedir.",
     "data": "2026-10-02",
@@ -143,6 +144,7 @@
   {
     "slug": "por-que-motos-pagam-juros-mais-altos-que-carros",
     "categoria": "mercado",
+    "tipo": "noticia",
     "titulo": "Por que financiar uma moto costuma custar mais caro que financiar um carro",
     "resumo": "As taxas de financiamento de motos tendem a ser mais altas do que as de carros. Entenda os fatores que explicam essa diferença.",
     "data": "2026-10-02",
@@ -162,6 +164,7 @@
   {
     "slug": "financiamento-agricola-linhas-subsidiadas-e-pronaf",
     "categoria": "mercado",
+    "tipo": "noticia",
     "titulo": "Financiamento agrícola: por que as taxas são diferentes das de carros e motos",
     "resumo": "Máquinas e equipamentos agrícolas contam com linhas de crédito próprias, algumas com juros subsidiados. Veja como isso afeta a comparação de taxas.",
     "data": "2026-10-02",

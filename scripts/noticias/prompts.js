@@ -6,7 +6,8 @@ const REGRAS_COMUNS = `REGRAS OBRIGATÓRIAS
 - Prefira fontes de ÓRGÃO OFICIAL e de GRANDE VEÍCULO/SETORIAL. Fonte REGIONAL serve só de complemento e nunca como única base.
 - NÃO traga fatos, comparações ou números de outros assuntos, países ou setores que não sejam o tema central das fontes usadas (por exemplo, trechos de notícias relacionadas que aparecem na mesma página). Fique no fato principal.
 - Impacto prático: baseie-se no que as fontes dizem. Quando for inferência geral, deixe claro que é um efeito possível ("pode", "tende a") e não a apresente como fato nem como regra.
-- PROIBIDO atribuição genérica: não escreva "especialistas destacam", "analistas apontam", "o mercado avalia", "muitos acreditam" nem equivalentes. Ou diga QUEM disse (nome da pessoa ou instituição, como aparece nas fontes: "segundo o Banco Central", "para o economista Fulano, do Banco X"), ou retire a frase.
+- ATRIBUIÇÃO: opinião, previsão ou avaliação de TERCEIROS é permitida desde que atribuída a quem a disse (nome da pessoa ou instituição, como aparece nas fontes: "segundo o Banco Central", "para o economista Fulano, do Banco X") e sem que o texto a endosse nem a repita como fato ou como posição do portal. PROIBIDO a atribuição vaga e sem fonte ("especialistas destacam", "analistas apontam", "o mercado avalia", "muitos acreditam"): ou diga QUEM disse ou retire a frase. Descrever um número agregado que está nas fontes ("a mediana das projeções do Boletim Focus", "a média das previsões") é permitido, mesmo sem listar cada instituição.
+- SEGURANÇA DE CONTEÚDO (o que Google e as redes sociais reprovariam): nada de conteúdo sexual ou erótico, mutilação ou violência gráfica, racismo, discurso de ódio ou ofensa a grupos, assédio ou xingamento a pessoas, instruções de algo perigoso ou ilegal, nem divulgação, venda ou incentivo a golpes ("dinheiro fácil", "renda extra garantida", "lucro garantido"). Reportar ou alertar sobre um golpe, sem ensinar nem promover, é permitido.
 - Cite quem decidiu ("o Copom decidiu", "a Câmara aprovou", "o STJ entendeu") e explique o impacto prático para quem financia, sem opinar nem usar adjetivos de valor.
 - Use no mínimo 2 das fontes numeradas, de sites diferentes, que tratem do MESMO fato. Informe só os números delas em "fontes_usadas" (os links e as datas são preenchidos pelo sistema). Se não houver 2 fontes sobre o mesmo fato recente, responda sem_novidade.
 - NEUTRALIDADE POLÍTICA ABSOLUTA (estamos em período eleitoral): nunca opine sobre partidos, políticos ou candidatos, não elogie nem critique governo ou oposição e não cite nomes de políticos nem de partidos. Atribua medidas a instituições ("o Governo Federal", "o Congresso", "o Banco Central", "o STJ"). Explique o fato e o que ele muda para quem tem ou vai fazer um financiamento.
@@ -32,13 +33,26 @@ Responda APENAS com um objeto JSON (sem markdown):
     return `${aviso}
 TAREFA: nenhum tema tem novidade hoje. Escreva um ARTIGO EXPLICATIVO e útil (guia, "como funciona", direitos do consumidor) de 450 a 700 palavras sobre um assunto do tema ainda NÃO abordado na lista acima, baseado nas fontes OFICIAIS acima (Banco Central, órgãos .gov.br, tribunais .jus.br etc.). Corpo em HTML simples usando apenas <p>, <h2>, <h3>, <ul>, <li>, <strong>, <em> (sem <h1>, sem estilos).
 Responda APENAS com um objeto JSON (sem markdown):
-{"sem_novidade": false, "titulo": "até 90 caracteres", "resumo": "1 a 2 frases, 40 a 220 caracteres", "corpo": "<p>...</p>", "fontes_usadas": [1, 2], "foto_busca": "2 a 4 palavras EM INGLÊS para foto de banco de imagens (cenas/objetos genéricos, sem pessoas conhecidas, marcas ou logotipos)"}`;
+{"sem_novidade": false, "titulo": "até 90 caracteres", "resumo": "1 a 2 frases, 40 a 220 caracteres", "corpo": "<p>...</p>", "fontes_usadas": [1, 2], "foto_busca": "2 a 4 palavras EM INGLÊS para foto de banco de imagens LIGADA AO ASSUNTO (ex.: car, vehicle financing, car contract, car documents, car keys on contract); nada sem relação com o tema, sem pessoas conhecidas, marcas ou logotipos"}`;
   }
   return `${aviso}
 TAREFA: escolha, entre as fontes acima, uma NOTÍCIA ou DADO RECENTE e REAL relacionado ao tema. Se nenhuma fonte trouxer novidade real e relevante, responda exatamente {"sem_novidade": true, "motivo": "uma frase"}.
 Se houver, escreva um artigo ORIGINAL em português do Brasil, informativo e neutro, de 450 a 700 palavras, corpo em HTML simples usando apenas <p>, <h2>, <h3>, <ul>, <li>, <strong>, <em> (sem <h1>, sem estilos).
 Responda APENAS com um objeto JSON (sem markdown):
-{"sem_novidade": false, "titulo": "até 90 caracteres", "resumo": "1 a 2 frases, 40 a 220 caracteres", "corpo": "<p>...</p>", "fontes_usadas": [1, 3], "foto_busca": "2 a 4 palavras EM INGLÊS para foto de banco de imagens (cenas/objetos genéricos, sem pessoas conhecidas, marcas ou logotipos)"}`;
+{"sem_novidade": false, "titulo": "até 90 caracteres", "resumo": "1 a 2 frases, 40 a 220 caracteres", "corpo": "<p>...</p>", "fontes_usadas": [1, 3], "foto_busca": "2 a 4 palavras EM INGLÊS para foto de banco de imagens LIGADA AO ASSUNTO (ex.: car, vehicle financing, car contract, car documents, car keys on contract); nada sem relação com o tema, sem pessoas conhecidas, marcas ou logotipos"}`;
+}
+
+
+/** Revisão de um GUIA já publicado (atemporal) com fontes atuais. Só devolve texto novo se algo realmente mudou. */
+function revisaoGuia({ guia, hoje, tema, cands, motivos = [], anterior = null }) {
+  const reescrita = anterior ? `\nSUA REVISÃO ANTERIOR FOI REPROVADA pelos motivos abaixo. Corrija TODOS ou responda {"sem_mudanca": true}.\nMotivos: ${motivos.map((m) => '- ' + m).join('\n')}\nRevisão anterior: ${JSON.stringify(anterior)}\n` : '';
+  return `FONTES ATUAIS (únicas que você pode usar):\n${listaFontes(cands)}\n\nPortal "ERASE Revisional". Data de hoje: ${hoje}. TEMA: ${tema.nome} — ${tema.foco}.\n${reescrita}\n${REGRAS_COMUNS}
+TAREFA: REVISAR um GUIA já publicado (conteúdo atemporal). Compare o TEXTO ATUAL abaixo com as FONTES ATUAIS (oficiais) e corrija SOMENTE o que as fontes mostram que mudou, está desatualizado ou errado (números, regras, leis, decisões). NÃO reescreva por estilo e não mude o tom, a estrutura nem o tamanho (±15%). Mantenha todos os avisos que o texto já tem (por exemplo: não há resultado garantido; conteúdo informativo, não é parecer jurídico). Texto 100% próprio, sem copiar trechos das fontes. Se NADA precisa mudar, responda exatamente {"sem_mudanca": true}.
+Se algo mudou, responda APENAS com um objeto JSON (sem markdown):
+{"sem_mudanca": false, "mudancas": ["o que mudou e por quê, citando a fonte [n]"], "corpo": "<p>...</p>", "fontes_usadas": [1, 2]}
+TÍTULO: ${guia.titulo}
+TEXTO ATUAL (HTML):
+${guia.corpo}`;
 }
 
 const SISTEMA_REVISOR = 'Você é um revisor editorial INDEPENDENTE, cético e rigoroso. Você NÃO escreveu o texto. Seu trabalho é achar motivos para reprovar; só aprove se tudo estiver comprovado. Responda apenas JSON.';
@@ -64,12 +78,14 @@ Avalie CADA critério. REGRA: ok = true SOMENTE se estiver inequivocamente atend
 3. "original": o texto é próprio, sem trechos copiados das fontes?
 4. "sem_repeticao": o assunto é diferente dos publicados nos últimos 15 dias?
 5. "sem_promessa": sem prometer resultado ("você vai recuperar", "garantido"), sem dizer que o leitor tem valores a receber, sem conselho jurídico individual e sem citar escritório/advogado parceiro?
-6. "neutro": sem opinião política ou partidária, sem elogio ou crítica a governo, oposição, partido ou político, sem tom de campanha?
+6. "neutro": sem opinião política ou partidária, sem elogio ou crítica a governo, oposição, partido ou político, sem tom de campanha? (Opinião de TERCEIROS sobre temas econômicos é permitida quando atribuída a quem a disse e sem que o texto a endosse; o que continua proibido é o texto adotar posição política.)
 7. "sem_autor": sem autor inventado, sem nome de jornalista, sem assinatura (a assinatura é "Equipe ERASE")?
 8. "contexto_numeros": em CADA par acima, o número é usado com o mesmo sentido da fonte (mesma grandeza, produto, período, ano e região)? Reprove se, por exemplo, uma taxa de cartão for apresentada como taxa de veículo, ou um dado de outro ano ou de outra região for tratado como o atual/local.
-9. "sem_generico": o texto NÃO tem frases de atribuição genérica sem fonte (\"especialistas destacam\", \"analistas apontam\", \"o mercado avalia\", \"muitos acreditam\")? Toda opinião, previsão ou avaliação precisa dizer QUEM disse (nome ou instituição presente nas fontes); se a fonte não nomeia, a frase deve sair.
+9. "sem_generico": o texto NÃO tem frases de opinião, previsão ou avaliação com atribuição vaga e sem fonte (\"especialistas destacam\", \"analistas apontam\", \"muitos acreditam\")? Opinião de terceiros precisa dizer QUEM disse (nome ou instituição presente nas fontes). NÃO reprove a descrição de um número agregado que está nas fontes (\"mediana das projeções\", \"média das previsões\", \"consenso do Boletim Focus\") só porque não lista cada instituição, nem frases cujo autor a fonte não nomeia mas o texto não apresenta como opinião de alguém.
+10. "seguro": o texto NÃO tem conteúdo sexual ou erótico, mutilação ou violência gráfica, racismo, discurso de ódio ou ofensa a grupos, assédio ou xingamento a pessoas, instruções de algo perigoso ou ilegal, nem promove, vende ou incentiva golpes ("dinheiro fácil", "renda extra garantida", "lucro garantido")? (Reportar ou alertar sobre um golpe, sem ensinar nem promover, é permitido.)
+IMPORTANTE: julgue apenas o que o TEXTO afirma. Não reprove por uma "interpretação" sua que a fonte não diz, nem por detalhe que o texto não afirma; cite na observação a frase do texto que reprova. Os critérios 2, 5, 8 e 10 não admitem exceção.
 Responda APENAS com JSON (sem markdown):
-{"criterios": {"fontes": {"ok": true, "obs": ""}, "fatos": {"ok": true, "obs": ""}, "original": {"ok": true, "obs": ""}, "sem_repeticao": {"ok": true, "obs": ""}, "sem_promessa": {"ok": true, "obs": ""}, "neutro": {"ok": true, "obs": ""}, "sem_autor": {"ok": true, "obs": ""}, "contexto_numeros": {"ok": true, "obs": ""}, "sem_generico": {"ok": true, "obs": ""}}}
+{"criterios": {"fontes": {"ok": true, "obs": ""}, "fatos": {"ok": true, "obs": ""}, "original": {"ok": true, "obs": ""}, "sem_repeticao": {"ok": true, "obs": ""}, "sem_promessa": {"ok": true, "obs": ""}, "neutro": {"ok": true, "obs": ""}, "sem_autor": {"ok": true, "obs": ""}, "contexto_numeros": {"ok": true, "obs": ""}, "sem_generico": {"ok": true, "obs": ""}, "seguro": {"ok": true, "obs": ""}}}
 Em "obs" escreva SEMPRE uma observação objetiva (o que conferiu e por que aprovou ou reprovou).`;
 }
 
@@ -96,4 +112,4 @@ Responda APENAS com JSON (sem markdown):
 Em "obs" escreva SEMPRE uma observação objetiva (o que verificou e por que aprovou ou reprovou).`;
 }
 
-module.exports = { escritor, revisor, neutralidade, SISTEMA_REVISOR, SISTEMA_NEUTRALIDADE };
+module.exports = { escritor, revisaoGuia, revisor, neutralidade, SISTEMA_REVISOR, SISTEMA_NEUTRALIDADE };

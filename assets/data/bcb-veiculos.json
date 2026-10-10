@@ -2,6 +2,7 @@
  "serie": 25471,
  "descricao": "Taxa média mensal de juros - pessoas físicas - aquisição de veículos (% ao mês)",
  "fonte": "Banco Central do Brasil — SGS 25471",
+ "atualizado_em": "2026-10-03",
  "primeiro_mes": "2000-06",
  "ultimo_mes": "2026-08",
  "valores": {

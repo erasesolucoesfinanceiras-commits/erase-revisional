@@ -2,7 +2,7 @@
 const { chamar, extrairJSON } = require('./gemini');
 const P = require('./prompts');
 
-const CRITERIOS = ['fontes', 'fatos', 'original', 'sem_repeticao', 'sem_promessa', 'neutro', 'sem_autor', 'contexto_numeros'];
+const CRITERIOS = ['fontes', 'fatos', 'original', 'sem_repeticao', 'sem_promessa', 'neutro', 'sem_autor', 'contexto_numeros', 'seguro'];
 const OPCIONAIS = ['sem_generico']; // se o modelo omitir, não derruba a revisão; se vier false, reprova
 const CRIT_NEUTRALIDADE = ['sem_adjetivo_politico', 'sem_merito_culpa', 'sem_termos_carregados', 'dois_lados', 'sem_eleicao', 'quem_decidiu_e_impacto'];
 

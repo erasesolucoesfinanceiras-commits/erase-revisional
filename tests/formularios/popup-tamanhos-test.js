@@ -15,6 +15,12 @@ const T = [[1366, 625], [1280, 600], [1920, 950], [390, 844], [360, 640], [844, 
         itens: ['.free-badge', '#popup-title', '#pp-nome', '#pp-tel', '.popup .choice:nth-child(1)', '.popup .choice:nth-child(2)', '.popup .choice:nth-child(3)', '#pp-lgpd', '.popup-cta', '.popup-legal', '.popup-close'].filter((s) => !visivel(s)),
         minAlvo: Math.round(Math.min(...alvo)), fechar: (() => { const q = document.querySelector('.popup-close').getBoundingClientRect(); return [Math.round(q.width), Math.round(q.height)]; })() };
     });
+    const ast = await pg.evaluate(() => {
+      const vis = (el) => { if (!el) return false; const c = getComputedStyle(el), q = el.getBoundingClientRect(), box = document.querySelector('.popup').getBoundingClientRect(); return c.display !== 'none' && c.visibility !== 'hidden' && q.width > 1 && q.height > 1 && q.top >= box.top - 1 && q.bottom <= box.bottom + 1 && el.textContent.trim() === '*'; };
+      const q = (s) => document.querySelector(s);
+      return { nome: vis(q('label[for=pp-nome] .req')) || vis(q('#pp-nome ~ .req-in')), tel: vis(q('label[for=pp-tel] .req')) || vis(q('#pp-tel ~ .req-in')), situacao: vis(q('.popup legend .req')), autorizacao: /\*\s*$/.test(q('.popup .check span').textContent) };
+    });
+    const astOk = ast.nome && ast.tel && ast.situacao && ast.autorizacao; if (!astOk) bad++; console.log(astOk ? 'OK   ' : 'FALHA', `${w}x${h} (asteriscos visíveis)`, JSON.stringify(ast));
     const ok = !r.rolaPopup && !r.rolaOverlay && r.cabeNaTela && !r.itens.length && r.minAlvo >= 44 && r.fechar[0] >= 44;
     if (!ok) bad++; console.log(ok ? 'OK   ' : 'FALHA', `${w}x${h}`, JSON.stringify(r));
     // estado de aviso (clique com o formulário vazio): continua sem rolagem, aviso e erros visíveis, foco no 1º campo

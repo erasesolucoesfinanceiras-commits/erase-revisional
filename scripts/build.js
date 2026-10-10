@@ -22,7 +22,10 @@ const SITE = C.siteNome;
 const hasBcb = fs.existsSync(path.join(S.ROOT, 'assets', 'data', 'bcb-veiculos.json')); // série histórica do Banco Central presente?
 const urls = []; // para o sitemap
 const LEGAL_DATE = '2026-10-01'; // data de vigência dos textos legais (altere ao revisá-los)
-const LASTMOD = articles[0].data; // evita diffs ruidosos a cada build
+// Datas do sitemap: SÓ datas reais (publicação ou revisão de verdade). Sem data real, sem <lastmod>.
+const maiorData = (...ds) => ds.flat().filter(Boolean).sort().pop();
+let BCB_ATUALIZADO = ''; // data real em que a série do Banco Central foi gravada (scripts/update-bcb.js)
+try { BCB_ATUALIZADO = S.readJSON('assets/data/bcb-veiculos.json').atualizado_em || ''; } catch (e) { /* sem série */ }
 
 // ---------------------------------------------------------------- HOME
 const nl = `<form class="newsletter" id="newsletter-form" novalidate>
@@ -66,9 +69,15 @@ ${S.ctaBanner()}`;
 }
 
 function home() {
-  const [feat, ...rest] = articles;
+  const { datados, guias } = S.ordenarConteudo(articles, notas);
+  const feat = datados[0], resto = [...datados.slice(1, 13), ...guias.slice(0, 6)];
   const INICIAL = 4;
-  const list = rest.map((a, i) => S.rowCard(a, i >= INICIAL)).join('\n');
+  const list = resto.map((it, i) => S.cardDe(it.tipo ? it : { ...it, a: it }, i >= INICIAL)).join('\n');
+  const ultima = S.ultimaPublicacao(articles, notas);
+  const faixa = `<div class="pub-strip" role="note"><div class="container">Última publicação: <time datetime="${ultima}">${fmtData(ultima)}</time>${BCB_ATUALIZADO ? ` · Taxas do Banco Central atualizadas em <time datetime="${BCB_ATUALIZADO}">${fmtData(BCB_ATUALIZADO)}</time>` : ''}</div></div>`;
+  const fa = feat.a || feat.n, fHref = feat.tipo === 'radar' ? `/radar.html#${esc(feat.n.id)}` : artUrl(feat.a);
+  const fImg = feat.tipo === 'radar' ? S.coverImg({ categoria: fa.categoria, slug: fa.id }, { width: 1160, height: 460, sizes: '(max-width: 1200px) 100vw, 1160px', eager: true }) : S.coverImg(feat.a, { width: 1160, height: 460, sizes: '(max-width: 1200px) 100vw, 1160px', eager: true });
+  const fTxt = feat.tipo === 'radar' ? feat.n.texto : feat.a.resumo;
   const body = `
 <div class="free-strip" role="note"><div class="container">${S.FREE_TXT} <span>Descubra se você tem valores a recuperar</span></div></div>
 <section class="hero">
@@ -80,13 +89,15 @@ function home() {
 </div>
 </section>
 
+${faixa}
 <section class="container featured-wrap" aria-label="Destaque">
-<a class="featured" href="${artUrl(feat)}">
-${coverImg(feat, { width: 1160, height: 460, sizes: '(max-width: 1200px) 100vw, 1160px', eager: true })}
+<a class="featured" href="${fHref}">
+${fImg}
 <div class="featured-text">
-<span class="tag tag-on-img">${esc(catNome(feat.categoria))}</span>
-<h2>${esc(feat.titulo)}</h2>
-<p>${esc(feat.resumo)}</p>
+<div class="row-tags">${S.selo('Mais recente', 'selo-destaque')}${S.selo(feat.tipo === 'radar' ? 'Radar' : 'Artigo', feat.tipo === 'radar' ? 'selo-radar' : 'selo-artigo')}<span class="tag tag-on-img">${esc(catNome(fa.categoria))}</span></div>
+<h2>${esc(fa.titulo)}</h2>
+<p>${esc(fTxt)}</p>
+<time class="featured-date" datetime="${feat.data}">${fmtData(feat.data)}</time>
 </div>
 </a>
 </section>
@@ -99,7 +110,7 @@ ${coverImg(feat, { width: 1160, height: 460, sizes: '(max-width: 1200px) 100vw, 
 ${list}
 <!-- ARTIGOS:FIM -->
 </div>
-${rest.length > INICIAL ? '<button class="btn btn-outline btn-block more-btn" id="ver-mais" type="button">Veja mais</button>' : ''}
+${resto.length > INICIAL ? '<button class="btn btn-outline btn-block more-btn" id="ver-mais" type="button">Veja mais</button>' : ''}
 </div>
 <div class="sticky-col">${S.promoCard()}</div>
 </section>
@@ -121,7 +132,7 @@ ${nl}
     },
     active: 'home', body,
   }));
-  urls.push(['/', '1.0']);
+  urls.push(['/', '1.0', maiorData(S.ultimaPublicacao(articles, notas), articles.map((a) => a.atualizado))]);
 }
 
 // ---------------------------------------------------------------- LISTAS
@@ -131,12 +142,12 @@ function listPage({ file, title, desc, h1, intro, items, active, p, cat }) {
 <h1>${esc(h1)}</h1>${intro ? `<p class="lead">${esc(intro)}</p>` : ''}
 </div></section>
 <section class="container home-grid">
-<div class="row-list">${items.length ? items.map((a) => S.rowCard(a)).join('\n') : '<p>Em breve, novos artigos nesta categoria.</p>'}</div>
+<div class="row-list">${items.length ? [...S.ordenarConteudo(items).datados.map((x) => x.a), ...S.ordenarConteudo(items).guias].map((a) => S.rowCard(a)).join('\n') : '<p>Em breve, novos artigos nesta categoria.</p>'}</div>
 <div class="sticky-col">${S.promoCard(cat)}</div>
 </section>
 ${S.ctaBanner(cat)}`;
   out(file, S.page({ meta: { title, desc, path: p }, active, body }));
-  urls.push([p, '0.7']);
+  urls.push([p, '0.7', maiorData(items.map((a) => a.data), items.map((a) => a.atualizado))]);
 }
 
 function lists() {
@@ -181,7 +192,7 @@ function artigos() {
       description: a.resumo,
       image: [absUrl('/assets/img/og-article-' + a.categoria + '.png')],
       datePublished: a.data,
-      dateModified: a.data,
+      ...(a.atualizado ? { dateModified: a.atualizado } : {}), // só existe se houve revisão real
       mainEntityOfPage: { '@type': 'WebPage', '@id': absUrl(artUrl(a)) },
       articleSection: catNome(a.categoria),
       inLanguage: 'pt-BR',
@@ -197,7 +208,7 @@ function artigos() {
 <a class="tag" href="${catUrl(a.categoria)}">${esc(catNome(a.categoria))}</a>
 <h1>${esc(a.titulo)}</h1>
 <p class="lead">${esc(a.resumo)}</p>
-<p class="meta">Por Equipe ERASE · <time datetime="${a.data}">${fmtData(a.data)}</time></p>
+<p class="meta">${S.selo(S.seloTxt(a), S.ehGuia(a) ? 'selo-guia' : 'selo-artigo')} Por Equipe ERASE${S.ehGuia(a) ? (a.atualizado ? ` · <time datetime="${a.atualizado}">Atualizado em ${fmtData(a.atualizado)}</time>` : '') : ` · <time datetime="${a.data}">${fmtData(a.data)}</time>`}</p>
 <figure class="article-fig">${coverImg(a, { width: 860, height: 430, sizes: '(max-width: 860px) 100vw, 860px', eager: true, cls: 'article-cover' })}${a.foto ? `<figcaption>Foto: <a href="${esc(a.foto.autorUrl)}" target="_blank" rel="noopener noreferrer">${esc(a.foto.autor)}</a> / <a href="${esc(a.foto.pagina)}" target="_blank" rel="noopener noreferrer">Pixabay</a></figcaption>` : ''}</figure>
 <div class="article-body">
 ${injectCTA(a.corpo, a.categoria)}
@@ -213,7 +224,7 @@ ${S.ctaBanner(a.categoria)}`;
       },
       active: 'artigos', body,
     }));
-    urls.push([artUrl(a), '0.6', a.data]);
+    urls.push([artUrl(a), '0.6', a.atualizado || a.data]);
   }
 }
 
@@ -370,7 +381,7 @@ ${faq.map(([q, a]) => `<details><summary>${esc(q)}</summary><p>${esc(a)}</p></de
     },
     active: 'calc', body, scripts: ['/assets/js/calculator.js'],
   }));
-  urls.push(['/calculadora.html', '0.9']);
+  urls.push(['/calculadora.html', '0.9', BCB_ATUALIZADO || undefined]);
 }
 
 // ---------------------------------------------------------------- LEGAIS / CONTATO
@@ -379,7 +390,7 @@ function legal(file, title, h1, html) {
     meta: { title: `${title} | ${SITE}`, desc: `${title} da ERASE Revisional.`, path: '/' + file },
     active: '', body: `<article class="container article legal-doc"><h1>${h1}</h1>${html}</article>`,
   }));
-  urls.push(['/' + file, '0.3']);
+  urls.push(['/' + file, '0.3', LEGAL_DATE]);
 }
 
 function legais() {
@@ -462,7 +473,7 @@ function notFound() {
 function seo() {
     const xml = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-${urls.map(([p, prio, d]) => `  <url><loc>${absUrl(p)}</loc><lastmod>${d || LASTMOD}</lastmod><priority>${prio}</priority></url>`).join('\n')}
+${urls.map(([p, prio, d]) => `  <url><loc>${absUrl(p)}</loc>${d ? `<lastmod>${d}</lastmod>` : ''}<priority>${prio}</priority></url>`).join('\n')}
 </urlset>
 `;
   out('sitemap.xml', xml);

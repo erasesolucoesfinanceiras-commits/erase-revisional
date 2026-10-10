@@ -15,6 +15,8 @@ const { revisar, revisarNeutralidade } = require('./revisor');
 const N = require('./numeros');
 const { coletar } = require('./fontes');
 const { fetchPhoto, FALLBACK_Q } = require('../photos');
+const EST = require('./estatisticas');
+const RG = require('./revisar-guia');
 
 const ROOT = path.join(__dirname, '..', '..');
 const DATA_DIR = process.env.DADOS_DIR || path.join(ROOT, 'data');
@@ -22,6 +24,7 @@ const F_ART = path.join(DATA_DIR, 'articles.json'), F_NOTAS = path.join(DATA_DIR
 const MODO = process.env.MODO === 'amostra' ? 'amostra' : 'publicar';
 const AMOSTRAS = path.join(ROOT, 'amostras');
 const F_LOG = MODO === 'amostra' ? path.join(AMOSTRAS, 'log.jsonl') : path.join(DATA_DIR, 'noticias-log.jsonl');
+const F_STATS = MODO === 'amostra' ? path.join(AMOSTRAS, 'stats.json') : path.join(DATA_DIR, 'revisor-stats.json'); // aprovados/reprovados por dia e critério
 const config = JSON.parse(fs.readFileSync(path.join(DATA_DIR, 'config.json'), 'utf8'));
 
 const hoje = process.env.DATA || new Date(Date.now() - 3 * 3600e3).toISOString().slice(0, 10); // data de Brasília
@@ -47,6 +50,13 @@ function log(evento, dados) {
   if (evento === 'reprovado' || evento === 'pulado') reprovacoes.push({ tipo: dados.tipo, tema: dados.tema, tentativa: dados.tentativa, motivos: dados.motivos || [dados.motivo] });
   console.log(`[${evento}] ${dados.tipo || ''} ${dados.tema || ''} ${dados.titulo ? '— ' + dados.titulo : ''} ${dados.motivos ? '| ' + [].concat(dados.motivos).join(' ; ') : dados.motivo || ''}`);
 }
+
+/** Conta o resultado de cada avaliação (por dia, tipo e critério) e deixa uma linha 'avaliacao' no log. */
+function contar(tipo, tema, tentativa, motivos, aprovado) {
+  try { fs.mkdirSync(path.dirname(F_STATS), { recursive: true }); EST.registrar(F_STATS, hoje, tipo, { aprovado, motivos }); } catch (e) { console.error('estatísticas do revisor: ' + e.message); }
+  log('avaliacao', { tipo, tema, tentativa, aprovado, criterios_reprovados: aprovado ? [] : EST.chaves(motivos) });
+}
+const semNovidade = (tipo) => { try { fs.mkdirSync(path.dirname(F_STATS), { recursive: true }); EST.registrar(F_STATS, hoje, tipo, { semNovidade: true }); } catch (e) { /* ignore */ } };
 
 definirLog((evento, dados) => log(evento, dados)); // esperas, novas tentativas e trocas de modelo do Gemini ficam no log
 
@@ -84,7 +94,7 @@ async function tentarTema(tipo, tema, modo, recentes) {
   const diasMax = tipo === 'nota' ? 3 : 14;
   const cands = (await coletar(tema, T, { hoje, diasMax, oficial: modo === 'guia' })).filter((c) => !urlsBloqueadas.has(c.url));
   const minimo = modo === 'guia' ? 2 : 2;
-  if (cands.length < minimo) { log('pulado', { tipo, tema, motivo: `sem novidade: só ${cands.length} fonte(s) legível(is) dos últimos ${diasMax} dias` }); return { status: 'sem_novidade' }; }
+  if (cands.length < minimo) { log('pulado', { tipo, tema, motivo: `sem novidade: só ${cands.length} fonte(s) legível(is) dos últimos ${diasMax} dias` }); semNovidade(tipo); return { status: 'sem_novidade' }; }
   let anterior = null, motivosAnt = [];
   const maxTent = tipo === 'artigo' ? TENTATIVAS_ARTIGO : 2;
   for (let tentativa = 1; tentativa <= maxTent; tentativa++) {
@@ -93,7 +103,7 @@ async function tentarTema(tipo, tema, modo, recentes) {
     let r;
     try { r = extrairJSON(texto); } catch (e) { r = null; }
     if (r && r.sem_novidade === true) {
-      if (tentativa === 1) { log('pulado', { tipo, tema, motivo: 'sem novidade real: ' + String(r.motivo || '').slice(0, 200) }); return { status: 'sem_novidade' }; }
+      if (tentativa === 1) { log('pulado', { tipo, tema, motivo: 'sem novidade real: ' + String(r.motivo || '').slice(0, 200) }); semNovidade(tipo); return { status: 'sem_novidade' }; }
       log('reprovado', { tipo, tema, tentativa, motivos: ['reescrita impossível com as fontes reais'] }); return { status: 'reprovado' };
     }
     let motivos = [];
@@ -121,6 +131,7 @@ async function tentarTema(tipo, tema, modo, recentes) {
         }
       }
     }
+    contar(tipo, tema, tentativa, motivos, !motivos.length);
     if (!motivos.length) { r.revisoes = revisoes; return { status: 'aprovado', rascunho: r }; }
     log('reprovado', { tipo, tema, tentativa, titulo: r && r.titulo, motivos, revisao: revisoes });
     anterior = r ? { titulo: r.titulo, resumo: r.resumo, corpo: r.corpo, texto: r.texto, fontes_usadas: r.fontes_usadas } : null;
@@ -176,8 +187,9 @@ async function publicarArtigo({ tema, modo, rascunho: r }, artigos) {
   let slug = slugify(r.titulo), n = 2;
   while (artigos.some((a) => a.slug === slug)) slug = `${slugify(r.titulo)}-${n++}`;
   const foto_busca = String(r.foto_busca || '').trim().slice(0, 60) || FALLBACK_Q[tema];
-  const foto = await fetchPhoto(slug, foto_busca, artigos.map((a) => a.foto && a.foto.id));
-  const art = { slug, categoria: tema, titulo: r.titulo, resumo: r.resumo, data: hoje, fontes: limparFontes(r.fontes), corpo: r.corpo, foto_busca, ...(modo === 'guia' && { tipo: 'guia' }), ...(foto && { foto }) };
+  const foto = await fetchPhoto(slug, foto_busca, artigos.map((a) => a.foto && a.foto.id), { categoria: tema, titulo: r.titulo });
+  if (!foto) log('foto_padrao', { tipo: 'artigo', tema, slug, motivo: require('../photos').motivoDaFalha() || 'sem foto' }); // sem foto adequada: imagem padrão do site
+  const art = { slug, categoria: tema, titulo: r.titulo, resumo: r.resumo, data: hoje, fontes: limparFontes(r.fontes), corpo: r.corpo, foto_busca, tipo: modo === 'guia' ? 'guia' : 'noticia', ...(foto && { foto }) };
   artigos.unshift(art);
   return art;
 }
@@ -206,6 +218,7 @@ function salvarAmostra(i, item) {
 
 /** Fecha o dia: falha só quando TODAS as saídas se esgotaram (rodada final) ou quando só uma pessoa resolve; a causa em linguagem simples vai na última linha do log. */
 function encerrar(falha) {
+  try { console.log('Revisor, últimos 7 dias: ' + EST.resumo(F_STATS, hoje).texto); } catch (e) { /* ignore */ }
   if (falha) {
     const humano = !!falha.humano;
     if (FINAL || humano) {
@@ -292,6 +305,22 @@ function encerrar(falha) {
         } catch (e) { desfazer(); throw e; }
       }
     } catch (e) { if (FINAL) houveErro = true; log('erro', { tipo: 'nota', motivo: String(e.message).slice(0, 300) }); }
+  }
+  // ---- revisão de guias (a cada 3 dias, no máximo 1 por dia). NUNCA altera a data de publicação; só grava "atualizado" se o texto mudou
+  // de verdade e passou no revisor. Falha aqui não derruba o dia (o artigo e a nota são o que importa); as rodadas seguintes tentam de novo.
+  if (!(falhaArtigo && falhaArtigo.humano)) {
+    try {
+      const linhas = fs.existsSync(F_LOG) ? fs.readFileSync(F_LOG, 'utf8').split('\n').filter(Boolean).map((l) => { try { return JSON.parse(l); } catch (e) { return {}; } }) : [];
+      if (RG.estaNaHora(linhas, hoje)) {
+        PRAZO = Date.now() + 10 * 60e3;
+        const res = await RG.revisarGuia({ artigos, hoje, linhasDoLog: linhas, deps: { coletar, chamar, extrairJSON, sanitizar, V, N, revisar, revisarNeutralidade, precisaNeutralidade, TEMAS, limparFontes, contar, log, urlsBloqueadas } });
+        if (res.resultado === 'atualizado') {
+          const desfazer = reconstruir(arquivos);
+          try { gravarJSON(F_ART, artigos); execFileSync('node', [path.join(__dirname, '..', 'build.js')], { stdio: 'inherit' }); } catch (e) { desfazer(); throw e; }
+        }
+        log('revisao_guia', res);
+      }
+    } catch (e) { log('revisao_guia', { resultado: 'erro', motivo: String(e.message).slice(0, 200) }); }
   }
   encerrar(falhaArtigo);
 })().catch((e) => { console.error(e); try { log('erro', { motivo: String(e.message).slice(0, 300) }); } catch (x) { /* ignore */ } process.exit(1); });

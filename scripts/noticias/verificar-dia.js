@@ -11,6 +11,7 @@
 const fs = require('fs');
 const path = require('path');
 const { execFileSync } = require('child_process');
+const EST = require('./estatisticas');
 
 const REPO = process.env.GITHUB_REPOSITORY, TOKEN = process.env.GITHUB_TOKEN;
 const API = process.env.GITHUB_API || 'https://api.github.com';
@@ -26,6 +27,7 @@ const diaBR = (ms) => new Date(ms - 3 * 3600e3).toISOString().slice(0, 10);
 const hoje = process.env.DATA || diaBR(Date.now());
 const dorme = (ms) => new Promise((r) => setTimeout(r, ms));
 const lerArtigos = () => JSON.parse(fs.readFileSync(F_ART, 'utf8'));
+// Atraso e conferência do site usam SÓ a data de publicação (`data`): guia revisado ganha `atualizado`, que NUNCA entra nesta conta.
 const maisRecente = (arts) => arts.reduce((m, a) => (!m || a.data > m.data ? a : m), null);
 const diasEntre = (d) => Math.floor((Date.parse(hoje) - Date.parse(d)) / 864e5);
 
@@ -132,6 +134,13 @@ function registrarAtividade(motivo) {
       if (apareceu) break;
     }
     if (!apareceu) problemas.push({ humano: true, causa: 'O artigo está no repositório, mas a capa do site no ar não o mostra, mesmo depois de pedir novo deploy ao Cloudflare Pages.', acao: 'Abrir o projeto no Cloudflare Pages: ver se o último build falhou, se a integração com o GitHub está ativa e se o domínio revisional.eraseconsulta.com.br aponta para este projeto. Para pedir novo deploy sem commit, criar o secret CF_DEPLOY_HOOK_URL (Settings > Builds > Deploy hooks).' });
+  }
+
+  // resumo semanal do revisor (segundas-feiras, ou sempre que RESUMO_REVISOR estiver definido): aprovados/reprovados por critério
+  if (new Date(hoje + 'T12:00:00Z').getUTCDay() === 1 || process.env.RESUMO_REVISOR) {
+    const r = EST.resumo(path.join(DATA_DIR, 'revisor-stats.json'), hoje);
+    log('resumo_revisor_semana', { motivo: `Revisor de ${r.de} a ${r.ate}: ${r.texto}`, de: r.de, ate: r.ate, por_tipo: r.por_tipo });
+    if (process.env.GITHUB_STEP_SUMMARY) fs.appendFileSync(process.env.GITHUB_STEP_SUMMARY, `### Revisor, semana ${r.de} a ${r.ate}\n\n${r.texto.split(' || ').map((l) => '- ' + l).join('\n')}\n`);
   }
 
   // fecha: diagnóstico (última linha do log) e atividade diária

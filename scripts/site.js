@@ -180,17 +180,51 @@ ${scripts.map((s) => `<script src="${s}" defer></script>`).join('\n')}
 }
 
 // Cards -----------------------------------------------------------------
+/** Tipo do conteúdo: "guia" (atemporal: sem data nos cards) ou "noticia" (atual). Sem o campo, vale "noticia". */
+const ehGuia = (a) => a.tipo === 'guia';
+const seloTxt = (a) => (ehGuia(a) ? 'Guia' : 'Artigo');
+const selo = (txt, cls = '') => `<span class="selo${cls ? ' ' + cls : ''}">${esc(txt)}</span>`;
+/**
+ * Ordem da capa e da página Artigos (SÓ datas reais): primeiro o que é datado (artigos de notícia e, se `notas`, notas do Radar),
+ * do mais novo ao mais antigo; guias ficam abaixo, em posição fixa, ordenados por "atualizado" (revisão real) quando houver.
+ * Nunca usa "data de hoje": a data de cada item é a que foi gravada na publicação.
+ */
+function ordenarConteudo(artigos, notas = []) {
+  const datados = [...artigos.filter((a) => !ehGuia(a)).map((a) => ({ tipo: 'artigo', data: a.data, a })), ...notas.map((n) => ({ tipo: 'radar', data: n.data, n }))]
+    .sort((x, y) => (x.data < y.data ? 1 : x.data > y.data ? -1 : x.tipo === y.tipo ? 0 : x.tipo === 'artigo' ? -1 : 1));
+  const guias = artigos.filter(ehGuia).sort((x, y) => { const dx = x.atualizado || '', dy = y.atualizado || ''; return dx < dy ? 1 : dx > dy ? -1 : 0; });
+  return { datados, guias };
+}
+/** Maior data real de publicação (artigos e notas): é a "Última publicação" da capa. */
+const ultimaPublicacao = (artigos, notas = []) => [...artigos.map((a) => a.data), ...notas.map((n) => n.data)].sort().pop() || '';
+
 function rowCard(a, hidden) {
+  const guia = ehGuia(a);
   return `<article class="row-card"${hidden ? ' data-extra hidden' : ''}>
 <a class="row-thumb" href="${artUrl(a)}" tabindex="-1" aria-hidden="true">${coverImg(a, { width: 168, height: 112, sizes: '(max-width: 600px) 100vw, 168px' })}</a>
 <div class="row-body">
-<a class="tag" href="${catUrl(a.categoria)}">${esc(catNome(a.categoria))}</a>
+<div class="row-tags">${selo(seloTxt(a), guia ? 'selo-guia' : 'selo-artigo')}<a class="tag" href="${catUrl(a.categoria)}">${esc(catNome(a.categoria))}</a></div>
 <h3><a href="${artUrl(a)}">${esc(a.titulo)}</a></h3>
 <p>${esc(a.resumo)}</p>
-<time datetime="${a.data}">${fmtData(a.data)}</time>
+${guia ? (a.atualizado ? `<time datetime="${a.atualizado}">Atualizado em ${fmtData(a.atualizado)}</time>` : '') : `<time datetime="${a.data}">${fmtData(a.data)}</time>`}
 </div>
 </article>`;
 }
+/** Nota do Radar no mesmo formato de card (leva à própria nota em /radar). */
+function rowCardNota(n, hidden) {
+  const href = `/radar.html#${esc(n.id)}`;
+  return `<article class="row-card"${hidden ? ' data-extra hidden' : ''}>
+<a class="row-thumb" href="${href}" tabindex="-1" aria-hidden="true">${coverImg({ categoria: n.categoria, slug: n.id }, { width: 168, height: 112, sizes: '(max-width: 600px) 100vw, 168px' })}</a>
+<div class="row-body">
+<div class="row-tags">${selo('Radar', 'selo-radar')}<a class="tag" href="${catUrl(n.categoria)}">${esc(catNome(n.categoria))}</a></div>
+<h3><a href="${href}">${esc(n.titulo)}</a></h3>
+<p>${esc(n.texto)}</p>
+<time datetime="${n.data}">${fmtData(n.data)}</time>
+</div>
+</article>`;
+}
+/** Lista mista (capa): datados + guias; `itens` vem de ordenarConteudo. */
+const cardDe = (it, hidden) => (it.tipo === 'radar' ? rowCardNota(it.n, hidden) : rowCard(it.a || it, hidden));
 
 // Veículos e lançamentos levam à calculadora; os demais temas levam à análise gratuita da ERASE (Fale Conosco).
 const usaContato = (cat) => !!cat && (config.categorias[cat] || {}).cta === 'contato';
@@ -236,6 +270,6 @@ const freeBadge = (cls = '') => `<p class="free-badge ${cls}" role="note">${FREE
 
 module.exports = {
   FREE_TXT, freeBadge,
-  ROOT, config, loadArticles, loadNotas, usaContato, esc, fmtPct, fmtData, catNome, catUrl, artUrl, absUrl, coverUrl, coverImg,
+  ROOT, config, loadArticles, loadNotas, ehGuia, selo, seloTxt, ordenarConteudo, ultimaPublicacao, rowCardNota, cardDe, readJSON, usaContato, esc, fmtPct, fmtData, catNome, catUrl, artUrl, absUrl, coverUrl, coverImg,
   ICON, page, rowCard, promoCard, trustBadges, ctaBanner,
 };
