@@ -289,5 +289,5 @@ if (ct) {
       setTimeout(close, 2600);
     });
   }
-  setTimeout(open, 3500);
+  setTimeout(open, 2500);
 })();

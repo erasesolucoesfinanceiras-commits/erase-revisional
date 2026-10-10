@@ -10,7 +10,7 @@ let ok=0,bad=0;const t=(n,c,x='')=>{c?ok++:bad++;console.log(c?'OK   ':'FALHA',n
   const ctx=await b.newContext({viewport:{width:1300,height:900}});await ctx.route(/fonts\./,r=>r.abort());
   const reqs=[];await ctx.route(URL_CRM,(route,req)=>{if(req.method()==='OPTIONS')return route.fulfill({status:204,headers:cors});reqs.push(JSON.parse(req.postData()));route.fulfill({status:200,headers:cors,contentType:'application/json',body:'{"ok":true}'})});
   const pg=await ctx.newPage();await pg.goto('http://localhost:8123/');
-  t('popup não abre antes de 3,5s',await pg.locator('.popup').count()===0);
+  t('popup não abre de imediato',await pg.locator('.popup').count()===0);
   await pg.waitForSelector('.popup',{timeout:6000});
   if(sit==='Em dia'){await pg.waitForTimeout(500);await pg.screenshot({path:'/tmp/desktop.png'});
    t('texto GRATUITA em caixa alta e aviso',/TOTALMENTE GRATUITA/.test(await pg.innerText('.free-badge'))&&/não é análise jurídica|sem valor de análise jurídica/i.test(await pg.innerText('.popup-legal')));
