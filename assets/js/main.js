@@ -216,18 +216,25 @@ if (ct) {
     ov.innerHTML = `
       <div class="popup" role="dialog" aria-modal="true" aria-labelledby="popup-title">
         <button class="popup-close" type="button" aria-label="Fechar">&times;</button>
-        <div class="popup-icon"><svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 17H3v-5l2-5a2 2 0 0 1 1.9-1.3h10.2A2 2 0 0 1 19 7l2 5v5h-2"/><path d="M3 12h18"/><circle cx="7.5" cy="17" r="2"/><circle cx="16.5" cy="17" r="2"/><path d="M9.5 17h5"/></svg></div>
-        <p class="free-badge">ANÁLISE DO CONTRATO 100% GRATUITA</p>
-        <h2 id="popup-title">Descubra se você está pagando juros acima da média no seu financiamento</h2>
-        <p>Deixe seus dados e um especialista entra em contato. Sem compromisso. O resultado depende da análise de cada caso.</p>
-        <form id="popup-form" novalidate>
-          <div class="field"><label class="sr-only" for="pp-nome">Nome</label><input id="pp-nome" name="nome" placeholder="Seu nome" autocomplete="name"></div>
-          <div class="field"><label class="sr-only" for="pp-tel">Telefone / WhatsApp</label><input id="pp-tel" name="telefone" inputmode="tel" placeholder="Telefone / WhatsApp" autocomplete="tel"></div>
-          <fieldset class="field choices" data-group="situacao"><legend>Como está seu financiamento hoje? <span class="req">*</span></legend><div class="choice-grid">${['Em dia', 'Atrasado', 'Busca e apreensão'].map((o) => `<label class="choice"><input type="radio" name="situacao" value="${o}"><span>${o}</span></label>`).join('')}</div></fieldset>
-          <div class="field check"><label><input type="checkbox" id="pp-lgpd" name="lgpd"><span>Autorizo a ERASE Soluções Financeiras a entrar em contato comigo por WhatsApp ou telefone, conforme a <a href="/privacidade" target="_blank" rel="noopener">Política de Privacidade</a>. *</span></label></div>
-          <button class="btn btn-primary btn-block" type="submit">Quero a análise gratuita</button>
-          <p class="form-msg" id="popup-msg" role="status" aria-live="polite"></p>
-        </form>
+        <aside class="popup-art" aria-hidden="true">
+          <img class="popup-logo" src="/assets/img/logo-erase.webp" alt="" width="147" height="26">
+          <svg class="popup-illus" viewBox="0 0 240 150" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M18 104h204"/><path d="M34 104V86c0-6 4-10 9-11l30-8 22-22c3-3 6-4 10-4h46c5 0 9 2 12 6l17 24 14 4c6 2 9 6 9 12v17"/><path d="M82 66h30V45M122 66h48l-14-20h-34"/><circle cx="66" cy="106" r="15" fill="var(--popup-art-a)"/><circle cx="176" cy="106" r="15" fill="var(--popup-art-a)"/><path d="M196 24l10 10 18-20" stroke-width="5"/></svg>
+          <p class="popup-art-text">Entenda o que está dentro do seu contrato de financiamento.</p>
+        </aside>
+        <div class="popup-main">
+          <p class="free-badge">ANÁLISE TOTALMENTE GRATUITA</p>
+          <h2 id="popup-title">Seu financiamento merece uma segunda olhada</h2>
+          <p class="popup-sub">Deixe seus dados e um especialista da ERASE fala com você. Sem compromisso.</p>
+          <form id="popup-form" novalidate>
+            <div class="field"><label for="pp-nome">Nome</label><input id="pp-nome" name="nome" placeholder="Seu nome" autocomplete="name"></div>
+            <div class="field"><label for="pp-tel">WhatsApp</label><input id="pp-tel" name="telefone" inputmode="tel" placeholder="(81) 99999-9999" autocomplete="tel"></div>
+            <fieldset class="field choices" data-group="situacao"><legend>Como estão as parcelas? <span class="req">*</span></legend><div class="choice-grid">${['Em dia', 'Atrasadas', 'Veículo com busca e apreensão'].map((o) => `<label class="choice"><input type="radio" name="situacao" value="${o}"><span>${o}</span></label>`).join('')}</div></fieldset>
+            <div class="field check"><label><input type="checkbox" id="pp-lgpd" name="lgpd"><span>Autorizo a ERASE Soluções Financeiras a entrar em contato comigo por WhatsApp ou telefone, conforme a <a href="/privacidade" target="_blank" rel="noopener">Política de Privacidade</a>. *</span></label></div>
+            <button class="btn btn-primary btn-block popup-cta" type="submit">Quero minha análise gratuita</button>
+            <p class="form-msg" id="popup-msg" role="status" aria-live="polite"></p>
+            <p class="popup-legal">Resultado estimado, sem valor de análise jurídica. Cada caso é avaliado individualmente.</p>
+          </form>
+        </div>
       </div>`;
     document.body.appendChild(ov);
 
@@ -258,8 +265,8 @@ if (ct) {
       // Mesmos nomes de campo e valores da calculadora (o CRM marca URGENTE se atrasado ou busca e apreensão).
       const SITUACAO = {
         'Em dia': { parcelas_em_dia: 'Em dia', busca_apreensao: '' },
-        'Atrasado': { parcelas_em_dia: 'Atrasadas', busca_apreensao: '' },
-        'Busca e apreensão': { parcelas_em_dia: '', busca_apreensao: 'Já tem processo de busca e apreensão' },
+        'Atrasadas': { parcelas_em_dia: 'Atrasadas', busca_apreensao: '' },
+        'Veículo com busca e apreensão': { parcelas_em_dia: '', busca_apreensao: 'Já tem processo de busca e apreensão' },
       };
       const d = { nome: f.nome.value.trim(), telefone: f.telefone.value.trim(), ...(sit ? SITUACAO[sit.value] : {}) };
       if (d.nome.length < 2) return setMsg(msg, 'Informe seu nome.', 'bad');
