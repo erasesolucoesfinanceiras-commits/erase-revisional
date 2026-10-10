@@ -25,7 +25,14 @@
       "autor": "Maximilianovich",
       "autorUrl": "https://pixabay.com/users/Maximilianovich-16478317/",
       "pagina": "https://pixabay.com/photos/man-sign-paper-write-document-5710164/"
-    }
+    },
+    "foto_buscas": [
+      "car keys contract",
+      "vehicle documents",
+      "car dealership",
+      "car purchase paperwork"
+    ],
+    "foto_refazer": true
   },
   {
     "slug": "como-calcular-a-taxa-de-juros-do-seu-financiamento",
@@ -125,7 +132,14 @@
       "autor": "NomeVisualizzato",
       "autorUrl": "https://pixabay.com/users/NomeVisualizzato-9517909/",
       "pagina": "https://pixabay.com/photos/money-coins-ruble-finance-5039173/"
-    }
+    },
+    "foto_buscas": [
+      "car loan paperwork",
+      "car purchase contract",
+      "vehicle documents",
+      "car keys contract"
+    ],
+    "foto_refazer": true
   },
   {
     "slug": "portabilidade-de-credito-quando-vale-a-pena",
@@ -145,7 +159,14 @@
       "autor": "wal_172619",
       "autorUrl": "https://pixabay.com/users/wal_172619-12138562/",
       "pagina": "https://pixabay.com/photos/silhouettes-people-bank-suitcase-6576684/"
-    }
+    },
+    "foto_buscas": [
+      "car loan documents",
+      "car purchase contract",
+      "vehicle documents",
+      "car dealership"
+    ],
+    "foto_refazer": true
   },
   {
     "slug": "por-que-motos-pagam-juros-mais-altos-que-carros",

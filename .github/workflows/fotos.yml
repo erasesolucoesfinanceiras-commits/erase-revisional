@@ -1,15 +1,31 @@
 name: Buscar fotos dos artigos (Pixabay)
 
-# Roda sozinho ao enviar mudanças em branches "claude/**" e manualmente (aba Actions).
-# Preenche a foto dos artigos que ainda não têm e salva no mesmo branch (a prévia da hospedagem atualiza).
+# Automático: ao enviar mudanças em branches "claude/**" (preenche a foto dos artigos que ainda não têm, no mesmo branch).
+# Manual (aba Actions > Run workflow, escolha a branch "main"): REFAZ a foto de um artigo (por slug) ou de todos os marcados
+# com "foto_refazer": true em data/articles.json, substituindo a atual. Mantém o filtro visual do Gemini, o crédito do autor
+# e, como último recurso, a imagem padrão do site. A foto escolhida e o motivo ficam em data/noticias-log.jsonl (evento "foto_escolhida").
 on:
   push:
     branches: ["claude/**"]
     paths: ["scripts/photos.js", "data/articles.json"]
   workflow_dispatch:
+    inputs:
+      modo:
+        description: "marcadas = refaz as fotos dos artigos marcados com foto_refazer · slug = refaz só o artigo do campo abaixo · faltantes = só quem não tem foto"
+        type: choice
+        default: marcadas
+        options: [marcadas, slug, faltantes]
+      slug:
+        description: "Slug do artigo (só no modo slug), ex.: pf-apura-fraude-em-financiamentos-veiculares-com-uso-de-biometria-em-mg"
+        required: false
+        type: string
 
 permissions:
   contents: write
+
+concurrency:
+  group: noticias
+  cancel-in-progress: false
 
 jobs:
   fotos:
@@ -23,11 +39,12 @@ jobs:
       - name: Buscar fotos
         env:
           PIXABAY_API_KEY: ${{ secrets.PIXABAY_API_KEY }}
-          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }} # filtro visual da foto (sem imagem sexual/violenta/perturbadora, ligada ao assunto)
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }} # filtro visual da foto (sem imagem sexual/violenta/perturbadora, sem pessoa em destaque, ligada ao assunto)
+          FOTO_MODO: ${{ inputs.modo || 'faltantes' }}
+          FOTO_SLUG: ${{ inputs.slug }}
         run: node scripts/photos.js
-      - name: Salvar no branch
+      - name: Salvar no branch (refaz com rebase se a branch andou)
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add -A
-          git diff --cached --quiet || { git commit -m "Fotos dos artigos (Pixabay)" && git push; }
+          bash scripts/noticias/gravar.sh "Fotos dos artigos (Pixabay)"

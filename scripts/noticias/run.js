@@ -190,6 +190,7 @@ async function publicarArtigo({ tema, modo, rascunho: r }, artigos) {
   const foto_busca = String(r.foto_busca || '').trim().slice(0, 60) || FALLBACK_Q[tema];
   const foto = await fetchPhoto(slug, foto_busca, artigos.map((a) => a.foto && a.foto.id), { categoria: tema, titulo: r.titulo });
   if (!foto) log('foto_padrao', { tipo: 'artigo', tema, slug, motivo: require('../photos').motivoDaFalha() || 'sem foto' }); // sem foto adequada: imagem padrão do site
+  else log('foto_escolhida', { tipo: 'artigo', tema, slug, ...(require('../photos').ultimaEscolha() || {}) }); // qual foto e por quê
   const art = { slug, categoria: tema, titulo: r.titulo, resumo: r.resumo, data: hoje, fontes: limparFontes(r.fontes), corpo: r.corpo, foto_busca, tipo: modo === 'guia' ? 'guia' : 'noticia', ...(foto && { foto }) };
   artigos.unshift(art);
   return art;

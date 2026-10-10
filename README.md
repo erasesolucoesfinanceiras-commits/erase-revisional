@@ -60,3 +60,6 @@ Cada artigo tem `tipo`: `noticia` (atual) ou `guia` (atemporal). Guias não most
 
 ### Faixa do Banco Central
 `assets/data/bcb-veiculos.json` guarda duas datas reais: `conferido_em` (última consulta ao BCB que funcionou e trouxe dados; a consulta que falha não mexe nela) e `atualizado_em` (última vez que a série mudou). A capa mostra "Taxas conferidas com o Banco Central em …" e, em letra menor e no `title`, a data da última alteração da série.
+
+### Refazer foto de artigo
+Workflow "Buscar fotos dos artigos (Pixabay)" > Run workflow na branch `main`: `marcadas` refaz os artigos com `"foto_refazer": true` em `data/articles.json`; `slug` refaz só o artigo do campo `slug`; `faltantes` só quem não tem foto. Usa os termos `foto_buscas` do artigo, só aceita foto ligada ao assunto que passe no filtro visual do Gemini, mantém o crédito do autor e, sem foto adequada, usa a imagem padrão. A escolha e o motivo ficam no log (`foto_escolhida` / `foto_padrao` / `foto_mantida`).
