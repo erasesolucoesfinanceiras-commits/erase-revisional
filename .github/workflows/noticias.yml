@@ -2,7 +2,7 @@ name: Notícias automáticas
 
 on:
   schedule:
-    # Todo dia às 08h de Brasília. O script decide: nota ("Radar") todo dia, artigo completo a cada 2 dias.
+    # Todo dia às 08h de Brasília. O script decide: nota ("Radar") todo dia, artigo completo quando o último tem 2 dias ou mais (dia que falha é recuperado no seguinte).
     - cron: "0 11 * * *"
   workflow_dispatch:
     inputs:

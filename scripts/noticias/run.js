@@ -1,9 +1,9 @@
 #!/usr/bin/env node
-// Notícias 100% automáticas, sem Pull Request: 1 artigo a cada 2 dias + 1 nota ("Radar") por dia, só com novidade real.
+// Notícias 100% automáticas, sem Pull Request: 1 artigo quando o último tem 2+ dias + 1 nota ("Radar") por dia, só com novidade real.
 // Cada texto passa por verificações automáticas e por uma 2ª revisão por IA antes de ir ao ar.
 //   GEMINI_API_KEY=... node scripts/noticias/run.js                      (publica o que estiver na vez, modo "publicar")
 //   GEMINI_API_KEY=... MODO=amostra node scripts/noticias/run.js          (gera 3 artigos + 1 nota em amostras/, sem publicar)
-// Variáveis: FORCAR_ARTIGO=1 (ignora o "a cada 2 dias", mas continua valendo 1 artigo por dia), DATA=AAAA-MM-DD (testes).
+// Variáveis: FORCAR_ARTIGO=1 (ignora o intervalo de 2 dias, mas continua valendo 1 artigo por dia), DATA=AAAA-MM-DD (testes).
 const fs = require('fs');
 const path = require('path');
 const { execFileSync } = require('child_process');
@@ -29,13 +29,16 @@ const epochDay = Math.floor(Date.parse(hoje + 'T00:00:00Z') / 864e5);
 const lerJSON = (f, vazio) => { try { return JSON.parse(fs.readFileSync(f, 'utf8')); } catch (e) { if (e.code === 'ENOENT') return vazio; throw e; } };
 const gravarJSON = (f, v) => fs.writeFileSync(f, JSON.stringify(v, null, 2) + '\n');
 let houveErro = false;
-const PRAZO = Date.now() + Number(process.env.NOTICIAS_MINUTOS || (MODO === 'amostra' ? 40 : 25)) * 60e3; // orçamento de tempo do job
+let PRAZO = Date.now() + Number(process.env.NOTICIAS_MINUTOS || (MODO === 'amostra' ? 40 : 30)) * 60e3; // orçamento de tempo do artigo; a nota ganha o seu depois
 const semTempo = () => Date.now() > PRAZO;
+const TENTATIVAS_ARTIGO = Number(process.env.TENTATIVAS_ARTIGO || 4); // reescritas após reprovação (mesmos critérios); nota segue com 2
+const reprovacoes = []; // resumo das reprovações/pulos da execução, para o log de falha
 
 function log(evento, dados) {
   const linha = { quando: new Date().toISOString(), data: hoje, evento, ...dados };
   fs.mkdirSync(path.dirname(F_LOG), { recursive: true });
   fs.appendFileSync(F_LOG, JSON.stringify(linha) + '\n');
+  if (evento === 'reprovado' || evento === 'pulado') reprovacoes.push({ tipo: dados.tipo, tema: dados.tema, tentativa: dados.tentativa, motivos: dados.motivos || [dados.motivo] });
   console.log(`[${evento}] ${dados.tipo || ''} ${dados.tema || ''} ${dados.titulo ? '— ' + dados.titulo : ''} ${dados.motivos ? '| ' + [].concat(dados.motivos).join(' ; ') : dados.motivo || ''}`);
 }
 
@@ -67,7 +70,7 @@ const FALA_DE_GOVERNO = /governo|congresso|c[âa]mara|senado|ministr|presidente|
 /** Temas de política/economia (e qualquer texto que fale de governo/Congresso/Judiciário) passam também pela revisão de neutralidade. */
 const precisaNeutralidade = (tema, txt) => !TEMAS_SEM_POLITICA.includes(tema) || FALA_DE_GOVERNO.test(txt);
 
-/** Escreve, verifica e revisa (até 2 vezes: original + 1 reescrita). Devolve { status: aprovado|sem_novidade|reprovado, rascunho? }. */
+/** Escreve, verifica e revisa (artigo: até TENTATIVAS_ARTIGO vezes; nota: 2 = original + 1 reescrita). Devolve { status: aprovado|sem_novidade|reprovado, rascunho? }. */
 async function tentarTema(tipo, tema, modo, recentes) {
   const T = TEMAS[tema];
   const diasMax = tipo === 'nota' ? 3 : 14;
@@ -75,7 +78,9 @@ async function tentarTema(tipo, tema, modo, recentes) {
   const minimo = modo === 'guia' ? 2 : 2;
   if (cands.length < minimo) { log('pulado', { tipo, tema, motivo: `sem novidade: só ${cands.length} fonte(s) legível(is) dos últimos ${diasMax} dias` }); return { status: 'sem_novidade' }; }
   let anterior = null, motivosAnt = [];
-  for (let tentativa = 1; tentativa <= 2; tentativa++) {
+  const maxTent = tipo === 'artigo' ? TENTATIVAS_ARTIGO : 2;
+  for (let tentativa = 1; tentativa <= maxTent; tentativa++) {
+    if (tentativa > 1 && semTempo()) break;
     const { texto } = await chamar({ prompt: P.escritor({ tipo, modo, tema: T, hoje, recentes, anterior, motivos: motivosAnt, cands }), temperatura: 0.6 });
     let r;
     try { r = extrairJSON(texto); } catch (e) { r = null; }
@@ -198,8 +203,11 @@ function salvarAmostra(i, item) {
   // ---- publicar
   const arquivos = [F_ART, F_NOTAS, path.join(ROOT, 'sitemap.xml')];
   const artigoHoje = artigos.some((a) => a.data === hoje);
-  const devoArtigo = !artigoHoje && (process.env.FORCAR_ARTIGO === '1' || epochDay % 2 === 0);
-  if (!devoArtigo) console.log(artigoHoje ? 'Já existe artigo de hoje: limite de 1 por dia.' : 'Hoje não é dia de artigo completo (a cada 2 dias).');
+  // Cadência: publica se o último artigo tem 2 dias ou mais (um dia que falhou é recuperado no seguinte).
+  const ultimoArtigo = artigos.reduce((m, a) => (a.data > m ? a.data : m), '');
+  const diasDesdeUltimo = ultimoArtigo ? epochDay - Math.floor(Date.parse(ultimoArtigo + 'T00:00:00Z') / 864e5) : Infinity;
+  const devoArtigo = !artigoHoje && (process.env.FORCAR_ARTIGO === '1' || diasDesdeUltimo >= 2);
+  if (!devoArtigo) console.log(artigoHoje ? 'Já existe artigo de hoje: limite de 1 por dia.' : `Último artigo é de ${ultimoArtigo} (${diasDesdeUltimo} dia(s)): ainda não é hora de outro.`);
   let publicouArtigo = null;
 
   if (devoArtigo) {
@@ -214,10 +222,15 @@ function salvarAmostra(i, item) {
           log('publicado', { tipo: 'artigo', tema: r.tema, titulo: art.titulo, modo: r.modo, slug: art.slug, fontes: art.fontes.map((f) => f.url), revisao: r.rascunho.revisoes });
           publicouArtigo = r.tema; recentes.push({ titulo: art.titulo, resumo: art.resumo, fontes: art.fontes });
         } catch (e) { desfazer(); artigos.shift(); throw e; }
+      } else {
+        // dia de artigo sem artigo: o run deve ficar vermelho e o log guarda o porquê
+        houveErro = true;
+        log('artigo_nao_publicado', { tipo: 'artigo', ultimo_artigo: ultimoArtigo, motivo: 'dia de artigo terminou sem publicar', reprovacoes: reprovacoes.filter((x) => x.tipo === 'artigo').slice(-12) });
       }
     } catch (e) { houveErro = true; log('erro', { tipo: 'artigo', motivo: String(e.message).slice(0, 300) }); }
   }
 
+  PRAZO = Date.now() + 15 * 60e3; // a nota tem o seu próprio tempo, mesmo que o artigo tenha usado o dele
   if (notas.some((n) => n.data === hoje)) console.log('Já existe nota de hoje: limite de 1 por dia.');
   else {
     try {

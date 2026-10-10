@@ -1,0 +1,21 @@
+name: Verificar artigo recente
+
+on:
+  schedule:
+    # Todo dia às 12h de Brasília, depois do run de notícias (08h): fica vermelho se o último artigo tem mais de 3 dias.
+    - cron: "0 15 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  verificar:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+      - run: node scripts/noticias/checar-atraso.js
