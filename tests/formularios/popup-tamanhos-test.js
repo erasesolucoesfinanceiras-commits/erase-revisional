@@ -17,6 +17,17 @@ const T = [[1366, 625], [1280, 600], [1920, 950], [390, 844], [360, 640], [844, 
     });
     const ok = !r.rolaPopup && !r.rolaOverlay && r.cabeNaTela && !r.itens.length && r.minAlvo >= 44 && r.fechar[0] >= 44;
     if (!ok) bad++; console.log(ok ? 'OK   ' : 'FALHA', `${w}x${h}`, JSON.stringify(r));
+    // estado de aviso (clique com o formulário vazio): continua sem rolagem, aviso e erros visíveis, foco no 1º campo
+    await pg.click('.popup-cta', { force: true }); await pg.waitForTimeout(250);
+    const e = await pg.evaluate(() => {
+      const pop = document.querySelector('.popup'), ov = document.querySelector('.popup-overlay'), box = pop.getBoundingClientRect();
+      const dentro = (el) => { const q = el.getBoundingClientRect(); return q.width > 0 && q.top >= box.top - 1 && q.bottom <= box.bottom + 1; };
+      const naoCabem = ['#popup-msg', ...[...document.querySelectorAll('.popup .field.invalid .err')].map((_, i) => `.popup .field.invalid:nth-of-type(${i + 1}) .err`)].filter((s) => { const el = document.querySelector(s); return el && !dentro(el); });
+      const naoVisiveis = [...document.querySelectorAll('.popup .err')].filter((el) => getComputedStyle(el).display === 'none' || !dentro(el)).length;
+      return { rolaPopup: pop.scrollHeight > pop.clientHeight + 1, rolaOverlay: ov.scrollHeight > ov.clientHeight + 1, msg: document.querySelector('#popup-msg').innerText.slice(0, 40), erros: document.querySelectorAll('.popup .field.invalid').length, errosForaDaTela: naoVisiveis, foco: document.activeElement.id, botao: ['.popup-cta', '.popup-legal', '.free-badge', '.popup-close', '#pp-lgpd'].filter((s) => !dentro(document.querySelector(s))) };
+    });
+    const ok2 = !e.rolaPopup && !e.rolaOverlay && /^Falta preencher/.test(e.msg) && e.erros === 4 && e.errosForaDaTela === 0 && e.foco === 'pp-nome' && !e.botao.length;
+    if (!ok2) bad++; console.log(ok2 ? 'OK   ' : 'FALHA', `${w}x${h} (com avisos)`, JSON.stringify(e));
     if (process.env.PRINTS && ((w === 1366 && h === 625) || (w === 360 && h === 640))) await pg.screenshot({ path: `${process.env.PRINTS}/popup-${w}x${h}.png` });
     await ctx.close();
   }

@@ -234,15 +234,15 @@ if (ct) {
               <p class="popup-sub">Deixe seus dados e um especialista da ERASE fala com você. Sem compromisso.</p>
             </div>
             <div class="pp-fields">
-              <div class="field"><label for="pp-nome">Nome</label><input id="pp-nome" name="nome" placeholder="Seu nome" autocomplete="name"></div>
-              <div class="field"><label for="pp-tel">WhatsApp</label><input id="pp-tel" name="telefone" inputmode="tel" placeholder="(81) 99999-9999" autocomplete="tel"></div>
+              <div class="field" data-campo="nome"><label for="pp-nome">Nome</label><input id="pp-nome" name="nome" placeholder="Nome e sobrenome" autocomplete="name" aria-describedby="pp-err-nome"><small class="err" id="pp-err-nome">Informe nome e sobrenome</small></div>
+              <div class="field" data-campo="telefone"><label for="pp-tel">WhatsApp</label><input id="pp-tel" name="telefone" inputmode="tel" placeholder="(81) 99999-9999" autocomplete="tel" aria-describedby="pp-err-tel"><small class="err" id="pp-err-tel">Informe DDD + número com 9 dígitos</small></div>
+              <p class="form-msg" id="popup-msg" role="status" aria-live="polite"></p>
             </div>
             <div class="pp-rest">
-              <fieldset class="field choices" data-group="situacao"><legend>Como estão as parcelas? <span class="req">*</span></legend><div class="choice-grid">${['Em dia', 'Atrasadas', 'Veículo com busca e apreensão'].map((o) => `<label class="choice"><input type="radio" name="situacao" value="${o}"><span>${o}</span></label>`).join('')}</div></fieldset>
-              <div class="field check"><label><input type="checkbox" id="pp-lgpd" name="lgpd"><span>Autorizo a ERASE Soluções Financeiras a entrar em contato comigo por WhatsApp ou telefone, conforme a <a href="/privacidade" target="_blank" rel="noopener">Política de Privacidade</a>. *</span></label></div>
-              <button class="btn btn-primary btn-block popup-cta" type="submit">Quero minha análise gratuita</button>
-              <p class="form-msg" id="popup-msg" role="status" aria-live="polite"></p>
-              <p class="popup-legal">Resultado estimado, sem valor de análise jurídica. Cada caso é avaliado individualmente.</p>
+              <fieldset class="field choices" data-group="situacao" data-campo="situacao" aria-describedby="pp-err-sit"><legend>Como estão as parcelas? <span class="req">*</span></legend><div class="choice-grid">${['Em dia', 'Atrasadas', 'Veículo com busca e apreensão'].map((o) => `<label class="choice"><input type="radio" name="situacao" value="${o}"><span>${o}</span></label>`).join('')}</div><small class="err" id="pp-err-sit">Escolha uma das opções</small></fieldset>
+              <div class="field check" data-campo="lgpd"><label><input type="checkbox" id="pp-lgpd" name="lgpd" aria-describedby="pp-err-lgpd"><span>Autorizo a ERASE Soluções Financeiras a entrar em contato comigo por WhatsApp ou telefone, conforme a <a href="/privacidade" target="_blank" rel="noopener">Política de Privacidade</a>. *</span></label><small class="err" id="pp-err-lgpd">Marque para autorizar o contato</small></div>
+              <button class="btn btn-primary btn-block popup-cta" type="submit" aria-disabled="true">Preencha os dados para enviar</button>
+              <p class="popup-legal">Resultado estimado, sem valor de análise jurídica.</p>
             </div>
           </form>
         </div>
@@ -269,9 +269,32 @@ if (ct) {
     maskPhone($('#pp-tel', ov));
     $('#pp-nome', ov).focus();
 
-    $('#popup-form', ov).addEventListener('submit', async (e) => {
+    const form = $('#popup-form', ov), btnEnvio = $('.popup-cta', form), aviso = $('#popup-msg', ov), caixa = $('.popup', ov);
+    const TXT_INCOMPLETO = 'Preencha os dados para enviar', TXT_COMPLETO = 'Enviar dados';
+    // O que falta, na ordem da tela. Nome: pelo menos duas palavras; WhatsApp: celular brasileiro com DDD; situação e autorização marcadas.
+    const faltando = () => {
+      const f = form, itens = [];
+      if (f.nome.value.trim().split(/\s+/).filter((p) => p.length >= 2).length < 2) itens.push({ campo: 'nome', rotulo: 'nome', foco: f.nome });
+      if (!phoneOk(f.telefone.value.trim())) itens.push({ campo: 'telefone', rotulo: 'WhatsApp', foco: f.telefone });
+      if (!f.querySelector('input[name="situacao"]:checked')) itens.push({ campo: 'situacao', rotulo: 'a situação das parcelas', foco: f.querySelector('input[name="situacao"]') });
+      if (!f.lgpd.checked) itens.push({ campo: 'lgpd', rotulo: 'a autorização de contato', foco: f.lgpd });
+      return itens;
+    };
+    const lista = (a) => (a.length > 1 ? a.slice(0, -1).join(', ') + ' e ' + a[a.length - 1] : a[0]);
+    // Botão "apagado" sem desabilitar (o clique ainda mostra o aviso): muda o TEXTO, a borda (tracejada) e a cor, não só a cor.
+    function atualizarBotao() {
+      const falta = faltando(), ok = falta.length === 0;
+      btnEnvio.setAttribute('aria-disabled', ok ? 'false' : 'true');
+      if (!btnEnvio.dataset.enviando) btnEnvio.textContent = ok ? TXT_COMPLETO : TXT_INCOMPLETO;
+      $$('.field[data-campo]', form).forEach((c) => { if (c.classList.contains('invalid') && !falta.some((x) => x.campo === c.dataset.campo)) c.classList.remove('invalid'); });
+      if (ok) { caixa.classList.remove('pp-erro'); if (aviso.classList.contains('bad')) setMsg(aviso, ''); }
+    }
+    form.addEventListener('input', atualizarBotao); form.addEventListener('change', atualizarBotao);
+    atualizarBotao();
+
+    form.addEventListener('submit', async (e) => {
       e.preventDefault();
-      const f = e.target, msg = $('#popup-msg', ov);
+      const f = e.target, msg = aviso;
       const sit = f.querySelector('input[name="situacao"]:checked');
       // Mesmos nomes de campo e valores da calculadora (o CRM marca URGENTE se atrasado ou busca e apreensão).
       const SITUACAO = {
@@ -279,17 +302,21 @@ if (ct) {
         'Atrasadas': { parcelas_em_dia: 'Atrasadas', busca_apreensao: '' },
         'Veículo com busca e apreensão': { parcelas_em_dia: '', busca_apreensao: 'Já tem processo de busca e apreensão' },
       };
+      const falta = faltando();
+      if (falta.length) { // não envia: lista o que falta, destaca cada campo (borda tracejada + texto) e leva o foco ao primeiro
+        $$('.field[data-campo]', f).forEach((c) => c.classList.toggle('invalid', falta.some((x) => x.campo === c.dataset.campo)));
+        caixa.classList.add('pp-erro');
+        setMsg(msg, `Falta preencher: ${lista(falta.map((x) => x.rotulo))}.`, 'bad');
+        falta[0].foco.focus();
+        return;
+      }
       const d = { nome: f.nome.value.trim(), telefone: f.telefone.value.trim(), ...(sit ? SITUACAO[sit.value] : {}) };
-      if (d.nome.length < 2) return setMsg(msg, 'Informe seu nome.', 'bad');
-      if (!phoneOk(d.telefone)) return setMsg(msg, 'Informe um telefone/WhatsApp válido com DDD.', 'bad');
-      if (!sit) return setMsg(msg, 'Escolha como está seu financiamento.', 'bad');
-      if (!f.lgpd.checked) return setMsg(msg, 'É necessário autorizar o contato para enviar.', 'bad');
-      const btn = $('button[type=submit]', f);
-      btn.disabled = true; setMsg(msg, 'Enviando…');
+      const btn = btnEnvio;
+      btn.disabled = true; btn.dataset.enviando = '1'; btn.textContent = 'Enviando…'; setMsg(msg, 'Enviando…');
       const ok = await enviarLead('popup-entrada', { ...d, lgpd_aceite: 'sim', status: 'novo' });
-      btn.disabled = false;
+      btn.disabled = false; delete btn.dataset.enviando; atualizarBotao();
       if (!ok) return setMsg(msg, MSG_FALHA, 'bad'); // dados continuam no formulário
-      f.reset();
+      f.reset(); atualizarBotao();
       setMsg(msg, 'Recebemos seus dados! Em breve um especialista falará com você.', 'ok');
       setTimeout(close, 2600);
     });
