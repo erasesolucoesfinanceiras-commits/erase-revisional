@@ -222,17 +222,23 @@ if (ct) {
           <p class="popup-art-text">Entenda o que está dentro do seu contrato de financiamento.</p>
         </aside>
         <div class="popup-main">
-          <p class="free-badge">ANÁLISE TOTALMENTE GRATUITA</p>
-          <h2 id="popup-title">Seu financiamento merece uma segunda olhada</h2>
-          <p class="popup-sub">Deixe seus dados e um especialista da ERASE fala com você. Sem compromisso.</p>
           <form id="popup-form" novalidate>
-            <div class="field"><label for="pp-nome">Nome</label><input id="pp-nome" name="nome" placeholder="Seu nome" autocomplete="name"></div>
-            <div class="field"><label for="pp-tel">WhatsApp</label><input id="pp-tel" name="telefone" inputmode="tel" placeholder="(81) 99999-9999" autocomplete="tel"></div>
-            <fieldset class="field choices" data-group="situacao"><legend>Como estão as parcelas? <span class="req">*</span></legend><div class="choice-grid">${['Em dia', 'Atrasadas', 'Veículo com busca e apreensão'].map((o) => `<label class="choice"><input type="radio" name="situacao" value="${o}"><span>${o}</span></label>`).join('')}</div></fieldset>
-            <div class="field check"><label><input type="checkbox" id="pp-lgpd" name="lgpd"><span>Autorizo a ERASE Soluções Financeiras a entrar em contato comigo por WhatsApp ou telefone, conforme a <a href="/privacidade" target="_blank" rel="noopener">Política de Privacidade</a>. *</span></label></div>
-            <button class="btn btn-primary btn-block popup-cta" type="submit">Quero minha análise gratuita</button>
-            <p class="form-msg" id="popup-msg" role="status" aria-live="polite"></p>
-            <p class="popup-legal">Resultado estimado, sem valor de análise jurídica. Cada caso é avaliado individualmente.</p>
+            <div class="pp-head">
+              <p class="free-badge">ANÁLISE TOTALMENTE GRATUITA</p>
+              <h2 id="popup-title">Seu financiamento merece uma segunda olhada</h2>
+              <p class="popup-sub">Deixe seus dados e um especialista da ERASE fala com você. Sem compromisso.</p>
+            </div>
+            <div class="pp-fields">
+              <div class="field"><label for="pp-nome">Nome</label><input id="pp-nome" name="nome" placeholder="Seu nome" autocomplete="name"></div>
+              <div class="field"><label for="pp-tel">WhatsApp</label><input id="pp-tel" name="telefone" inputmode="tel" placeholder="(81) 99999-9999" autocomplete="tel"></div>
+            </div>
+            <div class="pp-rest">
+              <fieldset class="field choices" data-group="situacao"><legend>Como estão as parcelas? <span class="req">*</span></legend><div class="choice-grid">${['Em dia', 'Atrasadas', 'Veículo com busca e apreensão'].map((o) => `<label class="choice"><input type="radio" name="situacao" value="${o}"><span>${o}</span></label>`).join('')}</div></fieldset>
+              <div class="field check"><label><input type="checkbox" id="pp-lgpd" name="lgpd"><span>Autorizo a ERASE Soluções Financeiras a entrar em contato comigo por WhatsApp ou telefone, conforme a <a href="/privacidade" target="_blank" rel="noopener">Política de Privacidade</a>. *</span></label></div>
+              <button class="btn btn-primary btn-block popup-cta" type="submit">Quero minha análise gratuita</button>
+              <p class="form-msg" id="popup-msg" role="status" aria-live="polite"></p>
+              <p class="popup-legal">Resultado estimado, sem valor de análise jurídica. Cada caso é avaliado individualmente.</p>
+            </div>
           </form>
         </div>
       </div>`;
