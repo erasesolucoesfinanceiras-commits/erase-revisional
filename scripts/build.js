@@ -295,7 +295,7 @@ ${choices('situacao', 'Como está seu financiamento hoje?', ['Em dia', 'Atrasado
 </div>
 
 <div class="contact-block"><h3>Para ver o resultado, informe seu contato</h3>
-<div class="field"><label for="lead-nome">Nome completo <span class="req">*</span></label><input id="lead-nome" name="nome" autocomplete="name" placeholder="Seu nome completo (não abrevie)"><small class="err" data-err="nome">Informe seu nome completo (não abrevie)</small></div>
+<div class="field"><label for="lead-nome">Nome e sobrenome <span class="req">*</span></label><input id="lead-nome" name="nome" autocomplete="name" placeholder="Ex.: Maria Silva"><small class="err" data-err="nome">Informe nome e sobrenome</small></div>
 <div class="field"><label for="lead-wa">WhatsApp <span class="req">*</span></label><input id="lead-wa" name="whatsapp" inputmode="tel" autocomplete="tel" placeholder="(81) 99999-9999"><small class="err" data-err="whatsapp">WhatsApp inválido — use DDD + 9 dígitos</small></div>
 <div class="field check"><label><input type="checkbox" id="lgpd" name="lgpd"><span>Autorizo a ERASE Soluções Financeiras a entrar em contato comigo por WhatsApp ou telefone sobre esta simulação, conforme a <a href="/privacidade.html" target="_blank" rel="noopener">Política de Privacidade</a>. <span class="req">*</span></span></label><small class="err" data-err="lgpd">É necessário autorizar o contato para ver o resultado</small></div></div>
 <p class="calc-warn" id="calc-warn" role="status" hidden>Para ver sua taxa na hora, preencha valor financiado, parcela e número de parcelas</p>

@@ -138,7 +138,7 @@ const FREE_BADGE_TXT = 'ANÁLISE DO CONTRATO 100% GRATUITA';
     if (!d.sit) e.situacao = 'Escolha uma opção';
     if (d.sit !== QUITADO && d.pagas >= 0 && d.n > 0 && d.pagas >= d.n) e.pagas = 'Parcelas pagas deve ser menor que o total financiado';
     const k = contato();
-    if (k.nome.split(' ').filter((w) => w.length >= 2).length < 2) e.nome = 'Informe seu nome completo (não abrevie)';
+    if (k.nome.split(' ').filter((w) => w.length >= 2).length < 2) e.nome = 'Informe nome e sobrenome';
     if (!phoneOk(k.whatsapp)) e.whatsapp = 'WhatsApp inválido — use DDD + 9 dígitos';
     if (!k.lgpd) e.lgpd = 'É necessário autorizar o contato para enviar';
     return e;

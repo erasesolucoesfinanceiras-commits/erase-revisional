@@ -23,11 +23,11 @@ let ok=0,bad=0;const t=(n,c,x='')=>{c?ok++:bad++;console.log(c?'OK   ':'FALHA',n
    await btn.click({force:true}); await pg.waitForTimeout(200);
    t('campos vazios: nada é enviado',reqs.length===0);
    const m=await pg.innerText('#popup-msg');
-   t('aviso lista tudo o que falta',/Falta preencher: nome, WhatsApp, a situação das parcelas e a autorização de contato\./.test(m),m);
+   t('aviso lista tudo o que falta',/Falta preencher: nome e sobrenome, WhatsApp, a situação das parcelas e a autorização de contato\./.test(m),m);
    t('campos faltantes destacados com mensagem curta (nome, WhatsApp, situação, autorização)',await pg.locator('.popup .field.invalid').count()===4&&await pg.locator('.popup .field.invalid .err:visible').count()===4);
    t('foco vai ao primeiro campo faltante (nome)',await pg.evaluate(()=>document.activeElement&&document.activeElement.id==='pp-nome'));
    await pg.fill('#pp-nome','Joao'); await pg.fill('#pp-tel','81900000000'); await pg.click('.popup-cta',{force:true}); await pg.waitForTimeout(150);
-   t('nome com 1 palavra continua faltando (só nome + situação + autorização)',/Falta preencher: nome, a situação das parcelas e a autorização de contato\./.test(await pg.innerText('#popup-msg'))&&reqs.length===0,await pg.innerText('#popup-msg'));
+   t('nome com 1 palavra continua faltando (só nome + situação + autorização)',/Falta preencher: nome e sobrenome, a situação das parcelas e a autorização de contato\./.test(await pg.innerText('#popup-msg'))&&reqs.length===0,await pg.innerText('#popup-msg'));
    await pg.fill('#pp-nome','Joao Souza'); await pg.fill('#pp-tel','8190000'); await pg.click('.popup-cta',{force:true}); await pg.waitForTimeout(150);
    t('WhatsApp incompleto é recusado',/WhatsApp/.test(await pg.innerText('#popup-msg'))&&reqs.length===0);
    await pg.fill('#pp-tel','81900000000'); await pg.locator('.popup input[name=situacao][value="Atrasadas"] + span').click(); await pg.waitForTimeout(100);
