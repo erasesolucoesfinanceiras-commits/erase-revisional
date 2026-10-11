@@ -1,5 +1,24 @@
 [
   {
+    "id": "2026-10-11-procon-interdita-empresa-por-suspeita-de",
+    "data": "2026-10-11",
+    "categoria": "consorcio-seguros",
+    "titulo": "Procon interdita empresa por suspeita de falso consórcio no Maranhão",
+    "texto": "Uma fiscalização conjunta do Procon do Maranhão e da Polícia Civil interditou a empresa Banvel Inter Mais Soluções em São Luís. Segundo os órgãos, clientes eram atraídos por anúncios de veículos descritos como financiamento, mas recebiam contratos de intermediação de consórcio somente após pagarem valores de entrada. Em caso citado na apuração, de R$ 10 mil pagos, R$ 9.500 ficavam com a intermediadora e R$ 500 seguiam ao consórcio.",
+    "fontes": [
+      {
+        "nome": "g1",
+        "url": "https://g1.globo.com/ma/maranhao/noticia/2026/10/08/procon-interdita-empresa-suspeita-de-golpe-do-falso-consorcio-em-sao-luis.ghtml",
+        "data": "2026-10-08"
+      },
+      {
+        "nome": "Jornal Pequeno",
+        "url": "https://jornalpequeno.com.br/2026/10/09/empresa-suspeita-de-golpe-do-falso-consorcio-e-interditada-em-sao-luis/",
+        "data": "2026-10-09"
+      }
+    ]
+  },
+  {
     "id": "2026-10-10-anfavea-eleva-projecao-de-vendas-para-20",
     "data": "2026-10-10",
     "categoria": "mercado",
