@@ -42,9 +42,6 @@ jobs:
         with:
           node-version: 22
 
-      - name: Guardar o commit inicial (para saber se algo foi gravado)
-        run: echo "INICIO=$(git rev-parse HEAD)" >> "$GITHUB_ENV"
-
       - name: Diagnóstico do Gemini (só modo diagnostico)
         if: inputs.modo == 'diagnostico'
         env:
@@ -81,13 +78,6 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           bash scripts/noticias/gravar.sh "Notícias automáticas (${{ inputs.modo || 'publicar' }}) $(date -u +%F)"
-
-      - name: Redeploy no Cloudflare Pages (só se o segredo CF_DEPLOY_HOOK_URL existir e algo foi gravado)
-        if: inputs.modo != 'amostra'
-        continue-on-error: true
-        env:
-          CF_DEPLOY_HOOK_URL: ${{ secrets.CF_DEPLOY_HOOK_URL }}
-        run: bash scripts/noticias/redeploy.sh "$INICIO"
 
       - name: Falhar se houve erro
         if: steps.gerar.outcome == 'failure'

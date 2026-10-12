@@ -86,7 +86,7 @@ async function esperarSite(slug, minutos) {
 /** Pede novo deploy ao Cloudflare Pages: gancho (deploy hook) → API → commit (o Pages publica a cada push na main). */
 async function pedirDeploy() {
   const tentativas = [];
-  if (process.env.CF_DEPLOY_HOOK_URL) tentativas.push(['gancho_de_deploy', async () => (await fetch(process.env.CF_DEPLOY_HOOK_URL, { method: 'POST' })).ok]);
+  if (process.env.CF_DEPLOY_HOOK_URL) tentativas.push(['gancho_de_deploy', async () => (await require('../retry').fetchRetry(process.env.CF_DEPLOY_HOOK_URL, { method: 'POST' }, { vezes: 3, timeout: 30000 })).ok]);
   const { CLOUDFLARE_API_TOKEN: tk, CLOUDFLARE_ACCOUNT_ID: ac, CLOUDFLARE_PAGES_PROJECT: pj } = process.env;
   if (tk && ac && pj) tentativas.push(['api_cloudflare', async () => (await fetch(`${CF}/accounts/${ac}/pages/projects/${pj}/deployments`, { method: 'POST', headers: { Authorization: `Bearer ${tk}` } })).ok]);
   tentativas.push(['commit', async () => { registrarAtividade('novo deploy pedido por commit'); return true; }]);
