@@ -1,4 +1,5 @@
 // Abre as páginas das fontes: confirma que o link funciona e traz o texto (para conferir cópia e fatos).
+const { fetchRetry } = require('../retry');
 const UA = 'Mozilla/5.0 (compatible; EraseRevisionalBot/1.0; +https://revisional.eraseconsulta.com.br)';
 
 function textoDoHtml(html) {
@@ -14,7 +15,7 @@ async function abrir(url, timeoutMs = 20000) {
   const ctrl = new AbortController();
   const timer = setTimeout(() => ctrl.abort(), timeoutMs);
   try {
-    const r = await fetch(url, { redirect: 'follow', signal: ctrl.signal, headers: { 'User-Agent': UA, Accept: 'text/html,application/xhtml+xml,text/plain;q=0.9,*/*;q=0.5', 'Accept-Language': 'pt-BR,pt;q=0.9' } });
+    const r = await fetchRetry(url, { redirect: 'follow', signal: ctrl.signal, headers: { 'User-Agent': UA, Accept: 'text/html,application/xhtml+xml,text/plain;q=0.9,*/*;q=0.5', 'Accept-Language': 'pt-BR,pt;q=0.9' } }, { vezes: 2, espera: 1500 });
     const bloqueado = [401, 403, 429].includes(r.status);
     let texto = '';
     const tipo = r.headers.get('content-type') || '';

@@ -10,6 +10,7 @@
 // documento...), sem etiquetas impróprias, com fotos de pessoas por último, e que passem num filtro visual do Gemini
 // (sem imagem sexual, violenta ou perturbadora, sem pessoa reconhecível em destaque, ligada ao assunto).
 const fs = require('fs');
+const { fetchRetry } = require('./retry');
 const path = require('path');
 
 const ROOT = process.env.PHOTOS_ROOT || path.join(__dirname, '..'); // PHOTOS_ROOT: só para testes
@@ -100,10 +101,11 @@ const abstratas = (txt) => ABSTRATOS.filter(([re]) => re.test(txt)).flatMap(([, 
 const buscasDe = (consulta, categoria, titulo = '') => [...new Set([].concat(consulta || [], abstratas([].concat(consulta || []).join(' ') + ' ' + titulo), FALLBACK_Q[categoria], MAIS_BUSCAS[categoria] || []).filter(Boolean))];
 
 // Provedores da corrente. buscar(q) -> hits normalizados { id, tags, largeImageURL, ... }; foto(hit) -> objeto `foto` gravado no artigo; aoUsar(hit) -> obrigações da plataforma.
-const baixar = async (url) => { const i = await fetch(url); if (!i.ok) throw new Error('download HTTP ' + i.status); return Buffer.from(await i.arrayBuffer()); };
+const baixar = async (url) => { const i = await fetchRetry(url, {}, { timeout: 30000 }); if (!i.ok) throw new Error('download HTTP ' + i.status); return Buffer.from(await i.arrayBuffer()); };
+// 429/5xx: uma repetição; persistindo, a corrente segue para o Unsplash
 const pixabay = (key) => ({
   nome: 'Pixabay',
-  buscar: async (q) => { const r = await fetch(`${PIXABAY}?key=${key}&q=${encodeURIComponent(q)}&image_type=photo&orientation=horizontal&safesearch=true&min_width=1280&per_page=50&lang=en`); if (!r.ok) throw new Error('Pixabay HTTP ' + r.status); return (await r.json()).hits || []; },
+  buscar: async (q) => { const r = await fetchRetry(`${PIXABAY}?key=${key}&q=${encodeURIComponent(q)}&image_type=photo&orientation=horizontal&safesearch=true&min_width=1280&per_page=50&lang=en`, {}, { vezes: 2, timeout: 30000 }); if (!r.ok) throw new Error('Pixabay HTTP ' + r.status); return (await r.json()).hits || []; },
   foto: (p) => ({ id: p.id, autor: p.user, autorUrl: `https://pixabay.com/users/${p.user}-${p.user_id}/`, pagina: p.pageURL, fonte: 'Pixabay' }),
   aoUsar: async () => {},
 });
@@ -112,7 +114,7 @@ const unsplash = (key) => {
   return {
     nome: 'Unsplash',
     buscar: async (q) => {
-      const r = await fetch(`${UNSPLASH}/search/photos?query=${encodeURIComponent(q)}&orientation=landscape&content_filter=high&per_page=30`, { headers: h });
+      const r = await fetchRetry(`${UNSPLASH}/search/photos?query=${encodeURIComponent(q)}&orientation=landscape&content_filter=high&per_page=30`, { headers: h }, { vezes: 2, timeout: 30000 });
       if (!r.ok) throw new Error('Unsplash HTTP ' + r.status);
       // etiquetas = descrição + tags da foto (o Unsplash não tem o campo "tags" do Pixabay)
       return ((await r.json()).results || []).filter((p) => p.width >= 1280 && p.width > p.height).map((p) => ({ id: 'u-' + p.id, tags: [p.alt_description, p.description, ...(p.tags || []).map((t) => t.title)].filter(Boolean).join(' '),
