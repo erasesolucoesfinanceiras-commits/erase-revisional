@@ -1,0 +1,52 @@
+name: Fotos das categorias (Unsplash)
+
+# Manual (Actions > Fotos das categorias > Run workflow). Busca no Unsplash a foto de cada categoria que ainda não tem
+# (assets/img/cat), converte para WebP 480/960/1280, preenche CREDITOS-IMAGENS.md e grava na branch. Precisa do segredo UNSPLASH_ACCESS_KEY.
+# Para trocar uma foto reprovada: preencha "categorias" e coloque o id da foto ruim em "excluir" (o id está em CREDITOS-IMAGENS.md).
+on:
+  workflow_dispatch:
+    inputs:
+      branch:
+        description: "Branch onde gravar"
+        default: claude/eloquent-planck-0cngvv
+        type: string
+      categorias:
+        description: "Só estas categorias (ex.: economia,imoveis); vazio = as que estão sem foto"
+        required: false
+        type: string
+      excluir:
+        description: "Ids de fotos do Unsplash que não podem ser escolhidas (separe por vírgula)"
+        required: false
+        type: string
+
+permissions:
+  contents: write
+
+concurrency:
+  group: noticias
+  cancel-in-progress: false
+
+jobs:
+  fotos:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          ref: ${{ inputs.branch }}
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+      - run: npm i --no-save sharp
+      - name: Buscar fotos
+        env:
+          UNSPLASH_ACCESS_KEY: ${{ secrets.UNSPLASH_ACCESS_KEY }}
+          CAT_FOTO_CATEGORIAS: ${{ inputs.categorias }}
+          CAT_FOTO_EXCLUIR: ${{ inputs.excluir }}
+        run: node scripts/cat-photos.js
+      - name: Salvar no branch
+        env:
+          BRANCH: ${{ inputs.branch }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          bash scripts/noticias/gravar.sh "Fotos das categorias (Unsplash)"
