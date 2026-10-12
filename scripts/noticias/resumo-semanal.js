@@ -1,11 +1,12 @@
 #!/usr/bin/env node
-// Resumo semanal por e-mail (Resend): o que foi publicado, quantos textos foram reprovados e por quê, temas sem publicação.
+// Resumo semanal por e-mail (Resend): a saúde do sistema (artigos, fotos da categoria, falhas, tentativas extras), o que foi publicado, quantos textos foram reprovados e por quê, temas sem publicação.
 //   node scripts/noticias/resumo-semanal.js          (usa data/noticias-log.jsonl, últimos 7 dias; segunda de manhã pelo resumo-semanal.yml)
 //   TESTE=1 node scripts/noticias/resumo-semanal.js  (usa amostras/: e-mail de teste, nada foi publicado)
 // Secrets: RESEND_API_KEY, ALERTA_EMAIL_PARA (vírgula separa vários), ALERTA_EMAIL_DE (opcional).
 const fs = require('fs');
 const path = require('path');
 const { TEMAS } = require('./temas');
+const { saude, htmlSaude } = require('./saude');
 
 const ROOT = path.join(__dirname, '..', '..');
 const config = JSON.parse(fs.readFileSync(path.join(ROOT, 'data', 'config.json'), 'utf8'));
@@ -58,6 +59,7 @@ const html = `<div style="font-family:Arial,Helvetica,sans-serif;max-width:560px
 <h2 style="margin:0 0 4px;font-size:20px">Resumo semanal · ERASE Revisional</h2>
 <p style="margin:0 0 16px;color:#666;font-size:14px">${esc(periodo)}${TESTE ? ' — nada foi publicado, são as amostras de teste' : ''}</p>
 <p style="margin:0 0 6px"><b>${artigos.length}</b> artigo(s) · <b>${notas.length}</b> nota(s) · <b>${reprovados.length}</b> reprovado(s)${erros ? ` · <b style="color:#b91c1c">${erros} erro(s)</b>` : ''}</p>
+${htmlSaude(saude(eventos))}
 <h3 style="font-size:16px;margin:18px 0 6px">Artigos publicados</h3><ul style="padding-left:18px;margin:0">${lista(artigos)}</ul>
 <h3 style="font-size:16px;margin:18px 0 6px">Notas do Radar</h3><ul style="padding-left:18px;margin:0">${lista(notas)}</ul>
 <h3 style="font-size:16px;margin:18px 0 6px">Reprovados, por motivo</h3>
