@@ -19,13 +19,13 @@ const cors={'access-control-allow-origin':'*','access-control-allow-headers':'co
    const pg=await ctx.newPage(); await pg.goto('http://localhost:8123/calculadora.html?utm_source=meta&utm_campaign=teste');
    await pg.selectOption('#n_parcelas','48'); await pg.fill('#valor_financiado','40000'); await pg.fill('#parcela','1500'); await pg.fill('#pagas','10');
    await pg.locator('input[name=situacao][value="Em dia"] + span').click();
-   await pg.fill('#lead-nome','Maria Silva'); await pg.fill('#lead-wa','81991547396'); await pg.check('#lgpd');
+   await pg.fill('#lead-nome','Maria'); await pg.fill('#lead-wa','81991547396'); await pg.check('#lgpd');
    await fn(pg,reqs,posts); await ctx.close();
  }
  await rodar(n=>n===1?'500':'ok', async (pg,reqs,posts)=>{
    await pg.click('#calc-btn'); await pg.waitForTimeout(600);
    t('calc: CRM falhou -> NÃO mostra resultado', (await pg.getAttribute('#analise','data-state'))!=='resultado' && (await pg.locator('.rate-big').count())===0);
-   t('calc: CRM falhou -> mensagem amigável, botão volta, dados mantidos', /Não conseguimos enviar/.test(await pg.innerText('#calc-msg')) && await pg.isEnabled('#calc-btn') && await pg.inputValue('#lead-nome')==='Maria Silva');
+   t('calc: CRM falhou -> mensagem amigável, botão volta, dados mantidos', /Não conseguimos enviar/.test(await pg.innerText('#calc-msg')) && await pg.isEnabled('#calc-btn') && await pg.inputValue('#lead-nome')==='Maria');
    await pg.click('#calc-btn'); await pg.waitForTimeout(900);
    t('calc: confirmado -> mostra o resultado', (await pg.getAttribute('#analise','data-state'))==='resultado' && (await pg.locator('.rate-big').count())===1);
    const a=reqs[0].b, c=reqs[1].b;

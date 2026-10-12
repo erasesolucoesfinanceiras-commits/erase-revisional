@@ -264,7 +264,7 @@ if (ct) {
               <p class="popup-sub">Deixe seus dados e um especialista da ERASE fala com você. Sem compromisso.</p>
             </div>
             <div class="pp-fields">
-              <div class="field" data-campo="nome"><label for="pp-nome">Nome e sobrenome <span class="req">*</span></label><input id="pp-nome" name="nome" placeholder="Ex.: Maria Silva" autocomplete="name" aria-required="true" aria-describedby="pp-err-nome"><span class="req req-in" aria-hidden="true">*</span><small class="err" id="pp-err-nome">Informe nome e sobrenome</small></div>
+              <div class="field" data-campo="nome"><label for="pp-nome">Seu nome <span class="req">*</span></label><input id="pp-nome" name="nome" placeholder="Ex.: Maria" autocomplete="name" aria-required="true" aria-describedby="pp-err-nome"><span class="req req-in" aria-hidden="true">*</span><small class="err" id="pp-err-nome">Informe seu nome</small></div>
               <div class="field" data-campo="telefone"><label for="pp-tel">WhatsApp <span class="req">*</span></label><input id="pp-tel" name="telefone" inputmode="tel" placeholder="(81) 99999-9999" autocomplete="tel" aria-required="true" aria-describedby="pp-err-tel"><span class="req req-in" aria-hidden="true">*</span><small class="err" id="pp-err-tel">Informe DDD + número com 9 dígitos</small></div>
               <p class="form-msg" id="popup-msg" role="status" aria-live="polite"></p>
             </div>
@@ -301,10 +301,10 @@ if (ct) {
 
     const form = $('#popup-form', ov), btnEnvio = $('.popup-cta', form), aviso = $('#popup-msg', ov), caixa = $('.popup', ov);
     const TXT_INCOMPLETO = 'Preencha os dados para enviar', TXT_COMPLETO = 'Enviar dados';
-    // O que falta, na ordem da tela. Nome: pelo menos duas palavras; WhatsApp: celular brasileiro com DDD; situação e autorização marcadas.
+    // O que falta, na ordem da tela. Nome: pelo menos 2 letras; WhatsApp: celular brasileiro com DDD; situação e autorização marcadas.
     const faltando = () => {
       const f = form, itens = [];
-      if (f.nome.value.trim().split(/\s+/).filter((p) => p.length >= 2).length < 2) itens.push({ campo: 'nome', rotulo: 'nome e sobrenome', foco: f.nome });
+      if (f.nome.value.replace(/[^\p{L}]/gu, '').length < 2) itens.push({ campo: 'nome', rotulo: 'seu nome', foco: f.nome });
       if (!phoneOk(f.telefone.value.trim())) itens.push({ campo: 'telefone', rotulo: 'WhatsApp', foco: f.telefone });
       if (!f.querySelector('input[name="situacao"]:checked')) itens.push({ campo: 'situacao', rotulo: 'a situação das parcelas', foco: f.querySelector('input[name="situacao"]') });
       if (!f.lgpd.checked) itens.push({ campo: 'lgpd', rotulo: 'a autorização de contato', foco: f.lgpd });
