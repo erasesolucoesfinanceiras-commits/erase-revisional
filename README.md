@@ -66,3 +66,9 @@ Workflow "Buscar fotos dos artigos (Pixabay)" > Run workflow na branch `main`: `
 
 ### Portal (fase 1): capa, barra lateral e artigos
 Capa: carrossel com os 5 itens mais recentes por data real (artigos e Radar; guias fora; sem autoplay), "Explore tópicos" (um quadro por categoria, com foto do artigo da categoria ou o desenho da categoria), "Últimos artigos" e "Escolha da equipe" (`data/escolha-da-equipe.json`: até 3 itens, slug de artigo/guia ou `radar:ID`; vazio = seção oculta). Barra lateral em capa, listas, Radar e artigos: cartão da calculadora, Destaques (4 mais recentes), Sobre (+ redes só se existirem em `data/config.json`) e newsletter (mesmo envio "newsletter" do CRM, com consentimento). Fim do artigo: 3 relacionados. Página "Como produzimos nosso conteúdo" (`como-produzimos.html`). Testes: `node tests/noticias/portal-test.js` e `node tests/formularios/portal-test.js`.
+
+## Redeploy automático (opcional): CF_DEPLOY_HOOK_URL
+O Cloudflare Pages já publica a cada push na `main`. O Deploy Hook é um reforço: o fluxo de notícias o chama depois de gravar algo (`scripts/noticias/redeploy.sh`). Sem o segredo, nada acontece e nada quebra.
+1. Cloudflare > **Workers & Pages** > projeto **erase-revisional** > **Settings** > **Builds** (em telas antigas: *Builds & deployments*) > **Deploy hooks** > **Add deploy hook**.
+2. Nome: `github-noticias` · Branch: `main` > **Save**. Copie a URL que aparece (`https://api.cloudflare.com/client/v4/pages/webhooks/deploy_hooks/...`).
+3. GitHub > repositório `erase-revisional` > **Settings** > **Secrets and variables** > **Actions** > **New repository secret** · Nome: `CF_DEPLOY_HOOK_URL` · Valor: a URL > **Add secret**.
