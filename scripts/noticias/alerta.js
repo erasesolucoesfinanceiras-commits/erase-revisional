@@ -3,7 +3,8 @@
 // ou quando o workflow de notícias fecha 3 dias seguidos com falha (e a cada 3 depois). Como há 3 rodadas por dia, conta DIAS:
 // um dia falhou se a última execução dele terminou em falha. Secrets: RESEND_API_KEY, ALERTA_EMAIL_PARA, ALERTA_EMAIL_DE (opcional).
 const { GITHUB_TOKEN, GITHUB_REPOSITORY, GITHUB_RUN_ID, RESEND_API_KEY, ALERTA_EMAIL_PARA, ALERTA_EMAIL_DE, CAUSA_HUMANA } = process.env;
-const WORKFLOW = 'noticias.yml';
+const WORKFLOW = process.env.ALERTA_WORKFLOW || 'noticias.yml'; // a verificação diária usa 'verificar-artigo.yml' (com CAUSA_HUMANA: avisa na hora)
+const { fetchRetry } = require('../retry');
 const diaBR = (iso) => new Date(Date.parse(iso) - 3 * 3600e3).toISOString().slice(0, 10);
 
 /** Dias seguidos com falha imediatamente antes de hoje (a última execução concluída de cada dia decide). */
@@ -27,7 +28,7 @@ function diasFalhosAntesDeHoje(runs, hoje) {
   if (!CAUSA_HUMANA && seguidas % 3 !== 0) return;
   if (!RESEND_API_KEY || !ALERTA_EMAIL_PARA) { console.error('Secrets RESEND_API_KEY / ALERTA_EMAIL_PARA ausentes: e-mail NÃO enviado.'); return; }
   const url = `https://github.com/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}`;
-  const e = await fetch('https://api.resend.com/emails', {
+  const e = await fetchRetry('https://api.resend.com/emails', {
     method: 'POST',
     headers: { Authorization: `Bearer ${RESEND_API_KEY}`, 'Content-Type': 'application/json' },
     body: JSON.stringify({

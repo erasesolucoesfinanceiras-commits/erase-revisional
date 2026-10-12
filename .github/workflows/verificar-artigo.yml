@@ -36,3 +36,15 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           node scripts/noticias/verificar-dia.js
+      - name: Avisar por e-mail (só se a verificação falhou de verdade)
+        if: failure()
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
+          ALERTA_EMAIL_PARA: ${{ secrets.ALERTA_EMAIL_PARA }}
+          ALERTA_EMAIL_DE: ${{ secrets.ALERTA_EMAIL_DE }}
+          ALERTA_WORKFLOW: verificar-artigo.yml
+        run: |
+          CAUSA=$(tail -n 1 data/noticias-log.jsonl 2>/dev/null | node -e "let s='';process.stdin.on('data',d=>s+=d).on('end',()=>{try{console.log(JSON.parse(s).causa||'')}catch(e){}})")
+          export CAUSA_HUMANA="${CAUSA:-A verificação diária falhou: o site pode estar desatualizado ou sem artigo novo há mais de 3 dias.}"
+          node scripts/noticias/alerta.js
