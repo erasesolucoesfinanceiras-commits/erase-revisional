@@ -5,7 +5,7 @@
 //   FOTO_MODO=slug FOTO_SLUG=meu-artigo node ...     -> REFAZ a foto desse artigo (substitui a atual)
 //   FOTO_MODO=marcadas node ...                      -> refaz a foto de todos os artigos com `foto_refazer: true`
 // Importável: fetchPhoto(slug, consulta, usadas, { categoria, titulo }) -> objeto `foto` ou null (nunca lança).
-// Sem foto adequada: null e o site usa a imagem padrão (capa SVG da categoria).
+// Sem foto adequada: null e o site usa a foto da categoria (assets/img/cat). Categoria nova sem foto: catSemFoto() / evento "categoria_sem_foto" no log.
 // Escolha: só entram fotos RELACIONADAS ao assunto (as etiquetas da foto têm de conter termos do tema: carro, veículo, contrato,
 // documento...), sem etiquetas impróprias, com fotos de pessoas por último, e que passem num filtro visual do Gemini
 // (sem imagem sexual, violenta ou perturbadora, sem pessoa reconhecível em destaque, ligada ao assunto).
@@ -108,7 +108,7 @@ async function fetchPhoto(slug, consulta, usadas = [], ctx = {}) {
     }
     motivo = e.motivo;
   } catch (e) { motivo = e.message; }
-  console.error(`Foto de "${slug}": ${motivo}; usando a imagem padrão do site.`);
+  console.error(`Foto de "${slug}": ${motivo}; usando a foto da categoria.`);
   return null;
 }
 
@@ -128,12 +128,17 @@ async function processar(lista, { modo = 'faltantes', slug = '' }, fetchFn = fet
   return res;
 }
 
-module.exports = { fetchPhoto, FALLBACK_Q, relacao, escolher, processar, buscasDe, motivoDaFalha: () => motivo, ultimaEscolha: () => escolha };
+/** Categorias do site que ainda não têm foto em assets/img/cat (o card cai no desenho SVG até alguém salvar a foto). */
+const catSemFoto = () => Object.keys(JSON.parse(fs.readFileSync(path.join(ROOT, 'data', 'config.json'), 'utf8')).categorias)
+  .filter((c) => !fs.existsSync(path.join(ROOT, 'assets', 'img', 'cat', `${c}-960.webp`)));
+
+module.exports = { catSemFoto, fetchPhoto, FALLBACK_Q, relacao, escolher, processar, buscasDe, motivoDaFalha: () => motivo, ultimaEscolha: () => escolha };
 
 if (require.main === module) (async () => {
   const lista = JSON.parse(fs.readFileSync(ARTICLES, 'utf8'));
   const hoje = new Date(Date.now() - 3 * 3600e3).toISOString().slice(0, 10);
   const log = (evento, dados) => { fs.appendFileSync(LOG, JSON.stringify({ quando: new Date().toISOString(), data: hoje, evento, origem: 'fotos', ...dados }) + '\n'); console.log(`[${evento}] ${dados.slug} ${dados.porque || dados.motivo || ''}`); };
+  for (const c of catSemFoto()) log('categoria_sem_foto', { slug: c, motivo: 'categoria sem foto em assets/img/cat: o card usa o desenho SVG' });
   const res = await processar(lista, { modo: process.env.FOTO_MODO || 'faltantes', slug: process.env.FOTO_SLUG || '' }, fetchPhoto, log);
   const mudou = res.filter((r) => ['trocada', 'padrao'].includes(r.resultado)).length;
   if (!mudou) { console.log('Nada a atualizar.'); process.exit(process.env.PIXABAY_API_KEY ? 0 : 1); }

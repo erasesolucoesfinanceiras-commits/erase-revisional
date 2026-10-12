@@ -42,13 +42,19 @@ const artUrl = (a) => `/noticias/${a.slug}.html`;
 const semHtml = (p) => p.replace(/\.html$/, '');
 const absUrl = (p) => config.siteUrl.replace(/\/$/, '') + semHtml(p);
 const coverUrl = (a) => `/assets/img/cover-${a.categoria}.svg`;
-// Capa: foto WebP (scripts/photos.js) em 3 tamanhos; sem foto, ou se ela não carregar, volta ao desenho SVG.
+// Foto da categoria (assets/img/cat/<categoria>-480|960|1280.webp, créditos em CREDITOS-IMAGENS.md): é a capa de todo item sem foto própria.
+// Só se a categoria for nova e ainda sem foto cai no desenho SVG (e o log de notícias avisa: ver catSemFoto em photos.js).
+const catFoto = (c) => fs.existsSync(path.join(ROOT, 'assets/img/cat', `${c}-960.webp`));
+const catSrcset = (c) => [480, 960, 1280].map((w) => `/assets/img/cat/${c}-${w}.webp ${w}w`).join(', ');
+// Capa: foto WebP do artigo (scripts/photos.js) em 3 tamanhos; sem foto, ou se ela não carregar, a foto da categoria.
 const PHOTO_WIDTHS = [480, 960, 1280]; // manter igual a WIDTHS em photos.js
 const coverImg = (a, { width, height, sizes, eager = false, cls = '' }) => {
   const base = `${cls ? `class="${cls}" ` : ''}alt="" width="${width}" height="${height}" ${eager ? 'fetchpriority="high"' : 'loading="lazy" decoding="async"'}`;
-  if (!a.foto) return `<img src="${coverUrl(a)}" ${base}>`;
+  const cat = catFoto(a.categoria);
+  const fim = cat ? `/assets/img/cat/${a.categoria}-960.webp` : coverUrl(a);
+  if (!a.foto) return cat ? `<img src="${fim}" srcset="${catSrcset(a.categoria)}" sizes="${sizes}" ${base}>` : `<img src="${fim}" ${base}>`;
   const srcset = PHOTO_WIDTHS.map((w) => `/assets/img/news/${a.slug}-${w}.webp ${w}w`).join(', ');
-  return `<img src="/assets/img/news/${a.slug}-960.webp" srcset="${srcset}" sizes="${sizes}" ${base} onerror="this.onerror=null;this.removeAttribute('srcset');this.src='${coverUrl(a)}'">`;
+  return `<img src="/assets/img/news/${a.slug}-960.webp" srcset="${srcset}" sizes="${sizes}" ${base} onerror="this.onerror=null;this.removeAttribute('srcset');this.src='${fim}'">`;
 };
 
 const ICON = {
@@ -423,6 +429,6 @@ const freeBadge = (cls = '') => `<p class="free-badge ${cls}" role="note">${FREE
 
 module.exports = {
   FREE_TXT, freeBadge,
-  ROOT, config, loadArticles, loadNotas, ehGuia, selo, seloTxt, ordenarConteudo, ultimaPublicacao, rowCardNota, cardDe, readJSON, itemDe, dataHtml, maisRecentes, cardV, miniItem, carrossel, exploreTopicos, escolhaDaEquipe, relacionados, sidebar, socialLinks, usaContato, esc, fmtPct, fmtData, catNome, catUrl, artUrl, absUrl, coverUrl, coverImg,
+  ROOT, config, loadArticles, loadNotas, ehGuia, selo, seloTxt, ordenarConteudo, ultimaPublicacao, rowCardNota, cardDe, readJSON, itemDe, dataHtml, maisRecentes, cardV, miniItem, carrossel, exploreTopicos, escolhaDaEquipe, relacionados, sidebar, socialLinks, usaContato, esc, fmtPct, fmtData, catNome, catUrl, artUrl, absUrl, coverUrl, catFoto, coverImg,
   ICON, page, rowCard, promoCard, trustBadges, ctaBanner,
 };

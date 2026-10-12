@@ -59,5 +59,14 @@ const hit = (id, tags) => ({ id, tags, largeImageURL: 'u' + id, user: 'u', user_
     t('fetchPhoto: busca da casinha é descartada, a de carro/contrato vale; crédito do autor e registro do porquê', r2 && r2.f && r2.f.id === 777 && r2.f.autor === 'fotografo' && r2.f.pagina.includes('777') && r2.e.consulta === 'car keys contract' && /etiquetas/.test(r2.e.porque), (out.stdout || '') + (out.stderr || '').slice(-300));
     t('fetchPhoto: grava as 3 versões WebP (480/960/1280)', [480, 960, 1280].every((w) => fs.existsSync(path.join(tmp, 'assets/img/news', `slug-teste-${w}.webp`))));
   }
+  // ---- capa: item sem foto usa a foto da categoria; categoria sem foto cai no SVG e é avisada
+  {
+    const S = require(path.join(ROOT, 'scripts/site')), dir = path.join(ROOT, 'assets/img/cat'), f = path.join(dir, 'economia-960.webp'), existia = fs.existsSync(f);
+    const semFoto = () => S.coverImg({ categoria: 'economia', slug: 'x' }, { width: 1, height: 1, sizes: '1px' });
+    if (!existia) { t('capa: categoria sem foto cai no SVG e aparece em catSemFoto()', /cover-economia\.svg/.test(semFoto()) && P.catSemFoto().includes('economia')); fs.mkdirSync(dir, { recursive: true }); fs.writeFileSync(f, ''); }
+    t('capa: item sem foto própria usa a foto da categoria (nunca o ícone)', /cat\/economia-960\.webp/.test(semFoto()) && !/\.svg/.test(semFoto()));
+    t('capa: foto do artigo que falha ao carregar volta para a foto da categoria', /onerror=.*cat\/economia-960\.webp/.test(S.coverImg({ categoria: 'economia', slug: 'x', foto: { id: 1 } }, { width: 1, height: 1, sizes: '1px' })));
+    if (!existia) fs.rmSync(f);
+  }
   console.log(`${ok} ok, ${bad} falha(s)`); process.exit(bad ? 1 : 0);
 })();

@@ -14,7 +14,7 @@ const V = require('./verificar');
 const { revisar, revisarNeutralidade } = require('./revisor');
 const N = require('./numeros');
 const { coletar } = require('./fontes');
-const { fetchPhoto, FALLBACK_Q } = require('../photos');
+const { fetchPhoto, FALLBACK_Q, catSemFoto } = require('../photos');
 const EST = require('./estatisticas');
 const RG = require('./revisar-guia');
 
@@ -189,6 +189,7 @@ async function publicarArtigo({ tema, modo, rascunho: r }, artigos) {
   while (artigos.some((a) => a.slug === slug)) slug = `${slugify(r.titulo)}-${n++}`;
   const foto_busca = String(r.foto_busca || '').trim().slice(0, 60) || FALLBACK_Q[tema];
   const foto = await fetchPhoto(slug, foto_busca, artigos.map((a) => a.foto && a.foto.id), { categoria: tema, titulo: r.titulo });
+  for (const c of catSemFoto()) log('categoria_sem_foto', { tipo: 'artigo', tema, slug: c, motivo: 'categoria sem foto em assets/img/cat: o card usa o desenho SVG' }); // categoria nova: avisa para salvar a foto
   if (!foto) log('foto_padrao', { tipo: 'artigo', tema, slug, motivo: require('../photos').motivoDaFalha() || 'sem foto' }); // sem foto adequada: imagem padrão do site
   else log('foto_escolhida', { tipo: 'artigo', tema, slug, ...(require('../photos').ultimaEscolha() || {}) }); // qual foto e por quê
   const art = { slug, categoria: tema, titulo: r.titulo, resumo: r.resumo, data: hoje, fontes: limparFontes(r.fontes), corpo: r.corpo, foto_busca, tipo: modo === 'guia' ? 'guia' : 'noticia', ...(foto && { foto }) };
