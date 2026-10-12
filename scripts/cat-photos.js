@@ -21,7 +21,7 @@ const BUSCAS = {
   'credito-rural': ['tractor in field', 'farm field aerial', 'wheat field harvest'],
   'empresas-mei': ['small shop storefront', 'coffee shop counter', 'market stall'],
   revisional: ['calculator and documents desk', 'signing contract pen paper', 'paperwork on desk'],
-  mercado: ['cars parked in a row', 'car showroom interior', 'new cars lot'],
+  mercado: ['empty highway road', 'asphalt road aerial view', 'road at sunset landscape'], // sem carros: o tema é mercado de veículos, mas carro em foto lembra marca
   financeiro: ['modern glass office building', 'bank building facade', 'city financial district buildings'],
   'energia-solar': ['solar panels roof', 'solar farm aerial', 'solar panels sky'],
   economia: ['stock market chart screen', 'financial district skyline', 'coins stack growth'],
