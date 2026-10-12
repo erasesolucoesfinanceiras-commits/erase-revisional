@@ -1,5 +1,33 @@
 [
   {
+    "slug": "aneel-estuda-liquidar-excedente-de-energia-solar-no-mercado-de-curto-prazo",
+    "categoria": "energia-solar",
+    "titulo": "ANEEL estuda liquidar excedente de energia solar no mercado de curto prazo",
+    "resumo": "Agência reguladora avalia mecanismo para contabilizar sobras de micro e minigeração distribuída, com potencial impacto no equilíbrio das tarifas de energia.",
+    "data": "2026-10-12",
+    "fontes": [
+      {
+        "nome": "Canal Solar",
+        "url": "https://canalsolar.com.br/excedente-mmgd-pode-entrar-contabilizacao-energia/",
+        "data": "2026-09-28"
+      },
+      {
+        "nome": "Click Petróleo e Gás",
+        "url": "https://clickpetroleoegas.com.br/aneel-estuda-permitir-venda-de-excedente-de-energia-solar-no-mercado-de-curto-prazo-rmrm97/",
+        "data": "2026-09-30"
+      }
+    ],
+    "corpo": "<p>A expansão da micro e minigeração distribuída (MMGD) no Brasil tem motivado discussões regulatórias sobre a forma como a energia excedente injetada nas redes elétricas é contabilizada. A Agência Nacional de Energia Elétrica (ANEEL) avalia uma proposta para permitir que as distribuidoras liquidem o excedente de geração solar no Mercado de Curto Prazo, adotando como referência o Preço de Liquidação das Diferenças (PLD).</p><h2>Distorções contábeis e a proposta em estudo</h2><p>O debate decorre da transformação no fluxo energético provocada pelo crescimento de sistemas solares próprios. Quando a estrutura contábil do setor elétrico foi criada, a presença da MMGD nas redes de distribuição era residual. Com o avanço das instalações solares, a produção própria passou a atender diretamente à demanda das áreas de concessão, gerando situações em que a injeção de eletricidade supera a carga local.</p><p>Pelo formato em vigor, a eletricidade que ultrapassa a carga não é reconhecida formalmente como recurso da distribuidora na contabilização da Câmara de Comercialização de Energia Elétrica (CCEE). Essa lacuna gera distorções nos registros do sistema, resultando em redução artificial do consumo contabilizado e em falhas na apuração de perdas na Rede Básica.</p><p>De acordo com nota técnica elaborada pela CCEE, o montante financeiro acumulado decorrente de energia de MMGD não contabilizada alcançou R$ 394,59 milhões entre janeiro de 2025 e junho de 2026. Esse valor esteve associado a uma média de 98,14 MW médios no período. Ao longo de 2025, os cálculos apontaram uma distorção financeira estimada em R$ 225 milhões, referente a um volume não contabilizado de 109 MW médios.</p><h2>Análise jurídica e destinação dos recursos</h2><p>A iniciativa para adequar as Regras de Comercialização está em processo de análise regulatória. Em 23 de setembro, a Procuradoria Federal junto à ANEEL disponibilizou parecer indicando que existe respaldo jurídico e regulatório para a evolução das regras, condicionando o formato mais abrangente à comprovação técnica consistente e ao cumprimento de novas etapas de avaliação.</p><p>Entre as diretrizes avaliadas pelo órgão regulador, o eventual resultado econômico apurado com a liquidação desses excedentes solares poderá ser revertido em prol dos consumidores ou utilizado como mecanismo para auxiliar no equilíbrio tarifário. A proposta da CCEE prevê incorporar os volumes de MMGD à apuração da geração total do sistema elétrico, às perdas e ao balanço energético das distribuidoras.</p><h2>Relevância para consumidores e investidores em energia solar</h2><p>As discussões regulatórias afetam o equilíbrio financeiro do setor elétrico e são acompanhadas de perto por consumidores residenciais e empresas que investem em geração solar distribuída. O tratamento conferido aos fluxos de energia e às tarifas influencia diretamente os cálculos de retorno de projetos próprios e as condições de viabilidade para quem busca crédito ou financiamento para instalação de painéis solares.</p><ul><li><strong>Liquidação pelo PLD:</strong> mecanismo busca dar destino formal aos excedentes que hoje não recebem precificação na contabilização da CCEE.</li><li><strong>Impacto nas tarifas:</strong> os recursos auferidos podem ser direcionados para atenuar custos tarifários aplicados aos consumidores.</li><li><strong>Segurança regulatória:</strong> novas diretrizes buscam corrigir inconsistências contábeis sem afastar as exigências técnicas do sistema elétrico.</li></ul><p>A matéria segue em análise nos órgãos técnicos e jurídicos do setor e ainda depende de deliberação final da diretoria da ANEEL antes de qualquer aplicação prática no mercado.</p>",
+    "foto_busca": "solar panels grid",
+    "tipo": "noticia",
+    "foto": {
+      "id": 2889317,
+      "autor": "lhzuniga",
+      "autorUrl": "https://pixabay.com/users/lhzuniga-896135/",
+      "pagina": "https://pixabay.com/photos/solar-panel-solar-energy-energy-2889317/"
+    }
+  },
+  {
     "slug": "pf-apura-fraude-em-financiamentos-veiculares-com-uso-de-biometria-em-mg",
     "categoria": "revisional",
     "tipo": "noticia",

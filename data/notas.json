@@ -1,5 +1,24 @@
 [
   {
+    "id": "2026-10-12-ipca-sobe-0-82-em-setembro-e-acumulado-e",
+    "data": "2026-10-12",
+    "categoria": "economia",
+    "titulo": "IPCA sobe 0,82% em setembro e acumulado em 12 meses vai a 4,58%",
+    "texto": "O IPCA avançou 0,82% em setembro, após deflação de 0,32% em agosto, alcançando 4,58% em 12 meses e superando o teto da meta de 4,5%, informou o IBGE. A alta foi puxada principalmente por habitação e transportes. Para quem planeja financiar um veículo, a pressão inflacionária pode reduzir o espaço para cortes na taxa básica de juros, o que tende a manter o custo do crédito mais alto nas novas contratações.",
+    "fontes": [
+      {
+        "nome": "g1",
+        "url": "https://g1.globo.com/economia/noticia/2026/10/09/ipca-setembro.ghtml",
+        "data": "2026-10-09"
+      },
+      {
+        "nome": "Agência Brasil",
+        "url": "https://agenciabrasil.ebc.com.br/economia/noticia/2026-10/inflacao-oficial-de-setembro-fica-em-082-mostra-ibge",
+        "data": "2026-10-09"
+      }
+    ]
+  },
+  {
     "id": "2026-10-11-procon-interdita-empresa-por-suspeita-de",
     "data": "2026-10-11",
     "categoria": "consorcio-seguros",
