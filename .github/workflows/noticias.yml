@@ -64,6 +64,7 @@ jobs:
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           PIXABAY_API_KEY: ${{ secrets.PIXABAY_API_KEY }}
+          UNSPLASH_ACCESS_KEY: ${{ secrets.UNSPLASH_ACCESS_KEY }}
           GEMINI_MODEL: ${{ vars.GEMINI_MODEL }}
           MODO: ${{ inputs.modo || 'publicar' }}
           RODADA: ${{ inputs.rodada || (github.event.schedule == '0 11 * * *' && '1' || github.event.schedule == '0 14 * * *' && '2' || 'final') }}

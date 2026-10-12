@@ -6,7 +6,7 @@
 - **Licença:** Pexels (uso comercial permitido, sem necessidade de atribuição; crédito mantido aqui por transparência).
 - **Edição feita pela ERASE:** recorte, redução, remoção da cesta de basquete e do poste, remoção do texto adesivado no para-brisa, dos decalques/emblema e do número da frente do carro, e leve degradê azul por cima (CSS). A foto original não fica no projeto, só a versão otimizada.
 
-As fotos dos artigos vêm do Pixabay (autor e página de cada uma em `data/articles.json`).
+As fotos dos artigos vêm do Pixabay ou, se ele falhar, do Unsplash (autor, página e fonte de cada uma em `data/articles.json` e na legenda do artigo).
 
 ## Fotos das categorias (`assets/img/cat/<categoria>-480|960|1280.webp`)
 Servem de capa para todo item sem foto própria (Radar, artigos) e para o card da categoria em "Explore tópicos". Uma linha por categoria, com autor e página de origem:

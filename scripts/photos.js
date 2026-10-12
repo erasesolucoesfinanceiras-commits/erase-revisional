@@ -1,6 +1,6 @@
 #!/usr/bin/env node
-// Foto de capa dos artigos (Pixabay, licença livre p/ uso comercial). Usa PIXABAY_API_KEY (+ GEMINI_API_KEY para o filtro visual).
-// As imagens são BAIXADAS e salvas em assets/img/news (o Pixabay proíbe hotlink).
+// Foto de capa dos artigos. Corrente: Pixabay (PIXABAY_API_KEY) -> se falhar/limite/nada relevante, Unsplash (UNSPLASH_ACCESS_KEY) -> se falhar, foto da categoria (assets/img/cat).
+// Filtro visual opcional do Gemini (GEMINI_API_KEY). As imagens são BAIXADAS e salvas em assets/img/news (o Pixabay proíbe hotlink; o Unsplash exige avisar o download e creditar).
 //   node scripts/photos.js                          -> preenche `foto` dos artigos que ainda não têm (e roda o build)
 //   FOTO_MODO=slug FOTO_SLUG=meu-artigo node ...     -> REFAZ a foto desse artigo (substitui a atual)
 //   FOTO_MODO=marcadas node ...                      -> refaz a foto de todos os artigos com `foto_refazer: true`
@@ -18,6 +18,8 @@ const LOG = path.join(ROOT, 'data', 'noticias-log.jsonl');
 const DIR = path.join(ROOT, 'assets', 'img', 'news');
 const WIDTHS = [480, 960, 1280]; // manter igual a PHOTO_WIDTHS em site.js
 const PIXABAY = process.env.PIXABAY_BASE || 'https://pixabay.com/api/';
+const UNSPLASH = process.env.UNSPLASH_BASE || 'https://api.unsplash.com';
+const UTM = 'utm_source=erase-revisional&utm_medium=referral';
 const VEICULO = 'car cars vehicle vehicles auto automobile motorcycle motorbike truck road driving dealership showroom contract contracts document documents signing signature insurance'.split(' ');
 // Buscas de reserva (em inglês), em ordem, ligadas ao assunto da categoria.
 const FALLBACK_Q = {
@@ -34,7 +36,7 @@ const TEMA = {
   'credito-pessoal': 'credit card payment debt bank money wallet'.split(' '), 'credito-rural': 'tractor farm field agriculture harvest crop machinery'.split(' '),
   'empresas-mei': 'business shop office entrepreneur store small worker'.split(' '), economia: 'economy finance chart money bank graph inflation'.split(' '),
 };
-const IMPROPRIAS = new Set('nude naked sexy erotic lingerie bikini porn violence blood corpse dead death murder war weapon gun rifle skull terror explosion drug drugs injury accident crash wreck hospital surgery'.split(' '));
+const IMPROPRIAS = new Set('nude naked sexy erotic lingerie bikini porn violence blood corpse dead death murder war weapon gun rifle skull terror explosion drug drugs injury accident crash wreck hospital surgery logo brand trademark'.split(' '));
 const PESSOAS = new Set('portrait face selfie woman man girl boy child children people person couple family men women businessman businesswoman'.split(' '));
 let motivo = '', escolha = null;
 
@@ -54,10 +56,11 @@ async function visaoAprova(buf, titulo, categoria) {
     const sharp = require('sharp');
     const mini = await sharp(buf).resize({ width: 640 }).jpeg({ quality: 70 }).toBuffer();
     const { texto } = await chamar({ imagem: { mime: 'image/jpeg', base64: mini.toString('base64') }, temperatura: 0.1, sistema: 'Você é um moderador de imagens de um portal de notícias financeiras. Responda apenas JSON.',
-      prompt: `Avalie esta foto para ilustrar um artigo sobre "${titulo || categoria}" (crédito e financiamento, foco em veículos).\nResponda APENAS JSON: {"segura": true|false, "relacionada": true|false, "pessoas_em_destaque": true|false, "motivo": "uma frase"}\n"segura" = false se tiver conteúdo sexual, nudez, violência, sangue, armas, acidente grave, sofrimento, ou qualquer coisa perturbadora ou imprópria para Google/redes sociais.\n"relacionada" = false se os objetos principais não tiverem relação com o assunto (por exemplo, uma casinha de madeira, um martelo de juiz ou uma calculadora num artigo sobre fraude em financiamento de veículo).\n"pessoas_em_destaque" = true se houver uma pessoa ou rosto reconhecível em primeiro plano (mãos ou silhuetas distantes não contam).` });
+      prompt: `Avalie esta foto para ilustrar um artigo sobre "${titulo || categoria}" (crédito e financiamento, foco em veículos).\nResponda APENAS JSON: {"segura": true|false, "relacionada": true|false, "pessoas_em_destaque": true|false, "marca_legivel": true|false, "motivo": "uma frase"}\n"segura" = false se tiver conteúdo sexual, nudez, violência, sangue, armas, acidente grave, sofrimento, ou qualquer coisa perturbadora ou imprópria para Google/redes sociais.\n"relacionada" = false se os objetos principais não tiverem relação com o assunto (por exemplo, uma casinha de madeira, um martelo de juiz ou uma calculadora num artigo sobre fraude em financiamento de veículo).\n"marca_legivel" = true se houver logotipo, marca, nome de empresa ou texto de marca legível (em carro, loja, placa, produto, tela).\n"pessoas_em_destaque" = true se houver uma pessoa ou rosto reconhecível em primeiro plano (mãos ou silhuetas distantes não contam).` });
     const r = extrairJSON(texto);
     if (r.segura !== true) return { ok: false, motivo: 'filtro visual: imagem imprópria (' + String(r.motivo || '').slice(0, 80) + ')' };
     if (r.pessoas_em_destaque === true) return { ok: false, motivo: 'filtro visual: pessoa reconhecível em destaque' };
+    if (r.marca_legivel === true) return { ok: false, motivo: 'filtro visual: marca ou logo legível' };
     if (r.relacionada !== true) return { ok: false, motivo: 'filtro visual: sem relação com o assunto (' + String(r.motivo || '').slice(0, 80) + ')' };
     return { ok: true };
   } catch (e) { console.error('Filtro visual indisponível (' + e.message.slice(0, 80) + '): vale o filtro por etiquetas.'); return { ok: true, semVisao: true }; }
@@ -86,27 +89,61 @@ async function escolher({ buscas, usadas = [], categoria, titulo, deps }) {
   return { motivo: (buscasOk ? 'nenhuma foto adequada: ' : 'busca indisponível: ') + rejeitadas.slice(-4).join(' | ') };
 }
 
-const buscasDe = (consulta, categoria) => [...new Set([].concat(consulta || [], FALLBACK_Q[categoria], MAIS_BUSCAS[categoria] || []).filter(Boolean))];
+// Temas abstratos (inflação, juros, Selic, MEI...) não rendem foto boa: ganham buscas por objetos que se vê (dinheiro, calculadora, loja pequena).
+const ABSTRATOS = [
+  [/inflation|ipca|igpm|prices?|inflação|inflacao/i, ['grocery shopping prices', 'coins and calculator']],
+  [/selic|interest|rate|juros|cdi|copom|central bank|taxa/i, ['calculator and coins', 'money on table']],
+  [/mei|microentrepreneur|small business|empreend/i, ['small shop storefront', 'market stall']],
+  [/economy|economia|gdp|pib|market/i, ['stock market chart screen', 'city skyline business']],
+];
+const abstratas = (txt) => ABSTRATOS.filter(([re]) => re.test(txt)).flatMap(([, q]) => q);
+const buscasDe = (consulta, categoria, titulo = '') => [...new Set([].concat(consulta || [], abstratas([].concat(consulta || []).join(' ') + ' ' + titulo), FALLBACK_Q[categoria], MAIS_BUSCAS[categoria] || []).filter(Boolean))];
+
+// Provedores da corrente. buscar(q) -> hits normalizados { id, tags, largeImageURL, ... }; foto(hit) -> objeto `foto` gravado no artigo; aoUsar(hit) -> obrigações da plataforma.
+const baixar = async (url) => { const i = await fetch(url); if (!i.ok) throw new Error('download HTTP ' + i.status); return Buffer.from(await i.arrayBuffer()); };
+const pixabay = (key) => ({
+  nome: 'Pixabay',
+  buscar: async (q) => { const r = await fetch(`${PIXABAY}?key=${key}&q=${encodeURIComponent(q)}&image_type=photo&orientation=horizontal&safesearch=true&min_width=1280&per_page=50&lang=en`); if (!r.ok) throw new Error('Pixabay HTTP ' + r.status); return (await r.json()).hits || []; },
+  foto: (p) => ({ id: p.id, autor: p.user, autorUrl: `https://pixabay.com/users/${p.user}-${p.user_id}/`, pagina: p.pageURL, fonte: 'Pixabay' }),
+  aoUsar: async () => {},
+});
+const unsplash = (key) => {
+  const h = { Authorization: `Client-ID ${key}`, 'Accept-Version': 'v1' }, utm = (u) => u + (u.includes('?') ? '&' : '?') + UTM;
+  return {
+    nome: 'Unsplash',
+    buscar: async (q) => {
+      const r = await fetch(`${UNSPLASH}/search/photos?query=${encodeURIComponent(q)}&orientation=landscape&content_filter=high&per_page=30`, { headers: h });
+      if (!r.ok) throw new Error('Unsplash HTTP ' + r.status);
+      // etiquetas = descrição + tags da foto (o Unsplash não tem o campo "tags" do Pixabay)
+      return ((await r.json()).results || []).filter((p) => p.width >= 1280 && p.width > p.height).map((p) => ({ id: 'u-' + p.id, tags: [p.alt_description, p.description, ...(p.tags || []).map((t) => t.title)].filter(Boolean).join(' '),
+        largeImageURL: p.urls.raw + (p.urls.raw.includes('?') ? '&' : '?') + 'w=1600&q=85&fm=jpg', user: p.user.name, userUrl: p.user.links.html, pageURL: p.links.html, dl: p.links.download_location }));
+    },
+    foto: (p) => ({ id: p.id, autor: p.user, autorUrl: utm(p.userUrl), pagina: utm(p.pageURL), fonte: 'Unsplash' }),
+    aoUsar: async (p) => { await fetch(p.dl, { headers: h }); }, // regra da API do Unsplash: registrar o download
+  };
+};
 
 async function fetchPhoto(slug, consulta, usadas = [], ctx = {}) {
   motivo = ''; escolha = null;
-  const key = process.env.PIXABAY_API_KEY;
-  if (!key) { motivo = 'PIXABAY_API_KEY ausente'; console.error('PIXABAY_API_KEY ausente: artigo ficará com a imagem padrão.'); return null; }
+  const provs = [process.env.PIXABAY_API_KEY && pixabay(process.env.PIXABAY_API_KEY), process.env.UNSPLASH_ACCESS_KEY && unsplash(process.env.UNSPLASH_ACCESS_KEY)].filter(Boolean);
+  if (!provs.length) { motivo = 'PIXABAY_API_KEY ausente'; console.error('Nenhuma chave de foto (PIXABAY_API_KEY/UNSPLASH_ACCESS_KEY): artigo ficará com a foto da categoria.'); return null; }
+  const falhas = [];
   try {
     const sharp = require('sharp');
-    const deps = {
-      buscar: async (q) => { const r = await fetch(`${PIXABAY}?key=${key}&q=${encodeURIComponent(q)}&image_type=photo&orientation=horizontal&safesearch=true&min_width=1280&per_page=50&lang=en`); if (!r.ok) throw new Error('Pixabay HTTP ' + r.status); return (await r.json()).hits || []; },
-      baixar: async (url) => { const i = await fetch(url); if (!i.ok) throw new Error('download HTTP ' + i.status); return Buffer.from(await i.arrayBuffer()); },
-      visao: visaoAprova,
-    };
-    const e = await escolher({ buscas: buscasDe(consulta, ctx.categoria), usadas, categoria: ctx.categoria, titulo: ctx.titulo, deps });
-    if (e.hit) {
-      fs.mkdirSync(DIR, { recursive: true });
-      for (const w of WIDTHS) await sharp(e.buf).resize({ width: w, withoutEnlargement: true }).webp({ quality: 72 }).toFile(path.join(DIR, `${slug}-${w}.webp`));
-      const p = e.hit; escolha = { foto_id: p.id, autor: p.user, pagina: p.pageURL, ...e.meta };
-      return { id: p.id, autor: p.user, autorUrl: `https://pixabay.com/users/${p.user}-${p.user_id}/`, pagina: p.pageURL };
+    for (const prov of provs) {
+      const deps = { buscar: prov.buscar, baixar, visao: visaoAprova };
+      const e = await escolher({ buscas: buscasDe(consulta, ctx.categoria, ctx.titulo), usadas, categoria: ctx.categoria, titulo: ctx.titulo, deps }).catch((x) => ({ motivo: 'busca indisponível: ' + x.message }));
+      if (!e.hit) { falhas.push(`${prov.nome}: ${e.motivo}`); console.error(`${prov.nome} sem foto para "${slug}" (${e.motivo}); tentando o próximo.`); continue; }
+      try {
+        fs.mkdirSync(DIR, { recursive: true });
+        for (const w of WIDTHS) await sharp(e.buf).resize({ width: w, withoutEnlargement: true }).webp({ quality: 72 }).toFile(path.join(DIR, `${slug}-${w}.webp`));
+        await prov.aoUsar(e.hit).catch(() => {});
+      } catch (x) { falhas.push(`${prov.nome}: ${x.message}`); continue; }
+      escolha = { fonte: prov.nome, foto_id: e.hit.id, autor: e.hit.user, pagina: e.hit.pageURL, ...e.meta };
+      return prov.foto(e.hit);
     }
-    motivo = e.motivo;
+    // infraestrutura (todas as buscas fora do ar) x falta de foto adequada: processar() só mantém a foto atual no primeiro caso
+    motivo = falhas.every((f) => /busca indisponível|HTTP|ausente/.test(f)) ? 'busca indisponível: ' + falhas.join(' | ') : falhas.join(' | ');
   } catch (e) { motivo = e.message; }
   console.error(`Foto de "${slug}": ${motivo}; usando a foto da categoria.`);
   return null;
