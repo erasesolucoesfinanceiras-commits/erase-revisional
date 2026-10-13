@@ -81,3 +81,26 @@
 {"quando":"2026-10-13T11:28:45.070Z","data":"2026-10-13","evento":"sem_publicacao","tipo":"nota","motivo":"orçamento de tempo do dia esgotado"}
 {"quando":"2026-10-13T11:28:50.431Z","data":"2026-10-13","evento":"gemini","modelo":"gemini-3.8-flash","status":503,"acao":"espera_e_repete","espera_s":10}
 {"quando":"2026-10-13T11:32:50.712Z","data":"2026-10-13","evento":"revisao_guia","resultado":"sem_mudanca","slug":"juros-acima-da-media-sao-abusivos-o-que-diz-o-stj"}
+{"quando":"2026-10-13T14:13:43.152Z","data":"2026-10-13","evento":"pulado","tipo":"nota","tema":"imoveis","motivo":"sem novidade real: Não há pelo menos duas fontes de veículos diferentes cobrindo o mesmo fato recente sobre o tema de mercado imobiliário."}
+{"quando":"2026-10-13T14:13:43.153Z","data":"2026-10-13","evento":"tema_trocado","tipo":"nota","de":"imoveis","para":"consorcio-seguros","motivo":"fontes insuficientes ou sem novidade real","ultimos_motivos":["sem novidade real: Não há pelo menos duas fontes de veículos diferentes cobrindo o mesmo fato recente sobre o tema de mercado imobiliário."]}
+{"quando":"2026-10-13T14:13:51.488Z","data":"2026-10-13","evento":"gemini","modelo":"gemini-3.8-flash","status":503,"acao":"espera_e_repete","espera_s":10}
+{"quando":"2026-10-13T14:14:01.780Z","data":"2026-10-13","evento":"gemini","modelo":"gemini-3.8-flash","status":503,"acao":"espera_e_repete","espera_s":40}
+{"quando":"2026-10-13T14:14:42.293Z","data":"2026-10-13","evento":"gemini","modelo":"gemini-3.8-flash","status":503,"acao":"proximo_modelo","motivo":"erro temporário persistiu"}
+{"quando":"2026-10-13T14:14:49.445Z","data":"2026-10-13","evento":"gemini","modelo":"gemini-3.7-flash","status":503,"acao":"espera_e_repete","espera_s":10}
+{"quando":"2026-10-13T14:14:59.841Z","data":"2026-10-13","evento":"gemini","modelo":"gemini-3.7-flash","status":503,"acao":"espera_e_repete","espera_s":40}
+{"quando":"2026-10-13T14:20:40.666Z","data":"2026-10-13","evento":"gemini","modelo":"gemini-3.7-flash","status":"rede","acao":"proximo_modelo","motivo":"erro temporário persistiu"}
+{"quando":"2026-10-13T14:20:41.401Z","data":"2026-10-13","evento":"gemini","modelo":"gemini-3.6-flash","status":503,"acao":"espera_e_repete","espera_s":10}
+{"quando":"2026-10-13T14:20:52.798Z","data":"2026-10-13","evento":"gemini","modelo":"gemini-3.6-flash","status":503,"acao":"espera_e_repete","espera_s":40}
+{"quando":"2026-10-13T14:21:33.139Z","data":"2026-10-13","evento":"gemini","modelo":"gemini-3.6-flash","status":503,"acao":"proximo_modelo","motivo":"erro temporário persistiu"}
+{"quando":"2026-10-13T14:21:40.153Z","data":"2026-10-13","evento":"gemini","modelo":"gemini-3.5-flash","status":503,"acao":"espera_e_repete","espera_s":10}
+{"quando":"2026-10-13T14:21:50.550Z","data":"2026-10-13","evento":"gemini","modelo":"gemini-3.5-flash","status":503,"acao":"espera_e_repete","espera_s":40}
+{"quando":"2026-10-13T14:22:31.476Z","data":"2026-10-13","evento":"gemini","modelo":"gemini-3.5-flash","status":503,"acao":"proximo_modelo","motivo":"erro temporário persistiu"}
+{"quando":"2026-10-13T14:22:37.705Z","data":"2026-10-13","evento":"gemini","modelo":"gemini-2.5-flash","status":404,"acao":"proximo_modelo","motivo":"modelo indisponível ou recusado"}
+{"quando":"2026-10-13T14:24:54.136Z","data":"2026-10-13","evento":"pulado","tipo":"nota","tema":"consorcio-seguros","motivo":"sem novidade real: Nenhuma das fontes recentes apresenta novidade sobre consórcio de veículo ou seguros embutidos em financiamentos no portal ERASE Revisional."}
+{"quando":"2026-10-13T14:24:54.136Z","data":"2026-10-13","evento":"tema_trocado","tipo":"nota","de":"consorcio-seguros","para":"credito-pessoal","motivo":"fontes insuficientes ou sem novidade real","ultimos_motivos":["sem novidade real: Nenhuma das fontes recentes apresenta novidade sobre consórcio de veículo ou seguros embutidos em financiamentos no portal ERASE Revisional."]}
+{"quando":"2026-10-13T14:25:04.993Z","data":"2026-10-13","evento":"gemini","modelo":"gemini-3.8-flash","status":503,"acao":"espera_e_repete","espera_s":10}
+{"quando":"2026-10-13T14:25:17.014Z","data":"2026-10-13","evento":"gemini","modelo":"gemini-3.8-flash","status":503,"acao":"espera_e_repete","espera_s":40}
+{"quando":"2026-10-13T14:25:57.199Z","data":"2026-10-13","evento":"gemini","modelo":"gemini-3.8-flash","status":429,"acao":"proximo_modelo","motivo":"cota por minuto ainda esgotada após esperas"}
+{"quando":"2026-10-13T14:26:04.618Z","data":"2026-10-13","evento":"gemini","modelo":"gemini-3.7-flash","status":503,"acao":"espera_e_repete","espera_s":10}
+{"quando":"2026-10-13T14:30:38.864Z","data":"2026-10-13","evento":"gemini","modelo":"gemini-3.7-flash","status":503,"acao":"espera_e_repete","espera_s":40}
+{"quando":"2026-10-13T14:31:18.888Z","data":"2026-10-13","evento":"erro","tipo":"nota","motivo":"tempo do job esgotado esperando o Gemini"}
