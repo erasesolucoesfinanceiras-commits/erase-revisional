@@ -24,9 +24,11 @@
  "2026-10-13": {
   "nota": {
    "aprovados": 0,
-   "reprovados": 0,
+   "reprovados": 1,
    "sem_novidade": 9,
-   "criterios": {}
+   "criterios": {
+    "fontes": 1
+   }
   }
  }
 }
