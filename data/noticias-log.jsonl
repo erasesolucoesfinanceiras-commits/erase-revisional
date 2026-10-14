@@ -168,3 +168,41 @@
 {"quando":"2026-10-14T12:09:25.118Z","data":"2026-10-14","evento":"gemini","modelo":"gemini-3.8-flash","status":429,"acao":"espera_e_repete","espera_s":70}
 {"quando":"2026-10-14T12:10:35.319Z","data":"2026-10-14","evento":"gemini","modelo":"gemini-3.8-flash","status":429,"acao":"espera_e_repete","espera_s":70}
 {"quando":"2026-10-14T12:11:45.340Z","data":"2026-10-14","evento":"erro","tipo":"nota","motivo":"tempo do job esgotado esperando o Gemini"}
+{"quando":"2026-10-14T14:18:26.882Z","data":"2026-10-14","evento":"gemini","modelo":"gemini-3.8-flash","status":500,"acao":"espera_e_repete","espera_s":10}
+{"quando":"2026-10-14T14:18:37.310Z","data":"2026-10-14","evento":"gemini","modelo":"gemini-3.8-flash","status":503,"acao":"espera_e_repete","espera_s":40}
+{"quando":"2026-10-14T14:19:17.421Z","data":"2026-10-14","evento":"gemini","modelo":"gemini-3.8-flash","status":429,"acao":"proximo_modelo","motivo":"cota por minuto ainda esgotada após esperas"}
+{"quando":"2026-10-14T14:19:24.828Z","data":"2026-10-14","evento":"gemini","modelo":"gemini-3.7-flash","status":503,"acao":"espera_e_repete","espera_s":10}
+{"quando":"2026-10-14T14:19:35.725Z","data":"2026-10-14","evento":"gemini","modelo":"gemini-3.7-flash","status":503,"acao":"espera_e_repete","espera_s":40}
+{"quando":"2026-10-14T14:20:16.155Z","data":"2026-10-14","evento":"gemini","modelo":"gemini-3.7-flash","status":503,"acao":"proximo_modelo","motivo":"erro temporário persistiu"}
+{"quando":"2026-10-14T14:20:24.438Z","data":"2026-10-14","evento":"gemini","modelo":"gemini-3.6-flash","status":503,"acao":"espera_e_repete","espera_s":10}
+{"quando":"2026-10-14T14:20:34.962Z","data":"2026-10-14","evento":"gemini","modelo":"gemini-3.6-flash","status":503,"acao":"espera_e_repete","espera_s":40}
+{"quando":"2026-10-14T14:21:15.443Z","data":"2026-10-14","evento":"gemini","modelo":"gemini-3.6-flash","status":503,"acao":"proximo_modelo","motivo":"erro temporário persistiu"}
+{"quando":"2026-10-14T14:21:25.596Z","data":"2026-10-14","evento":"gemini","modelo":"gemini-3.5-flash","status":503,"acao":"espera_e_repete","espera_s":10}
+{"quando":"2026-10-14T14:21:46.242Z","data":"2026-10-14","evento":"gemini","modelo":"gemini-3.5-flash","status":503,"acao":"espera_e_repete","espera_s":40}
+{"quando":"2026-10-14T14:22:51.510Z","data":"2026-10-14","evento":"gemini","modelo":"gemini-3.5-flash","status":503,"acao":"proximo_modelo","motivo":"erro temporário persistiu"}
+{"quando":"2026-10-14T14:22:51.592Z","data":"2026-10-14","evento":"gemini","modelo":"gemini-2.5-flash","status":404,"acao":"proximo_modelo","motivo":"modelo indisponível ou recusado"}
+{"quando":"2026-10-14T14:22:59.172Z","data":"2026-10-14","evento":"pulado","tipo":"nota","tema":"revisional","motivo":"sem novidade real: Nenhuma das fontes disponíveis trata do tema revisional de juros de veículos."}
+{"quando":"2026-10-14T14:22:59.173Z","data":"2026-10-14","evento":"tema_trocado","tipo":"nota","de":"revisional","para":"mercado","motivo":"fontes insuficientes ou sem novidade real","ultimos_motivos":["sem novidade real: Nenhuma das fontes disponíveis trata do tema revisional de juros de veículos."]}
+{"quando":"2026-10-14T14:23:54.867Z","data":"2026-10-14","evento":"gemini","modelo":"gemini-3.7-flash","status":503,"acao":"espera_e_repete","espera_s":10}
+{"quando":"2026-10-14T14:24:05.186Z","data":"2026-10-14","evento":"gemini","modelo":"gemini-3.7-flash","status":503,"acao":"espera_e_repete","espera_s":40}
+{"quando":"2026-10-14T14:24:45.809Z","data":"2026-10-14","evento":"gemini","modelo":"gemini-3.7-flash","status":503,"acao":"proximo_modelo","motivo":"erro temporário persistiu"}
+{"quando":"2026-10-14T14:24:52.738Z","data":"2026-10-14","evento":"gemini","modelo":"gemini-3.6-flash","status":503,"acao":"espera_e_repete","espera_s":10}
+{"quando":"2026-10-14T14:25:03.337Z","data":"2026-10-14","evento":"gemini","modelo":"gemini-3.6-flash","status":503,"acao":"espera_e_repete","espera_s":40}
+{"quando":"2026-10-14T14:25:43.671Z","data":"2026-10-14","evento":"gemini","modelo":"gemini-3.6-flash","status":503,"acao":"proximo_modelo","motivo":"erro temporário persistiu"}
+{"quando":"2026-10-14T14:25:52.141Z","data":"2026-10-14","evento":"gemini","modelo":"gemini-3.5-flash","status":503,"acao":"espera_e_repete","espera_s":10}
+{"quando":"2026-10-14T14:26:03.102Z","data":"2026-10-14","evento":"gemini","modelo":"gemini-3.5-flash","status":503,"acao":"espera_e_repete","espera_s":40}
+{"quando":"2026-10-14T14:26:43.519Z","data":"2026-10-14","evento":"gemini","modelo":"gemini-3.5-flash","status":503,"acao":"proximo_modelo","motivo":"erro temporário persistiu"}
+{"quando":"2026-10-14T14:26:51.263Z","data":"2026-10-14","evento":"pulado","tipo":"nota","tema":"mercado","motivo":"sem novidade real: Os fatos recentes disponíveis sobre emplacamentos e eletrificados coincidem com temas já publicados ou restrições de datas recentes."}
+{"quando":"2026-10-14T14:26:51.264Z","data":"2026-10-14","evento":"tema_trocado","tipo":"nota","de":"mercado","para":"energia-solar","motivo":"fontes insuficientes ou sem novidade real","ultimos_motivos":["sem novidade real: Os fatos recentes disponíveis sobre emplacamentos e eletrificados coincidem com temas já publicados ou restrições de datas recentes."]}
+{"quando":"2026-10-14T14:27:03.623Z","data":"2026-10-14","evento":"gemini","modelo":"gemini-3.7-flash","status":503,"acao":"espera_e_repete","espera_s":10}
+{"quando":"2026-10-14T14:27:13.895Z","data":"2026-10-14","evento":"gemini","modelo":"gemini-3.7-flash","status":503,"acao":"espera_e_repete","espera_s":40}
+{"quando":"2026-10-14T14:30:35.020Z","data":"2026-10-14","evento":"pulado","tipo":"nota","tema":"energia-solar","motivo":"sem novidade real: Não há pelo menos duas fontes distintas tratando do mesmo fato recente sobre energia solar."}
+{"quando":"2026-10-14T14:30:35.020Z","data":"2026-10-14","evento":"tema_trocado","tipo":"nota","de":"energia-solar","para":"imoveis","motivo":"fontes insuficientes ou sem novidade real","ultimos_motivos":["sem novidade real: Não há pelo menos duas fontes distintas tratando do mesmo fato recente sobre energia solar."]}
+{"quando":"2026-10-14T14:30:47.285Z","data":"2026-10-14","evento":"gemini","modelo":"gemini-3.7-flash","status":503,"acao":"espera_e_repete","espera_s":10}
+{"quando":"2026-10-14T14:30:57.631Z","data":"2026-10-14","evento":"gemini","modelo":"gemini-3.7-flash","status":503,"acao":"espera_e_repete","espera_s":40}
+{"quando":"2026-10-14T14:31:37.986Z","data":"2026-10-14","evento":"gemini","modelo":"gemini-3.7-flash","status":503,"acao":"proximo_modelo","motivo":"erro temporário persistiu"}
+{"quando":"2026-10-14T14:31:44.970Z","data":"2026-10-14","evento":"gemini","modelo":"gemini-3.6-flash","status":503,"acao":"espera_e_repete","espera_s":10}
+{"quando":"2026-10-14T14:31:55.408Z","data":"2026-10-14","evento":"gemini","modelo":"gemini-3.6-flash","status":503,"acao":"espera_e_repete","espera_s":40}
+{"quando":"2026-10-14T14:32:36.086Z","data":"2026-10-14","evento":"gemini","modelo":"gemini-3.6-flash","status":503,"acao":"proximo_modelo","motivo":"erro temporário persistiu"}
+{"quando":"2026-10-14T14:32:42.551Z","data":"2026-10-14","evento":"gemini","modelo":"gemini-3.5-flash","status":429,"acao":"espera_e_repete","espera_s":70}
+{"quando":"2026-10-14T14:33:52.581Z","data":"2026-10-14","evento":"erro","tipo":"nota","motivo":"tempo do job esgotado esperando o Gemini"}
