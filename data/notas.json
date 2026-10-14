@@ -1,5 +1,24 @@
 [
   {
+    "id": "2026-10-14-fundo-imobiliario-capta-recursos-para-o",
+    "data": "2026-10-14",
+    "categoria": "imoveis",
+    "titulo": "Fundo imobiliário capta recursos para o Minha Casa, Minha Vida",
+    "texto": "Um fundo da CIX Capital captou R$ 330 milhões para investir no programa habitacional Minha Casa, Minha Vida, utilizando a compra à vista de unidades em construção como alternativa de financiamento para incorporadoras, conforme divulgado pelo mercado imobiliário.",
+    "fontes": [
+      {
+        "nome": "Exame",
+        "url": "https://exame.com/mercado-imobiliario/como-um-fundo-virou-banco-do-minha-casa-minha-vida-sem-competir-com-a-caixa/",
+        "data": "2026-10-12"
+      },
+      {
+        "nome": "SpaceMoney",
+        "url": "https://www.spacemoney.com.br/economia/jovens-compram-imovel-minha-casa-minha-vida/",
+        "data": "2026-10-12"
+      }
+    ]
+  },
+  {
     "id": "2026-10-12-ipca-sobe-0-82-em-setembro-e-acumulado-e",
     "data": "2026-10-12",
     "categoria": "economia",
