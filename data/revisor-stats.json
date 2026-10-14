@@ -30,5 +30,21 @@
     "fontes": 1
    }
   }
+ },
+ "2026-10-14": {
+  "artigo": {
+   "aprovados": 1,
+   "reprovados": 1,
+   "sem_novidade": 0,
+   "criterios": {
+    "original": 1
+   }
+  },
+  "nota": {
+   "aprovados": 0,
+   "reprovados": 0,
+   "sem_novidade": 3,
+   "criterios": {}
+  }
  }
 }

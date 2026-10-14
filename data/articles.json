@@ -1,5 +1,34 @@
 [
   {
+    "slug": "emplacamentos-de-veiculos-em-setembro-atingem-recorde-historico-aponta-fenabrave",
+    "categoria": "mercado",
+    "titulo": "Emplacamentos de veículos em setembro atingem recorde histórico, aponta Fenabrave",
+    "resumo": "Com 509.686 unidades licenciadas, mercado brasileiro registra o melhor resultado da série histórica para o mês. Disputa entre montadoras e programas de estímulo sustentam ritmo das vendas.",
+    "data": "2026-10-14",
+    "fontes": [
+      {
+        "nome": "G1 Carros",
+        "url": "https://g1.globo.com/carros/noticia/2026/10/05/vendas-veiculos-novos-setembro-fenabrave.ghtml",
+        "data": "2026-10-05"
+      },
+      {
+        "nome": "Correio Braziliense",
+        "url": "https://www.correiobraziliense.com.br/economia/2026/10/7514905-emplacamentos-batem-recorde-em-setembro-segundo-fenabrave.html",
+        "data": "2026-10-05"
+      }
+    ],
+    "corpo": "<p>O comércio de veículos novos no Brasil alcançou uma marca histórica no nono mês do ano. Informações consolidadas pela Federação Nacional da Distribuição de Veículos Automotores (Fenabrave) revelam que foram contabilizados 509.686 emplacamentos em setembro de 2026. Esse montante representa uma expansão de 1,15% em comparação com agosto e um avanço de 8,32% sobre o mesmo mês de 2025, em um calendário no qual ambos os períodos contaram com 21 dias úteis.</p><p>Com essa movimentação, o setor automotivo acumulou 4.233.468 unidades licenciadas entre janeiro e setembro, registrando um incremento de 14,41% sobre igual intervalo do ano anterior (aproximadamente 15% de alta). O volume acumulado nos primeiros nove meses consolida-se como o segundo patamar mais expressivo de toda a série histórica, superado unicamente pelo resultado obtido em 2011.</p><h2>Automóveis leves e pesados impulsionados por programas</h2><p>No recorte voltado exclusivamente a automóveis de passeio e comerciais leves, as vendas somaram 268.721 unidades durante o mês de setembro. Em termos percentuais, houve uma elevação de 2,13% frente a agosto e um salto de 16,16% na comparação direta com o nono mês do exercício anterior.</p><p>Segundo o presidente da Fenabrave, Arcelio Junior, o aquecimento da procura ocorre em meio a um ambiente financeiro ainda desafiador para quem busca recursos bancários. O dirigente ressaltou que os consumidores mantêm o interesse na aquisição de automóveis novos, mesmo diante de um cenário de crédito classificado como complexo.</p><p>A entidade representativa atribui esse resultado principalmente à intensificação da concorrência entre as montadoras e à vigência de iniciativas federais de apoio à indústria, como os programas Move Brasil e Carro Sustentável. Essas medidas estimularam a redução de valores cobrados nas concessionárias e favoreceram linhas de aquisição mais competitivas. No segmento de transporte de carga e passageiros, os incentivos previstos pelo Programa Move frearam a retração que atingia ônibus e caminhões, além de permitirem recuperação nas vendas de implementos rodoviários.</p><h2>Desempenho dos veículos mais procurados</h2><p>O volume recorde apurado pela Fenabrave também refletiu a diversificação da preferência dos motoristas brasileiros. A picape Fiat Strada manteve o primeiro lugar nas vendas gerais com 16.002 registros no mês. Logo em seguida, o Volkswagen Polo alcançou a vice-liderança, contabilizando 11.095 unidades comercializadas.</p><p>A terceira colocação no ranking geral foi preenchida pelo modelo elétrico BYD Dolphin Mini, que registrou 9.385 emplacamentos em setembro. Entre os dez automóveis de maior volume de vendas no período figuraram ainda modelos consagrados como o Volkswagen T-Cross (9.339 licenciamentos), o utilitário Volkswagen Tera (8.725 registros), os modelos Fiat Argo (8.603 unidades) e Pulse (7.150), o hatch Chevrolet Onix (7.133), o utilitário híbrido GWM Haval H6 (6.433) e o compacto Fiat Mobi (6.395 unidades vendidas).</p><h2>Projeções e impactos práticos para quem financia</h2><p>A entidade manteve suas estimativas oficiais para o encerramento de 2026, com previsão de reavaliar os números em novembro. Conforme apontado por Arcelio Junior, o ritmo das vendas até o momento indica um desfecho anual mais positivo do que o projetado no início do ano para grande parte dos segmentos automotivos, a depender da confirmação dos dados de outubro.</p><p>Para os consumidores que necessitam recorrer ao financiamento bancário para comprar um veículo novo, a forte concorrência entre montadoras tradicionais e novas marcas pode gerar oportunidades comerciais, tais como descontos pontuais ou subsídios em taxas promocionais oferecidas pelas fábricas. Contudo, como o acesso ao crédito permanece rigoroso e os custos totais envolvem encargos e tarifas administrativas, a recomendação prática é avaliar cuidadosamente o Custo Efetivo Total (CET) da operação e o valor das parcelas mensais antes de fechar o contrato.</p>",
+    "foto_busca": "car dealership showroom vehicles",
+    "tipo": "noticia",
+    "foto": {
+      "id": 63930,
+      "autor": "oskaline",
+      "autorUrl": "https://pixabay.com/users/oskaline-11884/",
+      "pagina": "https://pixabay.com/photos/car-vehicle-sports-car-auto-63930/",
+      "fonte": "Pixabay"
+    }
+  },
+  {
     "slug": "aneel-estuda-liquidar-excedente-de-energia-solar-no-mercado-de-curto-prazo",
     "categoria": "energia-solar",
     "titulo": "ANEEL estuda liquidar excedente de energia solar no mercado de curto prazo",
