@@ -1,5 +1,24 @@
 [
   {
+    "id": "2026-10-15-camara-aprova-proposta-com-perdao-de-div",
+    "data": "2026-10-15",
+    "categoria": "credito-pessoal",
+    "titulo": "Câmara aprova proposta com perdão de dívidas e novo limite para MEIs",
+    "texto": "A Câmara dos Deputados aprovou projeto que concede anistia para dívidas de microempreendedores individuais inscritas na Dívida Ativa da União até 13 de outubro de 2026. Como contrapartida, o MEI precisará manter em dia os recolhimentos dos seis meses seguintes e desistir de eventuais disputas judiciais contra a União. A proposta também amplia o limite de faturamento anual para R$ 110 mil em 2027 e R$ 140 mil em 2028, seguindo agora para votação no Senado.",
+    "fontes": [
+      {
+        "nome": "Agência Câmara",
+        "url": "https://www.camara.leg.br/noticias/1311288-camara-aprova-novo-limite-de-enquadramento-para-microempreendedor-individual-e-inclui-perdao-de-dividas",
+        "data": "2026-10-14"
+      },
+      {
+        "nome": "G1 Economia",
+        "url": "https://g1.globo.com/politica/noticia/2026/10/14/camara-aprova-projeto-que-amplia-limite-do-mei-e-perdoa-dividas-de-inadimplentes.ghtml",
+        "data": "2026-10-14"
+      }
+    ]
+  },
+  {
     "id": "2026-10-14-fundo-imobiliario-capta-recursos-para-o",
     "data": "2026-10-14",
     "categoria": "imoveis",
