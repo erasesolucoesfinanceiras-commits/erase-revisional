@@ -53,13 +53,24 @@ const catFoto = (c) => fs.existsSync(path.join(ROOT, 'assets/img/cat', `${c}-960
 const catSrcset = (c) => [480, 960, 1280].map((w) => `/assets/img/cat/${c}-${w}.webp ${w}w`).join(', ');
 // Capa: foto WebP do artigo (scripts/photos.js) em 3 tamanhos; sem foto, ou se ela não carregar, a foto da categoria.
 const PHOTO_WIDTHS = [480, 960, 1280]; // manter igual a WIDTHS em photos.js
+// Sem foto própria: alterna entre a foto da categoria e as fotos já aprovadas dos artigos da mesma categoria (escolha fixa pelo id do item),
+// para os cards não repetirem sempre a mesma imagem. ponytail: com poucos artigos na categoria ainda repete; mais fotos = mais variação.
+const caminhoPadrao = (a) => {
+  const id = String(a.slug || ''), cat = `/assets/img/cat/${a.categoria}`;
+  const pool = [cat, ...dados().artigos.filter((x) => x.categoria === a.categoria && x.foto && x.slug !== a.slug).map((x) => `/assets/img/news/${x.slug}`)];
+  return pool[[...id].reduce((h, c) => h + c.charCodeAt(0), 0) % pool.length];
+};
 const coverImg = (a, { width, height, sizes, eager = false, cls = '' }) => {
-  const base = `${cls ? `class="${cls}" ` : ''}alt="" width="${width}" height="${height}" ${eager ? 'fetchpriority="high"' : 'loading="lazy" decoding="async"'}`;
+  const attrs = `${cls ? `class="${cls}" ` : ''}alt="" width="${width}" height="${height}" ${eager ? 'fetchpriority="high"' : 'loading="lazy" decoding="async"'}`;
   const cat = catFoto(a.categoria);
   const fim = cat ? `/assets/img/cat/${a.categoria}-960.webp` : coverUrl(a);
-  if (!a.foto) return cat ? `<img src="${fim}" srcset="${catSrcset(a.categoria)}" sizes="${sizes}" ${base}>` : `<img src="${fim}" ${base}>`;
-  const srcset = PHOTO_WIDTHS.map((w) => `/assets/img/news/${a.slug}-${w}.webp ${w}w`).join(', ');
-  return `<img src="/assets/img/news/${a.slug}-960.webp" srcset="${srcset}" sizes="${sizes}" ${base} onerror="this.onerror=null;this.removeAttribute('srcset');this.src='${fim}'">`;
+  const srcsetDe = (b) => PHOTO_WIDTHS.map((w) => `${b}-${w}.webp ${w}w`).join(', ');
+  if (!a.foto) {
+    if (!cat) return `<img src="${fim}" ${attrs}>`;
+    const b = caminhoPadrao(a);
+    return `<img src="${b}-960.webp" srcset="${srcsetDe(b)}" sizes="${sizes}" ${attrs} onerror="this.onerror=null;this.removeAttribute('srcset');this.src='${fim}'">`;
+  }
+  return `<img src="/assets/img/news/${a.slug}-960.webp" srcset="${srcsetDe('/assets/img/news/' + a.slug)}" sizes="${sizes}" ${attrs} onerror="this.onerror=null;this.removeAttribute('srcset');this.src='${fim}'">`;
 };
 
 const ICON = {
@@ -228,7 +239,7 @@ ${guia ? (a.atualizado ? `<time datetime="${a.atualizado}">Atualizado em ${fmtDa
 function rowCardNota(n, hidden) {
   const href = `/radar.html#${esc(n.id)}`;
   return `<article class="row-card"${hidden ? ' data-extra hidden' : ''}>
-<a class="row-thumb" href="${href}" tabindex="-1" aria-hidden="true">${coverImg({ categoria: n.categoria, slug: n.id }, { width: 168, height: 112, sizes: '(max-width: 600px) 100vw, 168px' })}</a>
+<a class="row-thumb" href="${href}" tabindex="-1" aria-hidden="true">${coverImg({ categoria: n.categoria, slug: n.id, foto: n.foto }, { width: 168, height: 112, sizes: '(max-width: 600px) 100vw, 168px' })}</a>
 <div class="row-body">
 <div class="row-tags">${selo('Radar', 'selo-radar')}<a class="tag" href="${catUrl(n.categoria)}">${esc(catNome(n.categoria))}</a></div>
 <h3><a href="${href}">${esc(n.titulo)}</a></h3>
@@ -274,7 +285,7 @@ const dadosCache = {};
 const dados = () => (dadosCache.d = dadosCache.d || { artigos: loadArticles(), notas: loadNotas() });
 /** Normaliza artigo, nota ou guia para um "item" de card: href, título, data (só real), selo e imagem. Guias não têm data. */
 function itemDe(x) {
-  if (x.tipo === 'radar') return { tipo: 'radar', href: `/radar.html#${esc(x.n.id)}`, titulo: x.n.titulo, resumo: x.n.texto, data: x.n.data, cat: x.n.categoria, ref: { categoria: x.n.categoria, slug: x.n.id }, selo: 'Radar', cls: 'selo-radar' };
+  if (x.tipo === 'radar') return { tipo: 'radar', href: `/radar.html#${esc(x.n.id)}`, titulo: x.n.titulo, resumo: x.n.texto, data: x.n.data, cat: x.n.categoria, ref: { categoria: x.n.categoria, slug: x.n.id, foto: x.n.foto }, selo: 'Radar', cls: 'selo-radar' };
   const a = x.a || x;
   return ehGuia(a)
     ? { tipo: 'guia', href: artUrl(a), titulo: a.titulo, resumo: a.resumo, data: '', atualizado: a.atualizado || '', cat: a.categoria, ref: a, selo: 'Guia', cls: 'selo-guia' }
@@ -340,7 +351,8 @@ ${n > 1 ? `<div class="car-nav" hidden>
 
 /** Imagem de uma categoria: foto do artigo mais novo dela, ou o desenho (degradê com ícone) que já existe no repositório. */
 function imgDaCategoria(slug) {
-  const a = dados().artigos.filter((x) => x.categoria === slug && x.foto).sort((x, y) => (x.data < y.data ? 1 : -1))[0];
+  const { artigos, notas } = dados();
+  const a = [...artigos, ...notas.map((n) => ({ ...n, slug: n.id }))].filter((x) => x.categoria === slug && x.foto).sort((x, y) => (x.data < y.data ? 1 : -1))[0];
   return coverImg(a || { categoria: slug }, { width: 480, height: 320, sizes: '(max-width: 600px) 50vw, 240px' });
 }
 /** "Explore tópicos": um quadro por categoria existente (nome em texto sobre a imagem). */

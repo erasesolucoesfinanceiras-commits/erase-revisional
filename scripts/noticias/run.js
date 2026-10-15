@@ -302,6 +302,9 @@ function encerrar(falha) {
         const desfazer = reconstruir(arquivos);
         try {
           const nota = criarNota(r, notas);
+          const foto = await fetchPhoto(nota.id, '', [...artigos, ...notas].map((x) => x.foto && x.foto.id), { categoria: r.tema, titulo: r.rascunho.titulo }); // mesma corrente das fotos dos artigos; sem foto adequada, o card usa a imagem padrão
+          if (foto) nota.foto = foto;
+          log(foto ? 'foto_escolhida' : 'foto_padrao', { tipo: 'nota', tema: r.tema, slug: nota.id, ...(foto ? require('../photos').ultimaEscolha() || {} : { motivo: require('../photos').motivoDaFalha() || 'sem foto' }) });
           gravarJSON(F_NOTAS, notas);
           execFileSync('node', [path.join(__dirname, '..', 'build.js')], { stdio: 'inherit' });
           log('publicado', { tipo: 'nota', tema: r.tema, titulo: nota.titulo, id: nota.id, fontes: nota.fontes.map((f) => f.url), revisao: r.rascunho.revisoes });

@@ -15,6 +15,8 @@ const path = require('path');
 
 const ROOT = process.env.PHOTOS_ROOT || path.join(__dirname, '..'); // PHOTOS_ROOT: só para testes
 const ARTICLES = path.join(ROOT, 'data', 'articles.json');
+const NOTAS = path.join(ROOT, 'data', 'notas.json');
+const chave = (a) => a.slug || a.id; // artigo = slug; nota do Radar = id (os arquivos ficam em assets/img/news/<chave>-<largura>.webp)
 const LOG = path.join(ROOT, 'data', 'noticias-log.jsonl');
 const DIR = path.join(ROOT, 'assets', 'img', 'news');
 const WIDTHS = [480, 960, 1280]; // manter igual a PHOTO_WIDTHS em site.js
@@ -152,17 +154,17 @@ async function fetchPhoto(slug, consulta, usadas = [], ctx = {}) {
 }
 
 /** Refaz/preenche fotos na lista (muta a lista). modo: faltantes | marcadas | slug. fetchFn e logFn existem para teste. Devolve os resultados por artigo. */
-async function processar(lista, { modo = 'faltantes', slug = '' }, fetchFn = fetchPhoto, logFn = () => {}, apagar = (a) => { for (const w of WIDTHS) fs.rmSync(path.join(DIR, `${a.slug}-${w}.webp`), { force: true }); }) {
-  const alvos = modo === 'slug' ? lista.filter((a) => a.slug === slug) : modo === 'marcadas' ? lista.filter((a) => a.foto_refazer) : lista.filter((a) => !a.foto);
+async function processar(lista, { modo = 'faltantes', slug = '', extras = [] }, fetchFn = fetchPhoto, logFn = () => {}, apagar = (a) => { for (const w of WIDTHS) fs.rmSync(path.join(DIR, `${chave(a)}-${w}.webp`), { force: true }); }) {
+  const alvos = modo === 'slug' ? lista.filter((a) => chave(a) === slug) : modo === 'marcadas' ? lista.filter((a) => a.foto_refazer) : lista.filter((a) => !a.foto);
   if (modo === 'slug' && !alvos.length) throw new Error(`Não há artigo com o slug "${slug}".`);
   const refazendo = modo !== 'faltantes', res = [];
   for (const a of alvos) {
-    const usadas = lista.map((x) => x.foto && x.foto.id).filter(Boolean); // inclui a foto atual: a nova tem de ser outra
-    const f = await fetchFn(a.slug, [].concat(a.foto_buscas || [], a.foto_busca || []), usadas, { categoria: a.categoria, titulo: a.titulo });
-    if (f) { a.foto = f; delete a.foto_refazer; const e = module.exports.ultimaEscolha(); logFn('foto_escolhida', { slug: a.slug, modo, ...(e || {}) }); res.push({ slug: a.slug, resultado: 'trocada', foto: f.id }); }
-    else if (refazendo && /^(busca indisponível|PIXABAY_API_KEY)/.test(module.exports.motivoDaFalha())) { logFn('foto_mantida', { slug: a.slug, modo, motivo: module.exports.motivoDaFalha() }); res.push({ slug: a.slug, resultado: 'mantida' }); } // falha de infraestrutura: não troca a foto por causa disso
-    else if (refazendo) { delete a.foto; delete a.foto_refazer; apagar(a); logFn('foto_padrao', { slug: a.slug, modo, motivo: module.exports.motivoDaFalha() || 'sem foto adequada' }); res.push({ slug: a.slug, resultado: 'padrao' }); }
-    else { logFn('foto_padrao', { slug: a.slug, modo, motivo: module.exports.motivoDaFalha() || 'sem foto adequada' }); res.push({ slug: a.slug, resultado: 'sem_foto' }); }
+    const usadas = [...lista, ...(extras || [])].map((x) => x.foto && x.foto.id).filter(Boolean); // inclui a foto atual (e as de outras listas): a nova tem de ser outra
+    const f = await fetchFn(chave(a), [].concat(a.foto_buscas || [], a.foto_busca || []), usadas, { categoria: a.categoria, titulo: a.titulo });
+    if (f) { a.foto = f; delete a.foto_refazer; const e = module.exports.ultimaEscolha(); logFn('foto_escolhida', { slug: chave(a), modo, ...(e || {}) }); res.push({ slug: chave(a), resultado: 'trocada', foto: f.id }); }
+    else if (refazendo && /^(busca indisponível|PIXABAY_API_KEY)/.test(module.exports.motivoDaFalha())) { logFn('foto_mantida', { slug: chave(a), modo, motivo: module.exports.motivoDaFalha() }); res.push({ slug: chave(a), resultado: 'mantida' }); } // falha de infraestrutura: não troca a foto por causa disso
+    else if (refazendo) { delete a.foto; delete a.foto_refazer; apagar(a); logFn('foto_padrao', { slug: chave(a), modo, motivo: module.exports.motivoDaFalha() || 'sem foto adequada' }); res.push({ slug: chave(a), resultado: 'padrao' }); }
+    else { logFn('foto_padrao', { slug: chave(a), modo, motivo: module.exports.motivoDaFalha() || 'sem foto adequada' }); res.push({ slug: chave(a), resultado: 'sem_foto' }); }
   }
   return res;
 }
@@ -178,10 +180,16 @@ if (require.main === module) (async () => {
   const hoje = new Date(Date.now() - 3 * 3600e3).toISOString().slice(0, 10);
   const log = (evento, dados) => { fs.appendFileSync(LOG, JSON.stringify({ quando: new Date().toISOString(), data: hoje, evento, origem: 'fotos', ...dados }) + '\n'); console.log(`[${evento}] ${dados.slug} ${dados.porque || dados.motivo || ''}`); };
   for (const c of catSemFoto()) log('categoria_sem_foto', { slug: c, motivo: 'categoria sem foto em assets/img/cat: o card usa o desenho SVG' });
-  const res = await processar(lista, { modo: process.env.FOTO_MODO || 'faltantes', slug: process.env.FOTO_SLUG || '' }, fetchPhoto, log);
-  const mudou = res.filter((r) => ['trocada', 'padrao'].includes(r.resultado)).length;
+  const notas = JSON.parse(fs.readFileSync(NOTAS, 'utf8'));
+  const modo = process.env.FOTO_MODO || 'faltantes', slug = process.env.FOTO_SLUG || '';
+  const ehNota = modo === 'slug' && notas.some((n) => n.id === slug);
+  const res = ehNota ? [] : await processar(lista, { modo, slug, extras: notas }, fetchPhoto, log);
+  // notas do Radar: só quem ainda não tem foto (no modo "slug" só se o id bater)
+  const resNotas = modo === 'marcadas' || (modo === 'slug' && !ehNota) ? [] : await processar(notas, { modo: ehNota ? 'slug' : 'faltantes', slug, extras: lista }, fetchPhoto, log);
+  const mudou = [...res, ...resNotas].filter((r) => ['trocada', 'padrao'].includes(r.resultado)).length;
   if (!mudou) { console.log('Nada a atualizar.'); process.exit(process.env.PIXABAY_API_KEY ? 0 : 1); }
   fs.writeFileSync(ARTICLES, JSON.stringify(lista, null, 2) + '\n');
+  fs.writeFileSync(NOTAS, JSON.stringify(notas, null, 2) + '\n');
   require('child_process').execFileSync('node', [path.join(__dirname, 'build.js')], { stdio: 'inherit' });
-  console.log(res.map((r) => `${r.slug}: ${r.resultado}`).join('\n'));
+  console.log([...res, ...resNotas].map((r) => `${r.slug}: ${r.resultado}`).join('\n'));
 })().catch((e) => { console.error(e.message); process.exit(1); });

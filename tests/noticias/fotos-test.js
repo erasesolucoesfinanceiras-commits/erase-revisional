@@ -68,5 +68,13 @@ const hit = (id, tags) => ({ id, tags, largeImageURL: 'u' + id, user: 'u', user_
     t('capa: foto do artigo que falha ao carregar volta para a foto da categoria', /onerror=.*cat\/economia-960\.webp/.test(S.coverImg({ categoria: 'economia', slug: 'x', foto: { id: 1 } }, { width: 1, height: 1, sizes: '1px' })));
     if (!existia) fs.rmSync(f);
   }
+  // ---- notas do Radar: foto própria quando existe; imagem padrão varia entre a foto da categoria e as dos artigos da categoria
+  {
+    const S = require(path.join(ROOT, 'scripts/site')), tam = { width: 1, height: 1, sizes: '1px' };
+    t('radar: nota com foto usa assets/img/news/<id>', /news\/2026-x-960\.webp/.test(S.coverImg({ categoria: 'revisional', slug: '2026-x', foto: { id: 'p1' } }, tam)));
+    const srcs = new Set(['a', 'bb', 'ccc', 'dddd', 'eeeee', 'ffffff', 'g7'].map((id) => /src="([^"]+)"/.exec(S.coverImg({ categoria: 'revisional', slug: id }, tam))[1]));
+    t('capa: imagem padrão não é sempre a mesma quando a categoria tem fotos de artigos', srcs.size > 1, [...srcs].join(' '));
+    t('capa: a escolha da imagem padrão é estável (mesmo id, mesma imagem)', S.coverImg({ categoria: 'revisional', slug: 'a' }, tam) === S.coverImg({ categoria: 'revisional', slug: 'a' }, tam));
+  }
   console.log(`${ok} ok, ${bad} falha(s)`); process.exit(bad ? 1 : 0);
 })();

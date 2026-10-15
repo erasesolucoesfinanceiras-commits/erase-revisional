@@ -42,7 +42,7 @@ const notaHtml = (n) => `<article class="nota" id="${esc(n.id)}">
 <div class="nota-meta"><a class="tag" href="${catUrl(n.categoria)}">${esc(catNome(n.categoria))}</a><time datetime="${n.data}">${fmtData(n.data)}</time></div>
 <h3>${esc(n.titulo)}</h3>
 <p>${esc(n.texto)}</p>
-<p class="nota-src">Fontes: ${n.fontes.map((f) => `<a href="${esc(f.url)}" target="_blank" rel="noopener noreferrer nofollow">${esc(f.nome)}</a>`).join(' · ')}</p>
+${n.foto ? `<p class="nota-src">Foto: <a href="${esc(n.foto.autorUrl)}" target="_blank" rel="noopener noreferrer nofollow">${esc(n.foto.autor)}</a> (<a href="${esc(n.foto.pagina)}" target="_blank" rel="noopener noreferrer nofollow">${esc(n.foto.fonte)}</a>)</p>\n` : ''}<p class="nota-src">Fontes: ${n.fontes.map((f) => `<a href="${esc(f.url)}" target="_blank" rel="noopener noreferrer nofollow">${esc(f.nome)}</a>`).join(' · ')}</p>
 </article>`;
 function radarHome() {
   if (!notas.length) return '';
