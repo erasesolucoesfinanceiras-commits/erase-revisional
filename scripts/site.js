@@ -88,9 +88,7 @@ const ICON = {
 
 // Google Analytics 4: o ID fica só em data/config.json ("gaId"). Com o marcador G-XXXXXXXXXX (ou vazio) nada é carregado.
 const gaOk = /^G-[A-Z0-9]{6,}$/.test(config.gaId || '') && !/^G-X+$/.test(config.gaId);
-const gaSnippet = () => gaOk
-  ? `<script async src="https://www.googletagmanager.com/gtag/js?id=${config.gaId}"></script>\n<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config','${config.gaId}');</script>\n`
-  : '';
+// O script do GA NÃO fica mais no HTML: main.js só o carrega depois que a pessoa aceita os cookies (<body data-ga>).
 
 function head({ title, desc, path: p, image, type = 'website', jsonld, noindex }) {
   const url = absUrl(p);
@@ -124,7 +122,7 @@ ${noindex ? '<meta name="robots" content="noindex">\n' : ''}<link rel="canonical
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/assets/css/style.css?v=${cssVer}">
-${gaSnippet()}${jsonld ? `<script type="application/ld+json">${JSON.stringify(jsonld)}</script>\n` : ''}</head>`;
+${jsonld ? `<script type="application/ld+json">${JSON.stringify(jsonld)}</script>\n` : ''}</head>`;
 }
 
 function header(active) {
@@ -171,7 +169,7 @@ ${(() => { const r = `${soc('x', 'X')}${soc('instagram', 'Instagram')}${soc('fac
 </div>
 <div>
 <h3>Navegação</h3>
-<ul><li><a href="/">Início</a></li><li><a href="/calculadora.html">Calculadora</a></li><li><a href="/radar.html">Radar</a></li><li><a href="/como-produzimos.html">Como produzimos nosso conteúdo</a></li><li><a href="/contato.html">Fale Conosco</a></li></ul>
+<ul><li><a href="/">Início</a></li><li><a href="/calculadora.html">Calculadora</a></li><li><a href="/radar.html">Radar</a></li><li><a href="/sobre.html">Sobre a ERASE</a></li><li><a href="/como-produzimos.html">Como produzimos nosso conteúdo</a></li><li><a href="/contato.html">Fale Conosco</a></li></ul>
 </div>
 <div>
 <h3>Categorias</h3>
@@ -181,7 +179,7 @@ ${(() => { const r = `${soc('x', 'X')}${soc('instagram', 'Instagram')}${soc('fac
 <div class="legal">
 <p>ERASE Revisional é uma ferramenta de simulação operada pela ERASE Soluções Financeiras. Não somos uma instituição financeira, correspondente bancário nem escritório de advocacia. O resultado é uma estimativa baseada em médias de mercado e nos dados informados, e não constitui parecer, consultoria ou promessa de resultado. Os percentuais de referência têm como fonte a taxa média de juros divulgada pelo Banco Central do Brasil para crédito livre, pessoas físicas, aquisição de veículos. A análise do contrato é realizada pela ERASE Soluções Financeiras.</p>
 ${dados ? `<p class="company">${esc(dados)}</p>` : ''}
-<p class="legal-links"><a href="/termos.html">Termos de Uso</a> · <a href="/privacidade.html">Política de Privacidade</a> · <a href="/como-produzimos.html">Como produzimos nosso conteúdo</a></p>
+<p class="legal-links"><a href="/termos.html">Termos de Uso</a> · <a href="/privacidade.html">Política de Privacidade</a> · <a href="/como-produzimos.html">Como produzimos nosso conteúdo</a>${gaOk ? ' · <a href="/privacidade.html#cookies" data-cookie-prefs>Preferências de cookies</a>' : ''}</p>
 <p class="copy">© ERASE Soluções Financeiras</p>
 </div>
 </div>
@@ -191,7 +189,7 @@ ${dados ? `<p class="company">${esc(dados)}</p>` : ''}
 // Monta a página completa.
 function page({ meta, active, body, scripts = [] }) {
   return `${head(meta)}
-<body data-wa="${esc(config.whatsapp)}">
+<body data-wa="${esc(config.whatsapp)}"${gaOk ? ` data-ga="${config.gaId}"` : ''}>
 ${header(active)}
 <main id="conteudo">
 ${body}
@@ -446,6 +444,6 @@ const freeBadge = (cls = '') => `<p class="free-badge ${cls}" role="note">${FREE
 
 module.exports = {
   FREE_TXT, freeBadge,
-  ROOT, config, loadArticles, loadNotas, ehGuia, selo, seloTxt, ordenarConteudo, ultimaPublicacao, rowCardNota, cardDe, readJSON, itemDe, dataHtml, maisRecentes, cardV, miniItem, carrossel, exploreTopicos, escolhaDaEquipe, relacionados, sidebar, socialLinks, usaContato, esc, fmtPct, fmtData, catNome, catUrl, artUrl, absUrl, coverUrl, catFoto, coverImg,
+  ROOT, config, catsComItens, loadArticles, loadNotas, ehGuia, selo, seloTxt, ordenarConteudo, ultimaPublicacao, rowCardNota, cardDe, readJSON, itemDe, dataHtml, maisRecentes, cardV, miniItem, carrossel, exploreTopicos, escolhaDaEquipe, relacionados, sidebar, socialLinks, usaContato, esc, fmtPct, fmtData, catNome, catUrl, artUrl, absUrl, coverUrl, catFoto, coverImg,
   ICON, page, rowCard, promoCard, trustBadges, ctaBanner,
 };

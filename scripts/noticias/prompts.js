@@ -31,23 +31,23 @@ Responda APENAS com um objeto JSON (sem markdown):
   }
   if (modo === 'guia') {
     return `${aviso}
-TAREFA: nenhum tema tem novidade hoje. Escreva um ARTIGO EXPLICATIVO e útil (guia, "como funciona", direitos do consumidor) de 450 a 700 palavras sobre um assunto do tema ainda NÃO abordado na lista acima, baseado nas fontes OFICIAIS acima (Banco Central, órgãos .gov.br, tribunais .jus.br etc.). Corpo em HTML simples usando apenas <p>, <h2>, <h3>, <ul>, <li>, <strong>, <em> (sem <h1>, sem estilos).
+TAREFA: nenhum tema tem novidade hoje. Escreva um ARTIGO EXPLICATIVO e útil (guia, "como funciona", direitos do consumidor) de 500 a 900 palavras sobre um assunto do tema ainda NÃO abordado na lista acima, baseado nas fontes OFICIAIS acima (Banco Central, órgãos .gov.br, tribunais .jus.br etc.). Corpo em HTML simples usando apenas <p>, <h2>, <h3>, <ul>, <li>, <strong>, <em> (sem <h1>, sem estilos).
 Responda APENAS com um objeto JSON (sem markdown):
 {"sem_novidade": false, "titulo": "até 90 caracteres", "resumo": "1 a 2 frases, 40 a 220 caracteres", "corpo": "<p>...</p>", "fontes_usadas": [1, 2], "foto_busca": "2 a 4 palavras EM INGLÊS para foto de banco de imagens LIGADA AO ASSUNTO (ex.: car, vehicle financing, car contract, car documents, car keys on contract); nada sem relação com o tema, sem pessoas conhecidas, marcas ou logotipos"}`;
   }
   return `${aviso}
 TAREFA: escolha, entre as fontes acima, uma NOTÍCIA ou DADO RECENTE e REAL relacionado ao tema. Se nenhuma fonte trouxer novidade real e relevante, responda exatamente {"sem_novidade": true, "motivo": "uma frase"}.
-Se houver, escreva um artigo ORIGINAL em português do Brasil, informativo e neutro, de 450 a 700 palavras, corpo em HTML simples usando apenas <p>, <h2>, <h3>, <ul>, <li>, <strong>, <em> (sem <h1>, sem estilos).
+Se houver, escreva um artigo ORIGINAL em português do Brasil, informativo e neutro, de 500 a 900 palavras (com subtítulos <h2> e, no fim, um parágrafo curto sobre o que a pessoa que financia pode observar na prática, sem aconselhar), corpo em HTML simples usando apenas <p>, <h2>, <h3>, <ul>, <li>, <strong>, <em> (sem <h1>, sem estilos).
 Responda APENAS com um objeto JSON (sem markdown):
 {"sem_novidade": false, "titulo": "até 90 caracteres", "resumo": "1 a 2 frases, 40 a 220 caracteres", "corpo": "<p>...</p>", "fontes_usadas": [1, 3], "foto_busca": "2 a 4 palavras EM INGLÊS para foto de banco de imagens LIGADA AO ASSUNTO (ex.: car, vehicle financing, car contract, car documents, car keys on contract); nada sem relação com o tema, sem pessoas conhecidas, marcas ou logotipos"}`;
 }
 
 
 /** Revisão de um GUIA já publicado (atemporal) com fontes atuais. Só devolve texto novo se algo realmente mudou. */
-function revisaoGuia({ guia, hoje, tema, cands, motivos = [], anterior = null }) {
+function revisaoGuia({ guia, hoje, tema, cands, motivos = [], anterior = null, semFontes = false }) {
   const reescrita = anterior ? `\nSUA REVISÃO ANTERIOR FOI REPROVADA pelos motivos abaixo. Corrija TODOS ou responda {"sem_mudanca": true}.\nMotivos: ${motivos.map((m) => '- ' + m).join('\n')}\nRevisão anterior: ${JSON.stringify(anterior)}\n` : '';
   return `FONTES ATUAIS (únicas que você pode usar):\n${listaFontes(cands)}\n\nPortal "ERASE Revisional". Data de hoje: ${hoje}. TEMA: ${tema.nome} — ${tema.foco}.\n${reescrita}\n${REGRAS_COMUNS}
-TAREFA: REVISAR um GUIA já publicado (conteúdo atemporal). Compare o TEXTO ATUAL abaixo com as FONTES ATUAIS (oficiais) e corrija SOMENTE o que as fontes mostram que mudou, está desatualizado ou errado (números, regras, leis, decisões). NÃO reescreva por estilo e não mude o tom, a estrutura nem o tamanho (±15%). Mantenha todos os avisos que o texto já tem (por exemplo: não há resultado garantido; conteúdo informativo, não é parecer jurídico). Texto 100% próprio, sem copiar trechos das fontes. Se NADA precisa mudar, responda exatamente {"sem_mudanca": true}.
+TAREFA: REVISAR um GUIA já publicado (conteúdo atemporal). Compare o TEXTO ATUAL abaixo com as FONTES ATUAIS (oficiais) e corrija SOMENTE o que as fontes mostram que mudou, está desatualizado ou errado (números, regras, leis, decisões). NÃO reescreva por estilo e não mude o tom, a estrutura nem o tamanho (±15%). Mantenha todos os avisos que o texto já tem (por exemplo: não há resultado garantido; conteúdo informativo, não é parecer jurídico). Texto 100% próprio, sem copiar trechos das fontes. ${semFontes ? 'ESTE GUIA AINDA NÃO CITA FONTES: confirme cada afirmação nas FONTES ATUAIS, reescreva só o que elas não sustentarem (ou remova), mantenha o restante e informe em "fontes_usadas" as fontes que sustentam o texto (no mínimo 2, de sites diferentes). Não responda sem_mudanca; em "mudancas" escreva "fontes citadas" e o que foi ajustado, se algo foi.' : 'Se NADA precisa mudar, responda exatamente {"sem_mudanca": true}.'}
 Se algo mudou, responda APENAS com um objeto JSON (sem markdown):
 {"sem_mudanca": false, "mudancas": ["o que mudou e por quê, citando a fonte [n]"], "corpo": "<p>...</p>", "fontes_usadas": [1, 2]}
 TÍTULO: ${guia.titulo}

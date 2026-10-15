@@ -21,7 +21,7 @@ const notas = S.loadNotas();
 const SITE = C.siteNome;
 const hasBcb = fs.existsSync(path.join(S.ROOT, 'assets', 'data', 'bcb-veiculos.json')); // série histórica do Banco Central presente?
 const urls = []; // para o sitemap
-const LEGAL_DATE = '2026-10-01'; // data de vigência dos textos legais (altere ao revisá-los)
+const LEGAL_DATE = '2026-10-15'; // data de vigência dos textos legais (altere ao revisá-los)
 // Datas do sitemap: SÓ datas reais (publicação ou revisão de verdade). Sem data real, sem <lastmod>.
 const maiorData = (...ds) => ds.flat().filter(Boolean).sort().pop();
 let BCB_ATUALIZADO = '', BCB_CONFERIDO = ''; // datas REAIS (scripts/update-bcb.js): última alteração da série e última consulta ao BCB que funcionou
@@ -125,7 +125,7 @@ ${nl}
 }
 
 // ---------------------------------------------------------------- LISTAS
-function listPage({ file, title, desc, h1, intro, items, notasDaLista = [], active, p, cat }) {
+function listPage({ file, title, desc, h1, intro, items, notasDaLista = [], active, p, cat, vazia = false }) {
   // itens por data real (artigos e, nas categorias, notas do Radar); guias depois, sem data; os 8 primeiros aparecem, o resto em "Ver mais"
   const o = S.ordenarConteudo(items, notasDaLista), todos = [...o.datados, ...o.guias], INICIAL = 8;
   const cards = todos.map((it, i) => S.cardDe(it.tipo ? it : { ...it, a: it }, i >= INICIAL)).join('\n');
@@ -141,8 +141,8 @@ ${todos.length > INICIAL ? '<button class="btn btn-outline btn-block more-btn" i
 ${S.sidebar(cat)}
 </section>
 ${S.ctaBanner(cat)}`;
-  out(file, S.page({ meta: { title, desc, path: p }, active, body }));
-  urls.push([p, '0.7', maiorData(items.map((a) => a.data), items.map((a) => a.atualizado), notasDaLista.map((n) => n.data))]);
+  out(file, S.page({ meta: { title, desc, path: p, noindex: vazia }, active, body }));
+  if (!vazia) urls.push([p, '0.7', maiorData(items.map((a) => a.data), items.map((a) => a.atualizado), notasDaLista.map((n) => n.data))]);
 }
 
 function lists() {
@@ -159,6 +159,7 @@ function lists() {
       desc: C.categorias[slug].descricao,
       h1: catNome(slug), intro: C.categorias[slug].descricao,
       items: articles.filter((a) => a.categoria === slug), notasDaLista: notas.filter((n) => n.categoria === slug), cat: slug,
+      vazia: !S.catsComItens().includes(slug),
     });
   }
 }
@@ -405,12 +406,16 @@ function legais() {
 <h2>4. Responsabilidades do usuário</h2>
 <p>O usuário é responsável pela veracidade dos dados informados. Resultados baseados em dados incorretos ou incompletos não refletem a situação real do contrato.</p>
 <h2>5. Conteúdo</h2>
-<p>Os artigos têm caráter informativo e podem ser atualizados a qualquer momento. As fontes são indicadas ao final de cada texto. O conteúdo não substitui a orientação de um profissional habilitado.</p>
-<h2>6. Propriedade intelectual</h2>
+<p>Os artigos têm caráter informativo e podem ser atualizados a qualquer momento. As fontes são indicadas ao final de cada texto. Parte do conteúdo é produzida com apoio de inteligência artificial e passa por revisão automática, como explicado em <a href="/como-produzimos.html">Como produzimos nosso conteúdo</a>. O conteúdo não substitui a orientação de um profissional habilitado.</p>
+<h2>6. Links, anúncios e serviços de terceiros</h2>
+<p>O site traz links para fontes externas (órgãos oficiais e veículos de imprensa) e usa serviços de terceiros, como Google Analytics e Cloudflare. Não controlamos esses sites e serviços e não respondemos pelo conteúdo ou pelas políticas deles. Poderemos exibir anúncios de terceiros, como os do Google AdSense; nesse caso, os anúncios serão identificados, não influenciam o conteúdo editorial e a presença de um anúncio não é recomendação nem indicação de que a ${razao} o endossa.</p>
+<h2>7. Cookies e privacidade</h2>
+<p>O uso de cookies e o tratamento de dados pessoais estão descritos na <a href="/privacidade.html">Política de Privacidade</a>. Cookies de estatística (e, no futuro, de anúncios) só são ativados depois do seu consentimento, que pode ser mudado a qualquer momento.</p>
+<h2>8. Propriedade intelectual</h2>
 <p>Marcas, textos, layout e código do site pertencem à ${razao} ou são usados com autorização, sendo vedada a reprodução sem permissão prévia.</p>
-<h2>7. Alterações</h2>
+<h2>9. Alterações</h2>
 <p>Estes termos podem ser alterados a qualquer momento. A versão vigente é sempre a publicada nesta página.</p>
-<h2>8. Foro e contato</h2>
+<h2>10. Foro e contato</h2>
 <p>Dúvidas podem ser enviadas pela página <a href="/contato.html">Fale Conosco</a>. Fica eleito o foro do domicílio do consumidor para dirimir eventuais controvérsias, nos termos da legislação aplicável.</p>`);
 
   legal('privacidade.html', 'Política de Privacidade', 'Política de Privacidade', `
@@ -424,13 +429,16 @@ function legais() {
 <h2>2. Para que usamos</h2>
 <p>Usamos os dados para devolver a análise solicitada, entrar em contato por WhatsApp, telefone ou e-mail quando você autoriza, permitir o atendimento por um especialista da ERASE, responder mensagens e enviar novidades quando você se inscreve na newsletter.</p>
 <h2>3. Com quem compartilhamos</h2>
-<p>Os dados enviados nos formulários são recebidos e armazenados em nosso sistema de relacionamento (CRM) e são usados pela equipe da ERASE Soluções Financeiras para entrar em contato com você. Não vendemos seus dados.</p>
+<p>Os dados enviados nos formulários são recebidos e armazenados em nosso sistema de relacionamento (CRM) e são usados pela equipe da ${razao} para entrar em contato com você. Não vendemos seus dados. Usamos prestadores que tratam dados em nosso nome: a Cloudflare (hospedagem do site e verificação anti-robô nos formulários) e, se você aceitar os cookies de estatística, o Google (Google Analytics). Esses prestadores podem processar dados fora do Brasil, com as garantias previstas na LGPD.</p>
 <h2>4. Por quanto tempo guardamos</h2>
 <p>Mantemos os dados pelo tempo necessário para as finalidades acima ou para cumprir obrigações legais.</p>
 <h2>5. Seus direitos</h2>
-<p>Você pode solicitar confirmação de tratamento, acesso, correção, anonimização, portabilidade e exclusão dos dados, além de revogar consentimentos, pela página <a href="/contato.html">Fale Conosco</a>.</p>
-<h2>6. Armazenamento no navegador</h2>
-<p>Usamos o armazenamento local do navegador para lembrar a sua escolha de tema (claro/escuro), exibir o pop-up uma vez por sessão e guardar a origem do acesso (UTMs e página de entrada).</p>
+<p>Você pode solicitar confirmação de tratamento, acesso, correção, anonimização, portabilidade e exclusão dos dados, informações sobre com quem compartilhamos e a revogação de consentimentos, pela página <a href="/contato.html">Fale Conosco</a>. Também pode apresentar reclamação à Autoridade Nacional de Proteção de Dados (ANPD).</p>
+<h2 id="cookies">6. Cookies, Google Analytics e anúncios</h2>
+<p><strong>Armazenamento essencial do navegador.</strong> Usamos o armazenamento local para lembrar a sua escolha de tema (claro/escuro) e de cookies, exibir o pop-up uma vez por sessão e guardar a origem do acesso (UTMs e página de entrada). Eles não servem para publicidade.</p>
+<p><strong>Estatísticas (Google Analytics).</strong> Se você aceitar, usamos o Google Analytics 4, serviço do Google, que grava cookies e identificadores para contar visitas, páginas vistas, tempo no site, tipo de aparelho e origem do acesso, e para medir o resultado dos formulários (sem enviar seu nome, telefone ou e-mail). Sem o seu aceite, o Google Analytics não é carregado.</p>
+<p><strong>Anúncios do Google (AdSense) — futuro.</strong> Poderemos exibir anúncios do Google AdSense. Quando isso acontecer, o Google e seus parceiros poderão usar cookies para mostrar anúncios com base nas suas visitas a este e a outros sites, e só os ativaremos com o seu consentimento. Você poderá desativar a personalização de anúncios em <a href="https://adssettings.google.com" target="_blank" rel="noopener noreferrer">adssettings.google.com</a> e saber como o Google usa dados de sites parceiros em <a href="https://policies.google.com/technologies/partner-sites" target="_blank" rel="noopener noreferrer">policies.google.com/technologies/partner-sites</a>. Esta política será atualizada antes de os anúncios entrarem no ar.</p>
+<p><strong>Como mudar a sua escolha.</strong> Use "Preferências de cookies" no rodapé de qualquer página para aceitar ou recusar, ou apague os cookies nas configurações do navegador. Para o Google Analytics, também há o <a href="https://tools.google.com/dlpage/gaoptout" target="_blank" rel="noopener noreferrer">complemento de desativação do Google</a>.</p>
 <h2>7. Contato</h2>
 <p>Controladora: ${razao}. Solicitações pela página <a href="/contato.html">Fale Conosco</a>.</p>`);
 }
@@ -469,6 +477,43 @@ function comoProduzimos() {
     active: '', body,
   }));
   urls.push(['/como-produzimos.html', '0.5', PRODUCAO_DATE]);
+}
+
+// ---------------------------------------------------------------- SOBRE
+const SOBRE_DATE = '2026-10-15'; // data real em que este texto foi escrito (atualize ao revisá-lo)
+function sobre() {
+  const e = C.empresa, wa = String(C.whatsapp).replace(/^55(\d{2})(\d{5})(\d{4})$/, '+55 ($1) $2-$3');
+  const body = `<article class="container article legal-doc">
+<nav class="crumbs" aria-label="Você está em"><a href="/">Início</a> / Sobre a ERASE</nav>
+<h1>Sobre a ERASE</h1>
+<p class="lead">Quem está por trás do ERASE Revisional, o que fazemos e como cuidamos do que publicamos.</p>
+<p class="meta">Última atualização: <time datetime="${SOBRE_DATE}">${fmtData(SOBRE_DATE)}</time></p>
+<h2>Quem somos</h2>
+<p>O ERASE Revisional é um portal de notícias e uma calculadora gratuita sobre financiamento de veículos, mantido pela <strong>${esc(e.razaoSocial)}</strong>. A ideia é simples: explicar com clareza o que está por trás dos juros e das regras do crédito e ajudar você a entender o seu contrato.</p>
+<h2>O que fazemos</h2>
+<ul>
+<li><strong>Notícias e guias</strong> sobre financiamento de veículos, juros, regras do Banco Central, consórcio, seguros, crédito pessoal, crédito rural e outros temas do sistema financeiro, sempre com as fontes citadas.</li>
+<li><strong>Calculadora gratuita</strong>: estima a taxa de juros mensal embutida no seu financiamento e compara com a taxa média divulgada pelo Banco Central. É uma estimativa, não um parecer.</li>
+<li><strong>Análise gratuita do contrato</strong> pela equipe da ERASE, se você quiser e autorizar o contato, sem compromisso e sem promessa de resultado.</li>
+</ul>
+<h2>Como o conteúdo é produzido e revisado</h2>
+<p>Os textos são assinados pela Equipe ERASE e produzidos com apoio de inteligência artificial a partir de fontes reais, com revisão automática independente de fatos, números, originalidade e neutralidade. Veja o passo a passo em <a href="/como-produzimos.html">Como produzimos nosso conteúdo</a>.</p>
+<h2>O que não somos</h2>
+<p>Não somos instituição financeira, correspondente bancário nem escritório de advocacia. O conteúdo é informativo e não substitui a orientação de um profissional habilitado.</p>
+<h2>Dados da empresa e contato</h2>
+<ul>
+<li><strong>Razão social:</strong> ${esc(e.razaoSocial)}</li>
+${e.cnpj ? `<li><strong>CNPJ:</strong> ${esc(e.cnpj)}</li>` : ''}
+${e.email ? `<li><strong>E-mail:</strong> <a href="mailto:${esc(e.email)}">${esc(e.email)}</a></li>` : ''}
+<li><strong>WhatsApp:</strong> <a href="#" data-wa-link>${esc(wa)}</a></li>
+<li><strong>Fale Conosco:</strong> <a href="/contato.html">formulário de contato</a></li>
+</ul>
+</article>`;
+  out('sobre.html', S.page({
+    meta: { title: `Sobre a ERASE | ${SITE}`, desc: 'Quem é a ERASE Soluções Financeiras, o que faz o ERASE Revisional, como o conteúdo é produzido e revisado e como falar com a equipe.', path: '/sobre.html' },
+    active: '', body,
+  }));
+  urls.push(['/sobre.html', '0.5', SOBRE_DATE]);
 }
 
 function contato() {
@@ -515,5 +560,5 @@ ${urls.map(([p, prio, d]) => `  <url><loc>${absUrl(p)}</loc>${d ? `<lastmod>${d}
   out('robots.txt', `User-agent: *\nAllow: /\n\nSitemap: ${absUrl('/sitemap.xml')}\n`);
 }
 
-home(); lists(); radar(); artigos(); calculadora(); legais(); comoProduzimos(); contato(); notFound(); seo();
+home(); lists(); radar(); artigos(); calculadora(); legais(); comoProduzimos(); sobre(); contato(); notFound(); seo();
 console.log(`OK — ${articles.length} artigos, ${urls.length} URLs no sitemap.`);

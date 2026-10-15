@@ -270,6 +270,8 @@ if (ct) {
 // ---- Pop-up de entrada --------------------------------------------
 (function popup() {
   if (location.pathname.includes('calculadora')) return; // quem já está no formulário não precisa do pop-up
+  const caminho = location.pathname.replace(/\.html$/, '').replace(/\/$/, '');
+  if (/^\/(privacidade|termos|sobre|contato|como-produzimos)$/.test(caminho)) return; // páginas institucionais/legais: nunca
   try { if (sessionStorage.getItem('erase-popup')) return; } catch (e) { /* sem storage: mostra */ }
 
   // Foto do pop-up: baixa em segundo plano (depois do carregamento da página e com o navegador ocioso) para já estar pronta quando ele abrir.
@@ -385,5 +387,49 @@ if (ct) {
       setTimeout(close, 2600);
     });
   }
-  setTimeout(open, 2500);
+  // artigos e notas do Radar: só depois de rolar cerca de metade do texto; demais páginas (capa etc.): 2,5 s como sempre
+  if (caminho.startsWith('/noticias/') || caminho === '/radar') {
+    const texto = $('main article') || $('main');
+    const passouDaMetade = () => { const r = texto.getBoundingClientRect(); return r.height > 0 && (innerHeight - r.top) / r.height >= 0.5; };
+    const vigia = () => { if (passouDaMetade()) { removeEventListener('scroll', vigia); open(); } };
+    addEventListener('scroll', vigia, { passive: true });
+  } else setTimeout(open, 2500);
+})();
+
+// ---- Consentimento de cookies (LGPD) -----------------------------------------
+// O Google Analytics (ID em <body data-ga>) só é carregado DEPOIS do aceite. Sem o ID (ou sem aceite) nada é carregado e nenhum cookie é criado.
+// Anúncios do Google (AdSense), quando existirem, devem carregar pelo mesmo gancho: carregarComConsentimento().
+(function cookies() {
+  const id = document.body.dataset.ga, CH = 'erase-cookies';
+  if (!id) return;
+  const ler = () => { try { return localStorage.getItem(CH); } catch (e) { return null; } };
+  const gravar = (v) => { try { localStorage.setItem(CH, v); } catch (e) { /* sem storage: pergunta de novo na próxima visita */ } };
+  function carregarComConsentimento() {
+    if (window.gtag) return;
+    window.dataLayer = window.dataLayer || [];
+    window.gtag = function () { window.dataLayer.push(arguments); };
+    const sc = document.createElement('script'); sc.async = true; sc.src = 'https://www.googletagmanager.com/gtag/js?id=' + id; document.head.appendChild(sc);
+    window.gtag('js', new Date()); window.gtag('config', id);
+  }
+  function apagarCookiesGA() {
+    window['ga-disable-' + id] = true;
+    document.cookie.split(';').map((c) => c.split('=')[0].trim()).filter((n) => n === '_ga' || n.startsWith('_ga_') || n === '_gid').forEach((n) => {
+      for (const d of [location.hostname, '.' + location.hostname.split('.').slice(-3).join('.'), '']) document.cookie = `${n}=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/${d ? '; domain=' + d : ''}`;
+    });
+  }
+  function escolher(v) { gravar(v); fechar(); if (v === 'sim') { window['ga-disable-' + id] = false; carregarComConsentimento(); } else apagarCookiesGA(); }
+  let barra = null;
+  function fechar() { if (barra) { barra.remove(); barra = null; document.body.style.paddingBottom = ''; } }
+  function abrir() {
+    if (barra) return;
+    barra = document.createElement('div');
+    barra.className = 'cookie-bar'; barra.setAttribute('role', 'region'); barra.setAttribute('aria-label', 'Aviso de cookies');
+    barra.innerHTML = '<p>Usamos cookies para medir o uso do site (Google Analytics). Você escolhe. <a href="/privacidade#cookies">Saiba mais</a></p><div class="cookie-actions"><button type="button" class="btn btn-outline btn-sm" data-c="nao">Recusar</button><button type="button" class="btn btn-primary btn-sm" data-c="sim">Aceitar</button></div>';
+    barra.addEventListener('click', (e) => { const b = e.target.closest('[data-c]'); if (b) escolher(b.dataset.c); });
+    document.body.appendChild(barra);
+    document.body.style.paddingBottom = barra.offsetHeight + 'px'; // a barra nunca esconde o fim da página
+  }
+  const atual = ler();
+  if (atual === 'sim') carregarComConsentimento(); else if (atual !== 'nao') abrir();
+  $$('[data-cookie-prefs]').forEach((a) => a.addEventListener('click', (e) => { e.preventDefault(); abrir(); }));
 })();

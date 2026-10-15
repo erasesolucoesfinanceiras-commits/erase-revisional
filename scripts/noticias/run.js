@@ -317,10 +317,10 @@ function encerrar(falha) {
   if (!(falhaArtigo && falhaArtigo.humano)) {
     try {
       const linhas = fs.existsSync(F_LOG) ? fs.readFileSync(F_LOG, 'utf8').split('\n').filter(Boolean).map((l) => { try { return JSON.parse(l); } catch (e) { return {}; } }) : [];
-      if (RG.estaNaHora(linhas, hoje)) {
+      if (RG.estaNaHora(linhas, hoje, artigos)) {
         PRAZO = Date.now() + 10 * 60e3;
         const res = await RG.revisarGuia({ artigos, hoje, linhasDoLog: linhas, deps: { coletar, chamar, extrairJSON, sanitizar, V, N, revisar, revisarNeutralidade, precisaNeutralidade, TEMAS, limparFontes, contar, log, urlsBloqueadas } });
-        if (res.resultado === 'atualizado') {
+        if (res.resultado === 'atualizado' || res.resultado === 'fontes_citadas') {
           const desfazer = reconstruir(arquivos);
           try { gravarJSON(F_ART, artigos); execFileSync('node', [path.join(__dirname, '..', 'build.js')], { stdio: 'inherit' }); } catch (e) { desfazer(); throw e; }
         }

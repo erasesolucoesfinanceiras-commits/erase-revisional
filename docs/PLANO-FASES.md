@@ -18,6 +18,12 @@ Situação de partida (15/10/2026): 11 artigos em 4 categorias; Crédito rural e
 
 Risco do passo 2: enquanto uma categoria vazia não tiver notícia elegível, ela é tentada primeiro todo dia e gasta algumas chamadas a mais antes de passar para a próxima. O passo 1 mostra quanto.
 
+### Mudança no robô em 15/10/2026 (considerar na medição de 22/10)
+Entrou **depois** do início da medição do passo 1 (o evento `uso_gemini` começou em 16/10 e a mudança vale a partir do primeiro run depois do deploy), então os números de 22/10 já a incluem:
+- **Artigos novos com 500 a 900 palavras** (antes 450 a 700; tolerância de contagem 480 a 950), com fontes citadas e todas as travas mantidas. Textos mais longos = mais tokens por chamada de escrita e de revisão, e mais reescritas reprovadas por número fora da fonte.
+- **Guias atuais passam a citar fontes**: enquanto houver guia sem fontes (7 hoje), a revisão de guias roda **1 por dia** (antes: 1 a cada 3 dias), cada passada com escrita + revisor (+ neutralidade quando aplicável) = alguns pedidos extras por dia por cerca de 7 dias. Depois volta ao ritmo de 3 dias. Resultado novo no log: `fontes_citadas` (o guia ganha fontes; só ganha "Atualizado em" se o texto realmente mudar).
+Ao ler `medir.js` em 22/10: separar o que é efeito desta mudança (mais pedidos nos dias de revisão de guia, artigos maiores) do que é o ritmo normal antes de decidir o passo 3.
+
 ### Revisão de 22/10/2026 — o que ver para decidir o passo 3
 Rodar `node scripts/noticias/medir.js` (dados desde 16/10, quando `uso_gemini` começou) e olhar:
 1. **Pedidos por dia** (`pedidos`/`ok`): média e pico. Comparar com a cota gratuita do modelo em uso (aistudio.google.com); 1 artigo/dia deve ao menos dobrar os pedidos de artigo.

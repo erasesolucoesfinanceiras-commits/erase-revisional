@@ -80,7 +80,7 @@ function checarRegras(r, tipo, ctx) {
     if (corpoTxt.length < 80 || corpoTxt.length > 520) m.push(`nota com ${corpoTxt.length} caracteres (deve ter 2 a 4 linhas, 80 a 520 caracteres)`);
   } else {
     const n = palavras(corpoTxt);
-    if (n < 400 || n > 900) m.push(`artigo com ${n} palavras (esperado 450 a 700)`);
+    if (n < 480 || n > 950) m.push(`artigo com ${n} palavras (esperado 500 a 900)`); // 480/950: folga pequena para a contagem do modelo
     if (!r.resumo || r.resumo.length < 40 || r.resumo.length > 230) m.push('resumo ausente ou fora do tamanho');
   }
   const todoSemAviso = todo.replace(AVISO_NEGATIVO, ' ');

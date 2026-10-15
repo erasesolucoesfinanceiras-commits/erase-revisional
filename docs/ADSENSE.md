@@ -1,5 +1,7 @@
 # Prontidão para o Google AdSense — auditoria de 15/10/2026
 
+> **Atualização de 15/10/2026 (mesmo dia):** já feitos — página Sobre, Política de Privacidade e Termos com cookies/Analytics/anúncios, banner de consentimento (Analytics só após aceite), pop-up restrito (artigos e Radar só após rolar metade; nunca em Privacidade, Termos, Sobre, Contato e Como produzimos), categorias vazias com noindex e fora do sitemap, artigos de 500 a 900 palavras e guias passando a citar fontes. **Ainda abertos:** volume de conteúdo (Fase 2), decisão de domínio, e-mail da empresa na página Sobre (campo `empresa.email` em `data/config.json`, vazio), autor/revisor nomeado, Search Console, `ads.txt` e, quando houver anúncios, CMP certificada pelo Google (obrigatória para visitantes do EEE/Reino Unido) no lugar do banner simples. O texto abaixo é a foto original da auditoria.
+
 Só leitura: nada do site foi alterado. Legenda: ✅ ok · ⚠️ atenção · ❌ falta.
 Limite da auditoria: não consegui abrir o site no ar nem o site da VSL (o ambiente bloqueia); tudo abaixo vem do repositório. As regras do AdSense mudam: confirme os pontos marcados com (*) no painel do AdSense antes de decidir.
 
