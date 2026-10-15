@@ -1,0 +1,25 @@
+# Plano por fases — ERASE Revisional
+
+Resumo das fases combinado com a ERASE (as conversas antigas não estão no repositório). Atualize este arquivo a cada decisão.
+
+## Fase 1 — Portal (concluída)
+Capa, barra lateral, Radar, relacionados, "Como produzimos". Ver README, seção "Portal (fase 1)".
+Ajustes posteriores: coluna "Últimos artigos" acompanha a altura da barra lateral; categorias sem item saem da capa e do menu até terem o primeiro artigo ou nota do Radar.
+
+## Fase 2 — Mais artigos por dia e cobertura das novas categorias
+Situação de partida (15/10/2026): 11 artigos em 4 categorias; Crédito rural e Empresas e MEI sem nenhum item; ritmo de 1 artigo a cada 2 dias + 1 nota/dia; Gemini na camada gratuita (muitos 503 e alguns 429 no log).
+
+| Passo | O que | Status |
+|---|---|---|
+| 1 | Medir cota e custo: evento `uso_gemini` (pedidos, ok, erros por status) no fim de cada execução + `node scripts/noticias/medir.js` (por dia e por tema) | feito; junte ~1 semana de dados |
+| 2 | Priorizar categorias vazias no rodízio, **sem mudar o ritmo** (`vazias()` em `scripts/noticias/temas.js`; artigo: categoria sem artigo; nota: sem artigo e sem nota). Se a vazia não tiver notícia boa, o robô segue para o próximo tema como antes | feito; teste `node tests/noticias/rodizio-test.js` |
+| 3 | Subir para 1 artigo/dia na camada gratuita, observar 1 semana. **Só com aprovação, com os números do passo 1.** Se a cota apertar, discutir plano pago com o valor na mão | aguardando aprovação |
+| 4 | Manter todas as travas (fontes, números, revisores, neutralidade) e o resumo semanal por e-mail | permanente |
+
+Risco do passo 2: enquanto uma categoria vazia não tiver notícia elegível, ela é tentada primeiro todo dia e gasta algumas chamadas a mais antes de passar para a próxima. O passo 1 mostra quanto.
+
+## Fase 3 — Google Search Console e Bing Webmaster (depois)
+Cadastrar o domínio, enviar `sitemap.xml`, acompanhar indexação. Fica para depois da Fase 2.
+
+## Pendências antigas (README)
+ID do Google Analytics, links de X/Facebook, revisão dos artigos iniciais.

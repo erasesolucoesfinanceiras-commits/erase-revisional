@@ -7,8 +7,8 @@
 const fs = require('fs');
 const path = require('path');
 const { execFileSync } = require('child_process');
-const { chamar, extrairJSON, ErroGemini, definirLog, definirPrazo } = require('./gemini');
-const { TEMAS, ordemDeTemas } = require('./temas');
+const { uso: usoGemini, chamar, extrairJSON, ErroGemini, definirLog, definirPrazo } = require('./gemini');
+const { TEMAS, ordemDeTemas, vazias } = require('./temas');
 const P = require('./prompts');
 const V = require('./verificar');
 const { revisar, revisarNeutralidade } = require('./revisor');
@@ -255,7 +255,7 @@ function encerrar(falha) {
       } catch (e) { houveErro = true; log('erro', { tipo: 'artigo', tema: inicio, motivo: e.message }); }
     }
     try {
-      const r = await produzir('nota', ordemDeTemas(epochDay, temasUsados), recentes);
+      const r = await produzir('nota', ordemDeTemas(epochDay, temasUsados, vazias(artigos, notas)), recentes);
       if (r) salvarAmostra(i++, { tipo: 'nota', ...r });
     } catch (e) { houveErro = true; log('erro', { tipo: 'nota', motivo: e.message }); }
     console.log(`Amostras em ${AMOSTRAS} (nada foi publicado).`);
@@ -275,7 +275,7 @@ function encerrar(falha) {
   let falhaArtigo = null; // { motivo, humano, causa, acao }
   if (devoArtigo) {
     try {
-      const r = await produzir('artigo', ordemDeTemas(Math.floor(epochDay / 2), temasTentadosHoje('artigo')), recentes);
+      const r = await produzir('artigo', ordemDeTemas(Math.floor(epochDay / 2), temasTentadosHoje('artigo'), vazias(artigos)), recentes);
       if (r) {
         const desfazer = reconstruir(arquivos);
         try {
@@ -297,7 +297,7 @@ function encerrar(falha) {
   else if (falhaArtigo && falhaArtigo.humano) console.log('Nota não tentada: o problema da IA exige uma pessoa.');
   else {
     try {
-      const r = await produzir('nota', ordemDeTemas(epochDay, publicouArtigo ? [publicouArtigo] : []), recentes);
+      const r = await produzir('nota', ordemDeTemas(epochDay, publicouArtigo ? [publicouArtigo] : [], vazias(artigos, notas)), recentes);
       if (r) {
         const desfazer = reconstruir(arquivos);
         try {
@@ -325,5 +325,6 @@ function encerrar(falha) {
       }
     } catch (e) { log('revisao_guia', { resultado: 'erro', motivo: String(e.message).slice(0, 200) }); }
   }
+  log('uso_gemini', { ...usoGemini });
   encerrar(falhaArtigo);
 })().catch((e) => { console.error(e); try { log('erro', { motivo: String(e.message).slice(0, 300) }); } catch (x) { /* ignore */ } process.exit(1); });

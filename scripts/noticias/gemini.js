@@ -9,6 +9,7 @@ const INTERVALO_MS = Number(process.env.GEMINI_INTERVALO_MS ?? 7000); // camada 
 const ESCALA = Number(process.env.GEMINI_ESPERA_ESCALA ?? 1); // multiplica todas as esperas (testes usam 0.001)
 const ESPERA_ERRO_MS = Number(process.env.GEMINI_ESPERA_ERRO_MS ?? 10000);
 const TENTATIVAS = 3; // por modelo
+const uso = { pedidos: 0, ok: 0, por_status: {} }; // desta execução: alimenta o evento "uso_gemini" do log
 let ultima = 0, aoRegistrar = () => {}, prazoFn = () => Infinity;
 const dorme = (ms) => new Promise((r) => setTimeout(r, ms * ESCALA));
 const indisponiveis = new Set(); // modelos sem cota do dia/encerrados nesta execução
@@ -50,7 +51,7 @@ function modelos(key) {
 async function umaChamada(modelo, key, { prompt, sistema, busca, temperatura, imagem }) {
   const espera = ultima + INTERVALO_MS * ESCALA - Date.now();
   if (espera > 0) await new Promise((r) => setTimeout(r, espera));
-  ultima = Date.now();
+  ultima = Date.now(); uso.pedidos++;
   const res = await fetch(`${BASE}/models/${modelo}:generateContent`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json', 'x-goog-api-key': key },
@@ -61,11 +62,12 @@ async function umaChamada(modelo, key, { prompt, sistema, busca, temperatura, im
       generationConfig: { temperature: temperatura },
     }),
   });
-  if (!res.ok) { const corpo = await res.text(); const e = new Error(`HTTP ${res.status} ${corpo.slice(0, 300)}`); e.status = res.status; e.corpo = corpo; throw e; }
+  if (!res.ok) { uso.por_status[res.status] = (uso.por_status[res.status] || 0) + 1; const corpo = await res.text(); const e = new Error(`HTTP ${res.status} ${corpo.slice(0, 300)}`); e.status = res.status; e.corpo = corpo; throw e; }
   const json = await res.json();
   const cand = json.candidates && json.candidates[0];
   const texto = cand && cand.content && cand.content.parts ? cand.content.parts.map((p) => p.text || '').join('') : '';
   if (!texto) { const e = new Error('resposta sem texto'); e.status = 502; throw e; }
+  uso.ok++;
   return texto;
 }
 
@@ -121,4 +123,4 @@ function extrairJSON(texto) {
   return JSON.parse(texto.slice(i, j + 1));
 }
 
-module.exports = { chamar, extrairJSON, ErroGemini, ordenarDisponiveis, definirLog, definirPrazo, exigeHumano };
+module.exports = { uso, chamar, extrairJSON, ErroGemini, ordenarDisponiveis, definirLog, definirPrazo, exigeHumano };

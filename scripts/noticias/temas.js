@@ -20,11 +20,15 @@ const TODOS = [...VEICULOS, ...OUTROS]; // ordem da lista: usada para "pular par
 function temaDaVez(slot) {
   return slot % 2 === 0 ? VEICULOS[(slot / 2) % VEICULOS.length] : OUTROS[((slot - 1) / 2) % OUTROS.length];
 }
-/** Ordem de tentativa: começa no tema da vez e segue a lista; `evitar` (temas já usados hoje) vão para o fim. */
-function ordemDeTemas(slot, evitar = []) {
+/** Temas sem nenhum item (artigo ou nota em `itens`), na ordem da lista. Passe só os artigos para o artigo, artigos+notas para a nota. */
+const vazias = (...listas) => TODOS.filter((t) => !listas.some((l) => l.some((x) => x.categoria === t)));
+/** Ordem de tentativa: categorias vazias primeiro (sem mudar o ritmo, só o tema da vez); depois começa no tema da vez e segue a lista.
+ *  `evitar` (temas já usados hoje) vão para o fim. */
+function ordemDeTemas(slot, evitar = [], vazios = []) {
   const i = TODOS.indexOf(temaDaVez(slot));
   const ordem = [...TODOS.slice(i), ...TODOS.slice(0, i)];
-  return [...ordem.filter((t) => !evitar.includes(t)), ...ordem.filter((t) => evitar.includes(t))];
+  const base = [...vazios, ...ordem.filter((t) => !vazios.includes(t))];
+  return [...base.filter((t) => !evitar.includes(t)), ...base.filter((t) => evitar.includes(t))];
 }
 
-module.exports = { TEMAS, TODOS, VEICULOS, OUTROS, temaDaVez, ordemDeTemas };
+module.exports = { vazias, TEMAS, TODOS, VEICULOS, OUTROS, temaDaVez, ordemDeTemas };
