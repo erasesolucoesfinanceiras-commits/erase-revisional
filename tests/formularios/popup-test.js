@@ -7,7 +7,7 @@ let ok=0,bad=0;const t=(n,c,x='')=>{c?ok++:bad++;console.log(c?'OK   ':'FALHA',n
  const b=await chromium.launch({args:['--no-sandbox']});
  const esperado={'Em dia':['Em dia',''],'Atrasadas':['Atrasadas',''],'Veículo com busca e apreensão':['','Já tem processo de busca e apreensão']};
  for(const [sit,[pd,ba]] of Object.entries(esperado)){
-  const ctx=await b.newContext({viewport:{width:1300,height:900}});await ctx.route(/fonts\./,r=>r.abort());
+  const ctx=await b.newContext({viewport:{width:1300,height:900}});await require('./_turnstile')(ctx); await ctx.route(/fonts\./,r=>r.abort());
   const reqs=[];await ctx.route(URL_CRM,(route,req)=>{if(req.method()==='OPTIONS')return route.fulfill({status:204,headers:cors});reqs.push(JSON.parse(req.postData()));route.fulfill({status:200,headers:cors,contentType:'application/json',body:'{"ok":true}'})});
   const pg=await ctx.newPage();await pg.goto('http://localhost:8123/');
   t('popup não abre de imediato',await pg.locator('.popup').count()===0);

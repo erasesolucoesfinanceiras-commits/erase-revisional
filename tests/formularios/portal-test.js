@@ -7,7 +7,7 @@ let ok = 0, bad = 0; const t = (n, c, x = '') => { c ? ok++ : bad++; console.log
 const PAGS = ['/', '/noticias/pf-apura-fraude-em-financiamentos-veiculares-com-uso-de-biometria-em-mg', '/categoria-revisional', '/artigos', '/radar', '/como-produzimos'];
 (async () => {
   const b = await chromium.launch({ args: ['--no-sandbox'] });
-  const novo = async (vp, extra = {}) => { const ctx = await b.newContext({ viewport: vp, ...extra }); await ctx.addInitScript(() => sessionStorage.setItem('erase-popup', '1')); await ctx.route(/fonts\.|googletagmanager/, (r) => r.abort()); return ctx; };
+  const novo = async (vp, extra = {}) => { const ctx = await b.newContext({ viewport: vp, ...extra }); await ctx.addInitScript(() => sessionStorage.setItem('erase-popup', '1')); await require('./_turnstile')(ctx); await ctx.route(/fonts\.|googletagmanager/, (r) => r.abort()); return ctx; };
 
   // ---- tamanhos: sem rolagem horizontal, em claro e escuro
   for (const [w, h] of [[1366, 768], [390, 844], [1920, 950]]) {
@@ -61,7 +61,7 @@ const PAGS = ['/', '/noticias/pf-apura-fraude-em-financiamentos-veiculares-com-u
     t('newsletter: completo → botão normal ("Receber novidades", aria-disabled=false)', await btn.getAttribute('aria-disabled') === 'false' && /Receber novidades/.test(await btn.innerText()));
     await btn.click(); await pg.waitForTimeout(500); const r = reqs[0] || {};
     t('newsletter: envio com origem "newsletter", e-mail e consentimento, sem campos de urgência', reqs.length === 1 && r.origem === 'newsletter' && r.email === 'ana@teste.com' && r.lgpd_aceite === 'sim' && r['bot-field'] === '' && r.utm_source === 'google' && !('parcelas_em_dia' in r) && !('busca_apreensao' in r) && !('status' in r), JSON.stringify(r));
-    t('newsletter: mensagem de sucesso e formulário limpo', /Pronto!/.test(await pg.innerText('#sb-msg')) && (await pg.inputValue('#sb-email')) === '' && await btn.getAttribute('aria-disabled') === 'true');
+    t('newsletter: mensagem de sucesso e formulário limpo', /Quase lá/.test(await pg.innerText('#sb-msg')) && (await pg.inputValue('#sb-email')) === '' && await btn.getAttribute('aria-disabled') === 'true');
     await ctx.close(); }
   { const { ctx, pg, reqs } = await news('erro'); await pg.fill('#sb-email', 'ana@teste.com'); await pg.check('#sb-lgpd'); await pg.click('#sb-news-form button[type=submit]'); await pg.waitForTimeout(500);
     t('newsletter: falha do CRM mostra erro e mantém os dados', /Não conseguimos enviar/.test(await pg.innerText('#sb-msg')) && (await pg.inputValue('#sb-email')) === 'ana@teste.com' && reqs.length === 1);

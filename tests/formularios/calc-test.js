@@ -8,7 +8,7 @@ const cors={'access-control-allow-origin':'*','access-control-allow-headers':'co
 (async()=>{
  const b=await chromium.launch({args:['--no-sandbox']});
  async function rodar(modo, fn){
-   const ctx=await b.newContext({viewport:{width:1300,height:900}}); await ctx.route(/fonts\./,r=>r.abort());
+   const ctx=await b.newContext({viewport:{width:1300,height:900}}); await require('./_turnstile')(ctx); await ctx.route(/fonts\./,r=>r.abort());
    const reqs=[]; let n=0, posts=[];
    await ctx.route(URL_CRM, async (route,req)=>{ if(req.method()==='OPTIONS') return route.fulfill({status:204,headers:cors});
      n++; reqs.push({h:req.headers(),b:JSON.parse(req.postData())}); const m=modo(n);
@@ -48,7 +48,7 @@ const cors={'access-control-allow-origin':'*','access-control-allow-headers':'co
    t('totais: mostra total pago (parcela × prazo) e total de juros', /Total pago no contrato/.test(txt) && /72\.000,00/.test(txt) && /Total de juros/.test(txt) && /32\.000,00/.test(txt), txt.slice(0,300));
    t('totais: linguagem simples + aviso de estimativa', /Em palavras simples/.test(txt) && /estimativa e não substitui a análise do contrato/.test(txt));
    t('no ato "Não": taxa enviada = Price comum', reqs[0].b.taxa_calculada===taxaPrice(40000,1500,48,false).toFixed(4), reqs[0].b.taxa_calculada);
-   t('no ato "Não": campos enviados ao CRM não mudaram (34)', Object.keys(reqs[0].b).length===34, Object.keys(reqs[0].b).length+'');
+   t('no ato "Não": campos enviados ao CRM não mudaram (35, com turnstile)', Object.keys(reqs[0].b).length===35, Object.keys(reqs[0].b).length+'');
  });
  await rodar(()=>'ok', async (pg,reqs)=>{
    await pg.locator('input[name=primeira_no_ato][value="Sim"] + span').click();

@@ -10,7 +10,7 @@ const cors={'access-control-allow-origin':'*','access-control-allow-headers':'co
 (async()=>{
  const b=await chromium.launch({args:['--no-sandbox']});
  async function novo(modo){ // modo: função (n)=> 'ok'|'500'|'okfalse'|'abort'
-   const ctx=await b.newContext({viewport:{width:1300,height:900}}); await ctx.route(/fonts\./,r=>r.abort());
+   const ctx=await b.newContext({viewport:{width:1300,height:900}}); await require('./_turnstile')(ctx); await ctx.route(/fonts\./,r=>r.abort());
    const reqs=[]; let n=0, outros=[];
    await ctx.route(URL_CRM, async (route,req)=>{
      if(req.method()==='OPTIONS') return route.fulfill({status:204,headers:cors});
@@ -32,7 +32,7 @@ const cors={'access-control-allow-origin':'*','access-control-allow-headers':'co
    t('newsletter: falha mostra mensagem de erro', /Não conseguimos enviar/.test(await pg.innerText('#newsletter-msg')));
    t('newsletter: falha mantém o e-mail digitado', await pg.inputValue('#nl-email')==='ana@teste.com');
    await pg.click('#newsletter-form button'); await pg.waitForTimeout(400);
-   t('newsletter: 2ª tentativa dá sucesso e limpa', /Pronto/.test(await pg.innerText('#newsletter-msg')) && await pg.inputValue('#nl-email')==='');
+   t('newsletter: 2ª tentativa dá sucesso e limpa', /Quase lá/.test(await pg.innerText('#newsletter-msg')) && await pg.inputValue('#nl-email')==='');
    const r=reqs[1]; t('newsletter: corpo/headers', r.body.origem==='newsletter' && r.body.email==='ana@teste.com' && r.body['bot-field']==='' && r.headers['x-api-key']===KEY && /application\/json/.test(r.headers['content-type']), JSON.stringify(r.body));
    t('newsletter: sem lead_id (como antes)', !('lead_id' in r.body));
    t('newsletter: nenhum POST ao Netlify (/)', outros.length===0, outros.join()); await ctx.close(); }
@@ -54,7 +54,7 @@ const cors={'access-control-allow-origin':'*','access-control-allow-headers':'co
    t('popup: 2ª tentativa dá sucesso', /Recebemos/.test(await pg.innerText('#popup-msg')));
    const a=reqs[0].body, c=reqs[1].body;
    t('popup: mesmo lead_id nas tentativas do mesmo envio', a.lead_id && a.lead_id===c.lead_id);
-   t('popup: campos exatos', JSON.stringify(Object.keys(c).filter(k=>k!=='origem'&&k!=='bot-field').sort())===JSON.stringify([...CAMPOS_POPUP].sort()), JSON.stringify(Object.keys(c)));
+   t('popup: campos exatos', JSON.stringify(Object.keys(c).filter(k=>k!=='origem'&&k!=='bot-field'&&k!=='turnstile').sort())===JSON.stringify([...CAMPOS_POPUP].sort()), JSON.stringify(Object.keys(c)));
    t('popup: origem/UTM/bot-field', c.origem==='popup-entrada' && c.utm_source==='google' && c.utm_medium==='cpc' && c.origem_trafego==='google' && c['bot-field']==='' && c.status==='novo' && c.lgpd_aceite==='sim'); await ctx.close(); }
  // ---- CALCULADORA
  { const {ctx,reqs,outros}=await novo(n=>n===1?'500':'ok'); const pg=await ctx.newPage(); await pg.goto('http://localhost:8123/calculadora.html?utm_source=meta&utm_campaign=teste');
@@ -69,7 +69,7 @@ const cors={'access-control-allow-origin':'*','access-control-allow-headers':'co
    t('calc: após confirmação mostra o resultado', (await pg.getAttribute('#analise','data-state'))==='resultado' && (await pg.locator('.rate-big').count())===1);
    const a=reqs[0].body, c=reqs[1].body;
    t('calc: mesmo lead_id nas 2 tentativas', a.lead_id && a.lead_id===c.lead_id);
-   const ks=Object.keys(c).filter(k=>k!=='origem'&&k!=='bot-field').sort();
+   const ks=Object.keys(c).filter(k=>k!=='origem'&&k!=='bot-field'&&k!=='turnstile').sort();
    t('calc: nomes de campos idênticos aos anteriores', JSON.stringify(ks)===JSON.stringify([...CAMPOS_CALC].sort()), 'extra/faltando: '+JSON.stringify([ks.filter(k=>!CAMPOS_CALC.includes(k)), CAMPOS_CALC.filter(k=>!ks.includes(k))]));
    t('calc: origem=calculadora, bot-field vazio, UTM, headers', c.origem==='calculadora' && c['bot-field']==='' && c.utm_source==='meta' && c.utm_campaign==='teste' && reqs[1].headers['x-api-key']===KEY && /application\/json/.test(reqs[1].headers['content-type']));
    t('calc: valores (taxa 2,7119 / status)', c.taxa_calculada==='2.7119' && c.status==='novo_acima_do_limite' && c.resultado==='acima_do_limite' && c.valor_financiado==='40000.00', JSON.stringify([c.taxa_calculada,c.status]));

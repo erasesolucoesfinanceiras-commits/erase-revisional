@@ -5,7 +5,7 @@ const T = [[1366, 625], [1280, 600], [1920, 950], [390, 844], [360, 640], [844, 
 (async () => {
   const b = await chromium.launch({ args: ['--no-sandbox'] }); let bad = 0;
   for (const [w, h] of T) {
-    const ctx = await b.newContext({ viewport: { width: w, height: h }, hasTouch: w < 900 }); await ctx.route(/fonts\./, (r) => r.abort());
+    const ctx = await b.newContext({ viewport: { width: w, height: h }, hasTouch: w < 900 }); await require('./_turnstile')(ctx); await ctx.route(/fonts\./, (r) => r.abort());
     const pg = await ctx.newPage(); await pg.goto('http://localhost:8123/'); await pg.waitForSelector('.popup', { timeout: 6000 }); await pg.waitForTimeout(600);
     const r = await pg.evaluate(() => {
       const pop = document.querySelector('.popup'), ov = document.querySelector('.popup-overlay'), box = pop.getBoundingClientRect();

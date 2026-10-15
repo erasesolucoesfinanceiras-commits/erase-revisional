@@ -4,11 +4,11 @@ const { chromium } = require('/opt/node22/lib/node_modules/playwright');
 const URL_CRM='https://lqxwdyjctsmirinvvyow.supabase.co/functions/v1/entrada-site';
 const KEY='erase_site_179340d5359c433abb6011ee7c881e3e79f932e261ce4b04ac037debf431bf6e';
 const cors={'access-control-allow-origin':'*','access-control-allow-headers':'content-type,x-api-key','access-control-allow-methods':'POST,OPTIONS'};
-const CAMP=['origem_trafego','pagina_entrada','pagina_envio','utm_source','utm_medium','utm_campaign','utm_term','utm_content'];
+const CAMP=['origem_trafego','pagina_entrada','pagina_envio','utm_source','utm_medium','utm_campaign','utm_term','utm_content','turnstile'];
 let ok=0,bad=0; const t=(n,c,x='')=>{c?ok++:bad++; console.log(c?'OK   ':'FALHA',n,c?'':x);};
 (async()=>{
  const b=await chromium.launch({args:['--no-sandbox']});
- async function ctxNovo(){ const ctx=await b.newContext({viewport:{width:1300,height:900}}); await ctx.route(/fonts\./,r=>r.abort()); const reqs=[]; let n=0;
+ async function ctxNovo(){ const ctx=await b.newContext({viewport:{width:1300,height:900}}); await require('./_turnstile')(ctx); await ctx.route(/fonts\./,r=>r.abort()); const reqs=[]; let n=0;
    await ctx.route(URL_CRM,(route,req)=>{ if(req.method()==='OPTIONS') return route.fulfill({status:204,headers:cors}); n++; reqs.push({h:req.headers(),b:JSON.parse(req.postData())});
      return n===1?route.fulfill({status:500,headers:cors,body:'{"error":"x"}',contentType:'application/json'}):route.fulfill({status:200,headers:cors,body:'{"ok":true}',contentType:'application/json'}); });
    await ctx.addInitScript(()=>sessionStorage.getItem('erase-popup')||sessionStorage.setItem('erase-popup','1')); return {ctx,reqs}; }
@@ -18,7 +18,7 @@ let ok=0,bad=0; const t=(n,c,x='')=>{c?ok++:bad++; console.log(c?'OK   ':'FALHA'
    await pg.fill('#nl-email','ana@teste.com'); await pg.click('#newsletter-form button'); await pg.waitForTimeout(500);
    t('newsletter: falha -> erro e e-mail mantido', /Não conseguimos enviar/.test(await pg.innerText('#newsletter-msg')) && await pg.inputValue('#nl-email')==='ana@teste.com');
    await pg.click('#newsletter-form button'); await pg.waitForTimeout(500);
-   t('newsletter: 2ª tentativa -> sucesso', /Pronto/.test(await pg.innerText('#newsletter-msg')));
+   t('newsletter: 2ª tentativa -> sucesso', /Quase lá/.test(await pg.innerText('#newsletter-msg')));
    const c=reqs[1].b;
    t('newsletter: UTMs do link', c.utm_source==='google' && c.utm_medium==='email' && c.utm_campaign==='boasvindas' && c.utm_term==='juros' && c.utm_content==='cta1', JSON.stringify(c));
    t('newsletter: origem_trafego/pagina_entrada/pagina_envio', c.origem_trafego==='google' && c.pagina_entrada===LINK && c.pagina_envio==='/', JSON.stringify([c.origem_trafego,c.pagina_entrada,c.pagina_envio]));

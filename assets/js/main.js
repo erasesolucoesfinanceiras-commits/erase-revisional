@@ -12,6 +12,30 @@
 const CRM_ENDPOINT = "https://lqxwdyjctsmirinvvyow.supabase.co/functions/v1/entrada-site";
 const CRM_API_KEY = "erase_site_179340d5359c433abb6011ee7c881e3e79f932e261ce4b04ac037debf431bf6e";
 const ENVIO_TIMEOUT_MS = 15000;
+const TURNSTILE_SITE_KEY = '0x4AAAAAAFXipig0gXCnRiPH';
+let turnstileId = null, turnstileCarregando = null, turnstileEntrega = null;
+
+/** Devolve um código novo do Turnstile (ou null se não conseguir em 12 s). Cada código vale um envio. O widget fica invisível e só aparece se a Cloudflare desconfiar. */
+function obterTokenTurnstile() {
+  return new Promise((resolve) => {
+    const limite = setTimeout(() => resolve(null), 12000);
+    const pronto = (token) => { clearTimeout(limite); resolve(token); };
+    turnstileEntrega = pronto; // o widget é criado uma vez: os callbacks sempre entregam ao envio atual
+    turnstileCarregando = turnstileCarregando || new Promise((ok, falha) => {
+      const sc = document.createElement('script');
+      sc.src = 'https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit';
+      sc.async = true; sc.onload = ok; sc.onerror = () => { turnstileCarregando = null; falha(); };
+      document.head.appendChild(sc);
+    });
+    turnstileCarregando.then(() => {
+      let caixa = document.getElementById('turnstile-caixa');
+      if (!caixa) { caixa = document.createElement('div'); caixa.id = 'turnstile-caixa'; document.body.appendChild(caixa); }
+      const opcoes = { sitekey: TURNSTILE_SITE_KEY, appearance: 'interaction-only', language: 'pt-br', callback: (t) => turnstileEntrega(t), 'error-callback': () => turnstileEntrega(null), 'timeout-callback': () => turnstileEntrega(null) };
+      if (turnstileId === null) turnstileId = window.turnstile.render(caixa, opcoes);
+      else window.turnstile.reset(turnstileId);
+    }).catch(() => pronto(null));
+  });
+}
 const MSG_FALHA = 'Não conseguimos enviar agora. Seus dados continuam aqui: confira a conexão e tente de novo.';
 
 /**
@@ -24,10 +48,11 @@ async function enviarParaCRM(origem, dados) {
   const ctrl = new AbortController();
   const timer = setTimeout(() => ctrl.abort(), ENVIO_TIMEOUT_MS);
   try {
+    const turnstile = await obterTokenTurnstile(); // null = não carregou: o CRM decide
     const r = await fetch(CRM_ENDPOINT, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'x-api-key': CRM_API_KEY },
-      body: JSON.stringify({ origem, 'bot-field': '', ...dados }),
+      body: JSON.stringify({ origem, 'bot-field': '', ...dados, turnstile }),
       signal: ctrl.signal,
     });
     let corpo = null;
@@ -183,7 +208,7 @@ if (nl) {
     const ok = await enviarLead('newsletter', { email, lgpd_aceite: 'sim', 'bot-field': nl['bot-field'].value }, { comAtribuicao: false, campanha: true });
     btn.disabled = false;
     if (!ok) return setMsg(msg, MSG_FALHA, 'bad');
-    nl.reset(); setMsg(msg, 'Pronto! Você vai receber nossas novidades.', 'ok');
+    nl.reset(); setMsg(msg, 'Quase lá! Enviamos um e-mail para confirmar a sua inscrição. Confira também o spam.', 'ok');
   });
 }
 
@@ -213,7 +238,7 @@ if (sbn) {
     const ok = await enviarLead('newsletter', { email: sbn.email.value.trim(), lgpd_aceite: 'sim', 'bot-field': sbn['bot-field'].value }, { comAtribuicao: false, campanha: true });
     btn.disabled = false; delete btn.dataset.enviando;
     if (!ok) { atualizar(); return setMsg(msg, MSG_FALHA, 'bad'); }
-    sbn.reset(); atualizar(); setMsg(msg, 'Pronto! Você vai receber o resumo semanal por e-mail.', 'ok');
+    sbn.reset(); atualizar(); setMsg(msg, 'Quase lá! Enviamos um e-mail para confirmar a sua inscrição. Confira também o spam.', 'ok');
   });
 }
 
