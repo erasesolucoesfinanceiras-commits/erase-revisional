@@ -18,6 +18,15 @@ Situação de partida (15/10/2026): 11 artigos em 4 categorias; Crédito rural e
 
 Risco do passo 2: enquanto uma categoria vazia não tiver notícia elegível, ela é tentada primeiro todo dia e gasta algumas chamadas a mais antes de passar para a próxima. O passo 1 mostra quanto.
 
+### Revisão de 22/10/2026 — o que ver para decidir o passo 3
+Rodar `node scripts/noticias/medir.js` (dados desde 16/10, quando `uso_gemini` começou) e olhar:
+1. **Pedidos por dia** (`pedidos`/`ok`): média e pico. Comparar com a cota gratuita do modelo em uso (aistudio.google.com); 1 artigo/dia deve ao menos dobrar os pedidos de artigo.
+2. **Erros por dia**: 429 (cota) pesam mais que 503 (instabilidade). Muitos 429 = sem folga para dobrar o ritmo.
+3. **Dias sem publicar** e erros "tempo esgotado esperando o Gemini" (3 notas perdidas em 13–14/10).
+4. **Categorias vazias**: Crédito rural, Empresas e MEI e as demais já receberam o primeiro artigo? Quantas tentativas cada uma gastou (pulados/tema_trocado por tema)?
+5. **Reprovações** por tema (`data/revisor-stats.json`): a qualidade se manteve?
+Regra de decisão: sem 429 relevante e com folga de cota → subir para 1 artigo/dia por 1 semana; se a cota apertar → trazer o valor do plano pago para a ERASE decidir.
+
 ## Fase 3 — Google Search Console e Bing Webmaster (depois)
 Cadastrar o domínio, enviar `sitemap.xml`, acompanhar indexação. Fica para depois da Fase 2.
 
