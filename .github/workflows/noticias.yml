@@ -79,6 +79,21 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           bash scripts/noticias/gravar.sh "Notícias automáticas (${{ inputs.modo || 'publicar' }}) $(date -u +%F)"
 
+      # IndexNow: avisa o Bing das páginas novas/alteradas DEPOIS que o deploy da main está no ar (espera até ~5 min; sem deploy a tempo, a
+      # URL continua pendente para o próximo run). Nunca derruba o workflow: continue-on-error + o script sempre sai com 0.
+      - name: IndexNow (avisar o Bing)
+        if: inputs.modo != 'diagnostico' && inputs.modo != 'resumo_teste' && inputs.modo != 'amostra'
+        continue-on-error: true
+        run: node scripts/noticias/indexnow.js
+
+      - name: Gravar o estado do IndexNow
+        if: inputs.modo != 'diagnostico' && inputs.modo != 'resumo_teste' && inputs.modo != 'amostra'
+        continue-on-error: true
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          bash scripts/noticias/gravar.sh "IndexNow: estado dos envios $(date -u +%F)"
+
       - name: Falhar se houve erro
         if: steps.gerar.outcome == 'failure'
         run: exit 1

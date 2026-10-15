@@ -10,7 +10,8 @@ const DIST = path.join(ROOT, 'dist');
 fs.rmSync(DIST, { recursive: true, force: true });
 fs.mkdirSync(DIST);
 
-const raiz = fs.readdirSync(ROOT).filter((f) => /\.html$/.test(f) || ['robots.txt', 'sitemap.xml', 'llms.txt', '_redirects'].includes(f));
+const KEY = JSON.parse(fs.readFileSync(path.join(ROOT, 'data', 'config.json'), 'utf8')).indexnowKey; // arquivo de verificação do IndexNow
+const raiz = fs.readdirSync(ROOT).filter((f) => /\.html$/.test(f) || ['robots.txt', 'sitemap.xml', 'llms.txt', '_redirects', KEY && `${KEY}.txt`].includes(f));
 for (const f of raiz) fs.copyFileSync(path.join(ROOT, f), path.join(DIST, f));
 
 // Cabeçalhos do Cloudflare Pages. O arquivo é GERADO aqui (dist/_headers), não fica na raiz do repositório.

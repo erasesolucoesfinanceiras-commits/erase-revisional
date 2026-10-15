@@ -557,6 +557,7 @@ ${urls.map(([p, prio, d]) => `  <url><loc>${absUrl(p)}</loc>${d ? `<lastmod>${d}
 </urlset>
 `;
   out('sitemap.xml', xml);
+  if (C.indexnowKey) out(`${C.indexnowKey}.txt`, C.indexnowKey); // arquivo de verificação do IndexNow: só a chave, na raiz do site
   out('robots.txt', `User-agent: *\nAllow: /\n\nSitemap: ${absUrl('/sitemap.xml')}\n`);
 }
 
