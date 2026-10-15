@@ -112,6 +112,8 @@ const ICON = {
 const gaOk = /^G-[A-Z0-9]{6,}$/.test(config.gaId || '') && !/^G-X+$/.test(config.gaId);
 // O script do GA NÃO fica mais no HTML: main.js só o carrega depois que a pessoa aceita os cookies (<body data-ga>).
 
+/** JSON-LD para dentro de <script>: escapa < > & e os separadores de linha, para nenhum texto (título vindo da IA) conseguir fechar o <script>. */
+const jsonLd = (obj) => JSON.stringify(obj).replace(/[<>&\u2028\u2029]/g, (c) => '\\u' + c.charCodeAt(0).toString(16).padStart(4, '0'));
 function head({ title, desc, path: p, image, type = 'website', jsonld, noindex }) {
   const url = absUrl(p);
   const img = absUrl(image || ogPadrao());
@@ -142,7 +144,7 @@ ${noindex ? '<meta name="robots" content="noindex">\n' : ''}<link rel="canonical
 <script>try{var t=localStorage.getItem('erase-theme');document.documentElement.setAttribute('data-theme',t==='dark'?'dark':'light')}catch(e){document.documentElement.setAttribute('data-theme','light')}</script>
 <link rel="preload" href="/assets/fonts/inter-latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="/assets/css/style.css?v=${cssVer}">
-${jsonld ? `<script type="application/ld+json">${JSON.stringify(jsonld)}</script>\n` : ''}</head>`;
+${jsonld ? `<script type="application/ld+json">${jsonLd(jsonld)}</script>\n` : ''}</head>`;
 }
 
 function header(active) {
@@ -438,7 +440,7 @@ ${redes ? `<div class="socials" aria-label="Redes sociais">${redes}</div>` : ''}
 </section>
 <section class="side-box" aria-labelledby="sb-news"><h2 id="sb-news">Receba as novidades</h2>
 <form id="sb-news-form" class="side-news" novalidate>
-<div class="field" data-campo="email"><label for="sb-email">E-mail <span class="req">*</span></label><input id="sb-email" name="email" type="email" inputmode="email" autocomplete="email" placeholder="seu@email.com" aria-required="true" aria-describedby="sb-err-email"><small class="err" id="sb-err-email">Informe um e-mail válido</small></div>
+<div class="field" data-campo="email"><label for="sb-email">E-mail <span class="req">*</span></label><input id="sb-email" name="email" type="email" maxlength="120" inputmode="email" autocomplete="email" placeholder="seu@email.com" aria-required="true" aria-describedby="sb-err-email"><small class="err" id="sb-err-email">Informe um e-mail válido</small></div>
 <input type="text" name="bot-field" class="hp" tabindex="-1" autocomplete="off" aria-hidden="true">
 <div class="field check" data-campo="lgpd"><label><input type="checkbox" id="sb-lgpd" name="lgpd" aria-required="true" aria-describedby="sb-err-lgpd"><span>Autorizo a ERASE a me enviar o resumo semanal por e-mail, conforme a <a href="/privacidade.html" target="_blank" rel="noopener">Política de Privacidade</a>. <span class="req">*</span></span></label><small class="err" id="sb-err-lgpd">Marque para autorizar o envio</small></div>
 <button class="btn btn-primary btn-block" type="submit" aria-disabled="true">Preencha para receber</button>
@@ -464,6 +466,6 @@ const freeBadge = (cls = '') => `<p class="free-badge ${cls}" role="note">${FREE
 
 module.exports = {
   FREE_TXT, freeBadge,
-  ROOT, config, catsComItens, loadArticles, loadNotas, ehGuia, selo, seloTxt, ordenarConteudo, ultimaPublicacao, rowCardNota, cardDe, readJSON, itemDe, dataHtml, maisRecentes, cardV, miniItem, carrossel, exploreTopicos, escolhaDaEquipe, relacionados, sidebar, socialLinks, usaContato, esc, ogArtigo, tituloSeo, descSeo, fmtPct, fmtData, catNome, catUrl, artUrl, absUrl, coverUrl, catFoto, coverImg,
+  ROOT, config, catsComItens, loadArticles, loadNotas, ehGuia, selo, seloTxt, ordenarConteudo, ultimaPublicacao, rowCardNota, cardDe, readJSON, itemDe, dataHtml, maisRecentes, cardV, miniItem, carrossel, exploreTopicos, escolhaDaEquipe, relacionados, sidebar, socialLinks, usaContato, esc, jsonLd, ogArtigo, tituloSeo, descSeo, fmtPct, fmtData, catNome, catUrl, artUrl, absUrl, coverUrl, catFoto, coverImg,
   ICON, page, rowCard, promoCard, trustBadges, ctaBanner,
 };

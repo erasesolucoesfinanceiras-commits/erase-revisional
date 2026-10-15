@@ -30,7 +30,7 @@ try { const b = S.readJSON('assets/data/bcb-veiculos.json'); BCB_ATUALIZADO = b.
 // ---------------------------------------------------------------- HOME
 const nl = `<form class="newsletter" id="newsletter-form" novalidate>
 <label class="sr-only" for="nl-email">Seu e-mail</label>
-<input id="nl-email" name="email" type="email" placeholder="Seu melhor e-mail" autocomplete="email" required>
+<input id="nl-email" name="email" type="email" maxlength="120" placeholder="Seu melhor e-mail" autocomplete="email" required>
 <input type="text" name="bot-field" class="hp" tabindex="-1" autocomplete="off" aria-hidden="true">
 <button class="btn btn-dark" type="submit">Receber novidades</button>
 </form>
@@ -302,15 +302,15 @@ function calculadora() {
 </fieldset>
 <div class="field"><label for="valor_financiado">Valor financiado <span class="need">necessário para o resultado</span></label>
 <small class="hint" id="valor_financiado-hint">Valor do veículo menos a entrada</small>
-<div class="money"><span>R$</span><input id="valor_financiado" name="valor_financiado" inputmode="decimal" autocomplete="off" placeholder="0,00" aria-describedby="valor_financiado-hint"></div><small class="err" data-err="valor_financiado">Informe o valor financiado</small></div>
+<div class="money"><span>R$</span><input id="valor_financiado" name="valor_financiado" inputmode="decimal" maxlength="14" autocomplete="off" placeholder="0,00" aria-describedby="valor_financiado-hint"></div><small class="err" data-err="valor_financiado">Informe o valor financiado</small></div>
 <div class="field"><label for="parcela">Valor atual da parcela <span class="need">necessário para o resultado</span></label>
-<div class="money"><span>R$</span><input id="parcela" name="parcela" inputmode="decimal" autocomplete="off" placeholder="0,00"></div><small class="err" data-err="parcela">Informe a parcela atual</small></div>
+<div class="money"><span>R$</span><input id="parcela" name="parcela" inputmode="decimal" maxlength="14" autocomplete="off" placeholder="0,00"></div><small class="err" data-err="parcela">Informe a parcela atual</small></div>
 <div class="field-row">
 <div class="field"><label for="n_parcelas">Quantas parcelas financiou? <span class="need">necessário para o resultado</span></label>
 <select id="n_parcelas" name="n_parcelas"><option value="">Selecione</option>${parcelasOpts}</select><small class="err" data-err="n_parcelas">Selecione o total de parcelas</small></div>
 <div class="field" id="pagas-field"><label for="pagas">Quantas parcelas já pagou? <span class="opt">(opcional)</span></label>
 <small class="hint">Usamos para estimar a data do contrato</small>
-<div class="money suffix"><input id="pagas" name="pagas" type="number" inputmode="numeric" min="0" step="1" placeholder="0"><span>meses</span></div><small class="err" data-err="pagas">Informe quantas parcelas já pagou</small></div>
+<div class="money suffix"><input id="pagas" name="pagas" type="number" inputmode="numeric" min="0" max="999" step="1" placeholder="0"><span>meses</span></div><small class="err" data-err="pagas">Informe quantas parcelas já pagou</small></div>
 </div>
 <div class="form-section"><h3>Sobre o seu financiamento</h3>
 ${choices('primeira_no_ato', 'A 1ª parcela foi paga no ato da assinatura?', ['Não', 'Sim'], { padrao: 'Não', opt: false })}
@@ -318,8 +318,9 @@ ${choices('situacao', 'Como está seu financiamento hoje?', ['Em dia', 'Atrasado
 </div>
 
 <div class="contact-block"><h3>Para ver o resultado, informe seu contato</h3>
-<div class="field"><label for="lead-nome">Seu nome <span class="req">*</span></label><input id="lead-nome" name="nome" autocomplete="name" placeholder="Ex.: Maria"><small class="err" data-err="nome">Informe seu nome</small></div>
-<div class="field"><label for="lead-wa">WhatsApp <span class="req">*</span></label><input id="lead-wa" name="whatsapp" inputmode="tel" autocomplete="tel" placeholder="(81) 99999-9999"><small class="err" data-err="whatsapp">WhatsApp inválido — use DDD + 9 dígitos</small></div>
+<input type="text" name="bot-field" class="hp" tabindex="-1" autocomplete="off" aria-hidden="true">
+<div class="field"><label for="lead-nome">Seu nome <span class="req">*</span></label><input id="lead-nome" name="nome" maxlength="80" autocomplete="name" placeholder="Ex.: Maria"><small class="err" data-err="nome">Informe seu nome</small></div>
+<div class="field"><label for="lead-wa">WhatsApp <span class="req">*</span></label><input id="lead-wa" name="whatsapp" maxlength="15" inputmode="tel" autocomplete="tel" placeholder="(81) 99999-9999"><small class="err" data-err="whatsapp">WhatsApp inválido — use DDD + 9 dígitos</small></div>
 <div class="field check"><label><input type="checkbox" id="lgpd" name="lgpd"><span>Autorizo a ERASE Soluções Financeiras a entrar em contato comigo por WhatsApp ou telefone sobre esta simulação, conforme a <a href="/privacidade.html" target="_blank" rel="noopener">Política de Privacidade</a>. <span class="req">*</span></span></label><small class="err" data-err="lgpd">É necessário autorizar o contato para ver o resultado</small></div></div>
 <p class="calc-warn" id="calc-warn" role="status" hidden>Para ver sua taxa na hora, preencha valor financiado, parcela e número de parcelas</p>
 ${S.freeBadge("block")}
@@ -534,9 +535,9 @@ function contato() {
 <p class="lead">Tem alguma dúvida ou quer pedir a exclusão dos seus dados? Envie uma mensagem ou fale direto pelo WhatsApp.</p></div></section>
 <section class="container contact-grid">
 <form id="contact-form" class="card-form" novalidate>
-<div class="field"><label for="c-nome">Nome</label><input id="c-nome" name="nome" autocomplete="name" required></div>
-<div class="field"><label for="c-email">E-mail</label><input id="c-email" name="email" type="email" autocomplete="email" required></div>
-<div class="field"><label for="c-msg">Mensagem</label><textarea id="c-msg" name="mensagem" rows="6" required></textarea></div>
+<div class="field"><label for="c-nome">Nome</label><input id="c-nome" name="nome" maxlength="80" autocomplete="name" required></div>
+<div class="field"><label for="c-email">E-mail</label><input id="c-email" name="email" type="email" maxlength="120" autocomplete="email" required></div>
+<div class="field"><label for="c-msg">Mensagem</label><textarea id="c-msg" name="mensagem" rows="6" maxlength="2000" required></textarea></div>
 <input type="text" name="bot-field" class="hp" tabindex="-1" autocomplete="off" aria-hidden="true">
 <button class="btn btn-primary" type="submit">Enviar mensagem</button>
 <p class="form-msg" id="contact-msg" role="status" aria-live="polite"></p>

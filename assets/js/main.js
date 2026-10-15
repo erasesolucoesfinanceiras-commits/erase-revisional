@@ -300,8 +300,9 @@ if (ct) {
               <p class="popup-sub">Deixe seus dados e um especialista da ERASE fala com você. Sem compromisso.</p>
             </div>
             <div class="pp-fields">
-              <div class="field" data-campo="nome"><label for="pp-nome">Seu nome <span class="req">*</span></label><input id="pp-nome" name="nome" placeholder="Ex.: Maria" autocomplete="name" aria-required="true" aria-describedby="pp-err-nome"><span class="req req-in" aria-hidden="true">*</span><small class="err" id="pp-err-nome">Informe seu nome</small></div>
-              <div class="field" data-campo="telefone"><label for="pp-tel">WhatsApp <span class="req">*</span></label><input id="pp-tel" name="telefone" inputmode="tel" placeholder="(81) 99999-9999" autocomplete="tel" aria-required="true" aria-describedby="pp-err-tel"><span class="req req-in" aria-hidden="true">*</span><small class="err" id="pp-err-tel">Informe DDD + número com 9 dígitos</small></div>
+              <div class="field" data-campo="nome"><label for="pp-nome">Seu nome <span class="req">*</span></label><input id="pp-nome" name="nome" maxlength="80" placeholder="Ex.: Maria" autocomplete="name" aria-required="true" aria-describedby="pp-err-nome"><span class="req req-in" aria-hidden="true">*</span><small class="err" id="pp-err-nome">Informe seu nome</small></div>
+              <div class="field" data-campo="telefone"><label for="pp-tel">WhatsApp <span class="req">*</span></label><input id="pp-tel" name="telefone" maxlength="15" inputmode="tel" placeholder="(81) 99999-9999" autocomplete="tel" aria-required="true" aria-describedby="pp-err-tel"><span class="req req-in" aria-hidden="true">*</span><small class="err" id="pp-err-tel">Informe DDD + número com 9 dígitos</small></div>
+              <input type="text" name="bot-field" class="hp" tabindex="-1" autocomplete="off" aria-hidden="true">
               <p class="form-msg" id="popup-msg" role="status" aria-live="polite"></p>
             </div>
             <div class="pp-rest">
@@ -360,6 +361,7 @@ if (ct) {
 
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
+      if (form['bot-field'] && form['bot-field'].value) return; // honeypot preenchido: é robô, descarta sem avisar
       const f = e.target, msg = aviso;
       const sit = f.querySelector('input[name="situacao"]:checked');
       // Mesmos nomes de campo e valores da calculadora (o CRM marca URGENTE se atrasado ou busca e apreensão).

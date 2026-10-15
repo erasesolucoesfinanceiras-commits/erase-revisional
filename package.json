@@ -1,8 +1,14 @@
 {
   "name": "erase-revisional",
   "private": true,
-  "description": "Portal ERASE Revisional (site estático)",
+  "description": "Portal ERASE Revisional (site est\u00e1tico)",
   "scripts": {
     "build": "node scripts/build.js && node scripts/publish.js"
+  },
+  "devDependencies": {
+    "sharp": "0.35.5"
+  },
+  "engines": {
+    "node": ">=22"
   }
 }

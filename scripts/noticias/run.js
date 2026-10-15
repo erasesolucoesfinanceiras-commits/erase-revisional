@@ -110,9 +110,10 @@ async function tentarTema(tipo, tema, modo, recentes) {
     const revisoes = {}, sugestoes = []; // sugestões de estilo do revisor: ficam no log e não reprovam
     if (!r || !r.titulo) motivos = ['resposta fora do formato JSON esperado'];
     else {
-      r.titulo = String(r.titulo).trim();
+      const semMarcas = (x) => String(x || '').replace(/[<>]/g, '').replace(/\s+/g, ' ').trim(); // título/resumo vão para <title> e JSON-LD: nunca com < ou >
+      r.titulo = semMarcas(r.titulo);
       if (tipo === 'nota') r.texto = String(r.texto || '').replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
-      else { r.corpo = sanitizar(r.corpo || ''); r.resumo = String(r.resumo || '').trim(); }
+      else { r.corpo = sanitizar(r.corpo || ''); r.resumo = semMarcas(r.resumo); }
       const fo = V.checarFontes(r, tipo, modo, cands, hoje, diasMax);
       motivos = V.checarRegras(r, tipo, { recentes, textosFontes: fo.textos });
       motivos.push(...fo.motivos);
@@ -182,7 +183,7 @@ function temasTentadosHoje(tipo) {
   } catch (e) { return []; }
 }
 
-const limparFontes = (fs_) => fs_.map(({ nome, url, data }) => ({ nome, url, ...(data && { data }) }));
+const limparFontes = (fs_) => fs_.map(({ nome, url, data }) => ({ nome: String(nome || '').replace(/[<>]/g, '').trim(), url, ...(data && { data }) }));
 
 async function publicarArtigo({ tema, modo, rascunho: r }, artigos) {
   let slug = slugify(r.titulo), n = 2;

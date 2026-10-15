@@ -37,8 +37,8 @@ jobs:
     runs-on: ubuntu-24.04
     timeout-minutes: 75
     steps:
-      - uses: actions/checkout@v5
-      - uses: actions/setup-node@v5
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5.1.0
+      - uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5.0.0
         with:
           node-version: 22
 
@@ -70,14 +70,16 @@ jobs:
           RODADA: ${{ inputs.rodada || (github.event.schedule == '0 11 * * *' && '1' || github.event.schedule == '0 14 * * *' && '2' || 'final') }}
           FORCAR_ARTIGO: ${{ inputs.forcar_artigo && '1' || '0' }}
         run: |
-          npm i --no-save sharp
+          npm ci --ignore-scripts
           node scripts/noticias/run.js
 
       - name: Gravar na branch (sem Pull Request)
+        env:
+          MODO: ${{ inputs.modo || 'publicar' }}
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          bash scripts/noticias/gravar.sh "Notícias automáticas (${{ inputs.modo || 'publicar' }}) $(date -u +%F)"
+          bash scripts/noticias/gravar.sh "Notícias automáticas ($MODO) $(date -u +%F)"
 
       # IndexNow: avisa o Bing das páginas novas/alteradas DEPOIS que o deploy da main está no ar (espera até ~5 min; sem deploy a tempo, a
       # URL continua pendente para o próximo run). Nunca derruba o workflow: continue-on-error + o script sempre sai com 0.

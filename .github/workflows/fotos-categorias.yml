@@ -1,15 +1,11 @@
 name: Fotos das categorias (Unsplash)
 
-# Manual (Actions > Fotos das categorias > Run workflow). Busca no Unsplash a foto de cada categoria que ainda não tem
+# Manual e SÓ na branch "main" (Actions > Fotos das categorias > Run workflow). Busca no Unsplash a foto de cada categoria que ainda não tem
 # (assets/img/cat), converte para WebP 480/960/1280, preenche CREDITOS-IMAGENS.md e grava na branch. Precisa do segredo UNSPLASH_ACCESS_KEY.
 # Para trocar uma foto reprovada: preencha "categorias" e coloque o id da foto ruim em "excluir" (o id está em CREDITOS-IMAGENS.md).
 on:
   workflow_dispatch:
     inputs:
-      branch:
-        description: "Branch onde gravar"
-        default: claude/eloquent-planck-0cngvv
-        type: string
       categorias:
         description: "Só estas categorias (ex.: economia,imoveis); vazio = as que estão sem foto"
         required: false
@@ -28,15 +24,14 @@ concurrency:
 
 jobs:
   fotos:
+    if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@v5
-        with:
-          ref: ${{ inputs.branch }}
-      - uses: actions/setup-node@v5
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5.1.0
+      - uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5.0.0
         with:
           node-version: 22
-      - run: npm i --no-save sharp
+      - run: npm ci --ignore-scripts
       - name: Buscar fotos
         env:
           UNSPLASH_ACCESS_KEY: ${{ secrets.UNSPLASH_ACCESS_KEY }}
@@ -44,8 +39,6 @@ jobs:
           CAT_FOTO_EXCLUIR: ${{ inputs.excluir }}
         run: node scripts/cat-photos.js
       - name: Salvar no branch
-        env:
-          BRANCH: ${{ inputs.branch }}
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"

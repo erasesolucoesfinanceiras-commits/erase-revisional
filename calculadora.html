@@ -71,15 +71,15 @@
 </fieldset>
 <div class="field"><label for="valor_financiado">Valor financiado <span class="need">necessário para o resultado</span></label>
 <small class="hint" id="valor_financiado-hint">Valor do veículo menos a entrada</small>
-<div class="money"><span>R$</span><input id="valor_financiado" name="valor_financiado" inputmode="decimal" autocomplete="off" placeholder="0,00" aria-describedby="valor_financiado-hint"></div><small class="err" data-err="valor_financiado">Informe o valor financiado</small></div>
+<div class="money"><span>R$</span><input id="valor_financiado" name="valor_financiado" inputmode="decimal" maxlength="14" autocomplete="off" placeholder="0,00" aria-describedby="valor_financiado-hint"></div><small class="err" data-err="valor_financiado">Informe o valor financiado</small></div>
 <div class="field"><label for="parcela">Valor atual da parcela <span class="need">necessário para o resultado</span></label>
-<div class="money"><span>R$</span><input id="parcela" name="parcela" inputmode="decimal" autocomplete="off" placeholder="0,00"></div><small class="err" data-err="parcela">Informe a parcela atual</small></div>
+<div class="money"><span>R$</span><input id="parcela" name="parcela" inputmode="decimal" maxlength="14" autocomplete="off" placeholder="0,00"></div><small class="err" data-err="parcela">Informe a parcela atual</small></div>
 <div class="field-row">
 <div class="field"><label for="n_parcelas">Quantas parcelas financiou? <span class="need">necessário para o resultado</span></label>
 <select id="n_parcelas" name="n_parcelas"><option value="">Selecione</option><option value="12">12 parcelas</option><option value="18">18 parcelas</option><option value="24">24 parcelas</option><option value="30">30 parcelas</option><option value="36">36 parcelas</option><option value="42">42 parcelas</option><option value="48">48 parcelas</option><option value="54">54 parcelas</option><option value="60">60 parcelas</option><option value="66">66 parcelas</option><option value="72">72 parcelas</option><option value="84">84 parcelas</option><option value="96">96 parcelas</option></select><small class="err" data-err="n_parcelas">Selecione o total de parcelas</small></div>
 <div class="field" id="pagas-field"><label for="pagas">Quantas parcelas já pagou? <span class="opt">(opcional)</span></label>
 <small class="hint">Usamos para estimar a data do contrato</small>
-<div class="money suffix"><input id="pagas" name="pagas" type="number" inputmode="numeric" min="0" step="1" placeholder="0"><span>meses</span></div><small class="err" data-err="pagas">Informe quantas parcelas já pagou</small></div>
+<div class="money suffix"><input id="pagas" name="pagas" type="number" inputmode="numeric" min="0" max="999" step="1" placeholder="0"><span>meses</span></div><small class="err" data-err="pagas">Informe quantas parcelas já pagou</small></div>
 </div>
 <div class="form-section"><h3>Sobre o seu financiamento</h3>
 <fieldset class="field choices short two" data-group="primeira_no_ato"><legend>A 1ª parcela foi paga no ato da assinatura?</legend><div class="choice-grid"><label class="choice"><input type="radio" name="primeira_no_ato" value="Não" checked><span>Não</span></label><label class="choice"><input type="radio" name="primeira_no_ato" value="Sim"><span>Sim</span></label></div><small class="err" data-err="primeira_no_ato">Escolha uma opção</small></fieldset>
@@ -87,8 +87,9 @@
 </div>
 
 <div class="contact-block"><h3>Para ver o resultado, informe seu contato</h3>
-<div class="field"><label for="lead-nome">Seu nome <span class="req">*</span></label><input id="lead-nome" name="nome" autocomplete="name" placeholder="Ex.: Maria"><small class="err" data-err="nome">Informe seu nome</small></div>
-<div class="field"><label for="lead-wa">WhatsApp <span class="req">*</span></label><input id="lead-wa" name="whatsapp" inputmode="tel" autocomplete="tel" placeholder="(81) 99999-9999"><small class="err" data-err="whatsapp">WhatsApp inválido — use DDD + 9 dígitos</small></div>
+<input type="text" name="bot-field" class="hp" tabindex="-1" autocomplete="off" aria-hidden="true">
+<div class="field"><label for="lead-nome">Seu nome <span class="req">*</span></label><input id="lead-nome" name="nome" maxlength="80" autocomplete="name" placeholder="Ex.: Maria"><small class="err" data-err="nome">Informe seu nome</small></div>
+<div class="field"><label for="lead-wa">WhatsApp <span class="req">*</span></label><input id="lead-wa" name="whatsapp" maxlength="15" inputmode="tel" autocomplete="tel" placeholder="(81) 99999-9999"><small class="err" data-err="whatsapp">WhatsApp inválido — use DDD + 9 dígitos</small></div>
 <div class="field check"><label><input type="checkbox" id="lgpd" name="lgpd"><span>Autorizo a ERASE Soluções Financeiras a entrar em contato comigo por WhatsApp ou telefone sobre esta simulação, conforme a <a href="/privacidade" target="_blank" rel="noopener">Política de Privacidade</a>. <span class="req">*</span></span></label><small class="err" data-err="lgpd">É necessário autorizar o contato para ver o resultado</small></div></div>
 <p class="calc-warn" id="calc-warn" role="status" hidden>Para ver sua taxa na hora, preencha valor financiado, parcela e número de parcelas</p>
 <p class="free-badge block" role="note">ANÁLISE DO CONTRATO 100% GRATUITA</p>
@@ -189,7 +190,7 @@
 </div>
 </div>
 </footer>
-<script src="/assets/js/main.js?v=e7fd2eef" defer></script>
-<script src="/assets/js/calculator.js?v=2d621dbe" defer></script>
+<script src="/assets/js/main.js?v=67e6d38b" defer></script>
+<script src="/assets/js/calculator.js?v=45ed0566" defer></script>
 </body>
 </html>

@@ -53,9 +53,9 @@
 <p class="lead">Tem alguma dúvida ou quer pedir a exclusão dos seus dados? Envie uma mensagem ou fale direto pelo WhatsApp.</p></div></section>
 <section class="container contact-grid">
 <form id="contact-form" class="card-form" novalidate>
-<div class="field"><label for="c-nome">Nome</label><input id="c-nome" name="nome" autocomplete="name" required></div>
-<div class="field"><label for="c-email">E-mail</label><input id="c-email" name="email" type="email" autocomplete="email" required></div>
-<div class="field"><label for="c-msg">Mensagem</label><textarea id="c-msg" name="mensagem" rows="6" required></textarea></div>
+<div class="field"><label for="c-nome">Nome</label><input id="c-nome" name="nome" maxlength="80" autocomplete="name" required></div>
+<div class="field"><label for="c-email">E-mail</label><input id="c-email" name="email" type="email" maxlength="120" autocomplete="email" required></div>
+<div class="field"><label for="c-msg">Mensagem</label><textarea id="c-msg" name="mensagem" rows="6" maxlength="2000" required></textarea></div>
 <input type="text" name="bot-field" class="hp" tabindex="-1" autocomplete="off" aria-hidden="true">
 <button class="btn btn-primary" type="submit">Enviar mensagem</button>
 <p class="form-msg" id="contact-msg" role="status" aria-live="polite"></p>
@@ -92,7 +92,7 @@
 </div>
 </div>
 </footer>
-<script src="/assets/js/main.js?v=e7fd2eef" defer></script>
+<script src="/assets/js/main.js?v=67e6d38b" defer></script>
 
 </body>
 </html>

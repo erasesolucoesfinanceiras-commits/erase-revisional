@@ -56,3 +56,27 @@ Qualquer push de quem tem escrita numa branch `claude/*` dispara o workflow com 
 5. COOP/CORP e `preload` no HSTS; plano para tirar `unsafe-inline` (depois do lote 11).
 6. Bloquear IPs internos e limitar redirecionamentos no robô de coleta.
 7. `fotos.yml` só manual.
+
+---
+
+## Andamento (15/10/2026, noite)
+
+| Item | Situação |
+|---|---|
+| 1. Repositório privado | **Aguardando a sua mudança de visibilidade.** Estimativa de minutos abaixo |
+| 2. JSON-LD | **Feito.** `<`, `>`, `&` e separadores de linha escapados; título, resumo e nome de fonte do robô sem `<` `>` |
+| 3. Dependências dos workflows | **Feito.** `sharp` 0.35.5 exato + `package-lock.json`; `npm ci --ignore-scripts`; ações fixadas por hash (`checkout` v5.1.0, `setup-node` v5.0.0); entrada `modo` do workflow das notícias passou a ir por variável de ambiente. Dependabot, proteção da `main`, secret scanning e push protection: ficam no painel do GitHub (confirmar) |
+| 4. Formulários | **Feito:** limites de tamanho (nome 80, e-mail 120, mensagem 2000, WhatsApp 15, valores 14) e honeypot na calculadora e no pop-up. **Turnstile obrigatório: Lote 3 do CRM** |
+| 5. Robô de coleta e fotos | **Feito:** só `http(s)` para sites públicos (recusa localhost, redes privadas, metadados, IPv6 interno e nomes que resolvem para IP interno), no máximo 5 redirecionamentos conferidos um a um; workflows de fotos só manuais e só na `main`. **CSP definitiva: Lote 11** |
+
+### Minutos de GitHub Actions por mês (estimativa)
+Base: duração real dos runs de 9 a 15/10 (cada job arredonda para cima, em minutos; todos em `ubuntu-24.04`, multiplicador 1x).
+| Workflow | Uso |
+|---|---|
+| Notícias automáticas (3 rodadas/dia) | ~180 min em 7 dias ⇒ **~770 min/mês** (faixa 600 a 1.000; o maior run foi 49 min, quando o Gemini deu muitos erros 503) |
+| Verificar artigo recente (1×/dia, ~15 s) | ~30 min |
+| Atualizar série do BC (dia 5 a 25, ~15 s) | ~21 min |
+| Resumo semanal | ~5 min |
+| Fotos (agora só manual, ~45 a 60 min por execução) | ~100 a 200 min (2 a 4 execuções) |
+| **Total** | **~930 a 1.260 min/mês** |
+Limite grátis de repositório **privado** no plano GitHub Free: **2.000 min/mês** (Pro/Team: 3.000). Cabe, usando uns 50% a 65%. Em repositório público os minutos são ilimitados. Antes desta mudança, cada `push` em `claude/**` disparava ~1 h de fotos (hoje 2 execuções); isso foi cortado. Risco: um mês com Gemini muito instável pode puxar o uso das notícias para perto de 1.500 min; para limitar o pior caso, dá para baixar `timeout-minutes` de 75 para 60 no workflow das notícias. Acompanhe em *Settings > Billing and plans > Usage*. O Cloudflare Pages continua funcionando com repositório privado (a conexão pelo app do GitHub precisa de permissão para o repositório).

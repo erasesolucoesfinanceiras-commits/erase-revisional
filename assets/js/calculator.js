@@ -204,6 +204,7 @@ const FREE_BADGE_TXT = 'ANÁLISE DO CONTRATO 100% GRATUITA';
 
   // ---- Cálculo + lead ----------------------------------------------------
   form.addEventListener('submit', async (ev) => {
+    if (form['bot-field'] && form['bot-field'].value) { ev.preventDefault(); return; } // honeypot preenchido: é robô, descarta sem avisar
     ev.preventDefault();
     const d = dados(), erros = validar(d);
     mostrarErros(erros);
