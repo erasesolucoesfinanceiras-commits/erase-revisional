@@ -264,5 +264,77 @@
       "autorUrl": "https://pixabay.com/users/Alexas_Fotos-686414/",
       "pagina": "https://pixabay.com/photos/tractor-field-summer-landscape-10395070/"
     }
+  },
+  {
+    "slug": "busca-e-apreensao-de-veiculo-financiado-prazos-direitos-e-o-que-observar",
+    "titulo": "Busca e apreensão de veículo financiado: prazos, direitos e o que observar",
+    "resumo": "Entenda quando o banco pode pedir a busca e apreensão do veículo financiado, quais são os prazos depois da liminar e o que conferir no processo.",
+    "foto_busca": "car keys documents",
+    "fontes": [
+      {
+        "nome": "Decreto-Lei 911/1969 (Planalto)",
+        "url": "https://www.planalto.gov.br/ccivil_03/decreto-lei/del0911.htm"
+      },
+      {
+        "nome": "Lei 10.931/2004 (Planalto)",
+        "url": "https://www.planalto.gov.br/ccivil_03/_ato2004-2006/2004/lei/l10.931.htm"
+      },
+      {
+        "nome": "STJ: Tema repetitivo 722",
+        "url": "https://processo.stj.jus.br/repetitivos/temas_repetitivos/pesquisa.jsp?novaConsulta=true&tipo_pesquisa=T&cod_tema_inicial=722&cod_tema_final=722"
+      }
+    ],
+    "corpo": "<p>A busca e apreensão é a ação em que o banco pede à Justiça a retomada do veículo financiado quando as parcelas deixam de ser pagas. Ela assusta, mas tem regras e prazos definidos em lei, e conhecê-los ajuda a entender em que ponto do processo você está. Este guia é informativo e não substitui a orientação de um profissional habilitado.</p>\n<h2>Por que o banco pode pedir o veículo</h2>\n<p>Na maioria dos financiamentos de veículos, o contrato prevê a <strong>alienação fiduciária</strong>: você usa e dirige o carro ou a moto, mas, até a última parcela, o bem fica em garantia em nome do banco. A busca e apreensão nesses casos é regulada pelo Decreto-Lei 911/1969, com as mudanças trazidas pela Lei 10.931/2004.</p>\n<h2>A mora precisa estar comprovada</h2>\n<p>Atrasar uma parcela não basta, por si só, para o banco entrar com a ação: o credor precisa comprovar que o devedor foi colocado em mora. A lei admite que isso seja feito por carta registrada com aviso de recebimento, enviada ao endereço do devedor, ou por protesto do título. O STJ tem entendimento antigo, na Súmula 72, de que a comprovação da mora é indispensável para a busca e apreensão do bem alienado fiduciariamente.</p>\n<p>Por isso, vale guardar as cartas e notificações que chegarem e conferir se elas foram enviadas ao endereço informado no contrato.</p>\n<h2>O que acontece depois da liminar</h2>\n<p>O banco costuma pedir uma liminar, isto é, uma decisão rápida, para que o veículo seja apreendido antes do fim do processo. Se o juiz concede e a liminar é cumprida, começam a correr dois prazos:</p>\n<ul>\n<li><strong>Cinco dias para pagar a dívida.</strong> A lei permite que o devedor pague a integralidade da dívida pendente, pelos valores apresentados pelo banco na petição inicial. Se pagar nesse prazo, o veículo é devolvido livre do ônus. O STJ, em recurso repetitivo (Tema 722), entendeu que, nos contratos firmados na vigência da Lei 10.931/2004, o pagamento deve ser da dívida inteira, e não apenas das parcelas em atraso, e que o prazo conta da execução da liminar, não da intimação.</li>\n<li><strong>Quinze dias para responder.</strong> O devedor apresenta a defesa (resposta) em quinze dias, também contados da execução da liminar. A resposta pode ser apresentada mesmo depois do pagamento, por exemplo se o devedor entender que pagou a mais e quiser a restituição.</li>\n</ul>\n<h2>Se a dívida não for paga</h2>\n<p>Passado o prazo de cinco dias sem o pagamento, a propriedade e a posse plena do bem se consolidam em nome do banco. O credor pode então vender o veículo e deve usar o valor para abater a dívida e as despesas da cobrança, devolvendo ao devedor o saldo, se houver. Por isso o tempo é curto: cada prazo conta a partir do dia em que o veículo é apreendido.</p>\n<h2>O que conferir no seu caso</h2>\n<ul>\n<li>Se há notificação válida da mora, enviada ao endereço do contrato, ou protesto.</li>\n<li>Se os valores cobrados na inicial batem com o contrato: parcelas, juros de mora, multa e encargos. Diferenças podem ser discutidas na resposta.</li>\n<li>Se o contrato traz tarifas, seguros ou juros que mereçam revisão. A existência de uma dessas cobranças não prova, sozinha, que ela é indevida: cada situação precisa ser analisada com o contrato em mãos.</li>\n<li>Os prazos exatos que constam no mandado ou na intimação que você recebeu.</li>\n</ul>\n<h2>O que fazer ao receber a notícia do processo</h2>\n<p>O ideal é agir rápido: reunir contrato, comprovantes de pagamento e notificações, e procurar orientação de advogado ou da Defensoria Pública, que podem avaliar os prazos do seu caso. Em paralelo, muitos bancos aceitam renegociar a dívida antes ou durante o processo, e vale pedir a proposta por escrito.</p>\n<p>Para saber se a taxa do seu financiamento fica perto da média, você pode usar a calculadora gratuita deste site: ela estima a taxa mensal embutida no contrato e compara com a média divulgada pelo Banco Central. O resultado é apenas uma estimativa e não é indicação de valores a receber nem de resultado em qualquer processo.</p>",
+    "categoria": "revisional",
+    "data": "2026-10-15",
+    "tipo": "guia"
+  },
+  {
+    "slug": "seguro-prestamista-no-financiamento-o-que-e-e-quando-pode-ser-venda-casada",
+    "titulo": "Seguro prestamista no financiamento: o que é e quando pode ser venda casada",
+    "resumo": "O seguro prestamista pode entrar no financiamento do veículo. Veja como ele funciona, o que a lei diz sobre venda casada e o que conferir no contrato.",
+    "foto_busca": "insurance documents contract",
+    "fontes": [
+      {
+        "nome": "Código de Defesa do Consumidor (Planalto)",
+        "url": "https://www.planalto.gov.br/ccivil_03/leis/l8078compilado.htm"
+      },
+      {
+        "nome": "STJ: Tema repetitivo 972",
+        "url": "https://processo.stj.jus.br/repetitivos/temas_repetitivos/pesquisa.jsp?novaConsulta=true&tipo_pesquisa=T&cod_tema_inicial=972&cod_tema_final=972"
+      },
+      {
+        "nome": "Banco Central: Resolução CMN 3.517/2007 (CET)",
+        "url": "https://www.bcb.gov.br/estabilidadefinanceira/exibenormativo?tipo=Resolu%C3%A7%C3%A3o&numero=3517"
+      }
+    ],
+    "corpo": "<p>Quem financia um veículo costuma ouvir, na hora de assinar, uma oferta de seguro: o chamado seguro prestamista. Ele pode ser útil, mas também é uma das cobranças mais questionadas nos contratos. Este guia explica como funciona e o que conferir. É um texto informativo, que não substitui a orientação de um profissional habilitado.</p>\n<h2>O que é o seguro prestamista</h2>\n<p>É um seguro ligado ao financiamento: em situações previstas na apólice, como morte ou invalidez, ele quita ou abate o saldo devedor, para que a dívida não passe para a família. Algumas apólices também cobrem perda de renda ou desemprego. O que está coberto, os prazos de carência e as exclusões variam de uma seguradora para outra e estão na apólice.</p>\n<h2>Como ele aparece no contrato</h2>\n<p>O prêmio do seguro, isto é, o preço dele, muitas vezes é incluído no valor financiado. Assim, ele passa a render juros junto com o restante da dívida e aumenta o valor final pago. Por isso é importante olhar o valor financiado e compará-lo com o preço do veículo menos a entrada: a diferença mostra o que foi acrescentado, como seguros e tarifas.</p>\n<h2>Quando pode ser venda casada</h2>\n<p>O Código de Defesa do Consumidor proíbe o fornecedor de condicionar a venda de um produto ou serviço à compra de outro, sem justa causa (art. 39, inciso I). Aplicando essa regra, o STJ fixou, em recurso repetitivo (Tema 972), que, nos contratos bancários em geral, o consumidor não pode ser obrigado a contratar seguro com a instituição financeira ou com a seguradora que ela indica.</p>\n<p>Na prática, o seguro deve ser uma escolha. Isso não significa que todo seguro prestamista seja irregular: se você entendeu a oferta, quis contratar e pôde recusar, o seguro tende a ser válido. A discussão surge quando a contratação foi apresentada como condição para aprovar o crédito ou quando o consumidor não foi informado de que podia recusar.</p>\n<h2>O que conferir antes de assinar</h2>\n<ul>\n<li>Se o seguro aparece como item separado, com valor próprio, e se há um campo em que você pode aceitar ou recusar.</li>\n<li>Se o <strong>Custo Efetivo Total (CET)</strong> informado inclui o seguro. As instituições são obrigadas a informar o CET, que reúne juros, tarifas, seguros e outros encargos do contrato (Resolução CMN 3.517/2007).</li>\n<li>O nome da seguradora e se você teve a opção de escolher outra.</li>\n<li>O que a apólice cobre e o que exclui, e se você recebeu uma cópia.</li>\n</ul>\n<h2>Se você já contratou e tem dúvidas</h2>\n<p>Comece pelo contrato e pela apólice: veja o valor do prêmio, a data de contratação e se houve opção de recusa. Depois, você pode pedir por escrito ao banco ou à seguradora o cancelamento e as condições de devolução proporcional, conforme a apólice. Se a resposta não resolver, é possível registrar a reclamação na plataforma consumidor.gov.br ou no Procon da sua cidade. Se o caso for levado à Justiça, cada situação é analisada com as provas do contrato; por isso, procurar um advogado ou a Defensoria Pública ajuda a avaliar o que se aplica ao seu caso.</p>\n<p>A calculadora gratuita deste site estima a taxa mensal embutida no seu financiamento a partir do valor financiado, da parcela e do prazo. Como o seguro, quando está no valor financiado, aumenta a base de cálculo, a diferença pode aparecer no resultado. É só uma estimativa: não é indicação de valores a receber nem garantia de resultado.</p>",
+    "categoria": "revisional",
+    "data": "2026-10-15",
+    "tipo": "guia"
+  },
+  {
+    "slug": "juros-abusivos-em-financiamento-como-comparar-a-taxa-do-seu-contrato-com-o-mercado",
+    "titulo": "Juros abusivos em financiamento: como comparar a taxa do seu contrato com o mercado",
+    "resumo": "Taxa alta nem sempre é taxa abusiva. Veja o que o STJ considera, como comparar o seu financiamento com a média do Banco Central e o que olhar no contrato.",
+    "foto_busca": "calculator contract desk",
+    "fontes": [
+      {
+        "nome": "Banco Central: taxas de juros das operações de crédito",
+        "url": "https://www.bcb.gov.br/estabilidadefinanceira/txjuros"
+      },
+      {
+        "nome": "Código de Defesa do Consumidor (Planalto)",
+        "url": "https://www.planalto.gov.br/ccivil_03/leis/l8078compilado.htm"
+      },
+      {
+        "nome": "STJ: Súmulas",
+        "url": "https://scon.stj.jus.br/SCON/sumstj/toc.jsp"
+      }
+    ],
+    "corpo": "<p>\"Juros abusivos\" é uma expressão comum em financiamentos de veículos, mas ela não significa o mesmo que \"juros altos\". Entender a diferença ajuda a avaliar o seu contrato com realismo, sem criar expectativa de resultado. Este guia é informativo e não substitui a orientação de um profissional habilitado.</p>\n<h2>O que a Justiça considera</h2>\n<p>O Código de Defesa do Consumidor se aplica aos bancos, entendimento que o STJ consolidou na Súmula 297. Mas, para os juros, o tribunal fixou uma regra importante na Súmula 382: a estipulação de juros remuneratórios acima de 12% ao ano, por si só, não indica abusividade. Em recurso repetitivo, o STJ também entendeu que a taxa média de mercado divulgada pelo Banco Central pode servir de referência, e que a abusividade só se reconhece quando há uma diferença relevante em relação a essa média e as circunstâncias do caso mostram desvantagem exagerada para o consumidor.</p>\n<p>Em resumo: não existe um número mágico a partir do qual os juros viram abusivos, e cada contrato é analisado individualmente. Uma taxa acima da média é um ponto de atenção, não uma conclusão.</p>\n<h2>A média do Banco Central como referência</h2>\n<p>O Banco Central divulga, todos os meses, a taxa média de juros por modalidade de crédito, incluindo a aquisição de veículos por pessoas físicas. Para comparar, use a taxa média do <strong>mês em que você assinou o contrato</strong>, porque os juros mudam ao longo do tempo. Também compare produtos parecidos: a média de veículos não serve para comparar com a de cartão ou de empréstimo pessoal.</p>\n<h2>Os cuidados na hora de comparar</h2>\n<ul>\n<li><strong>Mensal ou anual:</strong> a taxa mensal e a anual são expressões diferentes do mesmo custo. Compare sempre a mesma base.</li>\n<li><strong>Nominal e efetiva:</strong> a taxa efetiva é a que realmente incide sobre a dívida; confira qual delas o contrato informa.</li>\n<li><strong>CET, o custo total:</strong> o Custo Efetivo Total soma juros, tarifas, seguros e demais encargos. Duas ofertas com a mesma taxa de juros podem ter CET bem diferentes.</li>\n<li><strong>Valor financiado de verdade:</strong> seguros e tarifas incluídos no financiamento aumentam o valor financiado e, com ele, os juros pagos.</li>\n</ul>\n<h2>Como saber a taxa embutida no seu contrato</h2>\n<p>Muitas vezes o contrato não destaca a taxa de forma clara, mas você consegue estimá-la com três dados: o valor financiado, o valor da parcela e o número de parcelas. Com o sistema de amortização mais usado em financiamentos, a Tabela Price, é possível calcular qual taxa mensal faz esses três números fecharem. A calculadora gratuita deste site faz essa conta e compara o resultado com a média do Banco Central do mês da assinatura.</p>\n<h2>O que o resultado não é</h2>\n<p>A comparação é uma estimativa baseada nos dados que você informa. Estar acima da média não prova que a taxa seja abusiva, não é indicação de valores a receber e não é garantia de resultado em qualquer revisão. O que ela oferece é um ponto de partida objetivo para conversar com o banco ou com um profissional habilitado, levando o contrato em mãos.</p>\n<h2>Próximos passos</h2>\n<p>Se a sua taxa estimada ficou bem acima da referência, reúna o contrato, o CET informado e os comprovantes de pagamento, e procure orientação de advogado ou da Defensoria Pública para avaliar o seu caso. Se ficou próxima da média, o contrato tende a estar dentro do praticado no mercado.</p>",
+    "categoria": "revisional",
+    "data": "2026-10-15",
+    "tipo": "guia"
   }
 ]

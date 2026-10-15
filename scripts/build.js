@@ -62,7 +62,7 @@ ${S.sidebar()}
 </section>
 ${S.ctaBanner()}`;
   out('radar.html', S.page({
-    meta: { title: `Radar: notas rápidas sobre crédito e financiamento | ${SITE}`, desc: 'Notas rápidas e atualizadas sobre financiamento de veículos, crédito, juros e regras do sistema financeiro, sempre com a fonte citada.', path: '/radar.html' },
+    meta: { title: `Radar: notas rápidas sobre crédito | ${SITE}`, desc: 'Notas rápidas e atualizadas sobre financiamento de veículos, crédito, juros e regras do sistema financeiro, sempre com a fonte citada.', path: '/radar.html' },
     active: 'radar', body,
   }));
   urls.push(['/radar.html', '0.7', notas.length ? notas[0].data : undefined]);
@@ -75,6 +75,13 @@ function home() {
   const INICIAL = 4;
   const list = resto.map((it, i) => S.cardDe(it.tipo ? it : { ...it, a: it }, i >= INICIAL)).join('\n');
   const ultima = S.ultimaPublicacao(articles, notas);
+  const guiasCapa = (() => {
+    const g = (C.guiasDaCapa || []).map((sl) => articles.find((a) => a.slug === sl)).filter(Boolean);
+    return g.length ? `<section class="container guides-home" aria-labelledby="gh-t">
+<div class="section-head"><h2 id="gh-t">Guias para entender o seu contrato</h2></div>
+<ul class="guide-links">${g.map((a) => `<li><a href="${artUrl(a)}"><strong>${esc(a.titulo)}</strong><span>${esc(a.resumo)}</span></a></li>`).join('\n')}</ul>
+</section>` : '';
+  })();
   const faixa = `<div class="pub-strip" role="note"><div class="container">Última publicação: <time datetime="${ultima}">${fmtData(ultima)}</time>${BCB_CONFERIDO ? ` · <span${BCB_ATUALIZADO ? ` title="Última alteração da série do Banco Central: ${fmtData(BCB_ATUALIZADO)}"` : ''}>Taxas conferidas com o Banco Central em <time datetime="${BCB_CONFERIDO}">${fmtData(BCB_CONFERIDO)}</time>${BCB_ATUALIZADO ? ` <small>(série alterada em <time datetime="${BCB_ATUALIZADO}">${fmtData(BCB_ATUALIZADO)}</time>)</small>` : ''}</span>` : ''}</div></div>`;
   const body = `
 <div class="free-strip" role="note"><div class="container">${S.FREE_TXT} <span>Descubra se você tem valores a recuperar</span></div></div>
@@ -82,7 +89,7 @@ function home() {
 <div class="container hero-inner">
 <span class="badge">Simulação gratuita</span>
 <h1>Seu financiamento de veículo pode estar cobrando juros acima da média</h1>
-<p class="lead">Notícias sobre financiamento e uma calculadora gratuita que resolve a taxa de juros real do seu contrato e compara com a referência do Banco Central.</p>
+<p class="lead">Notícias e guias sobre financiamento de veículos, revisão de juros, busca e apreensão e seguro prestamista, com uma calculadora gratuita que resolve a taxa de juros real do seu contrato e compara com a referência do Banco Central.</p>
 <a class="btn btn-primary btn-lg btn-hero" href="/calculadora.html">${ICON.calc}Calcular minha taxa agora<span aria-hidden="true">→</span></a>
 </div>
 </section>
@@ -90,6 +97,7 @@ function home() {
 ${faixa}
 ${S.carrossel(destaques)}
 ${S.exploreTopicos()}
+${guiasCapa}
 
 <section class="container home-grid">
 <div>
@@ -115,9 +123,13 @@ ${nl}
 </section>`;
   out('index.html', S.page({
     meta: {
-      title: `${SITE} | Juros de financiamento de veículos: notícias e calculadora`,
+      title: `Juros de financiamento de veículos | ${SITE}`,
       desc: 'Notícias sobre financiamento de veículos e uma calculadora gratuita para descobrir a taxa de juros real do seu contrato e comparar com a média do Banco Central.',
       path: '/',
+      jsonld: { '@context': 'https://schema.org', '@graph': [
+        { '@type': 'Organization', '@id': absUrl('/') + '#organizacao', name: C.empresa.razaoSocial, url: absUrl('/'), logo: absUrl('/assets/img/apple-touch-icon.png'), sameAs: Object.values(C.social).filter(Boolean) },
+        { '@type': 'WebSite', '@id': absUrl('/') + '#site', name: SITE, url: absUrl('/'), inLanguage: 'pt-BR', publisher: { '@id': absUrl('/') + '#organizacao' } },
+      ] },
     },
     active: 'home', body, scripts: ['/assets/js/carrossel.js'],
   }));
@@ -186,7 +198,7 @@ function artigos() {
       '@type': 'NewsArticle',
       headline: a.titulo,
       description: a.resumo,
-      image: [absUrl('/assets/img/og-article-' + a.categoria + '.png')],
+      image: [absUrl(S.ogArtigo(a))], // foto real do artigo (JPG leve) ou, sem foto, a imagem da categoria
       datePublished: a.data,
       ...(a.atualizado ? { dateModified: a.atualizado } : {}), // só existe se houve revisão real
       mainEntityOfPage: { '@type': 'WebPage', '@id': absUrl(artUrl(a)) },
@@ -206,7 +218,7 @@ function artigos() {
 <h1>${esc(a.titulo)}</h1>
 <p class="lead">${esc(a.resumo)}</p>
 <p class="meta">${S.selo(S.seloTxt(a), S.ehGuia(a) ? 'selo-guia' : 'selo-artigo')} Por Equipe ERASE${S.ehGuia(a) ? (a.atualizado ? ` · <time datetime="${a.atualizado}">Atualizado em ${fmtData(a.atualizado)}</time>` : '') : ` · <time datetime="${a.data}">${fmtData(a.data)}</time>`}</p>
-<figure class="article-fig">${coverImg(a, { width: 860, height: 430, sizes: '(max-width: 860px) 100vw, 860px', eager: true, cls: 'article-cover' })}${a.foto ? `<figcaption>Foto: <a href="${esc(a.foto.autorUrl)}" target="_blank" rel="noopener noreferrer">${esc(a.foto.autor)}</a> / <a href="${esc(a.foto.pagina)}" target="_blank" rel="noopener noreferrer">${esc(a.foto.fonte || 'Pixabay')}</a></figcaption>` : ''}</figure>
+<figure class="article-fig">${coverImg(a, { width: 860, height: 430, sizes: '(max-width: 860px) 100vw, 860px', eager: true, cls: 'article-cover', alt: a.titulo })}${a.foto ? `<figcaption>Foto: <a href="${esc(a.foto.autorUrl)}" target="_blank" rel="noopener noreferrer">${esc(a.foto.autor)}</a> / <a href="${esc(a.foto.pagina)}" target="_blank" rel="noopener noreferrer">${esc(a.foto.fonte || 'Pixabay')}</a></figcaption>` : ''}</figure>
 <div class="article-body">
 ${injectCTA(a.corpo, a.categoria)}
 </div>
@@ -219,8 +231,8 @@ ${S.sidebar(a.categoria)}
 ${S.ctaBanner(a.categoria)}`;
     out(`noticias/${a.slug}.html`, S.page({
       meta: {
-        title: `${a.titulo} | ${SITE}`, desc: a.resumo, path: artUrl(a), type: 'article',
-        image: `/assets/img/og-article-${a.categoria}.png`, jsonld,
+        title: ((t) => (t.length <= 60 - SITE.length - 3 ? `${t} | ${SITE}` : t))(S.tituloSeo(a.titulo)), desc: S.descSeo(a.resumo), path: artUrl(a), type: 'article',
+        image: S.ogArtigo(a), jsonld,
       },
       active: 'artigos', body,
     }));
@@ -375,7 +387,7 @@ ${faq.map(([q, a]) => `<details><summary>${esc(q)}</summary><p>${esc(a)}</p></de
 </section>`;
   out('calculadora.html', S.page({
     meta: {
-      title: `Calculadora de juros do financiamento — compare a taxa do seu contrato | ${SITE}`,
+      title: `Calculadora de juros de financiamento | ${SITE}`,
       desc: 'Descubra a taxa de juros mensal embutida no seu financiamento de carro, moto ou máquina agrícola e compare com a média do Banco Central. Simulação gratuita.',
       path: '/calculadora.html', jsonld: faqLd,
     },
@@ -385,9 +397,9 @@ ${faq.map(([q, a]) => `<details><summary>${esc(q)}</summary><p>${esc(a)}</p></de
 }
 
 // ---------------------------------------------------------------- LEGAIS / CONTATO
-function legal(file, title, h1, html) {
+function legal(file, title, h1, html, desc) {
   out(file, S.page({
-    meta: { title: `${title} | ${SITE}`, desc: `${title} da ERASE Revisional.`, path: '/' + file },
+    meta: { title: `${title} | ${SITE}`, desc: desc || `${title} da ERASE Revisional.`, path: '/' + file },
     active: '', body: `<article class="container article legal-doc"><h1>${h1}</h1>${html}</article>`,
   }));
   urls.push(['/' + file, '0.3', LEGAL_DATE]);
@@ -416,7 +428,7 @@ function legais() {
 <h2>9. Alterações</h2>
 <p>Estes termos podem ser alterados a qualquer momento. A versão vigente é sempre a publicada nesta página.</p>
 <h2>10. Foro e contato</h2>
-<p>Dúvidas podem ser enviadas pela página <a href="/contato.html">Fale Conosco</a>. Fica eleito o foro do domicílio do consumidor para dirimir eventuais controvérsias, nos termos da legislação aplicável.</p>`);
+<p>Dúvidas podem ser enviadas pela página <a href="/contato.html">Fale Conosco</a>. Fica eleito o foro do domicílio do consumidor para dirimir eventuais controvérsias, nos termos da legislação aplicável.</p>`, 'Termos de uso do ERASE Revisional: natureza informativa da calculadora e do conteúdo, responsabilidades, links e anúncios de terceiros, cookies e foro.');
 
   legal('privacidade.html', 'Política de Privacidade', 'Política de Privacidade', `
 <p class="meta">Última atualização: ${fmtData(LEGAL_DATE)}</p>
@@ -440,7 +452,7 @@ function legais() {
 <p><strong>Anúncios do Google (AdSense) — futuro.</strong> Poderemos exibir anúncios do Google AdSense. Quando isso acontecer, o Google e seus parceiros poderão usar cookies para mostrar anúncios com base nas suas visitas a este e a outros sites, e só os ativaremos com o seu consentimento. Você poderá desativar a personalização de anúncios em <a href="https://adssettings.google.com" target="_blank" rel="noopener noreferrer">adssettings.google.com</a> e saber como o Google usa dados de sites parceiros em <a href="https://policies.google.com/technologies/partner-sites" target="_blank" rel="noopener noreferrer">policies.google.com/technologies/partner-sites</a>. Esta política será atualizada antes de os anúncios entrarem no ar.</p>
 <p><strong>Como mudar a sua escolha.</strong> Use "Preferências de cookies" no rodapé de qualquer página para aceitar ou recusar, ou apague os cookies nas configurações do navegador. Para o Google Analytics, também há o <a href="https://tools.google.com/dlpage/gaoptout" target="_blank" rel="noopener noreferrer">complemento de desativação do Google</a>.</p>
 <h2>7. Contato</h2>
-<p>Controladora: ${razao}. Solicitações pela página <a href="/contato.html">Fale Conosco</a>.</p>`);
+<p>Controladora: ${razao}. Solicitações pela página <a href="/contato.html">Fale Conosco</a>.</p>`, 'Política de Privacidade do ERASE Revisional: dados que coletamos e para quê, cookies e Google Analytics, anúncios do Google e seus direitos pela LGPD.');
 }
 
 // ---------------------------------------------------------------- COMO PRODUZIMOS NOSSO CONTEÚDO
@@ -473,7 +485,7 @@ function comoProduzimos() {
 <p>Fale com a gente pela página <a href="/contato.html">Fale Conosco</a>: corrigimos ou retiramos o texto.</p>
 </article>`;
   out('como-produzimos.html', S.page({
-    meta: { title: `Como produzimos nosso conteúdo | ${SITE}`, desc: 'Como a Equipe ERASE produz e revisa os textos: apoio de inteligência artificial, revisão automática, no mínimo 2 fontes citadas, números conferidos e nenhuma promessa de resultado.', path: '/como-produzimos.html' },
+    meta: { title: `Como produzimos nosso conteúdo | ${SITE}`, desc: 'Como a Equipe ERASE produz e revisa os textos: apoio de IA, revisão automática, 2 ou mais fontes citadas, números conferidos e nenhuma promessa de resultado.', path: '/como-produzimos.html' },
     active: '', body,
   }));
   urls.push(['/como-produzimos.html', '0.5', PRODUCAO_DATE]);
@@ -536,7 +548,7 @@ function contato() {
 </aside>
 </section>`;
   out('contato.html', S.page({
-    meta: { title: `Fale Conosco | ${SITE}`, desc: 'Entre em contato com a ERASE Revisional por formulário ou WhatsApp.', path: '/contato.html' },
+    meta: { title: `Fale Conosco | ${SITE}`, desc: 'Fale com a equipe da ERASE pelo formulário ou pelo WhatsApp: dúvidas sobre financiamento de veículo, análise gratuita do contrato ou exclusão de dados.', path: '/contato.html' },
     active: '', body,
   }));
   urls.push(['/contato.html', '0.4']);

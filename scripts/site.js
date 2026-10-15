@@ -41,6 +41,28 @@ const catsComItens = () => {
   const { artigos, notas } = dados();
   return Object.keys(config.categorias).filter((s) => artigos.some((a) => a.categoria === s) || notas.some((n) => n.categoria === s));
 };
+const existe = (p) => fs.existsSync(path.join(ROOT, p.replace(/^\//, '')));
+/** Imagem de prévia (WhatsApp/Open Graph) do artigo: foto dele (og/<slug>.jpg), senão a da categoria; JPG leve, PNG só se o JPG ainda não existir. */
+const ogArtigo = (a) => [`/assets/img/og/${a.slug}.jpg`, `/assets/img/og-article-${a.categoria}.jpg`, `/assets/img/og-article-${a.categoria}.png`].find(existe);
+const ogPadrao = () => ['/assets/img/og-image.jpg', '/assets/img/og-image.png'].find(existe);
+const PALAVRAS_SOLTAS = /\s+(?:\S{1,3}|quando|como|depois|antes|mais|menos|entre|sobre|apos|após|ainda)$/i; // palavra curta ou conector no fim do título cortado
+/** <title> de até ~60 caracteres: corta numa pausa natural (vírgula, dois-pontos, travessão) ou na última palavra inteira, sem reticências. */
+function tituloSeo(t, max = 60) {
+  t = String(t).trim();
+  if (t.length <= max) return t;
+  const ate = t.slice(0, max + 1), pausa = Math.max(ate.lastIndexOf(', '), ate.lastIndexOf(': '), ate.lastIndexOf(' – '), ate.lastIndexOf(' — '), ate.lastIndexOf(' - '));
+  let r = pausa >= 30 ? t.slice(0, pausa) : ate.slice(0, ate.lastIndexOf(' '));
+  while (PALAVRAS_SOLTAS.test(r)) r = r.replace(PALAVRAS_SOLTAS, '');
+  return r.replace(/[\s,:;–—-]+$/, '');
+}
+/** Meta description de até ~160 caracteres: termina numa frase ou, se não der, numa palavra inteira com reticências. */
+function descSeo(d, max = 160) {
+  d = String(d).replace(/\s+/g, ' ').trim();
+  if (d.length <= max) return d;
+  const ate = d.slice(0, max), ponto = ate.lastIndexOf('. ');
+  if (ponto >= 100) return ate.slice(0, ponto + 1);
+  return ate.slice(0, ate.lastIndexOf(' ')).replace(/[\s,:;–—-]+$/, '') + '…';
+}
 const catUrl = (slug) => `/categoria-${slug}.html`;
 const artUrl = (a) => `/noticias/${a.slug}.html`;
 // URLs públicas sem ".html" (o Cloudflare Pages redireciona /x.html -> /x).
@@ -60,8 +82,8 @@ const caminhoPadrao = (a) => {
   const pool = [cat, ...dados().artigos.filter((x) => x.categoria === a.categoria && x.foto && x.slug !== a.slug).map((x) => `/assets/img/news/${x.slug}`)];
   return pool[[...id].reduce((h, c) => h + c.charCodeAt(0), 0) % pool.length];
 };
-const coverImg = (a, { width, height, sizes, eager = false, cls = '' }) => {
-  const attrs = `${cls ? `class="${cls}" ` : ''}alt="" width="${width}" height="${height}" ${eager ? 'fetchpriority="high"' : 'loading="lazy" decoding="async"'}`;
+const coverImg = (a, { width, height, sizes, eager = false, cls = '', alt = '' }) => {
+  const attrs = `${cls ? `class="${cls}" ` : ''}alt="${esc(alt)}" width="${width}" height="${height}" ${eager ? 'fetchpriority="high"' : 'loading="lazy" decoding="async"'}`;
   const cat = catFoto(a.categoria);
   const fim = cat ? `/assets/img/cat/${a.categoria}-960.webp` : coverUrl(a);
   const srcsetDe = (b) => PHOTO_WIDTHS.map((w) => `${b}-${w}.webp ${w}w`).join(', ');
@@ -92,7 +114,7 @@ const gaOk = /^G-[A-Z0-9]{6,}$/.test(config.gaId || '') && !/^G-X+$/.test(config
 
 function head({ title, desc, path: p, image, type = 'website', jsonld, noindex }) {
   const url = absUrl(p);
-  const img = absUrl(image || '/assets/img/og-image.png');
+  const img = absUrl(image || ogPadrao());
   return `<!doctype html>
 <html lang="pt-BR">
 <head>
@@ -118,9 +140,7 @@ ${noindex ? '<meta name="robots" content="noindex">\n' : ''}<link rel="canonical
 <link rel="icon" href="/assets/img/favicon-32.png" type="image/png" sizes="32x32">
 <link rel="apple-touch-icon" href="/assets/img/apple-touch-icon.png">
 <script>try{var t=localStorage.getItem('erase-theme');document.documentElement.setAttribute('data-theme',t==='dark'?'dark':'light')}catch(e){document.documentElement.setAttribute('data-theme','light')}</script>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="preload" href="/assets/fonts/inter-latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="/assets/css/style.css?v=${cssVer}">
 ${jsonld ? `<script type="application/ld+json">${JSON.stringify(jsonld)}</script>\n` : ''}</head>`;
 }
@@ -444,6 +464,6 @@ const freeBadge = (cls = '') => `<p class="free-badge ${cls}" role="note">${FREE
 
 module.exports = {
   FREE_TXT, freeBadge,
-  ROOT, config, catsComItens, loadArticles, loadNotas, ehGuia, selo, seloTxt, ordenarConteudo, ultimaPublicacao, rowCardNota, cardDe, readJSON, itemDe, dataHtml, maisRecentes, cardV, miniItem, carrossel, exploreTopicos, escolhaDaEquipe, relacionados, sidebar, socialLinks, usaContato, esc, fmtPct, fmtData, catNome, catUrl, artUrl, absUrl, coverUrl, catFoto, coverImg,
+  ROOT, config, catsComItens, loadArticles, loadNotas, ehGuia, selo, seloTxt, ordenarConteudo, ultimaPublicacao, rowCardNota, cardDe, readJSON, itemDe, dataHtml, maisRecentes, cardV, miniItem, carrossel, exploreTopicos, escolhaDaEquipe, relacionados, sidebar, socialLinks, usaContato, esc, ogArtigo, tituloSeo, descSeo, fmtPct, fmtData, catNome, catUrl, artUrl, absUrl, coverUrl, catFoto, coverImg,
   ICON, page, rowCard, promoCard, trustBadges, ctaBanner,
 };

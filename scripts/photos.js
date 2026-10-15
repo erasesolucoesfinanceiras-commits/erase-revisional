@@ -142,6 +142,7 @@ async function fetchPhoto(slug, consulta, usadas = [], ctx = {}) {
         fs.mkdirSync(DIR, { recursive: true });
         for (const w of WIDTHS) await sharp(e.buf).resize({ width: w, withoutEnlargement: true }).webp({ quality: 72 }).toFile(path.join(DIR, `${slug}-${w}.webp`));
         await prov.aoUsar(e.hit).catch(() => {});
+        if (!ctx.semOg) await require('./og').ogDoArtigo(slug).catch((x) => console.error('Imagem de prévia (OG) de "' + slug + '" não gerada: ' + x.message)); // JPG 1200x630 < 150 KB para WhatsApp/Google; falhar aqui não perde a foto
       } catch (x) { falhas.push(`${prov.nome}: ${x.message}`); continue; }
       escolha = { fonte: prov.nome, foto_id: e.hit.id, autor: e.hit.user, pagina: e.hit.pageURL, ...e.meta };
       return prov.foto(e.hit);
@@ -154,13 +155,13 @@ async function fetchPhoto(slug, consulta, usadas = [], ctx = {}) {
 }
 
 /** Refaz/preenche fotos na lista (muta a lista). modo: faltantes | marcadas | slug. fetchFn e logFn existem para teste. Devolve os resultados por artigo. */
-async function processar(lista, { modo = 'faltantes', slug = '', extras = [] }, fetchFn = fetchPhoto, logFn = () => {}, apagar = (a) => { for (const w of WIDTHS) fs.rmSync(path.join(DIR, `${chave(a)}-${w}.webp`), { force: true }); }) {
+async function processar(lista, { modo = 'faltantes', slug = '', extras = [] }, fetchFn = fetchPhoto, logFn = () => {}, apagar = (a) => { for (const w of WIDTHS) fs.rmSync(path.join(DIR, `${chave(a)}-${w}.webp`), { force: true }); fs.rmSync(path.join(ROOT, 'assets', 'img', 'og', `${chave(a)}.jpg`), { force: true }); }) {
   const alvos = modo === 'slug' ? lista.filter((a) => chave(a) === slug) : modo === 'marcadas' ? lista.filter((a) => a.foto_refazer) : lista.filter((a) => !a.foto);
   if (modo === 'slug' && !alvos.length) throw new Error(`Não há artigo com o slug "${slug}".`);
   const refazendo = modo !== 'faltantes', res = [];
   for (const a of alvos) {
     const usadas = [...lista, ...(extras || [])].map((x) => x.foto && x.foto.id).filter(Boolean); // inclui a foto atual (e as de outras listas): a nova tem de ser outra
-    const f = await fetchFn(chave(a), [].concat(a.foto_buscas || [], a.foto_busca || []), usadas, { categoria: a.categoria, titulo: a.titulo });
+    const f = await fetchFn(chave(a), [].concat(a.foto_buscas || [], a.foto_busca || []), usadas, { categoria: a.categoria, titulo: a.titulo, semOg: !a.slug }); // nota do Radar (sem slug) não tem página própria: sem imagem de prévia
     if (f) { a.foto = f; delete a.foto_refazer; const e = module.exports.ultimaEscolha(); logFn('foto_escolhida', { slug: chave(a), modo, ...(e || {}) }); res.push({ slug: chave(a), resultado: 'trocada', foto: f.id }); }
     else if (refazendo && /^(busca indisponível|PIXABAY_API_KEY)/.test(module.exports.motivoDaFalha())) { logFn('foto_mantida', { slug: chave(a), modo, motivo: module.exports.motivoDaFalha() }); res.push({ slug: chave(a), resultado: 'mantida' }); } // falha de infraestrutura: não troca a foto por causa disso
     else if (refazendo) { delete a.foto; delete a.foto_refazer; apagar(a); logFn('foto_padrao', { slug: chave(a), modo, motivo: module.exports.motivoDaFalha() || 'sem foto adequada' }); res.push({ slug: chave(a), resultado: 'padrao' }); }

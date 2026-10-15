@@ -17,7 +17,21 @@ for (const f of raiz) fs.copyFileSync(path.join(ROOT, f), path.join(DIST, f));
 // Cabeçalhos do Cloudflare Pages. O arquivo é GERADO aqui (dist/_headers), não fica na raiz do repositório.
 // ATENÇÃO: nunca coloque X-Robots-Tag em regra de caminho (/*): o domínio oficial tem de ser indexável.
 const HEADERS = `# Gerado por scripts/publish.js.
-/assets/*
+# Cache: CSS, JS e fonte têm versão/nome fixo (?v= muda a cada alteração) => 1 ano. Imagens podem ser trocadas sob o mesmo nome
+# (refazer foto de artigo): 7 dias. Dados (série do Banco Central) mudam todo mês: 1 hora. NÃO deixe duas regras com Cache-Control casando o mesmo caminho.
+/assets/css/*
+  Cache-Control: public, max-age=31536000, immutable
+
+/assets/js/*
+  Cache-Control: public, max-age=31536000, immutable
+
+/assets/fonts/*
+  Cache-Control: public, max-age=31536000, immutable
+
+/assets/img/*
+  Cache-Control: public, max-age=604800, stale-while-revalidate=86400
+
+/assets/data/*
   Cache-Control: public, max-age=3600
 
 /*
@@ -26,7 +40,7 @@ const HEADERS = `# Gerado por scripts/publish.js.
   X-Frame-Options: DENY
   Strict-Transport-Security: max-age=31536000; includeSubDomains
   Permissions-Policy: camera=(), microphone=(), geolocation=()
-  Content-Security-Policy-Report-Only: default-src 'self'; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://challenges.cloudflare.com https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://lqxwdyjctsmirinvvyow.supabase.co https://*.google-analytics.com https://*.analytics.google.com https://www.googletagmanager.com https://cloudflareinsights.com; frame-src https://challenges.cloudflare.com https://www.instagram.com; frame-ancestors 'none'; object-src 'none'; base-uri 'self'; form-action 'self'
+  Content-Security-Policy-Report-Only: default-src 'self'; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://challenges.cloudflare.com https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data: https:; connect-src 'self' https://lqxwdyjctsmirinvvyow.supabase.co https://*.google-analytics.com https://*.analytics.google.com https://www.googletagmanager.com https://cloudflareinsights.com; frame-src https://challenges.cloudflare.com https://www.instagram.com; frame-ancestors 'none'; object-src 'none'; base-uri 'self'; form-action 'self'
 
 # Não indexar SÓ os endereços temporários do Cloudflare (*.pages.dev e prévias). O domínio oficial
 # (revisional.eraseconsulta.com.br) não casa com estes padrões e continua indexável.
