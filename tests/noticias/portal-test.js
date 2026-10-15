@@ -35,8 +35,10 @@ t('faixa "Última publicação… Taxas conferidas…" mantida', /Última public
 
 // ---- Explore tópicos
 const cats = Object.keys(json(B.d, 'data/config.json').categorias);
+const usadas = new Set([...json(B.d, 'data/articles.json'), ...json(B.d, 'data/notas.json')].map((x) => x.categoria));
+const visiveis = cats.filter((s) => usadas.has(s)); // categoria sem artigo nem nota fica fora dos quadros e do menu
 const tiles = home.match(/<a class="cat-tile"[\s\S]*?<\/a>/g) || [];
-t('tópicos: um quadro por categoria existente, com o nome em texto e link para a página da categoria', tiles.length === cats.length && cats.every((s) => tiles.some((x) => x.includes(`href="/categoria-${s}"`))) && tiles.every((x) => /<strong>[^<]+<\/strong>/.test(x) && /<img/.test(x)));
+t('tópicos: um quadro por categoria existente, com o nome em texto e link para a página da categoria', tiles.length === visiveis.length && visiveis.every((s) => tiles.some((x) => x.includes(`href="/categoria-${s}"`))) && tiles.every((x) => /<strong>[^<]+<\/strong>/.test(x) && /<img/.test(x)));
 t('tópicos: só imagens que já estão no repositório (foto do artigo da categoria ou desenho da categoria)', tiles.every((x) => { const m = /src="(\/assets\/img\/[^"]+)"/.exec(x); return m && fs.existsSync(path.join(B.d, m[1])); }));
 t('páginas de categoria existem e listam itens com "Ver mais"', cats.every((s) => fs.existsSync(path.join(B.d, `categoria-${s}.html`))) && /id="ver-mais"/.test(B.ler('categoria-financeiro.html')) === (cards(B.ler('categoria-financeiro.html'), 'row-card').length > 8));
 const catFin = B.ler('categoria-financeiro.html'); const ds = cards(catFin, 'row-card').filter((c) => !/>Guia</.test(c)).map((c) => (/<time datetime="([\d-]+)"/.exec(c) || [])[1]);
@@ -75,7 +77,7 @@ t('"Como produzimos nosso conteúdo": existe e cita IA, ≥2 fontes, sem promess
 const foot = /<footer[\s\S]*<\/footer>/.exec(paginas.capa)[0];
 t('rodapé: Navegação, Categorias, Fale Conosco, Termos de Uso, Política de Privacidade, Como produzimos; sem endereço', ['Navegação', 'Categorias', 'Fale Conosco', 'Termos de Uso', 'Política de Privacidade', 'Como produzimos nosso conteúdo'].every((x) => foot.includes(x)) && !/Rua Pedro|Lagoa dos Gatos/.test(foot) && fs.existsSync(path.join(B.d, 'termos.html')));
 const menu = /<div class="dropdown-menu">([\s\S]*?)<\/div>/.exec(paginas.capa)[1];
-t('menu "Categorias" lista as mesmas categorias dos quadros', cats.every((s) => menu.includes(`/categoria-${s}`)) && (menu.match(/<a /g) || []).length === cats.length);
+t('menu "Categorias" lista as mesmas categorias dos quadros', visiveis.every((s) => menu.includes(`/categoria-${s}`)) && (menu.match(/<a /g) || []).length === visiveis.length && cats.filter((s) => !usadas.has(s)).every((s) => !menu.includes(`/categoria-${s}`) && !home.includes(`href="/categoria-${s}"`)));
 
 // ---- SEO e compartilhamento de TODAS as páginas
 const htmls = [...fs.readdirSync(B.d).filter((f) => f.endsWith('.html')), ...fs.readdirSync(path.join(B.d, 'noticias')).map((f) => 'noticias/' + f)];

@@ -183,6 +183,15 @@ if (dd) {
 
 // ---- "Veja mais" ---------------------------------------------------
 const more = $('#ver-mais');
+// Capa (2 colunas): mostra cards até a coluna de artigos alcançar a altura da barra lateral; o botão só sobra se ainda houver card escondido.
+const lista = $('#lista-artigos'), lateral = $('.home-grid .side-col');
+function preencher() {
+  if (!more || !lista || !lateral) return;
+  const lado = lateral.getBoundingClientRect().top - lista.getBoundingClientRect().top < 40; // celular: barra lateral fica embaixo
+  if (lado) for (const el of $$('[data-extra][hidden]')) { if (lista.offsetHeight >= lateral.offsetHeight) break; el.removeAttribute('hidden'); }
+  more.hidden = !$('[data-extra][hidden]');
+}
+preencher(); addEventListener('load', preencher); addEventListener('resize', preencher);
 if (more) {
   more.addEventListener('click', () => {
     $$('[data-extra][hidden]').slice(0, 4).forEach((el) => el.removeAttribute('hidden'));

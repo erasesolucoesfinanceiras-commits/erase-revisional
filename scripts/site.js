@@ -36,6 +36,11 @@ const fmtData = (iso) =>
   });
 
 const catNome = (slug) => config.categorias[slug].nome;
+/** Categorias com ao menos 1 artigo ou nota do Radar; as vazias saem dos cards da capa e dos menus (a página continua existindo). */
+const catsComItens = () => {
+  const { artigos, notas } = dados();
+  return Object.keys(config.categorias).filter((s) => artigos.some((a) => a.categoria === s) || notas.some((n) => n.categoria === s));
+};
 const catUrl = (slug) => `/categoria-${slug}.html`;
 const artUrl = (a) => `/noticias/${a.slug}.html`;
 // URLs públicas sem ".html" (o Cloudflare Pages redireciona /x.html -> /x).
@@ -113,7 +118,7 @@ ${gaSnippet()}${jsonld ? `<script type="application/ld+json">${JSON.stringify(js
 
 function header(active) {
   const cur = (k) => (active === k ? ' aria-current="page"' : '');
-  const cats = Object.keys(config.categorias)
+  const cats = catsComItens()
     .map((s) => `<a href="${catUrl(s)}"${active === 'cat-' + s ? ' aria-current="page"' : ''}>${esc(catNome(s))}</a>`)
     .join('');
   return `<a class="skip" href="#conteudo">Pular para o conteúdo</a>
@@ -159,7 +164,7 @@ ${(() => { const r = `${soc('x', 'X')}${soc('instagram', 'Instagram')}${soc('fac
 </div>
 <div>
 <h3>Categorias</h3>
-<ul>${Object.keys(config.categorias).map((s) => `<li><a href="${catUrl(s)}">${esc(catNome(s))}</a></li>`).join('')}</ul>
+<ul>${catsComItens().map((s) => `<li><a href="${catUrl(s)}">${esc(catNome(s))}</a></li>`).join('')}</ul>
 </div>
 </div>
 <div class="legal">
@@ -341,7 +346,7 @@ function imgDaCategoria(slug) {
 /** "Explore tópicos": um quadro por categoria existente (nome em texto sobre a imagem). */
 function exploreTopicos() {
   const { artigos, notas } = dados();
-  const quadros = Object.keys(config.categorias).map((s) => {
+  const quadros = catsComItens().map((s) => {
     const n = artigos.filter((a) => a.categoria === s).length + notas.filter((x) => x.categoria === s).length;
     return `<li><a class="cat-tile" href="${catUrl(s)}">${imgDaCategoria(s)}<span class="cat-tile-text"><strong>${esc(catNome(s))}</strong><small>${n} ${n === 1 ? 'item' : 'itens'}</small></span></a></li>`;
   }).join('\n');
