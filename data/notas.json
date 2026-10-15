@@ -16,7 +16,14 @@
         "url": "https://g1.globo.com/politica/noticia/2026/10/14/camara-aprova-projeto-que-amplia-limite-do-mei-e-perdoa-dividas-de-inadimplentes.ghtml",
         "data": "2026-10-14"
       }
-    ]
+    ],
+    "foto": {
+      "id": 4334491,
+      "autor": "rupixen",
+      "autorUrl": "https://pixabay.com/users/rupixen-11154019/",
+      "pagina": "https://pixabay.com/photos/payment-online-payment-card-payment-4334491/",
+      "fonte": "Pixabay"
+    }
   },
   {
     "id": "2026-10-14-fundo-imobiliario-capta-recursos-para-o",
@@ -35,7 +42,14 @@
         "url": "https://www.spacemoney.com.br/economia/jovens-compram-imovel-minha-casa-minha-vida/",
         "data": "2026-10-12"
       }
-    ]
+    ],
+    "foto": {
+      "id": 3337032,
+      "autor": "Tumisu",
+      "autorUrl": "https://pixabay.com/users/Tumisu-148124/",
+      "pagina": "https://pixabay.com/photos/real-estate-agent-sale-home-keys-3337032/",
+      "fonte": "Pixabay"
+    }
   },
   {
     "id": "2026-10-12-ipca-sobe-0-82-em-setembro-e-acumulado-e",
@@ -54,7 +68,14 @@
         "url": "https://agenciabrasil.ebc.com.br/economia/noticia/2026-10/inflacao-oficial-de-setembro-fica-em-082-mostra-ibge",
         "data": "2026-10-09"
       }
-    ]
+    ],
+    "foto": {
+      "id": 1863880,
+      "autor": "3844328",
+      "autorUrl": "https://pixabay.com/users/3844328-3844328/",
+      "pagina": "https://pixabay.com/photos/stock-trading-monitor-business-1863880/",
+      "fonte": "Pixabay"
+    }
   },
   {
     "id": "2026-10-11-procon-interdita-empresa-por-suspeita-de",
@@ -73,7 +94,14 @@
         "url": "https://jornalpequeno.com.br/2026/10/09/empresa-suspeita-de-golpe-do-falso-consorcio-e-interditada-em-sao-luis/",
         "data": "2026-10-09"
       }
-    ]
+    ],
+    "foto": {
+      "id": 3999300,
+      "autor": "jennyfriedrichs",
+      "autorUrl": "https://pixabay.com/users/jennyfriedrichs-435099/",
+      "pagina": "https://pixabay.com/photos/mercedes-toy-vehicle-model-car-3999300/",
+      "fonte": "Pixabay"
+    }
   },
   {
     "id": "2026-10-10-anfavea-eleva-projecao-de-vendas-para-20",
@@ -92,7 +120,14 @@
         "url": "https://valor.globo.com/empresas/noticia/2026/10/07/anfavea-preve-que-mercado-brasileiro-voltara-a-passar-de-3-milhoes-de-veiculos-em-2026.ghtml",
         "data": "2026-10-07"
       }
-    ]
+    ],
+    "foto": {
+      "id": 3100637,
+      "autor": "Ralphs_Fotos",
+      "autorUrl": "https://pixabay.com/users/Ralphs_Fotos-1767157/",
+      "pagina": "https://pixabay.com/photos/autohandel-autokaufmann-car-sales-3100637/",
+      "fonte": "Pixabay"
+    }
   },
   {
     "id": "2026-10-09-brasil-atinge-1-milhao-de-carros-eletric",
@@ -111,6 +146,13 @@
         "url": "https://valor.globo.com/empresas/noticia/2026/10/07/eletricos-e-hibridos-dobram-fatia-nas-vendas-em-um-ano.ghtml",
         "data": "2026-10-07"
       }
-    ]
+    ],
+    "foto": {
+      "id": 1867006,
+      "autor": "Pexels",
+      "autorUrl": "https://pixabay.com/users/Pexels-2286921/",
+      "pagina": "https://pixabay.com/photos/automobile-automotive-car-show-cars-1867006/",
+      "fonte": "Pixabay"
+    }
   }
 ]
