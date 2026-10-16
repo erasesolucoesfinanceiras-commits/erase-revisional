@@ -54,5 +54,16 @@
    "sem_novidade": 1,
    "criterios": {}
   }
+ },
+ "2026-10-16": {
+  "nota": {
+   "aprovados": 0,
+   "reprovados": 1,
+   "sem_novidade": 4,
+   "criterios": {
+    "fontes": 1,
+    "original": 1
+   }
+  }
  }
 }
