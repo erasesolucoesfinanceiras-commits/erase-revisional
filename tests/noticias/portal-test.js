@@ -49,7 +49,7 @@ t('categoria: primeiros 8 visíveis, o resto escondido atrás de "Ver mais"', ca
 
 // ---- Escolha da equipe: vazia = sem seção
 t('escolha da equipe: arquivo vazio por padrão → seção não aparece', !/Escolha da equipe/.test(home) && json(ROOT, 'data/escolha-da-equipe.json').itens.length === 0);
-{ const E = construir((d) => { const a = json(d, 'data/articles.json'); const n = json(d, 'data/notas.json'); salvar(d, 'data/escolha-da-equipe.json', { itens: [a[1].slug, `radar:${n[0].id}`, 'nao-existe', a[2].slug, a[3].slug] }); });
+{ const E = construir((d) => { const a = json(d, 'data/articles.json'); const n = json(d, 'data/notas.json'); const guia = a.find((x) => x.tipo === 'guia'), noticias = a.filter((x) => x.tipo !== 'guia'); /* por tipo, não por posição: o robô põe artigos novos no começo da lista */ salvar(d, 'data/escolha-da-equipe.json', { itens: [guia.slug, `radar:${n[0].id}`, 'nao-existe', noticias[0].slug, noticias[1].slug] }); });
   const h = E.ler('index.html'); const sec = /<section class="container team"[\s\S]*?<\/section>/.exec(h);
   t('escolha da equipe: 3 itens fixos (slug, radar:ID; inexistente ignorado; máximo 3)', sec && cards(sec[0], 'card-v').length === 3 && /Escolha da equipe/.test(sec[0]) && />Radar</.test(sec[0]) && />Guia</.test(sec[0]) && !/<time[^>]*>\d/.test(cards(sec[0], 'card-v').filter((c) => />Guia</.test(c))[0] || '')); }
 
