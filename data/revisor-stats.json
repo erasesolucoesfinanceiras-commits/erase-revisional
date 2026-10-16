@@ -66,15 +66,16 @@
    }
   },
   "artigo": {
-   "aprovados": 0,
-   "reprovados": 11,
-   "sem_novidade": 1,
+   "aprovados": 1,
+   "reprovados": 24,
+   "sem_novidade": 4,
    "criterios": {
     "formato": 1,
-    "forma": 5,
+    "forma": 12,
     "fatos": 1,
-    "fontes": 6,
-    "original": 2
+    "fontes": 13,
+    "original": 5,
+    "sem_generico": 2
    }
   }
  }

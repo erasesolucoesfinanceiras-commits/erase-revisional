@@ -1,5 +1,34 @@
 [
   {
+    "slug": "governo-do-rj-endurece-regras-para-o-credito-consignado",
+    "categoria": "credito-pessoal",
+    "titulo": "Governo do RJ endurece regras para o crédito consignado",
+    "resumo": "Estado publica decreto com limites de descontos em folha, novas travas e proteção reforçada para contratantes com 60 anos ou mais.",
+    "data": "2026-10-16",
+    "fontes": [
+      {
+        "nome": "g1",
+        "url": "https://g1.globo.com/rj/rio-de-janeiro/bom-dia-rio/noticia/2026/10/06/governo-do-rj-endurece-regras-para-emprestimos-consignados.ghtml",
+        "data": "2026-10-06"
+      },
+      {
+        "nome": "O Dia",
+        "url": "https://odia.ig.com.br/economia/2026/10/7309512-governo-do-rj-endurece-regras-para-emprestimos-consignados.html",
+        "data": "2026-10-06"
+      }
+    ],
+    "corpo": "<h2>Novas diretrizes para o crédito consignado no Rio de Janeiro</h2><p>O Governo do Estado do Rio de Janeiro publicou em decreto na segunda-feira (5) novas regras para a contratação de empréstimos consignados voltados a servidores públicos civis e militares, aposentados, pensionistas, ex-participantes e beneficiários da Previ-Banerj. A medida tem como objetivo principal conter o avanço do endividamento da população e impor limites rigorosos ao comprometimento da renda mensal com os descontos realizados diretamente em folha de pagamento.</p><p>De acordo com as novas normas estabelecidas pela gestão estadual, o total de descontos facultativos relacionados a empréstimos, financiamentos e outras operações consignadas passa a ser limitado a 40% da renda mensal dos contratantes. Desse percentual total, o limite de 35% pode ser utilizado de forma específica para empréstimos e demais operações financeiras, enquanto os outros 5% ficam reservados exclusivamente para o cartão de crédito consignado. O texto do decreto também determina que novas consignações ficam expressamente proibidas caso a soma dos descontos obrigatórios, compulsórios e facultativos atinja ou ultrapasse 70% da base de incidência do consignado. Com isso, a administração pública poderá bloquear novas averbações sempre que identificar qualquer risco de comprometimento excessivo da remuneração dos servidores e beneficiários.</p><h2>Proteção ampliada para o público com 60 anos ou mais</h2><p>As novas diretrizes implementadas pelo governo estadual impõem exigências adicionais e mais rigorosas para a contratação de operações financeiras por pessoas com 60 anos ou mais. Para este público específico, a validade de novos contratos passa a exigir obrigatoriamente a assinatura física ou digital do próprio contratante ou de seu representante legal, acompanhada obrigatoriamente pela apresentação de documento oficial com foto. Além disso, o documento oficial proíbe de forma direta o assédio comercial e as práticas de marketing ativo que sejam direcionadas de maneira específica a essa faixa etária da população.</p><p>Em paralelo a essas restrições, o governo do estado determinou a suspensão temporária dos descontos em folha que se referem a empréstimos e cartões de crédito consignados que estejam vinculados ao Banco Master e ao Credcesta. Essa suspensão é aplicada diretamente na folha de outubro, com o pagamento programado para novembro, tendo caráter estritamente preventivo para viabilizar a apuração de eventuais descontos que possam não ter sido autorizados ou que apresentem irregularidades por parte das instituições envolvidas. Conforme a regulamentação estabelecida pelo poder público estadual, caso seja constatado efetivamente algum desconto considerado indevido, a instituição financeira responsável tem a obrigação regulamentar de realizar a devolução de forma integral de todo o valor descontado, acompanhado da devida correção monetária e dos juros legais, respeitando o prazo máximo de até 30 dias úteis. Novas operações envolvendo o cartão consignado de benefício e o adiantamento salarial também passam a ficar impedidas, embora os contratos que já existiam anteriormente continuem mantendo sua validade até o término do prazo previsto originalmente em seus termos.</p><h3>O que observar na prática</h3><p>Quem utiliza linhas de crédito consignado ou possui contratos em andamento no estado do Rio de Janeiro pode acompanhar de perto os contracheques e extratos bancários para verificar se os limites de desconto estão em conformidade com as novas normas estabelecidas pelo poder público. É recomendável prestar atenção redobrada a eventuais cobranças indevidas e à necessidade de validação formal por meio de assinatura e documento em eventuais novas contratações.</p>",
+    "foto_busca": "loan contract documents bank",
+    "tipo": "noticia",
+    "foto": {
+      "id": 948603,
+      "autor": "stevepb",
+      "autorUrl": "https://pixabay.com/users/stevepb-282134/",
+      "pagina": "https://pixabay.com/photos/coins-currency-investment-insurance-948603/",
+      "fonte": "Pixabay"
+    }
+  },
+  {
     "slug": "emplacamentos-de-veiculos-em-setembro-atingem-recorde-historico-aponta-fenabrave",
     "categoria": "mercado",
     "titulo": "Emplacamentos de veículos em setembro atingem recorde histórico, aponta Fenabrave",
