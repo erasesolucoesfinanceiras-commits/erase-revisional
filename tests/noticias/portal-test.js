@@ -48,7 +48,11 @@ t('categoria: artigos e notas do Radar misturados por data real (decrescente)', 
 t('categoria: primeiros 8 visíveis, o resto escondido atrás de "Ver mais"', cards(catFin, 'row-card').filter((c) => /data-extra hidden/.test(c)).length === Math.max(0, cards(catFin, 'row-card').length - 8) && /id="ver-mais"/.test(catFin));
 
 // ---- Escolha da equipe: vazia = sem seção
-t('escolha da equipe: arquivo vazio por padrão → seção não aparece', !/Escolha da equipe/.test(home) && json(ROOT, 'data/escolha-da-equipe.json').itens.length === 0);
+{ const V0 = construir((d) => { salvar(d, 'data/escolha-da-equipe.json', { itens: [] }); });
+  t('escolha da equipe: arquivo vazio → seção não aparece', !/Escolha da equipe/.test(V0.ler('index.html'))); }
+{ const cfg = json(ROOT, 'data/escolha-da-equipe.json').itens, arts = json(ROOT, 'data/articles.json'), sec = /<section class="container team"[\s\S]*?<\/section>/.exec(home);
+  const ordem = sec ? [...sec[0].matchAll(/href="\/noticias\/([^"]+)"/g)].map((m) => m[1]).filter((x, k, l) => l.indexOf(x) === k) : [];
+  t('escolha da equipe (real): os 3 guias escolhidos aparecem na capa, na ordem do arquivo, todos existentes e do tipo guia', cfg.length === 3 && cfg.every((sl) => arts.some((a) => a.slug === sl && a.tipo === 'guia')) && JSON.stringify(ordem) === JSON.stringify(cfg), JSON.stringify({ cfg, ordem })); }
 { const E = construir((d) => { const a = json(d, 'data/articles.json'); const n = json(d, 'data/notas.json'); const guia = a.find((x) => x.tipo === 'guia'), noticias = a.filter((x) => x.tipo !== 'guia'); /* por tipo, não por posição: o robô põe artigos novos no começo da lista */ salvar(d, 'data/escolha-da-equipe.json', { itens: [guia.slug, `radar:${n[0].id}`, 'nao-existe', noticias[0].slug, noticias[1].slug] }); });
   const h = E.ler('index.html'); const sec = /<section class="container team"[\s\S]*?<\/section>/.exec(h);
   t('escolha da equipe: 3 itens fixos (slug, radar:ID; inexistente ignorado; máximo 3)', sec && cards(sec[0], 'card-v').length === 3 && /Escolha da equipe/.test(sec[0]) && />Radar</.test(sec[0]) && />Guia</.test(sec[0]) && !/<time[^>]*>\d/.test(cards(sec[0], 'card-v').filter((c) => />Guia</.test(c))[0] || '')); }
