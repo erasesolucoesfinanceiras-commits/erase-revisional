@@ -43,6 +43,7 @@ const ler = (f) => fs.readFileSync(path.join(ROOT, f), 'utf8');
   t('workflows instalam com "npm ci --ignore-scripts" (nada de npm i / install sem versão)', wfs.every(([, c]) => !/npm (i|install)\b/.test(c)) && wfs.filter(([, c]) => /sharp|npm ci/.test(c)).every(([, c]) => /npm ci --ignore-scripts/.test(c)));
   const pkg = JSON.parse(ler('package.json')), lock = JSON.parse(ler('package-lock.json'));
   t('sharp com versão exata no package.json e no package-lock.json', /^\d+\.\d+\.\d+$/.test(pkg.devDependencies.sharp) && lock.packages['node_modules/sharp'].version === pkg.devDependencies.sharp);
+  t('workflow das notícias: timeout de 60 minutos', /timeout-minutes: 60\b/.test(wfs.find(([f]) => f === 'noticias.yml')[1]));
   const fotos = wfs.filter(([f]) => /^fotos/.test(f));
   t('workflows de fotos: só manual (sem push) e só na main', fotos.length === 2 && fotos.every(([, c]) => !/\n\s*push:/.test(c) && /workflow_dispatch:/.test(c) && /if: github\.ref == 'refs\/heads\/main'/.test(c)));
   const blocosRun = (c) => { const L = c.split('\n'), out = []; for (let i = 0; i < L.length; i++) { const m = /^(\s*)(?:- )?run:\s*(.*)$/.exec(L[i]); if (!m) continue; let b = m[2]; const ind = m[1].length; for (let k = i + 1; k < L.length && (L[k].trim() === '' || L[k].search(/\S/) > ind); k++) b += '\n' + L[k]; out.push(b); } return out; };
