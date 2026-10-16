@@ -1,5 +1,31 @@
 [
   {
+    "id": "2026-10-16-comissao-aprova-politica-de-credito-rura",
+    "data": "2026-10-16",
+    "categoria": "credito-rural",
+    "titulo": "Comissão aprova política de crédito rural para mulheres",
+    "texto": "A Comissão de Finanças e Tributação aprovou o Projeto de Lei 2501/20, que prioriza o crédito oficial e a assistência técnica para mulheres do campo microempreendedoras em regime familiar, direcionando os recursos para as regras do Pronaf.",
+    "fontes": [
+      {
+        "nome": "atlaspublico",
+        "url": "https://atlaspublico.com.br/noticias/cmn-aprova-precos-minimos-regras-do-proagro-e-do-pronaf-e-92037",
+        "data": "2026-10-13"
+      },
+      {
+        "nome": "Agência Câmara",
+        "url": "https://www.camara.leg.br/noticias/1311515-comissao-aprova-politica-de-credito-para-mulheres-do-campo",
+        "data": "2026-10-15"
+      }
+    ],
+    "foto": {
+      "id": 7300854,
+      "autor": "Mirko_Fabian",
+      "autorUrl": "https://pixabay.com/users/Mirko_Fabian-23681422/",
+      "pagina": "https://pixabay.com/photos/crop-sprayer-tractor-7300854/",
+      "fonte": "Pixabay"
+    }
+  },
+  {
     "id": "2026-10-15-camara-aprova-proposta-com-perdao-de-div",
     "data": "2026-10-15",
     "categoria": "credito-pessoal",

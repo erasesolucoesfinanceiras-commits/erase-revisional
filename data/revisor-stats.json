@@ -57,12 +57,24 @@
  },
  "2026-10-16": {
   "nota": {
-   "aprovados": 0,
+   "aprovados": 1,
    "reprovados": 1,
    "sem_novidade": 4,
    "criterios": {
     "fontes": 1,
     "original": 1
+   }
+  },
+  "artigo": {
+   "aprovados": 0,
+   "reprovados": 11,
+   "sem_novidade": 1,
+   "criterios": {
+    "formato": 1,
+    "forma": 5,
+    "fatos": 1,
+    "fontes": 6,
+    "original": 2
    }
   }
  }
