@@ -34,6 +34,8 @@ t('carrossel: 1ª imagem carrega já, as outras são preguiçosas e todas têm t
 t('faixa "Última publicação… Taxas conferidas…" mantida', /Última publicação: <time[\s\S]*Taxas conferidas com o Banco Central em/.test(home));
 
 // ---- Explore tópicos
+// endereço da empresa NÃO aparece no site nem no repositório: o teste procura qualquer rua/avenida/CEP (sem guardar o endereço aqui)
+const ENDERECO = /\b(Rua|Avenida|Av\.|CEP)\b|\b\d{2}\.\d{3}-\d{3}\b|\b\d{5}-\d{3}\b/;
 const cats = Object.keys(json(B.d, 'data/config.json').categorias);
 const usadas = new Set([...json(B.d, 'data/articles.json'), ...json(B.d, 'data/notas.json')].map((x) => x.categoria));
 const visiveis = cats.filter((s) => usadas.has(s)); // categoria sem artigo nem nota fica fora dos quadros e do menu
@@ -58,7 +60,7 @@ for (const [nome, h] of Object.entries(paginas)) {
   t(`barra lateral (${nome}): cartão da calculadora/análise + Destaques (4) + Sobre + newsletter`, /class="promo"/.test(h) && dest && (dest[1].match(/<li class="mini">/g) || []).length === 4 && /Portal de notícias e guias sobre financiamento de veículos, produzido pela Equipe ERASE e revisado com fontes citadas/.test(h) && /id="sb-news-form"/.test(h));
 }
 t('destaques: 4 mais recentes por data real, com data; sem guias', (() => { const d = /<ul class="mini-list">([\s\S]*?)<\/ul>/.exec(paginas.capa)[1]; return !/>Guia</.test(d) && (d.match(/<time datetime="\d{4}-\d{2}-\d{2}"/g) || []).length === 4; })());
-t('sobre: sem endereço, com link para "Como produzimos nosso conteúdo"', !/Rua Pedro|Lagoa dos Gatos/.test(paginas.capa) && /<a href="\/como-produzimos">Como produzimos nosso conteúdo/.test(paginas.capa));
+t('sobre: sem endereço, com link para "Como produzimos nosso conteúdo"', !ENDERECO.test(paginas.capa) && /<a href="\/como-produzimos">Como produzimos nosso conteúdo/.test(paginas.capa));
 t('redes sociais: só perfil que existe na config (Instagram); nada de x.com/facebook genéricos', (paginas.capa.match(/class="social"/g) || []).length === 2 && !/href="https:\/\/(x|twitter|www\.facebook)\.com/.test(paginas.capa) && /instagram\.com\/erasesolucoesfinanceiras/.test(paginas.capa));
 { const S0 = construir((d) => { const c = json(d, 'data/config.json'); c.social = { x: '', instagram: '', facebook: '' }; salvar(d, 'data/config.json', c); });
   t('redes sociais: todas vazias → nenhum ícone nem link', !/class="social"/.test(S0.ler('index.html')) && !/class="socials"/.test(S0.ler('noticias/' + fs.readdirSync(path.join(S0.d, 'noticias'))[0]))); }
@@ -75,7 +77,7 @@ t('artigo: relacionados não incluem o próprio artigo e completam com outras ca
 const prod = B.ler('como-produzimos.html');
 t('"Como produzimos nosso conteúdo": existe e cita IA, ≥2 fontes, sem promessa e regras do revisor em linguagem simples', /inteligência artificial/.test(prod) && /Pelo menos 2 fontes/.test(prod) && /Sem promessa de resultado/.test(prod) && /Números iguais aos da fonte/.test(prod) && /Equipe ERASE/.test(prod));
 const foot = /<footer[\s\S]*<\/footer>/.exec(paginas.capa)[0];
-t('rodapé: Navegação, Categorias, Fale Conosco, Termos de Uso, Política de Privacidade, Como produzimos; sem endereço', ['Navegação', 'Categorias', 'Fale Conosco', 'Termos de Uso', 'Política de Privacidade', 'Como produzimos nosso conteúdo'].every((x) => foot.includes(x)) && !/Rua Pedro|Lagoa dos Gatos/.test(foot) && fs.existsSync(path.join(B.d, 'termos.html')));
+t('rodapé: Navegação, Categorias, Fale Conosco, Termos de Uso, Política de Privacidade, Como produzimos; sem endereço', ['Navegação', 'Categorias', 'Fale Conosco', 'Termos de Uso', 'Política de Privacidade', 'Como produzimos nosso conteúdo'].every((x) => foot.includes(x)) && !ENDERECO.test(foot) && fs.existsSync(path.join(B.d, 'termos.html')));
 const menu = /<div class="dropdown-menu">([\s\S]*?)<\/div>/.exec(paginas.capa)[1];
 t('menu "Categorias" lista as mesmas categorias dos quadros', visiveis.every((s) => menu.includes(`/categoria-${s}`)) && (menu.match(/<a /g) || []).length === visiveis.length && cats.filter((s) => !usadas.has(s)).every((s) => !menu.includes(`/categoria-${s}`) && !home.includes(`href="/categoria-${s}"`)));
 

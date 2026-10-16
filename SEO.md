@@ -11,7 +11,7 @@ Base técnica boa (canonical, Open Graph, um H1 por página, sem título ou desc
 ## 2. llms.txt ⚠️
 Existe e descreve bem o serviço (análise revisional gratuita de contratos de veículos, calculadora Price × média do Banco Central, notícias com fonte).
 - Faltam: página **Sobre**, **Como produzimos nosso conteúdo** e as **categorias**; e os termos de busca do negócio (juros abusivos, busca e apreensão, seguro prestamista).
-- Mostra **CNPJ e a cidade (Lagoa dos Gatos - PE)**: se a decisão é não divulgar endereço, vale tirar a cidade.
+- Mostrava a cidade da empresa (já removida em 16/10; ver `SEGURANCA-SITE.md`); o CNPJ continua, por ser dado público da empresa.
 
 ## 3. Títulos e descrições ⚠️
 Sem duplicados em nenhuma das 31 páginas ✅. Tamanho (ideal: título até ~60 caracteres, descrição 70–160):

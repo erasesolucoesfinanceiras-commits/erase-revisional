@@ -9,9 +9,12 @@ Sem segredo exposto, sem dado de lead em arquivo público e `npm audit` limpo. O
 
 ## Achados, em ordem de gravidade
 
-### 🟠 1. Repositório público com o endereço da empresa (e e-mail, CNPJ)
-`github.com/erasesolucoesfinanceiras-commits/erase-revisional` é **público** (visibilidade conferida). `data/config.json` guarda `endereco` ("Rua Pedro Barreto, 20, Centro, Lagoa dos Gatos - PE…"), que o site não mostra por decisão sua, mas qualquer pessoa lê no repositório e no histórico (66 commits). E-mail e CNPJ também estão lá, mas já são públicos no site.
-- Correção: tornar o repositório **privado** (o Cloudflare Pages e o GitHub Actions continuam funcionando; só confirmar que a conexão Pages ↔ repositório tem permissão), ou tirar o endereço do `config.json` (some do arquivo, **não** do histórico; para o histórico seria preciso reescrever, o que não recomendo). Observação: repositório privado consome minutos de Actions do plano; hoje o uso é pequeno.
+### 🟠 1. Repositório público com dados da empresa — **decidido e resolvido (16/10/2026)**
+O repositório é **público** (visibilidade conferida) e o `data/config.json` guardava o endereço da empresa, que o site não mostra por decisão sua.
+- **Decisão:** o repositório **continua público**: somando o consumo de Actions com o do CRM (também privado, mesmo limite), passaria dos 2.000 min/mês grátis se ele virasse privado.
+- **Feito:** o campo `endereco` saiu do `data/config.json` (o código nunca o usava) e foi retirado de todo arquivo do repositório (relatórios e testes inclusive); os testes agora só procuram padrões de endereço (rua, avenida, CEP) no site, sem guardar o endereço.
+- **Não feito, de propósito:** o histórico do Git **não foi reescrito**. O endereço continua visível em commits antigos (a linha de `data/config.json` existe desde o início do projeto); quem souber procurar no histórico o encontra. Se isso passar a incomodar, a saída é reescrever o histórico (ou migrar o código para um repositório novo e limpo).
+- **Conferência dos demais dados internos (árvore atual):** só aparecem o e-mail e o WhatsApp da empresa e o CNPJ, todos públicos no site por decisão sua; e-mails de teste fictícios (`ana@teste.com`, `seu@email.com`…); nenhum e-mail ou telefone pessoal, CPF, senha ou chave privada. Chaves visíveis e **públicas por natureza**: chave do site do CRM (`erase_site_…`, fica no navegador), site key do Turnstile, ID do Google Analytics, chave do IndexNow e o endereço do CRM no Supabase. O que protege o CRM é a verificação no servidor (Lote 3), não o sigilo dessa chave; se ela for trocada no CRM, basta atualizar `assets/js/main.js` e os testes.
 
 ### 🟠 2. Injeção de script via JSON-LD (texto da IA não é escapado)
 `scripts/site.js` imprime os dados estruturados com `JSON.stringify(...)` dentro de `<script type="application/ld+json">` **sem escapar `<`**. O corpo dos artigos é limpo (`sanitizar`), mas **título e resumo não**: um título como `...</script><script>…` fecha o bloco e executa código na página. Testei: com esse título, a página gerada contém o `</script><script>` solto. O vetor realista é prompt injection: o robô lê páginas de terceiros e entrega o texto ao Gemini; o revisor confere fatos, não HTML.
@@ -48,8 +51,8 @@ Qualquer push de quem tem escrita numa branch `claude/*` dispara o workflow com 
 - **XSS no navegador:** o `innerHTML` dos scripts só recebe texto fixo ou números calculados; o nome digitado na calculadora só entra no link do WhatsApp, já codificado (`encodeURIComponent`). Corpo dos artigos: só `<p>, <h2>, <h3>, <ul>, <li>, <strong>, <em>`, sem atributos nem links.
 - **Cookies/Analytics:** o Google Analytics só carrega depois do aceite.
 
-## Correções propostas (para aprovação), em ordem
-1. Repositório privado (ou tirar o endereço do `config.json`).
+## Correções propostas, em ordem
+1. ~~Repositório privado~~ → decidido: continua público; endereço tirado do repositório.
 2. Escapar `<` no JSON-LD e limpar `<` `>` de título/resumo/fontes + teste.
 3. `sharp` com versão exata + lockfile + `npm ci --ignore-scripts`; ações por hash; Dependabot; proteção da `main`; secret scanning e push protection.
 4. Confirmar no CRM: Turnstile obrigatório, limite de tamanho e de taxa; acrescentar `maxlength` e honeypot na calculadora e no pop-up.
@@ -63,7 +66,7 @@ Qualquer push de quem tem escrita numa branch `claude/*` dispara o workflow com 
 
 | Item | Situação |
 |---|---|
-| 1. Repositório privado | **Aguardando a sua mudança de visibilidade.** Estimativa de minutos abaixo |
+| 1. Repositório | **Decidido: continua público** (limite de 2.000 min/mês dividido com o CRM). Endereço removido do repositório; histórico do Git mantido. Detalhes acima |
 | 2. JSON-LD | **Feito.** `<`, `>`, `&` e separadores de linha escapados; título, resumo e nome de fonte do robô sem `<` `>` |
 | 3. Dependências dos workflows | **Feito.** `sharp` 0.35.5 exato + `package-lock.json`; `npm ci --ignore-scripts`; ações fixadas por hash (`checkout` v5.1.0, `setup-node` v5.0.0); entrada `modo` do workflow das notícias passou a ir por variável de ambiente. Dependabot, proteção da `main`, secret scanning e push protection: ficam no painel do GitHub (confirmar) |
 | 4. Formulários | **Feito:** limites de tamanho (nome 80, e-mail 120, mensagem 2000, WhatsApp 15, valores 14) e honeypot na calculadora e no pop-up. **Turnstile obrigatório: Lote 3 do CRM** |
@@ -79,4 +82,4 @@ Base: duração real dos runs de 9 a 15/10 (cada job arredonda para cima, em min
 | Resumo semanal | ~5 min |
 | Fotos (agora só manual, ~45 a 60 min por execução) | ~100 a 200 min (2 a 4 execuções) |
 | **Total** | **~930 a 1.260 min/mês** |
-Limite grátis de repositório **privado** no plano GitHub Free: **2.000 min/mês** (Pro/Team: 3.000). Cabe, usando uns 50% a 65%. Em repositório público os minutos são ilimitados. Antes desta mudança, cada `push` em `claude/**` disparava ~1 h de fotos (hoje 2 execuções); isso foi cortado. Risco: um mês com Gemini muito instável pode puxar o uso das notícias para perto de 1.500 min; o `timeout-minutes` do workflow das notícias já foi baixado de 75 para 60 para limitar o pior caso. Acompanhe em *Settings > Billing and plans > Usage*. O Cloudflare Pages continua funcionando com repositório privado (a conexão pelo app do GitHub precisa de permissão para o repositório).
+Limite grátis de repositório **privado** no plano GitHub Free: **2.000 min/mês** (Pro/Team: 3.000), dividido com o CRM. Sozinho este repositório usaria uns 50% a 65%; com o CRM somado passaria, por isso ele continua público (minutos ilimitados). Em repositório público os minutos são ilimitados. Antes desta mudança, cada `push` em `claude/**` disparava ~1 h de fotos (hoje 2 execuções); isso foi cortado. Risco: um mês com Gemini muito instável pode puxar o uso das notícias para perto de 1.500 min; o `timeout-minutes` do workflow das notícias já foi baixado de 75 para 60 para limitar o pior caso. Acompanhe em *Settings > Billing and plans > Usage*. O Cloudflare Pages continua funcionando com repositório privado (a conexão pelo app do GitHub precisa de permissão para o repositório).

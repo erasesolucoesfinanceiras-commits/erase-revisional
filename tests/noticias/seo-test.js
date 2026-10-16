@@ -47,7 +47,8 @@ t('guia juros abusivos: Súmula 382 (12% ao ano não é abusivo por si só), ref
   /Súmula 382/.test(tx(guias[2])) && /12% ao ano não são abusivos por si só/.test(tx(guias[2])) && /muito acima da média para a mesma operação e na mesma época/.test(tx(guias[2])) && /nem mesmo estar muito acima garante um resultado favorável/.test(tx(guias[2])) && !/(vai|vão|pode) (ganhar|vencer)|ação ganha|garantid/i.test(tx(guias[2])));
 t('capa cita os 3 guias (seção "Guias para entender o seu contrato") e as palavras-chave no texto de abertura', guias.every((a) => home.includes(`/noticias/${a.slug}`)) && /busca e apreensão/.test(home) && /seguro prestamista/.test(home));
 const llms = ler('llms.txt');
-t('llms.txt: Sobre, Como produzimos, categorias e guias; sem a cidade', ['/sobre', '/como-produzimos', '/categoria-revisional', 'busca-e-apreensao', 'prestamista', 'juros abusivos'].every((x) => llms.includes(x)) && !/Lagoa dos Gatos/.test(llms));
+t('endereço da empresa fora do repositório: sem o campo `endereco` no config.json e sem rua/avenida/CEP em sobre, rodapé e llms.txt', !('endereco' in S.config.empresa) && !/\b(Rua|Avenida|Av\.|CEP)\b|\b\d{2}\.\d{3}-\d{3}\b|\b\d{5}-\d{3}\b/.test(ler('sobre.html').replace(/<[^>]+>/g, ' ')) && !/\b(Rua|Avenida|Av\.|CEP)\b/.test(ler('index.html').replace(/<[^>]+>/g, ' ')));
+t('llms.txt: Sobre, Como produzimos, categorias e guias; sem endereço', ['/sobre', '/como-produzimos', '/categoria-revisional', 'busca-e-apreensao', 'prestamista', 'juros abusivos'].every((x) => llms.includes(x)) && !/\b(Rua|Avenida|Av\.|CEP)\b|\b\d{2}\.\d{3}-\d{3}\b|\b\d{5}-\d{3}\b/.test(llms));
 const robots = ler('robots.txt');
 t('robots.txt libera o site, aponta o sitemap e a chave do IndexNow não é bloqueada', /Allow: \//.test(robots) && !/Disallow/.test(robots) && /Sitemap: https:\/\/revisional\.eraseconsulta\.com\.br\/sitemap\.xml/.test(robots));
 console.log(`${ok} ok, ${bad} falha(s)`); process.exit(bad ? 1 : 0);
