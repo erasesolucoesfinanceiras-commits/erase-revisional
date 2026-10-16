@@ -302,7 +302,8 @@
       "autorUrl": "https://pixabay.com/users/LauraTara-6167959/",
       "pagina": "https://pixabay.com/photos/car-key-car-keys-table-key-keys-2648850/",
       "fonte": "Pixabay"
-    }
+    },
+    "fora_da_cadencia": true
   },
   {
     "slug": "seguro-prestamista-no-financiamento-o-que-e-e-quando-pode-ser-venda-casada",
@@ -333,7 +334,8 @@
       "autorUrl": "https://pixabay.com/users/StockSnap-894430/",
       "pagina": "https://pixabay.com/photos/penmanship-pen-signature-document-2561217/",
       "fonte": "Pixabay"
-    }
+    },
+    "fora_da_cadencia": true
   },
   {
     "slug": "juros-abusivos-em-financiamento-como-comparar-a-taxa-do-seu-contrato-com-o-mercado",
@@ -364,6 +366,7 @@
       "autorUrl": "https://pixabay.com/users/andibreit-2748383/",
       "pagina": "https://pixabay.com/photos/contract-signature-lease-disposal-1464917/",
       "fonte": "Pixabay"
-    }
+    },
+    "fora_da_cadencia": true
   }
 ]

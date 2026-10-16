@@ -17,6 +17,7 @@ const { coletar } = require('./fontes');
 const { fetchPhoto, FALLBACK_Q, catSemFoto } = require('../photos');
 const EST = require('./estatisticas');
 const RG = require('./revisar-guia');
+const CAD = require('./cadencia');
 
 const ROOT = path.join(__dirname, '..', '..');
 const DATA_DIR = process.env.DADOS_DIR || path.join(ROOT, 'data');
@@ -265,9 +266,9 @@ function encerrar(falha) {
 
   // ---- publicar
   const arquivos = [F_ART, F_NOTAS, path.join(ROOT, 'sitemap.xml')];
-  const artigoHoje = artigos.some((a) => a.data === hoje);
+  const artigoHoje = CAD.temArtigoDe(artigos, hoje);
   // Cadência: publica se o último artigo tem 2 dias ou mais (um dia que falhou é recuperado no seguinte).
-  const ultimoArtigo = artigos.reduce((m, a) => (a.data > m ? a.data : m), '');
+  const ultimoArtigo = (CAD.maisRecente(artigos) || { data: '' }).data; // guias escritos à mão (fora_da_cadencia) não adiam o próximo artigo
   const diasDesdeUltimo = ultimoArtigo ? epochDay - Math.floor(Date.parse(ultimoArtigo + 'T00:00:00Z') / 864e5) : Infinity;
   const devoArtigo = !artigoHoje && (process.env.FORCAR_ARTIGO === '1' || diasDesdeUltimo >= 2);
   if (!devoArtigo) console.log(artigoHoje ? 'Já existe artigo de hoje: limite de 1 por dia.' : `Último artigo é de ${ultimoArtigo} (${diasDesdeUltimo} dia(s)): ainda não é hora de outro.`);

@@ -28,7 +28,8 @@ const hoje = process.env.DATA || diaBR(Date.now());
 const dorme = (ms) => new Promise((r) => setTimeout(r, ms));
 const lerArtigos = () => JSON.parse(fs.readFileSync(F_ART, 'utf8'));
 // Atraso e conferência do site usam SÓ a data de publicação (`data`): guia revisado ganha `atualizado`, que NUNCA entra nesta conta.
-const maisRecente = (arts) => arts.reduce((m, a) => (!m || a.data > m.data ? a : m), null);
+const CAD = require('./cadencia');
+const maisRecente = CAD.maisRecente; // guias escritos à mão (fora_da_cadencia) não contam
 const diasEntre = (d) => Math.floor((Date.parse(hoje) - Date.parse(d)) / 864e5);
 
 function log(evento, dados) {
@@ -114,7 +115,7 @@ function registrarAtividade(motivo) {
   let desde = null;
   if (andando) { log('verificacao', { acao: 'esperando_execucao_em_andamento', motivo: 'há uma geração rodando agora' }); desde = Date.now() - 3600e3; }
   else if (!deHoje.length) desde = await disparar('o horário agendado não disparou hoje');
-  else if (!arts.some((a) => a.data === hoje) && dias >= 2 && !exigePessoa) desde = await disparar('as rodadas do dia terminaram sem artigo e ele já está atrasado: rodada extra');
+  else if (!CAD.temArtigoDe(arts, hoje) && dias >= 2 && !exigePessoa) desde = await disparar('as rodadas do dia terminaram sem artigo e ele já está atrasado: rodada extra');
   if (desde) {
     const ok = await esperarTerminar(desde);
     if (!ok) log('verificacao', { acao: 'espera_estourou', motivo: 'a geração não terminou no tempo previsto' });
