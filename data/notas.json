@@ -1,5 +1,31 @@
 [
   {
+    "id": "2026-10-17-ibc-br-sobe-0-3-em-agosto-com-taxa-selic",
+    "data": "2026-10-17",
+    "categoria": "economia",
+    "titulo": "IBC-Br sobe 0,3% em agosto com taxa Selic em 13,75% ao ano",
+    "texto": "O IBC-Br do Banco Central subiu 0,3% em agosto ante julho, acumulando avanço de 1,6% em 12 meses. Com a Selic em 13,75% ao ano, a atividade segue em ritmo moderado sob o impacto dos juros elevados no crédito e no consumo. Para o consumidor, esse cenário tende a manter caras as taxas de novos financiamentos, exigindo cautela redobrada e comparação criteriosa das condições antes de contratar.",
+    "fontes": [
+      {
+        "nome": "Valor Investe",
+        "url": "https://valorinveste.globo.com/mercados/moedas-e-juros/noticia/2026/10/16/economia-brasileira-da-sinais-de-desaceleracao-e-suficiente-para-sustentar-novos-cortes-da-selic.ghtml",
+        "data": "2026-10-16"
+      },
+      {
+        "nome": "Agência Brasil",
+        "url": "https://agenciabrasil.ebc.com.br/economia/noticia/2026-10/atividade-economica-tem-alta-de-03-em-agosto-mostra-ibc-br",
+        "data": "2026-10-16"
+      }
+    ],
+    "foto": {
+      "id": 1726618,
+      "autor": "stevepb",
+      "autorUrl": "https://pixabay.com/users/stevepb-282134/",
+      "pagina": "https://pixabay.com/photos/coins-banknotes-money-currency-1726618/",
+      "fonte": "Pixabay"
+    }
+  },
+  {
     "id": "2026-10-16-comissao-aprova-politica-de-credito-rura",
     "data": "2026-10-16",
     "categoria": "credito-rural",

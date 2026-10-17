@@ -78,5 +78,22 @@
     "sem_generico": 2
    }
   }
+ },
+ "2026-10-17": {
+  "nota": {
+   "aprovados": 1,
+   "reprovados": 0,
+   "sem_novidade": 4,
+   "criterios": {}
+  },
+  "guia_revisao": {
+   "aprovados": 0,
+   "reprovados": 1,
+   "sem_novidade": 0,
+   "criterios": {
+    "forma": 1,
+    "fatos": 1
+   }
+  }
  }
 }
