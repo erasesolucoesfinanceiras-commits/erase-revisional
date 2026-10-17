@@ -498,3 +498,4 @@
 {"quando":"2026-10-17T11:20:51.957Z","data":"2026-10-17","evento":"avaliacao","tipo":"guia_revisao","tema":"financeiro","tentativa":1,"aprovado":false,"criterios_reprovados":["forma","fatos"]}
 {"quando":"2026-10-17T11:20:55.082Z","data":"2026-10-17","evento":"revisao_guia","resultado":"sem_mudanca","slug":"taxa-nominal-x-taxa-efetiva-entenda-a-diferenca"}
 {"quando":"2026-10-17T11:20:55.083Z","data":"2026-10-17","evento":"uso_gemini","pedidos":12,"ok":12,"por_status":{}}
+{"quando":"2026-10-17T11:21:29.064Z","data":"2026-10-17","evento":"indexnow","resultado":"enviado","status":200,"enviadas":3,"ainda_pendentes":0,"urls":["https://revisional.eraseconsulta.com.br/","https://revisional.eraseconsulta.com.br/radar","https://revisional.eraseconsulta.com.br/categoria-economia"],"resposta":""}
