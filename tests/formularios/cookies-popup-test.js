@@ -5,20 +5,24 @@ const root=path.join(__dirname,'..','..');
 const mime={'.html':'text/html','.css':'text/css','.js':'text/javascript','.webp':'image/webp','.svg':'image/svg+xml','.png':'image/png','.json':'application/json'};
 const srv=http.createServer((q,r)=>{let u=decodeURIComponent(q.url.split('?')[0]);let f=path.join(root,u);if(fs.existsSync(f)&&fs.statSync(f).isDirectory())f+='/index.html';else if(!fs.existsSync(f)&&fs.existsSync(f+'.html'))f+='.html';if(!fs.existsSync(f)){r.statusCode=404;return r.end()}r.setHeader('content-type',mime[path.extname(f)]||'application/octet-stream');r.end(fs.readFileSync(f))}).listen(8768,async()=>{
  const b=await chromium.launch();let ok=0,bad=0;const t=(n,c,x='')=>{c?ok++:bad++;console.log(c?'OK   ':'FALHA',n,c?'':x)};
- const novo=async(vp)=>{const c=await b.newContext({viewport:vp});c.route(/googletagmanager|fonts\.|turnstile|challenges/,r=>r.abort());return c};
+ const novo=async(vp)=>{const c=await b.newContext({viewport:vp});c.route(/googletagmanager|connect\.facebook|fonts\.|turnstile|challenges/,r=>r.abort());return c};
  // 1) GA só após aceite
  let ctx=await novo({width:1280,height:800}),pg=await ctx.newPage();
- const gaReq=[];ctx.on('request',r=>{if(/googletagmanager/.test(r.url()))gaReq.push(r.url())});
+ const gaReq=[];const fbReq=[];ctx.on('request',r=>{if(/googletagmanager/.test(r.url()))gaReq.push(r.url());if(/connect\.facebook\.net/.test(r.url()))fbReq.push(r.url())});
  await pg.goto('http://localhost:8768/privacidade');await pg.waitForTimeout(800);
+ t('Política de Privacidade cita o Meta Pixel e o aceite (Pixel configurado)',/Meta Pixel/.test(fs.readFileSync(path.join(root,'privacidade.html'),'utf8'))&&/Sem o seu aceite, o Pixel não é carregado/.test(fs.readFileSync(path.join(root,'privacidade.html'),'utf8')));
+ t('banner cita o Google Analytics e a Meta (Pixel configurado)',/Google Analytics/.test(await pg.innerText('.cookie-bar'))&&/Meta/.test(await pg.innerText('.cookie-bar')));
+ t('Pixel da Meta não carrega antes do aceite',fbReq.length===0&&await pg.evaluate(()=>!window.fbq));
  t('banner aparece na 1ª visita',await pg.locator('.cookie-bar').count()===1);
  t('GA não carrega antes do aceite',gaReq.length===0&&await pg.evaluate(()=>!window.gtag));
  await pg.click('.cookie-bar [data-c=sim]');await pg.waitForTimeout(500);
  t('após aceitar: GA é carregado e banner some',gaReq.length===1&&await pg.locator('.cookie-bar').count()===0&&await pg.evaluate(()=>typeof window.gtag==='function'));
+ t('após aceitar: Pixel carrega (fbevents.js), com PageView na fila',fbReq.length===1&&/fbevents\.js/.test(fbReq[0])&&await pg.evaluate(()=>typeof window.fbq==='function'&&window.fbq.queue.some(a=>a[0]==='init'&&a[1]==='1740412147210905')&&window.fbq.queue.some(a=>a[0]==='track'&&a[1]==='PageView')));
  await pg.reload();await pg.waitForTimeout(500);
  t('aceite lembrado: sem banner e GA carrega de novo',await pg.locator('.cookie-bar').count()===0&&gaReq.length===2);
  await pg.click('[data-cookie-prefs]');t('"Preferências de cookies" reabre o banner',await pg.locator('.cookie-bar').count()===1);
  await pg.click('.cookie-bar [data-c=nao]');await pg.reload();await pg.waitForTimeout(500);
- t('recusa lembrada: sem banner e sem GA',await pg.locator('.cookie-bar').count()===0&&gaReq.length===2);
+ t('recusa lembrada: sem banner, sem GA e sem Pixel',await pg.locator('.cookie-bar').count()===0&&gaReq.length===2&&fbReq.length===2&&await pg.evaluate(()=>!window.fbq));
  // 2) celular: barra baixa, não cobre o fim da página
  ctx=await novo({width:390,height:760});pg=await ctx.newPage();await pg.goto('http://localhost:8768/contato');await pg.waitForTimeout(600);
  const m=await pg.evaluate(()=>{const r=document.querySelector('.cookie-bar').getBoundingClientRect();return{h:r.height,pad:parseFloat(document.body.style.paddingBottom),vh:innerHeight}});
