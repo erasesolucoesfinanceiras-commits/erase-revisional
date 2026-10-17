@@ -56,6 +56,7 @@ const BASE = 'http://localhost:8123/analise/';
   t('Google Analytics e Meta Pixel carregam direto, sem esperar aceite', tr.some((u) => /googletagmanager\.com\/gtag\/js\?id=G-/.test(u)) && tr.some((u) => /connect\.facebook\.net.*fbevents\.js/.test(u)) && await pg.evaluate(() => typeof window.fbq === 'function' && window.fbq.queue.some((a) => a[0] === 'init' && a[1] === '1740412147210905') && window.fbq.queue.some((a) => a[0] === 'track' && a[1] === 'PageView')), JSON.stringify(tr));
   const rod = pg.locator('.chat-rodape'), rb = await rod.boundingBox(), fs0 = await rod.evaluate((e) => parseFloat(getComputedStyle(e).fontSize));
   t('rodapé pequeno e discreto com o aviso e o link da Política de Privacidade, visível sem cobrir o chat', /Ao continuar, você concorda com a Política de Privacidade e o uso de cookies/.test(await rod.innerText()) && (await rod.locator('a[href="/privacidade"]').count()) === 1 && fs0 <= 13 && rb.y + rb.height <= 844 && (await pg.evaluate(() => getComputedStyle(document.querySelector('.chat-rodape')).position)) === 'static');
+  t('não sobra espaço vazio do Turnstile no chat', await pg.evaluate(() => { const c = document.getElementById('turnstile-caixa'); return !c || c.getBoundingClientRect().height === 0; }));
   await ctx.close();
   ({ ctx, pg, trackers: tr } = await abrir({ consent: 'nao', semStub: true }));
   await pg.waitForSelector('.chat-opt', { timeout: 8000 });
