@@ -13,27 +13,49 @@ const CRM_ENDPOINT = "https://lqxwdyjctsmirinvvyow.supabase.co/functions/v1/entr
 const CRM_API_KEY = "erase_site_179340d5359c433abb6011ee7c881e3e79f932e261ce4b04ac037debf431bf6e";
 const ENVIO_TIMEOUT_MS = 15000;
 const TURNSTILE_SITE_KEY = '0x4AAAAAAFXipig0gXCnRiPH';
-let turnstileId = null, turnstileCarregando = null, turnstileEntrega = null;
-
-/** Devolve um código novo do Turnstile (ou null se não conseguir em 12 s). Cada código vale um envio. O widget fica invisível e só aparece se a Cloudflare desconfiar. */
+let turnstileId = null, turnstileCarregando = null;
+// Token do Turnstile: cada código vale UM envio e dura ~5 min. `prepararTurnstile()` (usado em /analise/) gera o código ao abrir a página,
+// renova antes de vencer e já prepara o próximo depois de cada uso; sem isso, o código é gerado na hora do envio. O widget fica invisível
+// e só aparece se a Cloudflare desconfiar. `tsErro` guarda o código de erro da Cloudflare (ex.: 110200 domínio não permitido, 400020 chave inválida).
+const TS_VALIDADE_MS = window.TS_VALIDADE_MS || 240000; // só os testes mudam isso
+let tsToken = null, tsGerando = false, tsFila = [], tsErro = '', tsStatus = '', tsRenova = null, tsProativo = false;
+function tsEntregar(token, erro) {
+  tsGerando = false; clearTimeout(tsRenova);
+  if (token) {
+    tsErro = '';
+    const fila = tsFila.splice(0);
+    if (fila.length) { fila.shift()(token); if (fila.length) { tsFila.push(...fila); tsGerar(); } return; }
+    tsToken = token;
+    tsRenova = setTimeout(() => { tsToken = null; tsGerar(); }, TS_VALIDADE_MS); // vence em ~5 min: renova antes
+  } else { tsErro = String(erro || 'erro'); tsFila.splice(0).forEach((f) => f(null)); }
+}
+function tsGerar() {
+  if (tsGerando) return;
+  tsGerando = true;
+  turnstileCarregando = turnstileCarregando || new Promise((ok, falha) => {
+    const sc = document.createElement('script');
+    sc.src = 'https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit';
+    sc.async = true; sc.onload = ok; sc.onerror = () => { turnstileCarregando = null; falha(); };
+    document.head.appendChild(sc);
+  });
+  turnstileCarregando.then(() => {
+    let caixa = document.getElementById('turnstile-caixa');
+    if (!caixa) { caixa = document.createElement('div'); caixa.id = 'turnstile-caixa'; document.body.appendChild(caixa); }
+    const opcoes = { sitekey: TURNSTILE_SITE_KEY, appearance: 'interaction-only', language: 'pt-br', callback: (t) => tsEntregar(t), 'error-callback': (c) => tsEntregar(null, c), 'timeout-callback': () => tsEntregar(null, 'timeout'), 'expired-callback': () => { tsToken = null; tsGerando = false; tsGerar(); } };
+    if (turnstileId === null) turnstileId = window.turnstile.render(caixa, opcoes);
+    else window.turnstile.reset(turnstileId);
+  }).catch(() => tsEntregar(null, 'script_nao_carregou'));
+}
+/** Começa a gerar o token já (ex.: ao abrir /analise/); depois de cada uso, gera o próximo sozinho. */
+function prepararTurnstile() { tsProativo = true; if (!tsToken) tsGerar(); }
+/** Devolve um token (ou null se não ficar pronto em `limiteMs`). Token pronto: usa na hora. Senão espera o que está sendo gerado. */
 function obterTokenTurnstile(limiteMs = 12000) {
   return new Promise((resolve) => {
-    const limite = setTimeout(() => resolve(null), limiteMs);
-    const pronto = (token) => { clearTimeout(limite); resolve(token); };
-    turnstileEntrega = pronto; // o widget é criado uma vez: os callbacks sempre entregam ao envio atual
-    turnstileCarregando = turnstileCarregando || new Promise((ok, falha) => {
-      const sc = document.createElement('script');
-      sc.src = 'https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit';
-      sc.async = true; sc.onload = ok; sc.onerror = () => { turnstileCarregando = null; falha(); };
-      document.head.appendChild(sc);
-    });
-    turnstileCarregando.then(() => {
-      let caixa = document.getElementById('turnstile-caixa');
-      if (!caixa) { caixa = document.createElement('div'); caixa.id = 'turnstile-caixa'; document.body.appendChild(caixa); }
-      const opcoes = { sitekey: TURNSTILE_SITE_KEY, appearance: 'interaction-only', language: 'pt-br', callback: (t) => turnstileEntrega(t), 'error-callback': () => turnstileEntrega(null), 'timeout-callback': () => turnstileEntrega(null) };
-      if (turnstileId === null) turnstileId = window.turnstile.render(caixa, opcoes);
-      else window.turnstile.reset(turnstileId);
-    }).catch(() => pronto(null));
+    if (tsToken) { const t = tsToken; tsToken = null; clearTimeout(tsRenova); tsStatus = 'ok'; resolve(t); if (tsProativo) setTimeout(tsGerar, 50); return; }
+    let feito = false;
+    const fim = (t) => { if (feito) return; feito = true; clearTimeout(lim); tsStatus = t ? 'ok' : `sem token (${tsErro || 'não ficou pronto a tempo'})`; if (!t) tsFila = tsFila.filter((f) => f !== fim); if (t && tsProativo) setTimeout(tsGerar, 50); resolve(t); };
+    const lim = setTimeout(() => fim(null), limiteMs);
+    tsFila.push(fim); tsGerar();
   });
 }
 const MSG_FALHA = 'Não conseguimos enviar agora. Seus dados continuam aqui: confira a conexão e tente de novo.';
@@ -52,7 +74,7 @@ async function enviarParaCRM(origem, dados, { limiteMs } = {}) {
   ultimoErroCRM = '';
   let semToken = false;
   try {
-    const turnstile = await obterTokenTurnstile(limiteMs ? Math.round(limiteMs * 0.6) : undefined); // null = não carregou: o CRM decide
+    const turnstile = await obterTokenTurnstile(limiteMs ? Math.max(1000, limiteMs - 1000) : undefined); // null = não ficou pronto: o CRM decide (com orçamento curto, sobra ≥ 1 s para o envio)
     semToken = turnstile === null;
     const r = await fetch(CRM_ENDPOINT, {
       method: 'POST',
@@ -63,10 +85,10 @@ async function enviarParaCRM(origem, dados, { limiteMs } = {}) {
     let corpo = null;
     try { corpo = await r.json(); } catch (e) { /* corpo vazio ou não-JSON */ }
     const ok = r.ok && !(corpo && (corpo.ok === false || corpo.success === false || corpo.error));
-    if (!ok) { ultimoErroCRM = `${semToken ? 'sem_token_turnstile+' : ''}http_${r.status}${corpo && corpo.error ? ' ' + String(corpo.error).slice(0, 80) : ''}`; console.error('CRM não confirmou o recebimento:', r.status, corpo); }
+    if (!ok) { ultimoErroCRM = `${semToken ? `sem_token_turnstile(${tsErro || 'não ficou pronto a tempo'})+` : ''}http_${r.status}${corpo && corpo.error ? ' ' + String(corpo.error).slice(0, 80) : ''}`; console.error('CRM não confirmou o recebimento:', r.status, corpo); }
     return ok;
   } catch (err) {
-    ultimoErroCRM = `${semToken ? 'sem_token_turnstile+' : ''}${err.name === 'AbortError' ? 'tempo_esgotado' : 'rede: ' + String(err.message).slice(0, 80)}`;
+    ultimoErroCRM = `${semToken ? `sem_token_turnstile(${tsErro || 'não ficou pronto a tempo'})+` : ''}${err.name === 'AbortError' ? 'tempo_esgotado' : 'rede: ' + String(err.message).slice(0, 80)}`;
     console.error('Falha ao enviar ao CRM:', err);
     return false;
   } finally {
@@ -446,6 +468,8 @@ if (ct) {
     document.body.style.paddingBottom = barra.offsetHeight + 'px'; // a barra nunca esconde o fim da página
     document.documentElement.style.setProperty('--cookie-h', barra.offsetHeight + 'px'); // área fixa de botões (chat) sobe acima da barra
   }
+  // página de campanha (/analise/): sem banner; carrega Analytics e Pixel ao abrir, a menos que a pessoa já tenha RECUSADO os cookies no site
+  if (document.body.dataset.cookies === 'direto') { if (ler() !== 'nao') carregarComConsentimento(); return; }
   const atual = ler();
   if (atual === 'sim') carregarComConsentimento(); else if (atual !== 'nao') abrir();
   $$('[data-cookie-prefs]').forEach((a) => a.addEventListener('click', (e) => { e.preventDefault(); abrir(); }));

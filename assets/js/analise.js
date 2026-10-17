@@ -1,6 +1,6 @@
 /* /analise/ — chat de filtro para anúncios. 4 perguntas (botões), primeiro nome + WhatsApp, envio ao CRM (origem "formulario-analise-revisional")
  * e abertura do WhatsApp da ERASE com as respostas. Usa main.js: enviarLead, phoneOk, maskPhone, waLink, ultimoErroCRM, $ e $$.
- * ?debug=1 mostra o motivo de uma falha de envio; sem isso, a pessoa segue para o WhatsApp sem ver erro. */
+ * ?debug=1 mostra o resultado do envio (CRM e Turnstile, com o código de erro da Cloudflare) e não abre o WhatsApp sozinho; sem isso, a pessoa segue para o WhatsApp sem ver erro. */
 (function analise() {
   const raiz = $('#chat');
   if (!raiz) return;
@@ -20,6 +20,7 @@
 
   // a área de botões é fixa no rodapé: as mensagens rolam até ficar acima dela
   if (window.ResizeObserver) new ResizeObserver(() => document.documentElement.style.setProperty('--acoes-h', acoes.offsetHeight + 'px')).observe(acoes);
+  prepararTurnstile(); // o token do Turnstile já nasce ao abrir a página: na hora do envio ele está pronto (renova sozinho se vencer)
   const esperar = (ms) => new Promise((r) => setTimeout(r, reduzir ? 0 : ms));
   const rolar = () => { const u = log.lastElementChild; if (u) u.scrollIntoView({ block: 'end', behavior: reduzir ? 'auto' : 'smooth' }); };
   const rolarDepois = () => { rolar(); setTimeout(rolar, 80); setTimeout(rolar, 300); }; // a área fixa de botões muda de altura logo depois de aparecer
@@ -111,7 +112,7 @@
     await bot(`Pronto, ${nome.replace(/[<>&]/g, '')}! Abrindo o WhatsApp da ERASE com as suas respostas para a sua <strong>ANÁLISE GRATUITA</strong>.`, 300);
     const a = document.createElement('a'); a.className = 'btn btn-wa btn-block chat-wa'; a.href = link; a.textContent = 'Abrir o WhatsApp agora';
     acoes.appendChild(a); rolarDepois();
-    if (debug && !ok) { const d = document.createElement('p'); d.className = 'chat-debug'; d.textContent = `debug: o CRM não confirmou (${ultimoErroCRM || 'sem detalhe'}). Nada foi aberto sozinho.`; acoes.appendChild(d); return; }
+    if (debug) { const d = document.createElement('p'); d.className = 'chat-debug'; d.textContent = `debug: crm=${ok ? 'confirmou' : 'não confirmou (' + (ultimoErroCRM || 'sem detalhe') + ')'}; turnstile=${tsStatus || 'não usado'}. Nada foi aberto sozinho.`; acoes.appendChild(d); return; }
     setTimeout(() => { location.href = link; }, 900);
   }
 

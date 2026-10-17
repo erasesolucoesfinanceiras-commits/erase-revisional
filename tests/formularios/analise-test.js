@@ -8,10 +8,15 @@ const BASE = 'http://localhost:8123/analise/';
 
 (async () => {
   const b = await chromium.launch({ args: ['--no-sandbox'] });
-  async function abrir({ query = '', crmAtrasoMs = 0, consent = 'nao' } = {}) {
+  async function abrir({ query = '', crmAtrasoMs = 0, consent = 'nao', semStub = false, ts = null, validade = 0 } = {}) {
     const ctx = await b.newContext({ viewport: { width: 390, height: 844 }, hasTouch: true });
-    await require('./_turnstile')(ctx);
-    await ctx.addInitScript((c) => { try { localStorage.setItem('erase-cookies', c); } catch (e) {} window.__fb = []; window.fbq = function () { window.__fb.push([].slice.call(arguments)); }; }, consent);
+    if (ts) { // Turnstile falso configurável: atraso, erro e contagem de gerações (window.__ts)
+      const corpo = `var o,n=0;window.__ts={render:0,reset:0};function emit(){setTimeout(function(){${ts.erro ? `o['error-callback']('${ts.erro}')` : "o.callback('tok-'+(++n))"}},${ts.atraso || 0});}window.turnstile={render:function(e,x){o=x;window.__ts.render++;emit();return 'w1'},reset:function(){window.__ts.reset++;emit()}};`;
+      await ctx.route(/challenges\.cloudflare\.com/, (r) => r.fulfill({ contentType: 'application/javascript', body: corpo }));
+    } else await require('./_turnstile')(ctx);
+    if (validade) await ctx.addInitScript((v) => { window.TS_VALIDADE_MS = v; }, validade);
+    await ctx.addInitScript(([c, stub]) => { try { if (c) localStorage.setItem('erase-cookies', c); } catch (e) {} if (stub) { window.__fb = []; window.fbq = function () { window.__fb.push([].slice.call(arguments)); }; } }, [consent, !semStub]);
+    const trackers = []; ctx.on('request', (r) => { if (/googletagmanager|connect\.facebook\.net/.test(r.url())) trackers.push(r.url()); });
     await ctx.route(/fonts\.|googletagmanager|connect\.facebook/, (r) => r.abort());
     const reqs = [], waUrls = [];
     await ctx.route(URL_CRM, async (route, req) => {
@@ -23,7 +28,7 @@ const BASE = 'http://localhost:8123/analise/';
     await ctx.route(/wa\.me/, (route) => { waUrls.push(route.request().url()); route.fulfill({ status: 200, contentType: 'text/html', body: '<h1>wa</h1>' }); });
     const pg = await ctx.newPage();
     await pg.goto(BASE + query);
-    return { ctx, pg, reqs, waUrls };
+    return { ctx, pg, reqs, waUrls, trackers };
   }
   const responder = async (pg, texto) => { const alvo = pg.locator('.chat-opt', { hasText: texto }); await alvo.waitFor({ timeout: 8000 }); await alvo.click(); };
   async function percorrer(pg, [v, p, c, a]) { await responder(pg, v); await responder(pg, p); await responder(pg, c); await responder(pg, a); await pg.waitForSelector('#chat-form', { timeout: 10000 }); }
@@ -43,12 +48,18 @@ const BASE = 'http://localhost:8123/analise/';
   t('sem rolagem horizontal (360 px)', await pg.evaluate(() => document.documentElement.scrollWidth <= innerWidth));
   await ctx.close();
 
-  // ---- banner de cookies não cobre os botões (primeira visita: sem escolha gravada)
-  ({ ctx, pg } = await abrir({ consent: '' }));
-  const opt = pg.locator('.chat-opt').first(); await opt.waitFor({ timeout: 8000 });
-  const bar = await pg.locator('.cookie-bar').count();
-  // sem ID de Google Analytics/Pixel configurado não há banner; se houver, os botões ficam acima dele
-  if (bar) { const bx = await pg.locator('.cookie-bar').boundingBox(), ob = await opt.boundingBox(); t('botões do chat acima do banner de cookies', ob.y + ob.height <= bx.y + 1, JSON.stringify({ ob, bx })); } else t('sem banner de cookies sem GA/Pixel configurado (nada a cobrir)', true);
+  // ---- cookies: sem banner; Analytics e Pixel carregam ao abrir; rodapé discreto com o aviso; recusa anterior vale
+  let tr;
+  ({ ctx, pg, trackers: tr } = await abrir({ consent: '', semStub: true }));
+  await pg.waitForSelector('.chat-opt', { timeout: 8000 });
+  t('sem banner de cookies com botões na /analise/', (await pg.locator('.cookie-bar').count()) === 0);
+  t('Google Analytics e Meta Pixel carregam direto, sem esperar aceite', tr.some((u) => /googletagmanager\.com\/gtag\/js\?id=G-/.test(u)) && tr.some((u) => /connect\.facebook\.net.*fbevents\.js/.test(u)) && await pg.evaluate(() => typeof window.fbq === 'function' && window.fbq.queue.some((a) => a[0] === 'init' && a[1] === '1740412147210905') && window.fbq.queue.some((a) => a[0] === 'track' && a[1] === 'PageView')), JSON.stringify(tr));
+  const rod = pg.locator('.chat-rodape'), rb = await rod.boundingBox(), fs0 = await rod.evaluate((e) => parseFloat(getComputedStyle(e).fontSize));
+  t('rodapé pequeno e discreto com o aviso e o link da Política de Privacidade, visível sem cobrir o chat', /Ao continuar, você concorda com a Política de Privacidade e o uso de cookies/.test(await rod.innerText()) && (await rod.locator('a[href="/privacidade"]').count()) === 1 && fs0 <= 13 && rb.y + rb.height <= 844 && (await pg.evaluate(() => getComputedStyle(document.querySelector('.chat-rodape')).position)) === 'static');
+  await ctx.close();
+  ({ ctx, pg, trackers: tr } = await abrir({ consent: 'nao', semStub: true }));
+  await pg.waitForSelector('.chat-opt', { timeout: 8000 });
+  t('quem já recusou os cookies no site continua sem Analytics e sem Pixel', tr.length === 0 && (await pg.locator('.cookie-bar').count()) === 0);
   await ctx.close();
 
   // ---- cenário A: carro / atrasadas / contrato sim / ação não, com UTM
@@ -93,11 +104,40 @@ const BASE = 'http://localhost:8123/analise/';
   ({ ctx, pg, reqs } = await abrir({ query: '?debug=1', crmAtrasoMs: 9000 }));
   await percorrer(pg, ['Carro', 'Em dia', 'Sim, em papel ou PDF', 'Não']); await enviar(pg, 'Rui', '(81) 99999-9999');
   await pg.waitForSelector('.chat-debug', { timeout: 8000 });
-  t('?debug=1 mostra o motivo da falha e não sai sozinho da página', /debug: o CRM não confirmou \((.*tempo_esgotado.*)\)/.test(await pg.innerText('.chat-debug')) && /analise/.test(pg.url()) && (await pg.locator('.chat-wa').count()) === 1);
+  t('?debug=1 mostra o resultado (CRM e Turnstile) e não sai sozinho da página', /debug: crm=não confirmou \(.*tempo_esgotado.*\); turnstile=ok/.test(await pg.innerText('.chat-debug')) && /analise/.test(pg.url()) && (await pg.locator('.chat-wa').count()) === 1);
   await ctx.close();
   ({ ctx, pg } = await abrir({ crmAtrasoMs: 9000 }));
   await percorrer(pg, ['Carro', 'Em dia', 'Sim, em papel ou PDF', 'Não']); await enviar(pg, 'Rui', '(81) 99999-9999'); await pg.waitForURL(/wa\.me/, { timeout: 8000 });
   t('sem ?debug=1 nenhum motivo de falha aparece', true); await ctx.close();
+
+  // ---- Turnstile: token já pronto ao abrir, espera dentro do limite, código de erro no debug, renovação
+  ({ ctx, pg, reqs } = await abrir({ ts: { atraso: 300 } }));
+  await pg.waitForTimeout(1200);
+  const gerados = await pg.evaluate(() => window.__ts.render + window.__ts.reset);
+  t('token do Turnstile gerado ao abrir a página (antes de qualquer pergunta)', gerados === 1, String(gerados));
+  await percorrer(pg, ['Carro', 'Em dia', 'Sim, em papel ou PDF', 'Não']); await enviar(pg, 'Ana', '(81) 99999-9999'); await pg.waitForURL(/wa\.me/, { timeout: 6000 });
+  t('o envio usa o token pronto', reqs[0].body.turnstile === 'tok-1', String(reqs[0].body.turnstile));
+  await ctx.close();
+  ({ ctx, pg, reqs } = await abrir({ ts: { atraso: 7000 } }));
+  await percorrer(pg, ['Carro', 'Em dia', 'Sim, em papel ou PDF', 'Não']);
+  const tw = Date.now(); await enviar(pg, 'Ana', '(81) 99999-9999'); await pg.waitForURL(/wa\.me/, { timeout: 8000 });
+  t('token ainda não pronto: espera por ele dentro do limite de 5 s e envia com o token', reqs[0].body.turnstile === 'tok-1' && Date.now() - tw < 5500, JSON.stringify({ tk: reqs[0].body.turnstile, ms: Date.now() - tw }));
+  await ctx.close();
+  ({ ctx, pg, reqs } = await abrir({ query: '?debug=1', ts: { erro: '110200' } }));
+  await percorrer(pg, ['Carro', 'Em dia', 'Sim, em papel ou PDF', 'Não']);
+  const te = Date.now(); await enviar(pg, 'Ana', '(81) 99999-9999'); await pg.waitForSelector('.chat-debug', { timeout: 8000 });
+  t('erro do Turnstile: o código (110200) aparece no debug e o envio não fica esperando à toa', /turnstile=sem token \(110200\)/.test(await pg.innerText('.chat-debug')) && reqs[0].body.turnstile === null && Date.now() - te < 3000, JSON.stringify({ ms: Date.now() - te, tk: reqs[0] && reqs[0].body.turnstile }));
+  await ctx.close();
+  ({ ctx, pg, reqs } = await abrir({ ts: { atraso: 100 }, validade: 1500 }));
+  await pg.waitForTimeout(4600);
+  const regerados = await pg.evaluate(() => window.__ts.render + window.__ts.reset);
+  await percorrer(pg, ['Carro', 'Em dia', 'Sim, em papel ou PDF', 'Não']); await enviar(pg, 'Ana', '(81) 99999-9999'); await pg.waitForURL(/wa\.me/, { timeout: 6000 });
+  t('token vence: renova sozinho e o envio usa o mais novo', regerados >= 3 && /^tok-([2-9]|\d{2,})$/.test(reqs[0].body.turnstile), JSON.stringify({ regerados, tk: reqs[0].body.turnstile }));
+  await ctx.close();
+  ({ ctx, pg } = await abrir({ query: '?debug=1' }));
+  await percorrer(pg, ['Carro', 'Em dia', 'Sim, em papel ou PDF', 'Não']); await enviar(pg, 'Ana', '(81) 99999-9999'); await pg.waitForSelector('.chat-debug', { timeout: 8000 });
+  t('debug com sucesso: crm=confirmou; turnstile=ok', /debug: crm=confirmou; turnstile=ok/.test(await pg.innerText('.chat-debug')));
+  await ctx.close();
 
   // ---- validação e honeypot
   ({ ctx, pg, reqs } = await abrir());

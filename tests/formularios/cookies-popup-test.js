@@ -10,7 +10,7 @@ const srv=http.createServer((q,r)=>{let u=decodeURIComponent(q.url.split('?')[0]
  let ctx=await novo({width:1280,height:800}),pg=await ctx.newPage();
  const gaReq=[];const fbReq=[];ctx.on('request',r=>{if(/googletagmanager/.test(r.url()))gaReq.push(r.url());if(/connect\.facebook\.net/.test(r.url()))fbReq.push(r.url())});
  await pg.goto('http://localhost:8768/privacidade');await pg.waitForTimeout(800);
- t('Política de Privacidade cita o Meta Pixel e o aceite (Pixel configurado)',/Meta Pixel/.test(fs.readFileSync(path.join(root,'privacidade.html'),'utf8'))&&/Sem o seu aceite, o Pixel não é carregado/.test(fs.readFileSync(path.join(root,'privacidade.html'),'utf8')));
+ t('Política de Privacidade cita o Meta Pixel e o aceite (Pixel configurado)',/Meta Pixel/.test(fs.readFileSync(path.join(root,'privacidade.html'),'utf8'))&&/sem o seu aceite o Pixel não é carregado/.test(fs.readFileSync(path.join(root,'privacidade.html'),'utf8')));
  t('banner cita o Google Analytics e a Meta (Pixel configurado)',/Google Analytics/.test(await pg.innerText('.cookie-bar'))&&/Meta/.test(await pg.innerText('.cookie-bar')));
  t('Pixel da Meta não carrega antes do aceite',fbReq.length===0&&await pg.evaluate(()=>!window.fbq));
  t('banner aparece na 1ª visita',await pg.locator('.cookie-bar').count()===1);

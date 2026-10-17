@@ -211,9 +211,9 @@ ${dados ? `<p class="company">${esc(dados)}</p>` : ''}
 // Monta a página completa.
 const pixelOk = /^\d{8,20}$/.test(String(config.metaPixelId || ''));
 /** `minimal`: página de campanha (sem menu nem rodapé do portal; o corpo traz o próprio cabeçalho). */
-function page({ meta, active, body, scripts = [], minimal = false, bodyClass = '' }) {
+function page({ meta, active, body, scripts = [], minimal = false, bodyClass = '', cookiesDireto = false }) {
   return `${head(meta)}
-<body${bodyClass ? ` class="${bodyClass}"` : ''} data-wa="${esc(config.whatsapp)}"${gaOk ? ` data-ga="${config.gaId}"` : ''}${pixelOk ? ` data-pixel="${config.metaPixelId}"` : ''}>
+<body${bodyClass ? ` class="${bodyClass}"` : ''} data-wa="${esc(config.whatsapp)}"${gaOk ? ` data-ga="${config.gaId}"` : ''}${pixelOk ? ` data-pixel="${config.metaPixelId}"` : ''}${cookiesDireto ? ' data-cookies="direto"' : ''}>
 ${minimal ? '' : header(active)}
 <main id="conteudo">
 ${body}
