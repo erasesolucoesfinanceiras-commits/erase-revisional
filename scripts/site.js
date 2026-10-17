@@ -209,14 +209,16 @@ ${dados ? `<p class="company">${esc(dados)}</p>` : ''}
 }
 
 // Monta a página completa.
-function page({ meta, active, body, scripts = [] }) {
+const pixelOk = /^\d{8,20}$/.test(String(config.metaPixelId || ''));
+/** `minimal`: página de campanha (sem menu nem rodapé do portal; o corpo traz o próprio cabeçalho). */
+function page({ meta, active, body, scripts = [], minimal = false, bodyClass = '' }) {
   return `${head(meta)}
-<body data-wa="${esc(config.whatsapp)}"${gaOk ? ` data-ga="${config.gaId}"` : ''}>
-${header(active)}
+<body${bodyClass ? ` class="${bodyClass}"` : ''} data-wa="${esc(config.whatsapp)}"${gaOk ? ` data-ga="${config.gaId}"` : ''}${pixelOk ? ` data-pixel="${config.metaPixelId}"` : ''}>
+${minimal ? '' : header(active)}
 <main id="conteudo">
 ${body}
 </main>
-${footer()}
+${minimal ? '' : footer()}
 <script src="${jsUrl('/assets/js/main.js')}" defer></script>
 ${scripts.map((s) => `<script src="${jsUrl(s)}" defer></script>`).join('\n')}
 </body>
@@ -466,6 +468,6 @@ const freeBadge = (cls = '') => `<p class="free-badge ${cls}" role="note">${FREE
 
 module.exports = {
   FREE_TXT, freeBadge,
-  ROOT, config, catsComItens, loadArticles, loadNotas, ehGuia, selo, seloTxt, ordenarConteudo, ultimaPublicacao, rowCardNota, cardDe, readJSON, itemDe, dataHtml, maisRecentes, cardV, miniItem, carrossel, exploreTopicos, escolhaDaEquipe, relacionados, sidebar, socialLinks, usaContato, esc, jsonLd, ogArtigo, tituloSeo, descSeo, fmtPct, fmtData, catNome, catUrl, artUrl, absUrl, coverUrl, catFoto, coverImg,
+  ROOT, config, catsComItens, loadArticles, loadNotas, ehGuia, selo, seloTxt, ordenarConteudo, ultimaPublicacao, rowCardNota, cardDe, readJSON, itemDe, dataHtml, maisRecentes, cardV, miniItem, carrossel, exploreTopicos, escolhaDaEquipe, relacionados, sidebar, socialLinks, usaContato, esc, pixelOk, jsonLd, ogArtigo, tituloSeo, descSeo, fmtPct, fmtData, catNome, catUrl, artUrl, absUrl, coverUrl, catFoto, coverImg,
   ICON, page, rowCard, promoCard, trustBadges, ctaBanner,
 };

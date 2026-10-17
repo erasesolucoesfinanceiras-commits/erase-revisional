@@ -40,7 +40,7 @@ const HEADERS = `# Gerado por scripts/publish.js.
   X-Frame-Options: DENY
   Strict-Transport-Security: max-age=31536000; includeSubDomains
   Permissions-Policy: camera=(), microphone=(), geolocation=()
-  Content-Security-Policy-Report-Only: default-src 'self'; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://challenges.cloudflare.com https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data: https:; connect-src 'self' https://lqxwdyjctsmirinvvyow.supabase.co https://*.google-analytics.com https://*.analytics.google.com https://www.googletagmanager.com https://cloudflareinsights.com; frame-src https://challenges.cloudflare.com https://www.instagram.com; frame-ancestors 'none'; object-src 'none'; base-uri 'self'; form-action 'self'
+  Content-Security-Policy-Report-Only: default-src 'self'; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://connect.facebook.net https://challenges.cloudflare.com https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data: https:; connect-src 'self' https://lqxwdyjctsmirinvvyow.supabase.co https://www.facebook.com https://*.facebook.com https://*.google-analytics.com https://*.analytics.google.com https://www.googletagmanager.com https://cloudflareinsights.com; frame-src https://challenges.cloudflare.com https://www.instagram.com; frame-ancestors 'none'; object-src 'none'; base-uri 'self'; form-action 'self'
 
 # Não indexar SÓ os endereços temporários do Cloudflare (*.pages.dev e prévias). O domínio oficial
 # (revisional.eraseconsulta.com.br) não casa com estes padrões e continua indexável.
@@ -50,7 +50,7 @@ https://:version.:project.pages.dev/*
   X-Robots-Tag: noindex
 `;
 fs.writeFileSync(path.join(DIST, '_headers'), HEADERS);
-for (const d of ['assets', 'noticias']) fs.cpSync(path.join(ROOT, d), path.join(DIST, d), { recursive: true });
+for (const d of ['assets', 'noticias', 'analise']) fs.cpSync(path.join(ROOT, d), path.join(DIST, d), { recursive: true });
 
 for (const obrigatorio of ['index.html', '404.html', 'sitemap.xml', '_headers']) {
   if (!fs.existsSync(path.join(DIST, obrigatorio))) { console.error('Faltando em dist/: ' + obrigatorio); process.exit(1); }

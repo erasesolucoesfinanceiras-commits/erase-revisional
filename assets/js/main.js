@@ -16,9 +16,9 @@ const TURNSTILE_SITE_KEY = '0x4AAAAAAFXipig0gXCnRiPH';
 let turnstileId = null, turnstileCarregando = null, turnstileEntrega = null;
 
 /** Devolve um código novo do Turnstile (ou null se não conseguir em 12 s). Cada código vale um envio. O widget fica invisível e só aparece se a Cloudflare desconfiar. */
-function obterTokenTurnstile() {
+function obterTokenTurnstile(limiteMs = 12000) {
   return new Promise((resolve) => {
-    const limite = setTimeout(() => resolve(null), 12000);
+    const limite = setTimeout(() => resolve(null), limiteMs);
     const pronto = (token) => { clearTimeout(limite); resolve(token); };
     turnstileEntrega = pronto; // o widget é criado uma vez: os callbacks sempre entregam ao envio atual
     turnstileCarregando = turnstileCarregando || new Promise((ok, falha) => {
@@ -44,11 +44,16 @@ const MSG_FALHA = 'Não conseguimos enviar agora. Seus dados continuam aqui: con
  * (campo anti-spam). Resolve true SOMENTE se o CRM confirmar o recebimento
  * (HTTP 2xx e corpo sem erro). Nunca lança: qualquer falha resolve false.
  */
-async function enviarParaCRM(origem, dados) {
+let ultimoErroCRM = ''; // motivo da última falha de envio (só aparece na tela com ?debug=1 em /analise)
+async function enviarParaCRM(origem, dados, { limiteMs } = {}) {
+  // limiteMs: orçamento TOTAL (token do Turnstile + envio, sem nova tentativa); o token usa no máximo 60% dele.
   const ctrl = new AbortController();
-  const timer = setTimeout(() => ctrl.abort(), ENVIO_TIMEOUT_MS);
+  const timer = setTimeout(() => ctrl.abort(), limiteMs || ENVIO_TIMEOUT_MS);
+  ultimoErroCRM = '';
+  let semToken = false;
   try {
-    const turnstile = await obterTokenTurnstile(); // null = não carregou: o CRM decide
+    const turnstile = await obterTokenTurnstile(limiteMs ? Math.round(limiteMs * 0.6) : undefined); // null = não carregou: o CRM decide
+    semToken = turnstile === null;
     const r = await fetch(CRM_ENDPOINT, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'x-api-key': CRM_API_KEY },
@@ -58,9 +63,10 @@ async function enviarParaCRM(origem, dados) {
     let corpo = null;
     try { corpo = await r.json(); } catch (e) { /* corpo vazio ou não-JSON */ }
     const ok = r.ok && !(corpo && (corpo.ok === false || corpo.success === false || corpo.error));
-    if (!ok) console.error('CRM não confirmou o recebimento:', r.status, corpo);
+    if (!ok) { ultimoErroCRM = `${semToken ? 'sem_token_turnstile+' : ''}http_${r.status}${corpo && corpo.error ? ' ' + String(corpo.error).slice(0, 80) : ''}`; console.error('CRM não confirmou o recebimento:', r.status, corpo); }
     return ok;
   } catch (err) {
+    ultimoErroCRM = `${semToken ? 'sem_token_turnstile+' : ''}${err.name === 'AbortError' ? 'tempo_esgotado' : 'rede: ' + String(err.message).slice(0, 80)}`;
     console.error('Falha ao enviar ao CRM:', err);
     return false;
   } finally {
@@ -118,16 +124,16 @@ function idDoEnvio(form, chave) {
 const CAMPOS_CAMPANHA = ['origem_trafego', 'pagina_entrada', 'pagina_envio', ...UTM_KEYS];
 function soCampanha() { const a = atribuicao(); return Object.fromEntries(CAMPOS_CAMPANHA.map((k) => [k, a[k]])); }
 /** Envia o lead ao CRM; `comAtribuicao`: lead_id + origem/UTM/data-hora (calculadora, pop-up); `campanha`: só origem/UTM/páginas. */
-async function enviarLead(form, dados, { comAtribuicao = true, campanha = false, comLeadId = false } = {}) {
+async function enviarLead(form, dados, { comAtribuicao = true, campanha = false, comLeadId = false, limiteMs } = {}) {
   const extra = comAtribuicao ? { ...atribuicao(), lead_id: idDoEnvio(form, JSON.stringify(dados)) } : campanha ? soCampanha() : {};
   // `comLeadId`: só o lead_id (mesmo formato da calculadora/pop-up); fica igual nas novas tentativas do mesmo envio.
   if (!comAtribuicao && comLeadId) extra.lead_id = idDoEnvio(form, JSON.stringify(dados));
-  const ok = await enviarParaCRM(form, { ...dados, ...extra });
+  const ok = await enviarParaCRM(form, { ...dados, ...extra }, { limiteMs });
   if (ok) { delete idsPendentes[form]; rastrear(form); }
   return ok;
 }
 // Google Analytics (GA4): só dispara depois que o CRM confirmou e só se o gtag foi carregado (ID em data/config.json).
-const EVENTOS_GA = { calculadora: 'envio_calculadora', 'popup-entrada': 'envio_popup', newsletter: 'envio_newsletter', contato: 'envio_contato' };
+const EVENTOS_GA = { 'formulario-analise-revisional': 'envio_analise', calculadora: 'envio_calculadora', 'popup-entrada': 'envio_popup', newsletter: 'envio_newsletter', contato: 'envio_contato' };
 function rastrear(form) {
   try { if (typeof gtag === 'function' && EVENTOS_GA[form]) gtag('event', EVENTOS_GA[form], { formulario: form, pagina: location.pathname }); } catch (e) { /* analytics nunca atrapalha o envio */ }
 }
@@ -271,7 +277,7 @@ if (ct) {
 (function popup() {
   if (location.pathname.includes('calculadora')) return; // quem já está no formulário não precisa do pop-up
   const caminho = location.pathname.replace(/\.html$/, '').replace(/\/$/, '');
-  if (/^\/(privacidade|termos|sobre|contato|como-produzimos)$/.test(caminho)) return; // páginas institucionais/legais: nunca
+  if (/^\/(privacidade|termos|sobre|contato|como-produzimos|analise)$/.test(caminho)) return; // páginas institucionais/legais: nunca
   try { if (sessionStorage.getItem('erase-popup')) return; } catch (e) { /* sem storage: mostra */ }
 
   // Foto do pop-up: baixa em segundo plano (depois do carregamento da página e com o navegador ocioso) para já estar pronta quando ele abrir.
@@ -399,37 +405,46 @@ if (ct) {
 })();
 
 // ---- Consentimento de cookies (LGPD) -----------------------------------------
-// O Google Analytics (ID em <body data-ga>) só é carregado DEPOIS do aceite. Sem o ID (ou sem aceite) nada é carregado e nenhum cookie é criado.
-// Anúncios do Google (AdSense), quando existirem, devem carregar pelo mesmo gancho: carregarComConsentimento().
+// Google Analytics (<body data-ga>) e Meta Pixel (<body data-pixel>, só se houver ID em data/config.json) só são carregados DEPOIS do aceite.
+// Sem ID nenhum (ou sem aceite) nada é carregado e nenhum cookie é criado. Anúncios do Google (AdSense), quando existirem, entram pelo mesmo gancho.
 (function cookies() {
-  const id = document.body.dataset.ga, CH = 'erase-cookies';
-  if (!id) return;
+  const id = document.body.dataset.ga, pixel = document.body.dataset.pixel, CH = 'erase-cookies';
+  if (!id && !pixel) return;
   const ler = () => { try { return localStorage.getItem(CH); } catch (e) { return null; } };
   const gravar = (v) => { try { localStorage.setItem(CH, v); } catch (e) { /* sem storage: pergunta de novo na próxima visita */ } };
   function carregarComConsentimento() {
-    if (window.gtag) return;
-    window.dataLayer = window.dataLayer || [];
-    window.gtag = function () { window.dataLayer.push(arguments); };
-    const sc = document.createElement('script'); sc.async = true; sc.src = 'https://www.googletagmanager.com/gtag/js?id=' + id; document.head.appendChild(sc);
-    window.gtag('js', new Date()); window.gtag('config', id);
+    if (id && !window.gtag) {
+      window.dataLayer = window.dataLayer || [];
+      window.gtag = function () { window.dataLayer.push(arguments); };
+      const sc = document.createElement('script'); sc.async = true; sc.src = 'https://www.googletagmanager.com/gtag/js?id=' + id; document.head.appendChild(sc);
+      window.gtag('js', new Date()); window.gtag('config', id);
+    }
+    if (pixel && !window.fbq) { // snippet padrão do Meta Pixel
+      const n = window.fbq = function () { n.callMethod ? n.callMethod.apply(n, arguments) : n.queue.push(arguments); };
+      if (!window._fbq) window._fbq = n; n.push = n; n.loaded = true; n.version = '2.0'; n.queue = [];
+      const sc = document.createElement('script'); sc.async = true; sc.src = 'https://connect.facebook.net/en_US/fbevents.js'; document.head.appendChild(sc);
+      window.fbq('init', pixel); window.fbq('track', 'PageView');
+    }
   }
-  function apagarCookiesGA() {
-    window['ga-disable-' + id] = true;
-    document.cookie.split(';').map((c) => c.split('=')[0].trim()).filter((n) => n === '_ga' || n.startsWith('_ga_') || n === '_gid').forEach((n) => {
+  function apagarCookies() {
+    if (id) window['ga-disable-' + id] = true;
+    const nomes = (n) => n === '_ga' || n.startsWith('_ga_') || n === '_gid' || n === '_fbp' || n === '_fbc';
+    document.cookie.split(';').map((c) => c.split('=')[0].trim()).filter(nomes).forEach((n) => {
       for (const d of [location.hostname, '.' + location.hostname.split('.').slice(-3).join('.'), '']) document.cookie = `${n}=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/${d ? '; domain=' + d : ''}`;
     });
   }
-  function escolher(v) { gravar(v); fechar(); if (v === 'sim') { window['ga-disable-' + id] = false; carregarComConsentimento(); } else apagarCookiesGA(); }
+  function escolher(v) { gravar(v); fechar(); if (v === 'sim') { if (id) window['ga-disable-' + id] = false; carregarComConsentimento(); } else apagarCookies(); }
   let barra = null;
-  function fechar() { if (barra) { barra.remove(); barra = null; document.body.style.paddingBottom = ''; } }
+  function fechar() { if (barra) { barra.remove(); barra = null; document.body.style.paddingBottom = ''; document.documentElement.style.removeProperty('--cookie-h'); } }
   function abrir() {
     if (barra) return;
     barra = document.createElement('div');
     barra.className = 'cookie-bar'; barra.setAttribute('role', 'region'); barra.setAttribute('aria-label', 'Aviso de cookies');
-    barra.innerHTML = '<p>Usamos cookies para medir o uso do site (Google Analytics). Você escolhe. <a href="/privacidade#cookies">Saiba mais</a></p><div class="cookie-actions"><button type="button" class="btn btn-outline btn-sm" data-c="nao">Recusar</button><button type="button" class="btn btn-primary btn-sm" data-c="sim">Aceitar</button></div>';
+    barra.innerHTML = `<p>Usamos cookies para medir o uso do site${id ? ' (Google Analytics)' : ''}${pixel ? ' e a eficácia dos anúncios (Meta)' : ''}. Você escolhe. <a href="/privacidade#cookies">Saiba mais</a></p><div class="cookie-actions"><button type="button" class="btn btn-outline btn-sm" data-c="nao">Recusar</button><button type="button" class="btn btn-primary btn-sm" data-c="sim">Aceitar</button></div>`;
     barra.addEventListener('click', (e) => { const b = e.target.closest('[data-c]'); if (b) escolher(b.dataset.c); });
     document.body.appendChild(barra);
     document.body.style.paddingBottom = barra.offsetHeight + 'px'; // a barra nunca esconde o fim da página
+    document.documentElement.style.setProperty('--cookie-h', barra.offsetHeight + 'px'); // área fixa de botões (chat) sobe acima da barra
   }
   const atual = ler();
   if (atual === 'sim') carregarComConsentimento(); else if (atual !== 'nao') abrir();

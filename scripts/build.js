@@ -450,6 +450,7 @@ function legais() {
 <h2 id="cookies">6. Cookies, Google Analytics e anúncios</h2>
 <p><strong>Armazenamento essencial do navegador.</strong> Usamos o armazenamento local para lembrar a sua escolha de tema (claro/escuro) e de cookies, exibir o pop-up uma vez por sessão e guardar a origem do acesso (UTMs e página de entrada). Eles não servem para publicidade.</p>
 <p><strong>Estatísticas (Google Analytics).</strong> Se você aceitar, usamos o Google Analytics 4, serviço do Google, que grava cookies e identificadores para contar visitas, páginas vistas, tempo no site, tipo de aparelho e origem do acesso, e para medir o resultado dos formulários (sem enviar seu nome, telefone ou e-mail). Sem o seu aceite, o Google Analytics não é carregado.</p>
+${S.pixelOk ? '<p><strong>Anúncios da Meta (Facebook e Instagram).</strong> Se você aceitar, usamos o Meta Pixel para medir se os nossos anúncios levaram a um contato (por exemplo, conclusão do formulário /analise). A Meta recebe o identificador do navegador e o evento ocorrido, sem o seu nome nem o seu telefone. Sem o seu aceite, o Pixel não é carregado.</p>' : ''}
 <p><strong>Anúncios do Google (AdSense) — futuro.</strong> Poderemos exibir anúncios do Google AdSense. Quando isso acontecer, o Google e seus parceiros poderão usar cookies para mostrar anúncios com base nas suas visitas a este e a outros sites, e só os ativaremos com o seu consentimento. Você poderá desativar a personalização de anúncios em <a href="https://adssettings.google.com" target="_blank" rel="noopener noreferrer">adssettings.google.com</a> e saber como o Google usa dados de sites parceiros em <a href="https://policies.google.com/technologies/partner-sites" target="_blank" rel="noopener noreferrer">policies.google.com/technologies/partner-sites</a>. Esta política será atualizada antes de os anúncios entrarem no ar.</p>
 <p><strong>Como mudar a sua escolha.</strong> Use "Preferências de cookies" no rodapé de qualquer página para aceitar ou recusar, ou apague os cookies nas configurações do navegador. Para o Google Analytics, também há o <a href="https://tools.google.com/dlpage/gaoptout" target="_blank" rel="noopener noreferrer">complemento de desativação do Google</a>.</p>
 <h2>7. Contato</h2>
@@ -529,6 +530,26 @@ ${e.email ? `<li><strong>E-mail:</strong> <a href="mailto:${esc(e.email)}">${esc
   urls.push(['/sobre.html', '0.5', SOBRE_DATE]);
 }
 
+// ---------------------------------------------------------------- /analise/ (chat de filtro para anúncios; noindex, fora do sitemap e do menu)
+function analise() {
+  const body = `<div class="chat-shell" id="chat">
+<header class="chat-top">
+<a class="chat-logo" href="/" aria-label="ERASE Revisional — início"><img class="logo-img logo-light" src="/assets/img/logo-erase.webp" alt="" width="110" height="20"><img class="logo-img logo-dark" src="/assets/img/logo-erase-dark.webp" alt="" width="110" height="20"></a>
+<p class="chat-badge">ANÁLISE GRATUITA</p>
+<p class="chat-prog" id="chat-progresso" aria-live="polite">&nbsp;</p>
+</header>
+<div class="chat-log" id="chat-log" role="log" aria-live="polite" aria-label="Conversa"></div>
+<div class="chat-acoes" id="chat-acoes"></div>
+<p class="chat-rodape">ERASE Soluções Financeiras · CNPJ ${esc(C.empresa.cnpj || '')} · <a href="/privacidade" target="_blank" rel="noopener">Política de Privacidade</a> · <a href="/termos" target="_blank" rel="noopener">Termos</a></p>
+<noscript><p class="chat-sem-js">Esta página precisa de JavaScript. Fale com a gente pelo <a href="/contato">Fale Conosco</a>.</p></noscript>
+</div>`;
+  out('analise/index.html', S.page({
+    meta: { title: `Análise gratuita do seu financiamento | ${SITE}`, desc: 'Responda 4 perguntas rápidas e receba a ANÁLISE GRATUITA do seu financiamento de veículo pelo WhatsApp da ERASE.', path: '/analise/', noindex: true },
+    active: '', body, scripts: ['/assets/js/analise.js'], minimal: true, bodyClass: 'chat-page',
+  }));
+  // não entra no sitemap: é página de campanha
+}
+
 function contato() {
   const body = `
 <section class="page-head"><div class="container"><h1>Fale Conosco</h1>
@@ -574,5 +595,5 @@ ${urls.map(([p, prio, d]) => `  <url><loc>${absUrl(p)}</loc>${d ? `<lastmod>${d}
   out('robots.txt', `User-agent: *\nAllow: /\n\nSitemap: ${absUrl('/sitemap.xml')}\n`);
 }
 
-home(); lists(); radar(); artigos(); calculadora(); legais(); comoProduzimos(); sobre(); contato(); notFound(); seo();
+home(); lists(); radar(); artigos(); calculadora(); legais(); comoProduzimos(); sobre(); analise(); contato(); notFound(); seo();
 console.log(`OK — ${articles.length} artigos, ${urls.length} URLs no sitemap.`);
