@@ -532,3 +532,4 @@
 {"quando":"2026-10-18T11:29:38.988Z","data":"2026-10-18","evento":"sem_publicacao","tipo":"nota","motivo":"nenhum tema com novidade real"}
 {"quando":"2026-10-18T11:30:29.237Z","data":"2026-10-18","evento":"revisao_guia","resultado":"sem_mudanca","slug":"cet-custo-efetivo-total-o-que-entra-na-conta"}
 {"quando":"2026-10-18T11:30:29.237Z","data":"2026-10-18","evento":"uso_gemini","pedidos":18,"ok":18,"por_status":{}}
+{"quando":"2026-10-18T11:31:03.908Z","data":"2026-10-18","evento":"indexnow","resultado":"enviado","status":200,"enviadas":4,"ainda_pendentes":0,"urls":["https://revisional.eraseconsulta.com.br/noticias/consorcio-da-caixa-lidera-proporcao-de-contemplacao-imobiliaria-no-pais","https://revisional.eraseconsulta.com.br/","https://revisional.eraseconsulta.com.br/artigos","https://revisional.eraseconsulta.com.br/categoria-consorcio-seguros"],"resposta":""}
