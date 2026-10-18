@@ -60,7 +60,7 @@ const BASE = 'http://localhost:8123/analise/';
   await ctx.close();
   ({ ctx, pg, trackers: tr } = await abrir({ consent: 'nao', semStub: true }));
   await pg.waitForSelector('.chat-opt', { timeout: 8000 });
-  t('quem já recusou os cookies no site continua sem Analytics e sem Pixel', tr.length === 0 && (await pg.locator('.cookie-bar').count()) === 0);
+  t('sem escolha de cookies: mesmo com recusa antiga no navegador, Analytics e Pixel carregam', tr.length >= 2 && (await pg.locator('.cookie-bar').count()) === 0);
   await ctx.close();
 
   // ---- cenário A: carro / atrasadas / contrato sim / ação não, com UTM

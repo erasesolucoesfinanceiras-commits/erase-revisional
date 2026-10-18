@@ -110,7 +110,7 @@ const ICON = {
 
 // Google Analytics 4: o ID fica só em data/config.json ("gaId"). Com o marcador G-XXXXXXXXXX (ou vazio) nada é carregado.
 const gaOk = /^G-[A-Z0-9]{6,}$/.test(config.gaId || '') && !/^G-X+$/.test(config.gaId);
-// O script do GA NÃO fica mais no HTML: main.js só o carrega depois que a pessoa aceita os cookies (<body data-ga>).
+// O script do GA NÃO fica mais no HTML: main.js o carrega ao abrir a página (<body data-ga>).
 
 /** JSON-LD para dentro de <script>: escapa < > & e os separadores de linha, para nenhum texto (título vindo da IA) conseguir fechar o <script>. */
 const jsonLd = (obj) => JSON.stringify(obj).replace(/[<>&\u2028\u2029]/g, (c) => '\\u' + c.charCodeAt(0).toString(16).padStart(4, '0'));
@@ -201,7 +201,7 @@ ${(() => { const r = `${soc('x', 'X')}${soc('instagram', 'Instagram')}${soc('fac
 <div class="legal">
 <p>ERASE Revisional é uma ferramenta de simulação operada pela ERASE Soluções Financeiras. Não somos uma instituição financeira, correspondente bancário nem escritório de advocacia. O resultado é uma estimativa baseada em médias de mercado e nos dados informados, e não constitui parecer, consultoria ou promessa de resultado. Os percentuais de referência têm como fonte a taxa média de juros divulgada pelo Banco Central do Brasil para crédito livre, pessoas físicas, aquisição de veículos. A análise do contrato é realizada pela ERASE Soluções Financeiras.</p>
 ${dados ? `<p class="company">${esc(dados)}</p>` : ''}
-<p class="legal-links"><a href="/termos.html">Termos de Uso</a> · <a href="/privacidade.html">Política de Privacidade</a> · <a href="/como-produzimos.html">Como produzimos nosso conteúdo</a>${gaOk ? ' · <a href="/privacidade.html#cookies" data-cookie-prefs>Preferências de cookies</a>' : ''}</p>
+<p class="legal-links"><a href="/termos.html">Termos de Uso</a> · <a href="/privacidade.html">Política de Privacidade</a> · <a href="/como-produzimos.html">Como produzimos nosso conteúdo</a></p>
 <p class="copy">© ERASE Soluções Financeiras</p>
 </div>
 </div>
@@ -211,9 +211,9 @@ ${dados ? `<p class="company">${esc(dados)}</p>` : ''}
 // Monta a página completa.
 const pixelOk = /^\d{8,20}$/.test(String(config.metaPixelId || ''));
 /** `minimal`: página de campanha (sem menu nem rodapé do portal; o corpo traz o próprio cabeçalho). */
-function page({ meta, active, body, scripts = [], minimal = false, bodyClass = '', cookiesDireto = false }) {
+function page({ meta, active, body, scripts = [], minimal = false, bodyClass = '' }) {
   return `${head(meta)}
-<body${bodyClass ? ` class="${bodyClass}"` : ''} data-wa="${esc(config.whatsapp)}"${gaOk ? ` data-ga="${config.gaId}"` : ''}${pixelOk ? ` data-pixel="${config.metaPixelId}"` : ''}${cookiesDireto ? ' data-cookies="direto"' : ''}>
+<body${bodyClass ? ` class="${bodyClass}"` : ''} data-wa="${esc(config.whatsapp)}"${gaOk ? ` data-ga="${config.gaId}"` : ''}${pixelOk ? ` data-pixel="${config.metaPixelId}"` : ''}>
 ${minimal ? '' : header(active)}
 <main id="conteudo">
 ${body}

@@ -1,4 +1,4 @@
-// Cookies e pop-up: GA só após aceite, banner no celular, regras de abertura do pop-up por página. Rodar: node tests/formularios/cookies-popup-test.js (precisa de Playwright)
+// Medição sem aviso de cookies (GA e Pixel ao abrir), Política de Privacidade, regras de abertura do pop-up por página. Rodar: node tests/formularios/cookies-popup-test.js (precisa de Playwright)
 const { chromium } = require('playwright');
 const http=require('http'),fs=require('fs'),path=require('path');
 const root=path.join(__dirname,'..','..');
@@ -6,31 +6,24 @@ const mime={'.html':'text/html','.css':'text/css','.js':'text/javascript','.webp
 const srv=http.createServer((q,r)=>{let u=decodeURIComponent(q.url.split('?')[0]);let f=path.join(root,u);if(fs.existsSync(f)&&fs.statSync(f).isDirectory())f+='/index.html';else if(!fs.existsSync(f)&&fs.existsSync(f+'.html'))f+='.html';if(!fs.existsSync(f)){r.statusCode=404;return r.end()}r.setHeader('content-type',mime[path.extname(f)]||'application/octet-stream');r.end(fs.readFileSync(f))}).listen(8768,async()=>{
  const b=await chromium.launch();let ok=0,bad=0;const t=(n,c,x='')=>{c?ok++:bad++;console.log(c?'OK   ':'FALHA',n,c?'':x)};
  const novo=async(vp)=>{const c=await b.newContext({viewport:vp});c.route(/googletagmanager|connect\.facebook|fonts\.|turnstile|challenges/,r=>r.abort());return c};
- // 1) GA só após aceite
+ // 1) sem aviso de cookies: GA e Pixel carregam ao abrir qualquer página
  let ctx=await novo({width:1280,height:800}),pg=await ctx.newPage();
  const gaReq=[];const fbReq=[];ctx.on('request',r=>{if(/googletagmanager/.test(r.url()))gaReq.push(r.url());if(/connect\.facebook\.net/.test(r.url()))fbReq.push(r.url())});
- await pg.goto('http://localhost:8768/privacidade');await pg.waitForTimeout(800);
- t('Política de Privacidade cita o Meta Pixel e o aceite (Pixel configurado)',/Meta Pixel/.test(fs.readFileSync(path.join(root,'privacidade.html'),'utf8'))&&/sem o seu aceite o Pixel não é carregado/.test(fs.readFileSync(path.join(root,'privacidade.html'),'utf8')));
- t('Política cita o Cloudflare Turnstile, dados técnicos do navegador e o link oficial do Turnstile Privacy Addendum',(h=>/Cloudflare Turnstile/.test(h)&&/dados técnicos do seu navegador/.test(h)&&h.includes('href="https://www.cloudflare.com/turnstile-privacy-policy/"'))(fs.readFileSync(path.join(root,'privacidade.html'),'utf8')));
- t('Política descreve o chat /analise (respostas, CRM, Meta, Cloudflare, Google)',(h=>/Chat de análise gratuita \(\/analise\)/.test(h)&&/primeiro nome, WhatsApp e as suas respostas/.test(h)&&/e a Meta \(Meta Pixel/.test(h)&&/a Cloudflare \(hospedagem/.test(h)&&/na \/analise ele carrega ao abrir/.test(h))(fs.readFileSync(path.join(root,'privacidade.html'),'utf8')));
- t('Política tem base legal, prazos de guarda, canal do titular sem encarregado, controladora com CNPJ e transferência internacional',(h=>/base legal/.test(h)&&/executar o contrato/.test(h)&&/até 12 meses após o último contato/.test(h)&&/até 5 anos após o fim do contrato/.test(h)&&/não indicamos encarregado/.test(h)&&/CNPJ 59\.449\.234\/0001-63/.test(h)&&(h.match(/mailto:atendimento@eraseconsulta\.com\.br/g)||[]).length>=2&&/Cloudflare, Supabase, Meta e Google\) podem armazenar ou processar os dados em servidores fora do Brasil/.test(h))(fs.readFileSync(path.join(root,'privacidade.html'),'utf8')));
- t('banner cita o Google Analytics e a Meta (Pixel configurado)',/Google Analytics/.test(await pg.innerText('.cookie-bar'))&&/Meta/.test(await pg.innerText('.cookie-bar')));
- t('Pixel da Meta não carrega antes do aceite',fbReq.length===0&&await pg.evaluate(()=>!window.fbq));
- t('banner aparece na 1ª visita',await pg.locator('.cookie-bar').count()===1);
- t('GA não carrega antes do aceite',gaReq.length===0&&await pg.evaluate(()=>!window.gtag));
- await pg.click('.cookie-bar [data-c=sim]');await pg.waitForTimeout(500);
- t('após aceitar: GA é carregado e banner some',gaReq.length===1&&await pg.locator('.cookie-bar').count()===0&&await pg.evaluate(()=>typeof window.gtag==='function'));
- t('após aceitar: Pixel carrega (fbevents.js), com PageView na fila',fbReq.length===1&&/fbevents\.js/.test(fbReq[0])&&await pg.evaluate(()=>typeof window.fbq==='function'&&window.fbq.queue.some(a=>a[0]==='init'&&a[1]==='1740412147210905')&&window.fbq.queue.some(a=>a[0]==='track'&&a[1]==='PageView')));
- await pg.reload();await pg.waitForTimeout(500);
- t('aceite lembrado: sem banner e GA carrega de novo',await pg.locator('.cookie-bar').count()===0&&gaReq.length===2);
- await pg.click('[data-cookie-prefs]');t('"Preferências de cookies" reabre o banner',await pg.locator('.cookie-bar').count()===1);
- await pg.click('.cookie-bar [data-c=nao]');await pg.reload();await pg.waitForTimeout(500);
- t('recusa lembrada: sem banner, sem GA e sem Pixel',await pg.locator('.cookie-bar').count()===0&&gaReq.length===2&&fbReq.length===2&&await pg.evaluate(()=>!window.fbq));
- // 2) celular: barra baixa, não cobre o fim da página
- ctx=await novo({width:390,height:760});pg=await ctx.newPage();await pg.goto('http://localhost:8768/contato');await pg.waitForTimeout(600);
- const m=await pg.evaluate(()=>{const r=document.querySelector('.cookie-bar').getBoundingClientRect();return{h:r.height,pad:parseFloat(document.body.style.paddingBottom),vh:innerHeight}});
- t('celular: banner usa menos de 20% da altura e reserva o espaço no fim da página',m.h<m.vh*0.2&&m.pad>=m.h-1,JSON.stringify(m));
- await pg.screenshot({path:'/tmp/ck-mob.png'});
+ await pg.goto('http://localhost:8768/contato');await pg.waitForTimeout(800);
+ t('sem barra de cookies e sem link "Preferências de cookies" no rodapé',await pg.locator('.cookie-bar,[data-cookie-prefs]').count()===0);
+ t('GA carrega ao abrir a página, sem aceite',gaReq.length===1&&await pg.evaluate(()=>typeof window.gtag==='function'));
+ t('Pixel carrega ao abrir (fbevents.js), com init e PageView na fila',fbReq.length===1&&/fbevents\.js/.test(fbReq[0])&&await pg.evaluate(()=>typeof window.fbq==='function'&&window.fbq.queue.some(a=>a[0]==='init'&&a[1]==='1740412147210905')&&window.fbq.queue.some(a=>a[0]==='track'&&a[1]==='PageView')));
+ await pg.evaluate(()=>localStorage.setItem('erase-cookies','nao'));await pg.reload();await pg.waitForTimeout(500);
+ t('não resta lógica de escolha: mesmo com "erase-cookies=nao" antigo no navegador, GA e Pixel carregam',gaReq.length===2&&fbReq.length===2);
+ t('o código de aceite foi removido do JS (sem erase-cookies, sem cookie-bar)',!/erase-cookies|cookie-bar|data-cookie-prefs/.test(fs.readFileSync(path.join(root,'assets/js/main.js'),'utf8')+fs.readFileSync(path.join(root,'assets/css/style.css'),'utf8')));
+ // 2) Política de Privacidade
+ const h=fs.readFileSync(path.join(root,'privacidade.html'),'utf8');
+ t('Política: Meta Pixel e GA carregam ao abrir qualquer página, base legal legítimo interesse (sem "se você aceitar")',/Meta Pixel/.test(h)&&/legítimo interesse/.test(h)&&/quando você abre qualquer página/.test(h)&&!/sem o seu aceite|Se você aceitar|Preferências de cookies|consentimento para cookies/.test(h)&&!/cookies de estatística e de anúncios só funcionam/.test(h));
+ t('Política: como recusar (navegador, janela anônima, complemento do Google, preferências de anúncios da Meta com link oficial, oposição por e-mail)',/bloquear ou apagar os cookies/.test(h)&&/janela anônima/.test(h)&&h.includes('tools.google.com/dlpage/gaoptout')&&h.includes('href="https://www.meta.com/pt-br/help/accounts-center/1894490827562393/"')&&/oposição/.test(h));
+ t('Política cita o Cloudflare Turnstile, dados técnicos do navegador e o link oficial do Turnstile Privacy Addendum',/Cloudflare Turnstile/.test(h)&&/dados técnicos do seu navegador/.test(h)&&h.includes('href="https://www.cloudflare.com/turnstile-privacy-policy/"'));
+ t('Política descreve o chat /analise (respostas, CRM, Meta, Cloudflare, Google)',/Chat de análise gratuita \(\/analise\)/.test(h)&&/primeiro nome, WhatsApp e as suas respostas/.test(h)&&/e a Meta \(Meta Pixel/.test(h)&&/a Cloudflare \(hospedagem/.test(h));
+ t('Política tem base legal, prazos de guarda, canal do titular sem encarregado, controladora com CNPJ e transferência internacional',/base legal/.test(h)&&/executar o contrato/.test(h)&&/até 12 meses após o último contato/.test(h)&&/até 5 anos após o fim do contrato/.test(h)&&/não indicamos encarregado/.test(h)&&/CNPJ 59\.449\.234\/0001-63/.test(h)&&(h.match(/mailto:atendimento@eraseconsulta\.com\.br/g)||[]).length>=2&&/Cloudflare, Supabase, Meta e Google\) podem armazenar ou processar os dados em servidores fora do Brasil/.test(h));
+ t('Termos não dizem mais que cookies dependem de consentimento',!/só são ativados depois do seu consentimento/.test(fs.readFileSync(path.join(root,'termos.html'),'utf8')));
  // 3) pop-up
  const popup=async(url,vp,acoes)=>{const c=await novo(vp);await c.addInitScript(()=>localStorage.setItem('erase-cookies','nao'));const p=await c.newPage();await p.goto('http://localhost:8768'+url);await p.waitForTimeout(3300);const antes=await p.locator('.popup').count();await acoes(p);await p.waitForTimeout(600);return [antes,await p.locator('.popup').count()]};
  let r=await popup('/',{width:1280,height:800},async()=>{});t('capa: abre em 2,5 s',r[0]===1,r);

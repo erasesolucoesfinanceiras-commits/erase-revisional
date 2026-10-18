@@ -583,11 +583,6 @@ fieldset.field { border: 0; padding: 0; margin: 0 0 18px; min-width: 0; }
 .related .card-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 @media (max-width: 600px) { .related .card-grid { grid-template-columns: 1fr; } }
 
-/* Aviso de cookies: barra baixa e compacta; main.js reserva o espaço no fim da página para ela não cobrir conteúdo */
-.cookie-bar { position: fixed; left: 8px; right: 8px; bottom: 8px; z-index: 250; max-width: 760px; margin: 0 auto; display: flex; gap: 12px; align-items: center; justify-content: space-between; padding: 10px 12px; background: var(--surface); color: var(--text); border: 1.5px solid var(--border); border-radius: 14px; box-shadow: 0 8px 24px rgba(3, 8, 14, .18); font-size: .85rem; line-height: 1.35; }
-.cookie-bar p { margin: 0; }
-.cookie-actions { display: flex; gap: 8px; flex: none; }
-@media (max-width: 600px) { .cookie-bar { flex-direction: column; align-items: stretch; gap: 8px; font-size: .8rem; } .cookie-actions .btn { flex: 1; min-height: 44px; } }
 
 /* "Guias para entender o seu contrato" (capa) */
 .guides-home { margin-bottom: 32px; }
@@ -606,14 +601,14 @@ fieldset.field { border: 0; padding: 0; margin: 0 0 18px; min-width: 0; }
 .chat-badge { margin: 0; justify-self: end; padding: 6px 12px; border-radius: 999px; background: #0a6cb3; color: #fff; font-weight: 800; font-size: .8rem; letter-spacing: .04em; text-transform: uppercase; white-space: nowrap; }
 .chat-prog { grid-column: 1 / -1; margin: 0; font-size: .78rem; color: var(--muted); min-height: 1em; }
 .chat-log { flex: 1; display: flex; flex-direction: column; gap: 10px; padding: 16px 14px 20px; }
-.chat-msg { scroll-margin-bottom: calc(var(--acoes-h, 0px) + var(--cookie-h, 0px) + 12px); max-width: 86%; padding: 10px 14px; border-radius: 18px; font-size: 1rem; line-height: 1.4; animation: chat-in .22s ease; }
+.chat-msg { scroll-margin-bottom: calc(var(--acoes-h, 0px) + 12px); max-width: 86%; padding: 10px 14px; border-radius: 18px; font-size: 1rem; line-height: 1.4; animation: chat-in .22s ease; }
 .chat-msg.bot { align-self: flex-start; background: var(--surface-2, #eef2f8); color: var(--text); border-bottom-left-radius: 6px; }
 .chat-msg.eu { align-self: flex-end; background: #0a6cb3; color: #fff; border-bottom-right-radius: 6px; }
 .chat-msg strong { font-weight: 800; }
 .chat-digitando { display: inline-flex; gap: 4px; padding: 14px 16px; }
 .chat-digitando i { width: 7px; height: 7px; border-radius: 50%; background: var(--muted); opacity: .5; animation: chat-ponto 1s infinite ease-in-out; }
 .chat-digitando i:nth-child(2) { animation-delay: .15s; } .chat-digitando i:nth-child(3) { animation-delay: .3s; }
-.chat-acoes { position: sticky; bottom: var(--cookie-h, 0px); z-index: 20; padding: 12px 14px calc(12px + env(safe-area-inset-bottom)); background: var(--surface); border-top: 1.5px solid var(--border); }
+.chat-acoes { position: sticky; bottom: 0; z-index: 20; padding: 12px 14px calc(12px + env(safe-area-inset-bottom)); background: var(--surface); border-top: 1.5px solid var(--border); }
 .chat-acoes:empty { display: none; }
 .chat-opcoes { display: grid; gap: 8px; }
 .chat-opt { min-height: 52px; padding: 12px 16px; border-radius: 14px; border: 2px solid #0a6cb3; background: var(--surface); color: #0a6cb3; font: inherit; font-weight: 700; text-align: left; cursor: pointer; }

@@ -426,51 +426,20 @@ if (ct) {
   } else setTimeout(open, 2500);
 })();
 
-// ---- Consentimento de cookies (LGPD) -----------------------------------------
-// Google Analytics (<body data-ga>) e Meta Pixel (<body data-pixel>, só se houver ID em data/config.json) só são carregados DEPOIS do aceite.
-// Sem ID nenhum (ou sem aceite) nada é carregado e nenhum cookie é criado. Anúncios do Google (AdSense), quando existirem, entram pelo mesmo gancho.
-(function cookies() {
-  const id = document.body.dataset.ga, pixel = document.body.dataset.pixel, CH = 'erase-cookies';
-  if (!id && !pixel) return;
-  const ler = () => { try { return localStorage.getItem(CH); } catch (e) { return null; } };
-  const gravar = (v) => { try { localStorage.setItem(CH, v); } catch (e) { /* sem storage: pergunta de novo na próxima visita */ } };
-  function carregarComConsentimento() {
-    if (id && !window.gtag) {
-      window.dataLayer = window.dataLayer || [];
-      window.gtag = function () { window.dataLayer.push(arguments); };
-      const sc = document.createElement('script'); sc.async = true; sc.src = 'https://www.googletagmanager.com/gtag/js?id=' + id; document.head.appendChild(sc);
-      window.gtag('js', new Date()); window.gtag('config', id);
-    }
-    if (pixel && !window.fbq) { // snippet padrão do Meta Pixel
-      const n = window.fbq = function () { n.callMethod ? n.callMethod.apply(n, arguments) : n.queue.push(arguments); };
-      if (!window._fbq) window._fbq = n; n.push = n; n.loaded = true; n.version = '2.0'; n.queue = [];
-      const sc = document.createElement('script'); sc.async = true; sc.src = 'https://connect.facebook.net/en_US/fbevents.js'; document.head.appendChild(sc);
-      window.fbq('init', pixel); window.fbq('track', 'PageView');
-    }
+// ---- Medição: Google Analytics (<body data-ga>) e Meta Pixel (<body data-pixel>, só se houver ID em data/config.json) carregam ao abrir a página ----
+// Sem aviso nem escolha de cookies (base legal: legítimo interesse, ver Política de Privacidade). Sem ID nenhum, nada é carregado.
+(function medicao() {
+  const id = document.body.dataset.ga, pixel = document.body.dataset.pixel;
+  if (id && !window.gtag) {
+    window.dataLayer = window.dataLayer || [];
+    window.gtag = function () { window.dataLayer.push(arguments); };
+    const sc = document.createElement('script'); sc.async = true; sc.src = 'https://www.googletagmanager.com/gtag/js?id=' + id; document.head.appendChild(sc);
+    window.gtag('js', new Date()); window.gtag('config', id);
   }
-  function apagarCookies() {
-    if (id) window['ga-disable-' + id] = true;
-    const nomes = (n) => n === '_ga' || n.startsWith('_ga_') || n === '_gid' || n === '_fbp' || n === '_fbc';
-    document.cookie.split(';').map((c) => c.split('=')[0].trim()).filter(nomes).forEach((n) => {
-      for (const d of [location.hostname, '.' + location.hostname.split('.').slice(-3).join('.'), '']) document.cookie = `${n}=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/${d ? '; domain=' + d : ''}`;
-    });
+  if (pixel && !window.fbq) { // snippet padrão do Meta Pixel
+    const n = window.fbq = function () { n.callMethod ? n.callMethod.apply(n, arguments) : n.queue.push(arguments); };
+    if (!window._fbq) window._fbq = n; n.push = n; n.loaded = true; n.version = '2.0'; n.queue = [];
+    const sc = document.createElement('script'); sc.async = true; sc.src = 'https://connect.facebook.net/en_US/fbevents.js'; document.head.appendChild(sc);
+    window.fbq('init', pixel); window.fbq('track', 'PageView');
   }
-  function escolher(v) { gravar(v); fechar(); if (v === 'sim') { if (id) window['ga-disable-' + id] = false; carregarComConsentimento(); } else apagarCookies(); }
-  let barra = null;
-  function fechar() { if (barra) { barra.remove(); barra = null; document.body.style.paddingBottom = ''; document.documentElement.style.removeProperty('--cookie-h'); } }
-  function abrir() {
-    if (barra) return;
-    barra = document.createElement('div');
-    barra.className = 'cookie-bar'; barra.setAttribute('role', 'region'); barra.setAttribute('aria-label', 'Aviso de cookies');
-    barra.innerHTML = `<p>Usamos cookies para medir o uso do site${id ? ' (Google Analytics)' : ''}${pixel ? ' e a eficácia dos anúncios (Meta)' : ''}. Você escolhe. <a href="/privacidade#cookies">Saiba mais</a></p><div class="cookie-actions"><button type="button" class="btn btn-outline btn-sm" data-c="nao">Recusar</button><button type="button" class="btn btn-primary btn-sm" data-c="sim">Aceitar</button></div>`;
-    barra.addEventListener('click', (e) => { const b = e.target.closest('[data-c]'); if (b) escolher(b.dataset.c); });
-    document.body.appendChild(barra);
-    document.body.style.paddingBottom = barra.offsetHeight + 'px'; // a barra nunca esconde o fim da página
-    document.documentElement.style.setProperty('--cookie-h', barra.offsetHeight + 'px'); // área fixa de botões (chat) sobe acima da barra
-  }
-  // página de campanha (/analise/): sem banner; carrega Analytics e Pixel ao abrir, a menos que a pessoa já tenha RECUSADO os cookies no site
-  if (document.body.dataset.cookies === 'direto') { if (ler() !== 'nao') carregarComConsentimento(); return; }
-  const atual = ler();
-  if (atual === 'sim') carregarComConsentimento(); else if (atual !== 'nao') abrir();
-  $$('[data-cookie-prefs]').forEach((a) => a.addEventListener('click', (e) => { e.preventDefault(); abrir(); }));
 })();
