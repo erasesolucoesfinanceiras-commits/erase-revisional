@@ -544,7 +544,7 @@ function analise() {
 </header>
 <div class="chat-log" id="chat-log" role="log" aria-live="polite" aria-label="Conversa"></div>
 <div class="chat-acoes" id="chat-acoes"></div>
-<p class="chat-rodape">Ao continuar, você concorda com a <a href="/privacidade" target="_blank" rel="noopener">Política de Privacidade</a> e o uso de cookies.<br>ERASE Soluções Financeiras · CNPJ ${esc(C.empresa.cnpj || '')} · <a href="/termos" target="_blank" rel="noopener">Termos</a></p>
+<p class="chat-rodape">Ao continuar, você aceita a <a href="/privacidade" target="_blank" rel="noopener">Política de Privacidade</a>.<br>ERASE Soluções Financeiras · CNPJ ${esc(C.empresa.cnpj || '')} · <a href="/termos" target="_blank" rel="noopener">Termos</a></p>
 <noscript><p class="chat-sem-js">Esta página precisa de JavaScript. Fale com a gente pelo <a href="/contato">Fale Conosco</a>.</p></noscript>
 </div>`;
   out('analise/index.html', S.page({
