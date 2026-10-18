@@ -95,5 +95,21 @@
     "fatos": 1
    }
   }
+ },
+ "2026-10-18": {
+  "artigo": {
+   "aprovados": 1,
+   "reprovados": 1,
+   "sem_novidade": 1,
+   "criterios": {
+    "fatos": 1
+   }
+  },
+  "nota": {
+   "aprovados": 0,
+   "reprovados": 0,
+   "sem_novidade": 20,
+   "criterios": {}
+  }
  }
 }
