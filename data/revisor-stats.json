@@ -106,9 +106,9 @@
    }
   },
   "nota": {
-   "aprovados": 0,
+   "aprovados": 1,
    "reprovados": 0,
-   "sem_novidade": 20,
+   "sem_novidade": 22,
    "criterios": {}
   }
  }

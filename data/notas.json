@@ -1,5 +1,31 @@
 [
   {
+    "id": "2026-10-18-tesla-apresenta-nova-geracao-do-roadster",
+    "data": "2026-10-18",
+    "categoria": "mercado",
+    "titulo": "Tesla apresenta nova geração do Roadster com propulsores de ar comprimido",
+    "texto": "A Tesla revelou a nova geração do esportivo elétrico Roadster, desenvolvido em parceria com a SpaceX e equipado com sistema de propulsores de ar comprimido. De acordo com a montadora, a produção do modelo está prevista para começar em 2028, incorporando recursos projetados para manobras extremas e empuxo aéreo.",
+    "fontes": [
+      {
+        "nome": "G1 Carros",
+        "url": "https://g1.globo.com/carros/noticia/2026/10/16/tesla-roadster-voa-entenda.ghtml",
+        "data": "2026-10-16"
+      },
+      {
+        "nome": "VEJA",
+        "url": "https://veja.abril.com.br/tecnologia/preco-data-e-mais-tudo-o-que-se-sabe-sobre-o-roadster-primeiro-carro-voador-da-tesla/",
+        "data": "2026-10-16"
+      }
+    ],
+    "foto": {
+      "id": "u-H8Pr-En1I18",
+      "autor": "Michael Kahn",
+      "autorUrl": "https://unsplash.com/@mklibrary?utm_source=erase-revisional&utm_medium=referral",
+      "pagina": "https://unsplash.com/photos/a-car-dealership-with-cars-parked-in-front-of-it-H8Pr-En1I18?utm_source=erase-revisional&utm_medium=referral",
+      "fonte": "Unsplash"
+    }
+  },
+  {
     "id": "2026-10-17-ibc-br-sobe-0-3-em-agosto-com-taxa-selic",
     "data": "2026-10-17",
     "categoria": "economia",
