@@ -603,3 +603,52 @@
 {"quando":"2026-10-19T11:27:07.765Z","data":"2026-10-19","evento":"avaliacao","tipo":"guia_revisao","tema":"financeiro","tentativa":2,"aprovado":false,"criterios_reprovados":["fontes","fatos"]}
 {"quando":"2026-10-19T11:27:07.765Z","data":"2026-10-19","evento":"revisao_guia","resultado":"reprovado","slug":"portabilidade-de-credito-quando-vale-a-pena","motivos":["fontes: As fontes apresentadas tratam de um projeto de lei sobre quitação antecipada de dívidas e de alerta de golpes financeiros em Jacareí, não abordando centralmente as regras e procedimentos de portabilidade de crédito bancário.","fatos: Informações substanciais do texto sobre o funcionamento prático da portabilidade, regras de custos interbancários, transferência de alienação fiduciária e gravames de veículos não constam nas fontes fornecidas."]}
 {"quando":"2026-10-19T11:27:07.765Z","data":"2026-10-19","evento":"uso_gemini","pedidos":11,"ok":11,"por_status":{}}
+{"quando":"2026-10-19T14:27:07.804Z","data":"2026-10-19","evento":"gemini","modelo":"gemini-3.8-flash","status":503,"acao":"espera_e_repete","espera_s":10}
+{"quando":"2026-10-19T14:27:18.305Z","data":"2026-10-19","evento":"gemini","modelo":"gemini-3.8-flash","status":503,"acao":"espera_e_repete","espera_s":40}
+{"quando":"2026-10-19T14:28:05.495Z","data":"2026-10-19","evento":"gemini","modelo":"gemini-3.8-flash","status":503,"acao":"proximo_modelo","motivo":"erro temporário persistiu"}
+{"quando":"2026-10-19T14:28:06.063Z","data":"2026-10-19","evento":"gemini","modelo":"gemini-3.7-flash","status":503,"acao":"espera_e_repete","espera_s":10}
+{"quando":"2026-10-19T14:28:16.886Z","data":"2026-10-19","evento":"gemini","modelo":"gemini-3.7-flash","status":503,"acao":"espera_e_repete","espera_s":40}
+{"quando":"2026-10-19T14:28:57.425Z","data":"2026-10-19","evento":"gemini","modelo":"gemini-3.7-flash","status":503,"acao":"proximo_modelo","motivo":"erro temporário persistiu"}
+{"quando":"2026-10-19T14:29:04.495Z","data":"2026-10-19","evento":"gemini","modelo":"gemini-3.6-flash","status":503,"acao":"espera_e_repete","espera_s":10}
+{"quando":"2026-10-19T14:29:14.944Z","data":"2026-10-19","evento":"gemini","modelo":"gemini-3.6-flash","status":503,"acao":"espera_e_repete","espera_s":40}
+{"quando":"2026-10-19T14:29:55.427Z","data":"2026-10-19","evento":"gemini","modelo":"gemini-3.6-flash","status":503,"acao":"proximo_modelo","motivo":"erro temporário persistiu"}
+{"quando":"2026-10-19T14:30:03.671Z","data":"2026-10-19","evento":"gemini","modelo":"gemini-3.5-flash","status":503,"acao":"espera_e_repete","espera_s":10}
+{"quando":"2026-10-19T14:30:14.788Z","data":"2026-10-19","evento":"gemini","modelo":"gemini-3.5-flash","status":503,"acao":"espera_e_repete","espera_s":40}
+{"quando":"2026-10-19T14:30:55.306Z","data":"2026-10-19","evento":"gemini","modelo":"gemini-3.5-flash","status":503,"acao":"proximo_modelo","motivo":"erro temporário persistiu"}
+{"quando":"2026-10-19T14:31:01.936Z","data":"2026-10-19","evento":"gemini","modelo":"gemini-2.5-flash","status":404,"acao":"proximo_modelo","motivo":"modelo indisponível ou recusado"}
+{"quando":"2026-10-19T14:31:31.671Z","data":"2026-10-19","evento":"pulado","tipo":"nota","tema":"empresas-mei","motivo":"sem novidade real: Nenhuma das fontes aborda crédito para pequenos negócios, MEI, Pronampe ou endividamento empresarial conforme o tema da vez."}
+{"quando":"2026-10-19T14:31:31.671Z","data":"2026-10-19","evento":"tema_trocado","tipo":"nota","de":"empresas-mei","para":"credito-rural","motivo":"fontes insuficientes ou sem novidade real","ultimos_motivos":["sem novidade real: Nenhuma das fontes aborda crédito para pequenos negócios, MEI, Pronampe ou endividamento empresarial conforme o tema da vez."]}
+{"quando":"2026-10-19T14:31:41.123Z","data":"2026-10-19","evento":"gemini","modelo":"gemini-3.8-flash","status":503,"acao":"espera_e_repete","espera_s":10}
+{"quando":"2026-10-19T14:31:51.716Z","data":"2026-10-19","evento":"gemini","modelo":"gemini-3.8-flash","status":503,"acao":"espera_e_repete","espera_s":40}
+{"quando":"2026-10-19T14:32:33.032Z","data":"2026-10-19","evento":"gemini","modelo":"gemini-3.8-flash","status":503,"acao":"proximo_modelo","motivo":"erro temporário persistiu"}
+{"quando":"2026-10-19T14:32:39.317Z","data":"2026-10-19","evento":"gemini","modelo":"gemini-3.7-flash","status":503,"acao":"espera_e_repete","espera_s":10}
+{"quando":"2026-10-19T14:32:49.835Z","data":"2026-10-19","evento":"gemini","modelo":"gemini-3.7-flash","status":503,"acao":"espera_e_repete","espera_s":40}
+{"quando":"2026-10-19T14:33:30.365Z","data":"2026-10-19","evento":"gemini","modelo":"gemini-3.7-flash","status":503,"acao":"proximo_modelo","motivo":"erro temporário persistiu"}
+{"quando":"2026-10-19T14:33:37.369Z","data":"2026-10-19","evento":"gemini","modelo":"gemini-3.6-flash","status":503,"acao":"espera_e_repete","espera_s":10}
+{"quando":"2026-10-19T14:33:47.887Z","data":"2026-10-19","evento":"gemini","modelo":"gemini-3.6-flash","status":503,"acao":"espera_e_repete","espera_s":40}
+{"quando":"2026-10-19T14:34:28.369Z","data":"2026-10-19","evento":"gemini","modelo":"gemini-3.6-flash","status":503,"acao":"proximo_modelo","motivo":"erro temporário persistiu"}
+{"quando":"2026-10-19T14:34:35.420Z","data":"2026-10-19","evento":"gemini","modelo":"gemini-3.5-flash","status":503,"acao":"espera_e_repete","espera_s":10}
+{"quando":"2026-10-19T14:34:45.873Z","data":"2026-10-19","evento":"gemini","modelo":"gemini-3.5-flash","status":503,"acao":"espera_e_repete","espera_s":40}
+{"quando":"2026-10-19T14:35:26.220Z","data":"2026-10-19","evento":"gemini","modelo":"gemini-3.5-flash","status":503,"acao":"proximo_modelo","motivo":"erro temporário persistiu"}
+{"quando":"2026-10-19T14:35:40.473Z","data":"2026-10-19","evento":"gemini","modelo":"gemini-3.8-flash","status":503,"acao":"espera_e_repete","espera_s":10}
+{"quando":"2026-10-19T14:35:50.907Z","data":"2026-10-19","evento":"gemini","modelo":"gemini-3.8-flash","status":503,"acao":"espera_e_repete","espera_s":40}
+{"quando":"2026-10-19T14:36:31.308Z","data":"2026-10-19","evento":"gemini","modelo":"gemini-3.8-flash","status":503,"acao":"proximo_modelo","motivo":"erro temporário persistiu"}
+{"quando":"2026-10-19T14:36:39.568Z","data":"2026-10-19","evento":"gemini","modelo":"gemini-3.7-flash","status":503,"acao":"espera_e_repete","espera_s":10}
+{"quando":"2026-10-19T14:36:50.060Z","data":"2026-10-19","evento":"gemini","modelo":"gemini-3.7-flash","status":503,"acao":"espera_e_repete","espera_s":40}
+{"quando":"2026-10-19T14:37:30.510Z","data":"2026-10-19","evento":"gemini","modelo":"gemini-3.7-flash","status":503,"acao":"proximo_modelo","motivo":"erro temporário persistiu"}
+{"quando":"2026-10-19T14:37:37.578Z","data":"2026-10-19","evento":"gemini","modelo":"gemini-3.6-flash","status":503,"acao":"espera_e_repete","espera_s":10}
+{"quando":"2026-10-19T14:37:47.859Z","data":"2026-10-19","evento":"gemini","modelo":"gemini-3.6-flash","status":503,"acao":"espera_e_repete","espera_s":40}
+{"quando":"2026-10-19T14:38:28.285Z","data":"2026-10-19","evento":"gemini","modelo":"gemini-3.6-flash","status":503,"acao":"proximo_modelo","motivo":"erro temporário persistiu"}
+{"quando":"2026-10-19T14:38:35.296Z","data":"2026-10-19","evento":"gemini","modelo":"gemini-3.5-flash","status":503,"acao":"espera_e_repete","espera_s":10}
+{"quando":"2026-10-19T14:38:45.621Z","data":"2026-10-19","evento":"gemini","modelo":"gemini-3.5-flash","status":503,"acao":"espera_e_repete","espera_s":40}
+{"quando":"2026-10-19T14:39:26.042Z","data":"2026-10-19","evento":"gemini","modelo":"gemini-3.5-flash","status":503,"acao":"proximo_modelo","motivo":"erro temporário persistiu"}
+{"quando":"2026-10-19T14:39:40.117Z","data":"2026-10-19","evento":"gemini","modelo":"gemini-3.8-flash","status":503,"acao":"espera_e_repete","espera_s":10}
+{"quando":"2026-10-19T14:39:50.644Z","data":"2026-10-19","evento":"gemini","modelo":"gemini-3.8-flash","status":503,"acao":"espera_e_repete","espera_s":40}
+{"quando":"2026-10-19T14:40:30.780Z","data":"2026-10-19","evento":"gemini","modelo":"gemini-3.8-flash","status":429,"acao":"proximo_modelo","motivo":"cota por minuto ainda esgotada após esperas"}
+{"quando":"2026-10-19T14:40:38.110Z","data":"2026-10-19","evento":"gemini","modelo":"gemini-3.7-flash","status":503,"acao":"espera_e_repete","espera_s":10}
+{"quando":"2026-10-19T14:40:48.579Z","data":"2026-10-19","evento":"gemini","modelo":"gemini-3.7-flash","status":503,"acao":"espera_e_repete","espera_s":40}
+{"quando":"2026-10-19T14:41:28.948Z","data":"2026-10-19","evento":"gemini","modelo":"gemini-3.7-flash","status":503,"acao":"proximo_modelo","motivo":"erro temporário persistiu"}
+{"quando":"2026-10-19T14:41:35.839Z","data":"2026-10-19","evento":"gemini","modelo":"gemini-3.6-flash","status":503,"acao":"espera_e_repete","espera_s":10}
+{"quando":"2026-10-19T14:41:48.429Z","data":"2026-10-19","evento":"gemini","modelo":"gemini-3.6-flash","status":503,"acao":"espera_e_repete","espera_s":40}
+{"quando":"2026-10-19T14:42:28.441Z","data":"2026-10-19","evento":"erro","tipo":"nota","motivo":"tempo do job esgotado esperando o Gemini"}
+{"quando":"2026-10-19T14:42:28.443Z","data":"2026-10-19","evento":"uso_gemini","pedidos":48,"ok":3,"por_status":{"404":1,"429":1,"503":43}}
