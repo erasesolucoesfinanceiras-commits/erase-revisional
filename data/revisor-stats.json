@@ -114,10 +114,12 @@
  },
  "2026-10-19": {
   "nota": {
-   "aprovados": 0,
-   "reprovados": 0,
-   "sem_novidade": 11,
-   "criterios": {}
+   "aprovados": 1,
+   "reprovados": 1,
+   "sem_novidade": 13,
+   "criterios": {
+    "fontes": 1
+   }
   },
   "guia_revisao": {
    "aprovados": 0,

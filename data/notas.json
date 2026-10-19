@@ -1,5 +1,31 @@
 [
   {
+    "id": "2026-10-19-projecoes-do-ipca-e-pib-atualizadas-pelo",
+    "data": "2026-10-19",
+    "categoria": "economia",
+    "titulo": "Projeções do IPCA e PIB atualizadas pelo Boletim Focus",
+    "texto": "De acordo com o Boletim Focus divulgado pelo Banco Central, a mediana das projeções para o IPCA em 2026 seguiu em 5,22%, enquanto a estimativa de crescimento do PIB para o mesmo ano foi ajustada para 1,83%. Para quem busca financiamento, alterações nas expectativas de inflação podem influenciar o cenário de juros e o custo futuro do crédito.",
+    "fontes": [
+      {
+        "nome": "Correio Braziliense",
+        "url": "https://www.correiobraziliense.com.br/economia/2026/10/7523151-focus-mercado-mantem-projecao-de-alta-do-ipca-mas-reduz-a-do-pib.html",
+        "data": "2026-10-19"
+      },
+      {
+        "nome": "Valor Econômico",
+        "url": "https://valor.globo.com/brasil/noticia/2026/10/19/mercado-mantem-projecao-de-alta-do-ipca-de-2026-em-522percent-e-eleva-de-2027-para-432percent-aponta-focus.ghtml",
+        "data": "2026-10-18"
+      }
+    ],
+    "foto": {
+      "id": 2724241,
+      "autor": "nattanan23",
+      "autorUrl": "https://pixabay.com/users/nattanan23-6312362/",
+      "pagina": "https://pixabay.com/photos/money-coin-investment-business-2724241/",
+      "fonte": "Pixabay"
+    }
+  },
+  {
     "id": "2026-10-18-tesla-apresenta-nova-geracao-do-roadster",
     "data": "2026-10-18",
     "categoria": "mercado",
