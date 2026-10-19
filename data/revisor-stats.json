@@ -111,5 +111,23 @@
    "sem_novidade": 22,
    "criterios": {}
   }
+ },
+ "2026-10-19": {
+  "nota": {
+   "aprovados": 0,
+   "reprovados": 0,
+   "sem_novidade": 10,
+   "criterios": {}
+  },
+  "guia_revisao": {
+   "aprovados": 0,
+   "reprovados": 2,
+   "sem_novidade": 0,
+   "criterios": {
+    "forma": 1,
+    "fontes": 1,
+    "fatos": 1
+   }
+  }
  }
 }
