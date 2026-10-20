@@ -131,5 +131,19 @@
     "fatos": 1
    }
   }
+ },
+ "2026-10-20": {
+  "artigo": {
+   "aprovados": 1,
+   "reprovados": 0,
+   "sem_novidade": 7,
+   "criterios": {}
+  },
+  "nota": {
+   "aprovados": 1,
+   "reprovados": 0,
+   "sem_novidade": 2,
+   "criterios": {}
+  }
  }
 }

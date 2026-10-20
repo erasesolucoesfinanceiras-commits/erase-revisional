@@ -1,5 +1,31 @@
 [
   {
+    "id": "2026-10-20-aneel-discute-novas-regras-de-conexao-pa",
+    "data": "2026-10-20",
+    "categoria": "energia-solar",
+    "titulo": "Aneel discute novas regras de conexão para energia solar",
+    "texto": "A Aneel avalia mudanças nos requisitos de monitoramento e controle para a conexão de energia solar, baterias e veículos elétricos por meio da Consulta Pública 33/2026. A revisão técnica do Prodist coloca em debate possíveis comandos para reduzir a injeção na rede e os custos de adaptação das instalações, o que pode impactar a previsibilidade financeira de novos projetos.",
+    "fontes": [
+      {
+        "nome": "ABSOLAR",
+        "url": "https://www.absolar.org.br/videos/cp-33-2026-barbara-rubim-quem-deve-decidir-pela-reducao-de-energia-injetada-na-rede/",
+        "data": "2026-10-19"
+      },
+      {
+        "nome": "Click Petróleo e Gás",
+        "url": "https://clickpetroleoegas.com.br/aneel-novas-regras-energia-solar-baterias-carros-eletricos-rss94/",
+        "data": "2026-10-17"
+      }
+    ],
+    "foto": {
+      "id": 4824604,
+      "autor": "Solarimo",
+      "autorUrl": "https://pixabay.com/users/Solarimo-15097051/",
+      "pagina": "https://pixabay.com/photos/solar-solar-energy-solar-power-4824604/",
+      "fonte": "Pixabay"
+    }
+  },
+  {
     "id": "2026-10-19-projecoes-do-ipca-e-pib-atualizadas-pelo",
     "data": "2026-10-19",
     "categoria": "economia",

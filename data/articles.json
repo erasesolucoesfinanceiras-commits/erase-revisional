@@ -1,5 +1,34 @@
 [
   {
+    "slug": "fraude-em-financiamento-gera-mandado-de-busca-e-apreensao-de-veiculo-quitado-em-",
+    "categoria": "revisional",
+    "titulo": "Fraude em financiamento gera mandado de busca e apreensão de veículo quitado em SP",
+    "resumo": "Caso em Batatais (SP) expõe riscos de uso indevido de dados veiculares em contratos bancários não autorizados que resultam em ordens judiciais de apreensão.",
+    "data": "2026-10-20",
+    "fontes": [
+      {
+        "nome": "g1",
+        "url": "https://g1.globo.com/sp/ribeirao-preto-franca/noticia/2026/10/09/agricultora-de-batatais-denuncia-golpe-e-diz-que-teve-carro-financiado-por-desconhecida-no-rio-grande-do-sul.ghtml",
+        "data": "2026-10-08"
+      },
+      {
+        "nome": "PIRANOT",
+        "url": "https://www.piranot.com.br/2026/10/09/noticias/brasil/agricultora-batatais-contesta-financiamento-rs-bloqueia-carro/",
+        "data": "2026-10-09"
+      }
+    ],
+    "corpo": "<p>A contratação irregular de financiamentos veiculares utilizando dados de automóveis de terceiros tem gerado transtornos judiciais para proprietários que mantêm seus veículos quitados. Em Batatais, no interior de São Paulo, a agricultora Sônia Donizete Ribeiro Mani constatou que o automóvel de sua família, adquirido à vista no ano de 2020, foi inserido sem autorização em um contrato de crédito firmado no Rio Grande do Sul, fato que culminou na emissão de uma ordem de busca e apreensão por inadimplência.</p><h2>Tentativa de apreensão e detalhes do financiamento irregular</h2><p>A situação veio a público quando um oficial de Justiça, acompanhado por uma equipe da Polícia Militar, compareceu à residência da proprietária para apreender o bem. A medida judicial decorreu da falta de pagamento de parcelas de um financiamento concedido no município de Canoas (RS) em nome de uma terceira pessoa, com quem os legítimos proprietários afirmam não possuir qualquer vínculo ou conhecimento.</p><p>Segundo as informações prestadas pela agricultora, o contrato questionado liberou a quantia de R$ 70 mil e estabeleceu uma obrigação financeira final superior a R$ 130 mil. Os titulares do veículo ressaltaram que nunca assinaram documentos relativos à negociação, não colocaram o bem à venda e tampouco receberam valores decorrentes da transação financeira. A remoção imediata do automóvel pelo guincho foi evitada na ocasião após a moradora apresentar a nota fiscal de aquisição original do veículo.</p><h2>Trâmites judiciais e desdobramentos operacionais</h2><p>Diante do ocorrido, a proprietária registrou um boletim de ocorrência junto à Polícia Civil para que as autoridades apurem a suspeita de fraude e o uso indevido de documentos. Além disso, a defesa da vítima recorreu ao Poder Judiciário para comprovar a posse legal e desconstituir os efeitos da cobrança.</p><p>Uma decisão judicial favorável emitida em 22 de setembro determinou o desbloqueio do automóvel. Contudo, a agricultora relatou que a baixa da restrição ainda não havia sido registrada no sistema integrado, o que manteve os impedimentos administrativos de circulação e de transferência do veículo. Em razão da impossibilidade de rodar regularmente com o carro, utilizado no transporte de sua mãe de 92 anos, a família teve de alugar outro veículo temporário, somando despesas de R$ 15 mil com locação, além dos honorários advocatícios.</p><p>A instituição financeira apontada pela vítima na operação, o C6 Bank, manifestou-se declarando que a ocorrência decorreu de fraude externa cometida por terceiros em uma revendedora estabelecida no estado do Rio Grande do Sul.</p><h2>O que observar na prática em casos de restrição veicular indevida</h2><p>Episódios de fraude que envolvem a alienação fiduciária e gravames em veículos exigem atenção dos proprietários quanto aos registros cadastrais do patrimônio. Na prática, a verificação periódica do prontuário do automóvel junto ao órgão de trânsito estadual permite checar a existência de eventuais bloqueios administrativos ou judiciais vinculados ao Renavam. Caso seja identificada qualquer anotação restritiva desconhecida ou abordagem decorrente de cobrança judicial não reconhecida, a formalização imediata de ocorrência policial e a guarda documental que ateste a posse contínua e a origem do bem são medidas que servem de base para a solicitação de regularização perante as autoridades competentes e os bancos envolvidos.</p>",
+    "foto_busca": "car documents vehicle financing",
+    "tipo": "noticia",
+    "foto": {
+      "id": 2132360,
+      "autor": "garten-gg",
+      "autorUrl": "https://pixabay.com/users/garten-gg-201217/",
+      "pagina": "https://pixabay.com/photos/vehicle-transport-automobile-2132360/",
+      "fonte": "Pixabay"
+    }
+  },
+  {
     "slug": "consorcio-da-caixa-lidera-proporcao-de-contemplacao-imobiliaria-no-pais",
     "categoria": "consorcio-seguros",
     "titulo": "Consórcio da Caixa lidera proporção de contemplação imobiliária no país",
