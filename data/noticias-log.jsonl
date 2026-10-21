@@ -737,3 +737,4 @@
 {"quando":"2026-10-21T11:27:08.141Z","data":"2026-10-21","evento":"revisao_guia","resultado":"sem_mudanca","slug":"como-calcular-a-taxa-de-juros-do-seu-financiamento"}
 {"quando":"2026-10-21T11:27:08.141Z","data":"2026-10-21","evento":"uso_gemini","pedidos":15,"ok":15,"por_status":{}}
 {"quando":"2026-10-21T11:27:42.582Z","data":"2026-10-21","evento":"indexnow","resultado":"enviado","status":200,"enviadas":3,"ainda_pendentes":0,"urls":["https://revisional.eraseconsulta.com.br/","https://revisional.eraseconsulta.com.br/radar","https://revisional.eraseconsulta.com.br/categoria-financeiro"],"resposta":""}
+{"quando":"2026-10-21T14:22:51.388Z","data":"2026-10-21","evento":"uso_gemini","pedidos":0,"ok":0,"por_status":{}}
