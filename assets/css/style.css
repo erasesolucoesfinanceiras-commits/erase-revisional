@@ -613,6 +613,7 @@ fieldset.field { border: 0; padding: 0; margin: 0 0 18px; min-width: 0; }
 .chat-opcoes { display: grid; gap: 8px; }
 .chat-opt { min-height: 52px; padding: 12px 16px; border-radius: 14px; border: 2px solid #0a6cb3; background: var(--surface); color: #0a6cb3; font: inherit; font-weight: 700; text-align: left; cursor: pointer; }
 .chat-opt:hover, .chat-opt:focus-visible { background: #0a6cb3; color: #fff; outline: none; }
+.chat-opt:focus-visible { outline: 3px solid #0a6cb3; outline-offset: 3px; }
 #chat-form { display: grid; gap: 6px; }
 #chat-form label { font-weight: 700; font-size: .9rem; }
 #chat-form input:not(.hp) { min-height: 50px; padding: 0 14px; border: 2px solid var(--border); border-radius: 12px; font: inherit; font-size: 1rem; background: var(--surface); color: var(--text); }
@@ -630,3 +631,13 @@ fieldset.field { border: 0; padding: 0; margin: 0 0 18px; min-width: 0; }
 
 #turnstile-caixa { margin: 0; padding: 0; line-height: 0; }
 #turnstile-caixa:empty { display: none; }
+
+/* Alvos de toque de pelo menos 44 px no celular */
+@media (max-width: 700px) {
+  .theme-toggle, .nav-toggle { width: 44px; height: 44px; }
+  .nav-actions .btn-sm { min-height: 44px; display: inline-flex; align-items: center; }
+  .car-dot { width: 44px; height: 44px; }
+  a.tag:not(.tag-on-img) { padding: 13px 0; margin: -13px 0 -5px; }
+  a.tag.tag-on-img { position: relative; }
+  a.tag.tag-on-img::after { content: ""; position: absolute; inset: -14px -6px; }
+}

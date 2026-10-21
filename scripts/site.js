@@ -177,7 +177,7 @@ function header(active) {
 function footer() {
   const e = config.empresa;
   // Dados da empresa: preencha razaoSocial/cnpj em data/config.json (aparecem aqui automaticamente).
-  const dados = [e.razaoSocial, e.cnpj && `CNPJ ${e.cnpj}`].filter(Boolean).join(' · ');
+  const dados = [e.razaoSocial, e.cnpj && `CNPJ ${e.cnpj}`, e.email].filter(Boolean).join(' · ');
   // Ícone só aparece quando há URL real em data/config.json (evita link morto).
   const soc = (k, label) => !config.social[k] ? '' :
     `<a class="social" href="${esc(config.social[k])}" target="_blank" rel="noopener noreferrer" aria-label="${label}">${ICON[k]}</a>`;
