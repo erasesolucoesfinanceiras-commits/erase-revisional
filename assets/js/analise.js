@@ -103,8 +103,10 @@
     const contrato = CODIGO[R.contrato] || 'nao', urgente = R.parcelas === 'Em dia' ? 'nao' : 'sim';
     const respostas = `Veículo: ${R.veiculo} | Parcelas: ${R.parcelas} | Contrato: ${R.contrato} | Ação revisional anterior: ${R.acao}`;
     const dados = { nome, whatsapp: wa, telefone: wa, lgpd_aceite: 'sim', veiculo: R.veiculo, parcelas: R.parcelas, contrato, acao_anterior: R.acao, qualificado: contrato, urgente, respostas };
-    const ok = await enviarLead(ORIGEM, dados, { limiteMs: LIMITE_MS }); // sem sucesso ou passou de 5 s: segue para o WhatsApp mesmo assim
-    try { if (typeof fbq === 'function') fbq('trackCustom', EVENTO_PIXEL[contrato], { urgente, veiculo: R.veiculo, parcelas: R.parcelas, contrato }); } catch (e) { /* o Pixel nunca atrapalha */ }
+    const leadId = uuid(); // vai ao CRM como lead_id e ao Pixel como eventID: a API de Conversões do CRM usa o mesmo id e a Meta não conta em dobro
+    // O evento sai assim que a pessoa envia (não espera o CRM): qualificado = contrato em mãos ('sim'); cada resposta dispara um só evento, com o nome exato.
+    try { if (typeof fbq === 'function') fbq('trackCustom', EVENTO_PIXEL[contrato], { urgente, veiculo: R.veiculo, parcelas: R.parcelas, contrato }, { eventID: leadId }); } catch (e) { /* o Pixel nunca atrapalha */ }
+    const ok = await enviarLead(ORIGEM, dados, { limiteMs: LIMITE_MS, leadId }); // sem sucesso ou passou de 5 s: segue para o WhatsApp mesmo assim
     const texto = `Olá! Meu nome é ${nome}. Quero a ANÁLISE GRATUITA do meu financiamento.\n${respostas.replace(/ \| /g, '\n')}${urgente === 'sim' ? '\nURGENTE' : ''}`;
     const link = waLink(texto);
     acoes.innerHTML = '';

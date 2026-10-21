@@ -146,8 +146,9 @@ function idDoEnvio(form, chave) {
 const CAMPOS_CAMPANHA = ['origem_trafego', 'pagina_entrada', 'pagina_envio', ...UTM_KEYS];
 function soCampanha() { const a = atribuicao(); return Object.fromEntries(CAMPOS_CAMPANHA.map((k) => [k, a[k]])); }
 /** Envia o lead ao CRM; `comAtribuicao`: lead_id + origem/UTM/data-hora (calculadora, pop-up); `campanha`: só origem/UTM/páginas. */
-async function enviarLead(form, dados, { comAtribuicao = true, campanha = false, comLeadId = false, limiteMs } = {}) {
-  const extra = comAtribuicao ? { ...atribuicao(), lead_id: idDoEnvio(form, JSON.stringify(dados)) } : campanha ? soCampanha() : {};
+async function enviarLead(form, dados, { comAtribuicao = true, campanha = false, comLeadId = false, limiteMs, leadId } = {}) {
+  // `leadId`: id escolhido por quem chama (o chat usa o mesmo id como eventID do Pixel, para a API de Conversões do CRM deduplicar)
+  const extra = comAtribuicao ? { ...atribuicao(), lead_id: leadId || idDoEnvio(form, JSON.stringify(dados)) } : campanha ? soCampanha() : {};
   // `comLeadId`: só o lead_id (mesmo formato da calculadora/pop-up); fica igual nas novas tentativas do mesmo envio.
   if (!comAtribuicao && comLeadId) extra.lead_id = idDoEnvio(form, JSON.stringify(dados));
   const ok = await enviarParaCRM(form, { ...dados, ...extra }, { limiteMs });

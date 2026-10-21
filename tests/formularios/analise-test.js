@@ -91,7 +91,8 @@ const BASE = 'http://localhost:8123/analise/';
     ({ ctx, pg, reqs } = await abrir({ query: '?debug=1', crmAtrasoMs: 0 }));
     await percorrer(pg, resp); await enviar(pg, 'Ana', '(21) 97777-6666'); await pg.waitForSelector('.chat-wa', { timeout: 8000 });
     const fb = await pg.evaluate(() => window.__fb), C = reqs[0].body;
-    t(`Pixel: ${evento}`, fb.some((x) => x[0] === 'trackCustom' && x[1] === evento), JSON.stringify(fb));
+    const custom = fb.filter((x) => x[0] === 'trackCustom');
+    t(`Pixel: ${evento} (um só evento, nome exato, eventID = lead_id enviado ao CRM)`, custom.length === 1 && custom[0][1] === evento && custom[0][3] && custom[0][3].eventID === C.lead_id && /^[\w-]{8,}$/.test(C.lead_id), JSON.stringify(fb));
     if (evento === 'RevLeadNaoQualificado') t('"Não tenho": dica orienta sem descartar; qualificado nao; urgente sim (busca e apreensão)', /Sem problema/.test(await pg.locator('#chat-log').innerText()) && C.contrato === 'nao' && C.qualificado === 'nao' && C.urgente === 'sim' && C.veiculo === 'Caminhão ou máquina agrícola');
     await ctx.close();
   }
@@ -139,6 +140,15 @@ const BASE = 'http://localhost:8123/analise/';
   await percorrer(pg, ['Carro', 'Em dia', 'Sim, em papel ou PDF', 'Não']); await enviar(pg, 'Ana', '(81) 99999-9999'); await pg.waitForSelector('.chat-debug', { timeout: 8000 });
   t('debug com sucesso: crm=confirmou; turnstile=ok', /debug: crm=confirmou; turnstile=ok/.test(await pg.innerText('.chat-debug')));
   await ctx.close();
+
+  // ---- Pixel não depende do CRM: com o CRM fora do ar, o evento do lead qualificado sai igual (e só ele)
+  ({ ctx, pg } = await abrir({ query: '?debug=1', crmAtrasoMs: 9000 }));
+  await percorrer(pg, ['Carro', 'Em dia', 'Sim, em papel ou PDF', 'Não']); await enviar(pg, 'Ana', '(81) 99999-9999');
+  await pg.waitForTimeout(800);
+  const fbCedo = await pg.evaluate(() => window.__fb.filter((x) => x[0] === 'trackCustom').map((x) => x[1]));
+  t('RevLeadQualificado sai na hora do envio, sem esperar o CRM', JSON.stringify(fbCedo) === '["RevLeadQualificado"]', JSON.stringify(fbCedo));
+  await ctx.close();
+  t('endereço do site contém "revisional" (regra da conversão personalizada)', /revisional/.test(JSON.parse(require('fs').readFileSync(require('path').join(__dirname, '../../data/config.json'), 'utf8')).siteUrl));
 
   // ---- validação e honeypot
   ({ ctx, pg, reqs } = await abrir());
