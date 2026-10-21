@@ -1,5 +1,31 @@
 [
   {
+    "id": "2026-10-21-tcu-aprova-contas-de-2025-do-banco-centr",
+    "data": "2026-10-21",
+    "categoria": "financeiro",
+    "titulo": "TCU aprova contas de 2025 do Banco Central com quitação plena a gestores",
+    "texto": "A Segunda Câmara do TCU aprovou a prestação de contas do Banco Central referente ao exercício de 2025 e concedeu quitação plena aos nove responsáveis pela autarquia, incluindo o presidente Gabriel Galípolo. Sob relatoria do ministro Jorge Oliveira, os ministros consideraram as contas regulares e desvincularam o caso da investigação sobre a liquidação do Banco Master, que continua em análise em procedimento separado.",
+    "fontes": [
+      {
+        "nome": "Agência Brasil",
+        "url": "https://agenciabrasil.ebc.com.br/economia/noticia/2026-10/tcu-aprova-contas-do-bc-de-2025-apos-desvincular-processo-do-master",
+        "data": "2026-10-20"
+      },
+      {
+        "nome": "G1 Economia",
+        "url": "https://g1.globo.com/economia/noticia/2026/10/20/tcu-recua-e-aprova-contas-do-bc-tribunal-tinha-condicionado-analise-a-conclusao-da-avaliacao-da-liquidacao-do-banco-master.ghtml",
+        "data": "2026-10-20"
+      }
+    ],
+    "foto": {
+      "id": 171422,
+      "autor": "angelic",
+      "autorUrl": "https://pixabay.com/users/angelic-47376/",
+      "pagina": "https://pixabay.com/photos/car-vehicle-vintage-car-white-car-171422/",
+      "fonte": "Pixabay"
+    }
+  },
+  {
     "id": "2026-10-20-aneel-discute-novas-regras-de-conexao-pa",
     "data": "2026-10-20",
     "categoria": "energia-solar",
