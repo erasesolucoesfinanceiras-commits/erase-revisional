@@ -777,3 +777,13 @@
 {"quando":"2026-10-22T12:08:25.256Z","data":"2026-10-22","evento":"revisao_guia","resultado":"sem_fontes","slug":"juros-acima-da-media-sao-abusivos-o-que-diz-o-stj","motivo":"só 0 fonte(s) oficial(is) legível(is)"}
 {"quando":"2026-10-22T12:08:25.256Z","data":"2026-10-22","evento":"uso_gemini","pedidos":39,"ok":17,"por_status":{"429":8,"503":13}}
 {"quando":"2026-10-22T12:08:59.956Z","data":"2026-10-22","evento":"indexnow","resultado":"enviado","status":200,"enviadas":6,"ainda_pendentes":0,"urls":["https://revisional.eraseconsulta.com.br/noticias/plano-safra-2026-2027-tem-avanco-de-cprs-e-exige-foco-no-caixa","https://revisional.eraseconsulta.com.br/","https://revisional.eraseconsulta.com.br/artigos","https://revisional.eraseconsulta.com.br/radar","https://revisional.eraseconsulta.com.br/categoria-credito-rural","https://revisional.eraseconsulta.com.br/categoria-empresas-mei"],"resposta":""}
+{"quando":"2026-10-22T14:24:38.244Z","data":"2026-10-22","evento":"gemini","modelo":"gemini-3.8-flash","status":503,"acao":"espera_e_repete","espera_s":10}
+{"quando":"2026-10-22T14:24:48.392Z","data":"2026-10-22","evento":"gemini","modelo":"gemini-3.8-flash","status":429,"acao":"espera_e_repete","espera_s":70}
+{"quando":"2026-10-22T14:25:59.498Z","data":"2026-10-22","evento":"gemini","modelo":"gemini-3.8-flash","status":503,"acao":"proximo_modelo","motivo":"erro temporário persistiu"}
+{"quando":"2026-10-22T14:26:05.888Z","data":"2026-10-22","evento":"gemini","modelo":"gemini-3.7-flash","status":503,"acao":"espera_e_repete","espera_s":10}
+{"quando":"2026-10-22T14:26:16.057Z","data":"2026-10-22","evento":"gemini","modelo":"gemini-3.7-flash","status":429,"acao":"espera_e_repete","espera_s":70}
+{"quando":"2026-10-22T14:27:26.691Z","data":"2026-10-22","evento":"gemini","modelo":"gemini-3.7-flash","status":503,"acao":"proximo_modelo","motivo":"erro temporário persistiu"}
+{"quando":"2026-10-22T14:27:33.822Z","data":"2026-10-22","evento":"gemini","modelo":"gemini-3.6-flash","status":503,"acao":"espera_e_repete","espera_s":10}
+{"quando":"2026-10-22T14:27:44.251Z","data":"2026-10-22","evento":"gemini","modelo":"gemini-3.6-flash","status":503,"acao":"espera_e_repete","espera_s":40}
+{"quando":"2026-10-22T14:29:00.429Z","data":"2026-10-22","evento":"revisao_guia","resultado":"sem_mudanca","slug":"juros-acima-da-media-sao-abusivos-o-que-diz-o-stj"}
+{"quando":"2026-10-22T14:29:00.429Z","data":"2026-10-22","evento":"uso_gemini","pedidos":9,"ok":1,"por_status":{"429":2,"503":6}}
