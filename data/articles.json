@@ -1,5 +1,34 @@
 [
   {
+    "slug": "plano-safra-2026-2027-tem-avanco-de-cprs-e-exige-foco-no-caixa",
+    "categoria": "credito-rural",
+    "titulo": "Plano Safra 2026/2027 tem avanço de CPRs e exige foco no caixa",
+    "resumo": "Agricultura empresarial contratou R$ 107,1 bilhões no primeiro trimestre da safra, com quase metade do valor obtido por meio de títulos privados de CPR.",
+    "data": "2026-10-22",
+    "fontes": [
+      {
+        "nome": "Notícias R7",
+        "url": "https://noticias.r7.com/prisma/mundo-agro/credito-rural-exige-planejamento-financeiro-e-atencao-ao-endividamento-na-safra-20262027-20102026/",
+        "data": "2026-10-20"
+      },
+      {
+        "nome": "g1",
+        "url": "https://g1.globo.com/pr/parana/especial-publicitario/agrinvest-alem-da-porteira/noticia/2026/10/19/credito-rural-na-safra-2627-como-proteger-caixa-e-margem.ghtml",
+        "data": "2026-10-19"
+      }
+    ],
+    "corpo": "<p>A execução do crédito rural na safra 2026/2027 evidencia uma participação expressiva de instrumentos privados de captação combinada aos recursos oficiais do governo federal. Para o ciclo corrente, o Plano Safra destinou R$ 525,1 bilhões ao segmento da agricultura empresarial. Esse montante divide-se entre R$ 384,9 bilhões para despesas de custeio e comercialização e R$ 140,2 bilhões direcionados a investimentos de longo prazo. No período anterior, a rubrica de custeio e comercialização havia contado com R$ 414,7 bilhões.</p><h2>Desempenho dos desembolsos e espaço das CPRs</h2><p>Durante o primeiro trimestre da safra 2026/2027, correspondente aos meses de julho a setembro de 2026, as contratações de crédito para a agricultura empresarial alcançaram R$ 107,1 bilhões, de acordo com dados divulgados pelo Ministério da Agricultura e Pecuária (Mapa). O levantamento oficial indica que os financiamentos via Cédula de Produto Rural (CPR) responderam por R$ 50,3 bilhões desse total, atingindo uma fatia de 46,9% das captações realizadas no intervalo.</p><p>A relevância desses títulos privados já havia se manifestado no bimestre inicial do ano-safra. Entre julho e agosto, o setor empresarial demandou R$ 65,7 bilhões em financiamento agrícola, dos quais R$ 32,4 bilhões decorreram da emissão de CPRs, o correspondente a 49,2% das operações efetuadas no período. Em âmbito geral, os registros de estoques de CPRs chegaram ao patamar de R$ 597 bilhões em setembro de 2026.</p><h2>Custos de produção e risco de endividamento</h2><p>Apesar da disponibilidade anunciada nas linhas programadas, o acesso ao montante depende das exigências cadastrais, das garantias exigidas por bancos e revendas e das condições fixadas para cada modalidade. O produtor rural precisa equilibrar compromissos herdados de safras passadas com a necessidade de novos recursos de curto prazo para manter a atividade em funcionamento.</p><p>Para o advogado Bruno Durão, especialista em Direito Bancário, o financiamento agropecuário não pode ser visto como uma medida emergencial para quitar dívidas correntes, mas integrado a um planejamento orçamentário consistente. Bruno Durão pontuou que a tomada de crédito requer a verificação cuidadosa do custo financeiro total, dos prazos contratuais e da real capacidade do negócio de honrar as prestações com base no faturamento esperado. O advogado alertou também sobre os pedidos de renegociação: estender o cronograma de pagamento com redução de parcelas mensais pode gerar um encarecimento global do débito devido à incidência continuada de juros ao longo do tempo.</p><p>A conformidade das obrigações fiscais é outro elemento determinante na avaliação de crédito pelas instituições bancárias. Segundo o especialista em Direito Tributário Adriano de Almeida, falhas de documentação e passivos tributários criam insegurança e dificultam a tomada de recursos. Adriano de Almeida destacou que a apuração correta de tributos e a organização documental asseguram maior previsibilidade ao negócio rural e facilitam o processo de análise cadastral.</p><h2>Dinâmica de desembolsos ao longo da lavoura</h2><p>A gestão de capital no campo enfrenta o descompasso temporal entre desembolsos e receitas. Grande parte dos custos operacionais ocorre meses antes do início da colheita, demandando recursos imediatos para:</p><ul><li>Aquisição de sementes, defensivos agrícolas e fertilizantes;</li><li>Gastos com combustível, maquinários e logística operacional;</li><li>Pagamento de mão de obra e eventuais arrendamentos de terra;</li><li>Contratação de coberturas securitárias e serviços técnicos.</li></ul><p>Como o retorno financeiro só ingressa no caixa após a comercialização da safra, oscilações adversas nas cotações de mercado ou quebras de produtividade afetam diretamente a solvência do produtor que possui prazos rígidos de quitação bancária.</p><h2>O que o tomador de crédito pode observar na prática</h2><p>Na prática, quem contrata crédito rural ou emite títulos agrícolas pode mapear detalhadamente o cronograma de despesas do plantio à colheita antes de assinar novas dívidas. É recomendável confrontar as taxas do Plano Safra com as exigências de garantias e os custos acessórios das CPRs, verificando se os prazos de vencimento coincidem com a liquidação da colheita e se o orçamento da propriedade suporta eventuais variações negativas nos preços dos grãos sem comprometer a solvência da atividade.</p>",
+    "foto_busca": "combine harvester field tractor",
+    "tipo": "noticia",
+    "foto": {
+      "id": 8192037,
+      "autor": "andystrauss",
+      "autorUrl": "https://pixabay.com/users/andystrauss-37834902/",
+      "pagina": "https://pixabay.com/photos/harvest-agriculture-summer-grain-8192037/",
+      "fonte": "Pixabay"
+    }
+  },
+  {
     "slug": "fraude-em-financiamento-gera-mandado-de-busca-e-apreensao-de-veiculo-quitado-em-",
     "categoria": "revisional",
     "titulo": "Fraude em financiamento gera mandado de busca e apreensão de veículo quitado em SP",

@@ -1,5 +1,24 @@
 [
   {
+    "id": "2026-10-22-inadimplencia-de-empresas-bate-recorde-c",
+    "data": "2026-10-22",
+    "categoria": "empresas-mei",
+    "titulo": "Inadimplência de empresas bate recorde com 9,3 milhões de CNPJs negativados",
+    "texto": "O número de empresas inadimplentes no Brasil atingiu o recorde de 9,3 milhões em agosto de 2026, somando R$ 244,4 bilhões em dívidas atrasadas, segundo a Serasa Experian. As micro e pequenas empresas concentram 8,8 milhões desses CNPJs negativados. Segundo a entidade, a busca por crédito e concessões de capital de giro de curto prazo avançou com foco na manutenção das operações e do fluxo de caixa em meio a condições financeiras ainda pressionadas.",
+    "fontes": [
+      {
+        "nome": "VEJA",
+        "url": "https://veja.abril.com.br/economia/brasil-bate-recorde-de-93-milhoes-de-empresas-inadimplentes-com-dividas-de-r-244-bilhoes/",
+        "data": "2026-10-21"
+      },
+      {
+        "nome": "Poder360",
+        "url": "https://www.poder360.com.br/poder-economia/inadimplencia-bate-recorde-e-chega-a-93-milhoes-de-empresas/",
+        "data": "2026-10-21"
+      }
+    ]
+  },
+  {
     "id": "2026-10-21-tcu-aprova-contas-de-2025-do-banco-centr",
     "data": "2026-10-21",
     "categoria": "financeiro",
