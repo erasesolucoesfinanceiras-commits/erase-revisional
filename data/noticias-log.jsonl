@@ -788,3 +788,4 @@
 {"quando":"2026-10-22T14:29:00.429Z","data":"2026-10-22","evento":"revisao_guia","resultado":"sem_mudanca","slug":"juros-acima-da-media-sao-abusivos-o-que-diz-o-stj"}
 {"quando":"2026-10-22T14:29:00.429Z","data":"2026-10-22","evento":"uso_gemini","pedidos":9,"ok":1,"por_status":{"429":2,"503":6}}
 {"quando":"2026-10-22T17:52:51.174Z","data":"2026-10-22","evento":"uso_gemini","pedidos":0,"ok":0,"por_status":{}}
+{"quando":"2026-10-22T20:01:36.235Z","data":"2026-10-22","evento":"verificacao","origem":"verificacao-diaria","acao":"tudo_certo","motivo":"último artigo 2026-10-22 (0 dia(s)), na capa do site"}
