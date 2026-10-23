@@ -807,3 +807,8 @@
 {"quando":"2026-10-23T11:40:04.059Z","data":"2026-10-23","evento":"sem_publicacao","tipo":"nota","motivo":"orçamento de tempo do dia esgotado"}
 {"quando":"2026-10-23T11:42:45.916Z","data":"2026-10-23","evento":"revisao_guia","resultado":"sem_mudanca","slug":"o-que-e-revisao-de-contrato-de-financiamento"}
 {"quando":"2026-10-23T11:42:45.916Z","data":"2026-10-23","evento":"uso_gemini","pedidos":11,"ok":6,"por_status":{"503":5}}
+{"quando":"2026-10-23T14:29:34.836Z","data":"2026-10-23","evento":"pulado","tipo":"nota","tema":"financeiro","motivo":"sem novidade real: Não há pelo menos duas fontes de veículos diferentes abordando o mesmo fato recente sobre o sistema financeiro."}
+{"quando":"2026-10-23T14:29:34.837Z","data":"2026-10-23","evento":"tema_trocado","tipo":"nota","de":"financeiro","para":"economia","motivo":"fontes insuficientes ou sem novidade real","ultimos_motivos":["sem novidade real: Não há pelo menos duas fontes de veículos diferentes abordando o mesmo fato recente sobre o sistema financeiro."]}
+{"quando":"2026-10-23T14:34:42.845Z","data":"2026-10-23","evento":"gemini","modelo":"gemini-3.8-flash","status":"rede","acao":"espera_e_repete","espera_s":10}
+{"quando":"2026-10-23T14:41:10.581Z","data":"2026-10-23","evento":"erro","tipo":"nota","motivo":"tempo do job esgotado esperando o Gemini"}
+{"quando":"2026-10-23T14:41:10.583Z","data":"2026-10-23","evento":"uso_gemini","pedidos":4,"ok":3,"por_status":{}}
