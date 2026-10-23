@@ -208,7 +208,7 @@
     const tipo = TIPO[d.veiculo], i = CalcCore.resolverTaxa(d.pv, d.parcela, d.n, false);
     const { ano, mes } = CalcCore.estimarData(d.pagas), ref = CalcCore.referencia(tipo, ano, mes, LIM, bcb);
     const mensal = i === null ? null : i * 100;
-    return { tipo, mensal, anual: i === null ? null : (Math.pow(1 + i, 12) - 1) * 100, limite: ref.limite, acima: mensal !== null && mensal > ref.limite, textoRef: ref.historico ? `média do Banco Central em ${mm(ref.chave)}` : `referência para ${NOME_TIPO[tipo]}` };
+    return { tipo, mensal, anual: i === null ? null : (Math.pow(1 + i, 12) - 1) * 100, limite: ref.limite, acima: mensal !== null && mensal > ref.limite, mostrarRef: mensal !== null && mensal >= ref.limite * CalcCore.MARGEM_REFERENCIA, textoRef: ref.historico ? 'média do Banco Central na época da contratação' : `referência para ${NOME_TIPO[tipo]}` };
   }
 
   async function calcular() {
@@ -232,16 +232,17 @@
     const { ok, urgente } = await enviarLeadDoChat(nome, wa, respostas, '');
     acoes.innerHTML = '';
     bolha('eu', `${nome} · ${wa}`);
-    const alerta = '<p class="chat-alerta"><strong>Atenção:</strong> além dos juros, o seu contrato <strong>pode ter</strong> cobranças abusivas ou indevidas embutidas, e só a análise do contrato consegue identificar isso. Vale conferir.</p>';
+    const alerta = '<p class="chat-alerta"><strong>Atenção:</strong> os juros são só uma parte do contrato. Muitos financiamentos têm cobranças abusivas ou indevidas embutidas, que não aparecem na taxa e só a análise do contrato identifica.</p>';
     const fim = '<p class="chat-fine">Isto é uma <strong>estimativa</strong>, feita com os números que você informou (sistema Price, sem IOF e tarifas). Não indica valores a receber nem substitui a <strong>ANÁLISE GRATUITA</strong> do contrato.</p>';
     const topo = '<p class="chat-tags"><span class="chat-tag">ANÁLISE GRATUITA</span><span class="chat-tag chat-tag-2">ESTIMATIVA</span></p>';
+    // A referência só aparece se a taxa estiver pelo menos 10% acima dela (CalcCore.MARGEM_REFERENCIA); abaixo disso mostra só a taxa.
     const corpo = e.mensal === null
       ? '<p>Não conseguimos estimar a taxa com esses números. Sem problema: a equipe faz o cálculo com você no WhatsApp.</p>'
-      : `<p>Pelos números que você informou, a taxa estimada do seu financiamento é de <strong>${pct(e.mensal)}% ao mês</strong> (≈ ${pct(e.anual)}% ao ano).</p><p>${e.acima ? `Ela está <strong>acima</strong> da referência de ${pct(e.limite)}% ao mês (${e.textoRef}). Isso é um indício que vale investigar, não uma conclusão.` : `Ela está dentro da referência de ${pct(e.limite)}% ao mês (${e.textoRef}).`}</p>`;
+      : `<p>A taxa estimada do seu financiamento é de <strong>${pct(e.mensal)}% ao mês</strong> (≈ ${pct(e.anual)}% ao ano)${e.mostrarRef ? `, acima da referência de ${pct(e.limite)}% ao mês (${e.textoRef})` : ''}.</p>`;
     await bot(topo + corpo + alerta + fim, 600);
-    const resumo = e.mensal === null ? 'Simulação feita no chat (não foi possível estimar a taxa).' : `Simulação (estimativa): taxa de ${pct(e.mensal)}% ao mês, ${e.acima ? 'acima' : 'dentro'} da referência de ${pct(e.limite)}% ao mês.`;
-    const texto = `Olá! Meu nome é ${nome}. Quero a ANÁLISE GRATUITA do meu financiamento.\n${resumo}\nVeículo: ${R.veiculo}\nFinanciamento: ${R.financ}\nParcelas: ${R.parcelas}\nContrato: ${R.contrato}${urgente === 'sim' ? '\nURGENTE' : ''}`;
-    const a = document.createElement('a'); a.className = 'btn btn-wa btn-block chat-wa'; a.href = waLink(texto); a.textContent = 'Falar com a equipe';
+    const taxaTxt = e.mensal === null ? 'Simulação feita no chat (não foi possível estimar a taxa).' : `Simulação (estimativa): taxa de ${pct(e.mensal)}% ao mês${e.mostrarRef ? `, acima da referência de ${pct(e.limite)}% ao mês` : ''}.`;
+    const texto = `Olá! Meu nome é ${nome}.\n${taxaTxt}\nVeículo: ${R.veiculo}\nFinanciamento: ${R.financ}\nParcelas: ${R.parcelas}\nContrato: ${R.contrato}${urgente === 'sim' ? '\nURGENTE' : ''}\nQuero a análise gratuita do meu contrato.`;
+    const a = document.createElement('a'); a.className = 'btn btn-wa btn-block chat-wa'; a.href = waLink(texto); a.textContent = 'Quero minha ANÁLISE GRATUITA';
     acoes.appendChild(a); rolarDepois();
     if (debug) linhaDebug(ok);
   }

@@ -206,10 +206,10 @@ const BASE = 'http://localhost:8123/analise/';
   t('CRM: a simulação e o resultado vão como texto no campo "respostas"', /^Simulação feita na calculadora do chat \|/.test(C2.respostas) && /R\$\s40\.000,00 em 48x/.test(C2.respostas) && /Taxa estimada: [\d.,]+% ao mês \(referência [\d.,]+% ao mês\)/.test(C2.respostas), C2.respostas);
   t('Pixel: um só evento, RevLeadQualificado, eventID = lead_id', fb2.length === 1 && fb2[0][1] === 'RevLeadQualificado' && fb2[0][3].eventID === C2.lead_id, JSON.stringify(fb2));
   const res = await pg.locator('.chat-msg.bot').last().innerText(), resHtml = await pg.locator('.chat-msg.bot').last().innerHTML();
-  t('resultado: ESTIMATIVA e ANÁLISE GRATUITA em caixa alta, taxa e referência', /ESTIMATIVA/.test(res) && /ANÁLISE GRATUITA/.test(res) && /taxa estimada do seu financiamento é de [\d.,]+% ao mês/.test(res) && /referência de [\d.,]+% ao mês/.test(res) && /acima/.test(res), res);
-  t('resultado: alerta sobre cobranças abusivas ou indevidas em tom de possibilidade; nunca "tudo certo" nem valor a recuperar', /pode ter cobranças abusivas ou indevidas embutidas/.test(res) && /Vale conferir/.test(res) && !/tudo certo|nada a recuperar|não há o que recuperar|você tem direito|vai receber/i.test(res), res);
+  t('resultado acima do limite: ESTIMATIVA e ANÁLISE GRATUITA em caixa alta; taxa, ≈ ao ano e referência (média do Banco Central na época da contratação)', /ESTIMATIVA/.test(res) && /ANÁLISE GRATUITA/.test(res) && /A taxa estimada do seu financiamento é de [\d.,]+% ao mês \(≈ [\d.,]+% ao ano\), acima da referência de [\d.,]+% ao mês \(média do Banco Central na época da contratação\)\./.test(res), res);
+  t('alerta sempre em destaque (texto exato), sem "tudo certo", sem valor a recuperar e sem pedir foto/PDF do contrato', (await pg.locator('.chat-msg.bot').last().locator('.chat-alerta').count()) === 1 && /Atenção: os juros são só uma parte do contrato\. Muitos financiamentos têm cobranças abusivas ou indevidas embutidas, que não aparecem na taxa e só a análise do contrato identifica\./.test(res) && !/tudo certo|nada a recuperar|não há o que recuperar|você tem direito|vai receber|foto|envie o contrato|mande o contrato/i.test(res), res);
   const wa2 = await pg.locator('.chat-wa').getAttribute('href'), tx2 = decodeURIComponent(wa2.split('text=')[1] || '');
-  t('botão "Falar com a equipe": WhatsApp com nome, resumo da estimativa e dados, sem pedir nada de novo', /Falar com a equipe/.test(await pg.innerText('.chat-wa')) && /^https:\/\/wa\.me\/5581991547396/.test(wa2) && /Meu nome é Ana\./.test(tx2) && /Simulação \(estimativa\): taxa de [\d.,]+% ao mês, acima da referência/.test(tx2) && /Financiamento: R\$\s40\.000,00 em 48x/.test(tx2) && !/URGENTE/.test(tx2), tx2);
+  t('botão final "Quero minha ANÁLISE GRATUITA": WhatsApp com nome, resumo da estimativa (cita a referência só porque passou do limite) e termina com "Quero a análise gratuita do meu contrato."', (await pg.innerText('.chat-wa')) === 'Quero minha ANÁLISE GRATUITA' && /^https:\/\/wa\.me\/5581991547396/.test(wa2) && /Meu nome é Ana\./.test(tx2) && /taxa de [\d.,]+% ao mês, acima da referência de [\d.,]+% ao mês/.test(tx2) && /Financiamento: R\$\s40\.000,00 em 48x/.test(tx2) && tx2.endsWith('Quero a análise gratuita do meu contrato.') && !/URGENTE/.test(tx2), tx2);
   await pg.waitForTimeout(1500);
   t('não abre o WhatsApp sozinho: a pessoa lê o resultado e clica', /analise/.test(pg.url()));
   await pg.click('.chat-wa'); await pg.waitForURL(/wa\.me/, { timeout: 6000 });
@@ -219,9 +219,24 @@ const BASE = 'http://localhost:8123/analise/';
   // caminho "dentro da referência": o alerta continua e não diz que está tudo certo
   ({ ctx, pg, reqs } = await abrir());
   await painelCompleto(pg, { parcela: '1100' }); await pg.waitForSelector('#chat-form', { timeout: 10000 }); await enviar(pg, 'Rui', '(81) 99999-9999'); await pg.waitForSelector('.chat-wa', { timeout: 9000 });
-  const res3 = await pg.locator('.chat-msg.bot').last().innerText();
-  t('juros dentro da média: "dentro da referência", mas o alerta de cobranças abusivas ou indevidas continua, sem "tudo certo"', /dentro da referência/.test(res3) && /pode ter cobranças abusivas ou indevidas/.test(res3) && !/tudo certo|nada a recuperar|não há o que recuperar/i.test(res3) && /ESTIMATIVA/.test(res3), res3);
+  const res3 = await pg.locator('.chat-msg.bot').last().innerText(), tx3 = decodeURIComponent((await pg.locator('.chat-wa').getAttribute('href')).split('text=')[1] || '');
+  t('taxa abaixo do limite: só a taxa e o ≈ ao ano, sem citar referência nem "dentro da média"; alerta em destaque continua; botão igual', /A taxa estimada do seu financiamento é de [\d.,]+% ao mês \(≈ [\d.,]+% ao ano\)\./.test(res3) && !/referência|dentro da|média|abaixo|acima/i.test(res3.split('Atenção')[0].replace(/ANÁLISE GRATUITA|ESTIMATIVA/g, '')) && /Atenção: os juros são só uma parte do contrato\. Muitos financiamentos têm cobranças abusivas ou indevidas embutidas, que não aparecem na taxa e só a análise do contrato identifica\./.test(res3) && !/tudo certo|nada a recuperar/i.test(res3) && (await pg.innerText('.chat-wa')) === 'Quero minha ANÁLISE GRATUITA', res3);
   await ctx.close();
+
+  // limite de 10%: com a taxa 9% acima da referência não mostra a referência; com 11% acima mostra
+  const fsb = require('fs'), pthb = require('path'), bcbj = JSON.parse(fsb.readFileSync(pthb.join(__dirname, '../../assets/data/bcb-veiculos.json'), 'utf8'));
+  const hoje = new Date(), tt = hoje.getFullYear() * 12 + hoje.getMonth() - 10, chave = `${Math.floor(tt / 12)}-${String((tt % 12) + 1).padStart(2, '0')}`;
+  const refB = bcbj.valores[bcbj.valores[chave] === undefined && chave > bcbj.ultimo_mes ? bcbj.ultimo_mes : chave];
+  const pmtB = (pv, i, n) => (pv * i) / (1 - Math.pow(1 + i, -n));
+  const parcelaPara = (fator) => pmtB(40000, (refB * fator) / 100, 48).toFixed(2).replace('.', ',');
+  for (const [fator, mostra] of [[1.09, false], [1.11, true]]) {
+    ({ ctx, pg } = await abrir());
+    await painelCompleto(pg, { parcela: parcelaPara(fator) }); await pg.waitForSelector('#chat-form', { timeout: 10000 }); await enviar(pg, 'Rui', '(81) 99999-9999'); await pg.waitForSelector('.chat-wa', { timeout: 9000 });
+    const rb = await pg.locator('.chat-msg.bot').last().innerText(), txb = decodeURIComponent((await pg.locator('.chat-wa').getAttribute('href')).split('text=')[1] || '');
+    t(`limite de 10%: taxa ${Math.round((fator - 1) * 100)}% acima da referência (${refB}%) ${mostra ? 'mostra' : 'não mostra'} a referência no resultado e no WhatsApp`, mostra ? (/acima da referência de/.test(rb) && /acima da referência de/.test(txb)) : (!/referência/.test(rb) && !/referência/.test(txb) && txb.endsWith('Quero a análise gratuita do meu contrato.')), rb + ' || ' + txb);
+    await ctx.close();
+  }
+  t('a constante do limite é uma só (calc-core.js) e vale 1,10', /MARGEM_REFERENCIA = 1\.10;/.test(fsb.readFileSync(pthb.join(__dirname, '../../assets/js/calc-core.js'), 'utf8')) && (fsb.readFileSync(pthb.join(__dirname, '../../assets/js/analise.js'), 'utf8').match(/1\.10/g) || []).length === 0);
 
   // atrasadas + contrato "buscando": urgente, evento Buscando (um só)
   ({ ctx, pg, reqs } = await abrir());

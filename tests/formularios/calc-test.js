@@ -58,5 +58,17 @@ const cors={'access-control-allow-origin':'*','access-control-allow-headers':'co
    t('no ato "Sim": resultado informa o cálculo com 1ª parcela no ato', /1ª parcela paga no ato/.test(txt));
    t('no ato "Sim": totais continuam parcela × prazo', /72\.000,00/.test(txt) && /32\.000,00/.test(txt));
  });
+ // regra da referência no resultado do site: só aparece com a taxa pelo menos 10% acima; alerta sempre; sem a expressão proibida
+ const ALERTA=/Atenção: os juros são só uma parte do contrato\. Muitos financiamentos têm cobranças abusivas ou indevidas embutidas, que não aparecem na taxa e só a análise do contrato identifica\./;
+ for(const [parcela,mostra] of [['1500',true],['1100',false]]){
+   await rodar(()=> 'ok', async (pg,reqs)=>{
+     await pg.fill('#parcela',parcela); await pg.click('#calc-btn'); await pg.waitForSelector('.rate-big',{timeout:8000});
+     const txt=await pg.innerText('#panel-body'), wa=decodeURIComponent((await pg.locator('#result-actions a').getAttribute('href')).split('text=')[1]||'');
+     t(`site, parcela ${parcela}: ${mostra?'mostra':'não mostra'} comparação/referência/veredito`, mostra ? (/Referência:/.test(txt) && /Acima do parâmetro de referência/.test(txt)) : (!/Referência:|parâmetro de referência|dentro da média|dentro do parâmetro|Economia estimada/.test(txt)), txt);
+     t(`site, parcela ${parcela}: alerta em destaque, sem "tudo certo" e sem a expressão proibida`, ALERTA.test(txt) && (await pg.locator('#panel-body .alerta-contrato').count())===1 && !/tudo certo|nada a recuperar|prestamista/i.test(txt), txt);
+     t(`site, parcela ${parcela}: WhatsApp ${mostra?'cita':'não cita'} a referência e termina com o pedido da análise`, (mostra ? /acima da referência de/.test(wa) : !/referência/.test(wa)) && wa.endsWith('Quero a análise gratuita do meu contrato.'), wa);
+     t(`site, parcela ${parcela}: CRM com o mesmo resultado de antes (acima/dentro do limite, sem campo novo)`, reqs[0].b.resultado===(mostra?'acima_do_limite':'dentro_do_limite') && Object.keys(reqs[0].b).length===35, JSON.stringify([reqs[0].b.resultado,Object.keys(reqs[0].b).length]));
+   });
+ }
  await b.close(); console.log(`\n${ok} ok, ${bad} falha(s)`); process.exit(bad?1:0);
 })();

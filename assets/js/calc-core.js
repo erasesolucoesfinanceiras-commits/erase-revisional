@@ -2,6 +2,8 @@
  * Matemática: Tabela Price  PMT = PV · i / (1 − (1+i)^−n); dado PMT, PV e n, a taxa "i" é achada por bisseção.
  * Referência: carro = média mensal do Banco Central NO MÊS DA ASSINATURA (/assets/data/bcb-veiculos.json); sem a série ou o mês, limite fixo de data/config.json. */
 const CalcCore = (function () {
+  // A referência do Banco Central só aparece no resultado quando a taxa estimada está pelo menos 10% acima dela (1,10 = +10%). Mude só aqui.
+  const MARGEM_REFERENCIA = 1.10;
   const bcbSerie = () => fetch('/assets/data/bcb-veiculos.json').then((r) => (r.ok ? r.json() : null)).then((j) => (j && j.valores ? j : null)).catch(() => null);
 
   /** Referência (% a.m.) para o tipo e o mês de assinatura. */
@@ -71,5 +73,5 @@ const CalcCore = (function () {
   }
 
 
-  return { bcbSerie, referencia, pmtPrice, pmtPriceNoAto, resolverTaxa, brl, pct, fmt2, parseMoney, maskMoney, estimarData };
+  return { MARGEM_REFERENCIA, bcbSerie, referencia, pmtPrice, pmtPriceNoAto, resolverTaxa, brl, pct, fmt2, parseMoney, maskMoney, estimarData };
 })();

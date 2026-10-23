@@ -190,6 +190,7 @@ const FREE_BADGE_TXT = 'ANÁLISE DO CONTRATO 100% GRATUITA';
     const ref = referencia(t, d.ano, d.mes), limite = ref.limite;
     const mensal = i * 100, anual = (Math.pow(1 + i, 12) - 1) * 100, acima = mensal > limite;
     const quitado = d.sit === QUITADO, restantes = quitado ? 0 : d.n - d.pagas; // sem parcelas pagas: NaN → sem estimativa de economia
+    const mostrarRef = mensal >= limite * CalcCore.MARGEM_REFERENCIA; // só mostra a referência/comparação se a taxa estiver pelo menos 10% acima dela
     let economia = 0, porParcela = 0;
     if (acima && restantes > 0) { porParcela = d.parcela - (d.noAto ? pmtPriceNoAto : pmtPrice)(pv, limite / 100, d.n); economia = porParcela * restantes; }
 
@@ -224,30 +225,25 @@ const FREE_BADGE_TXT = 'ANÁLISE DO CONTRATO 100% GRATUITA';
           <div><small>Total de juros</small><b>${brl(totalJuros)}</b><span>é o que você paga além dos ${brl(pv)} financiados</span></div>
         </div>
         <p class="fine" style="margin:0 0 6px">Em palavras simples: se você pagar todas as parcelas no valor informado, o contrato custa ${brl(totalPago)} no total, dos quais ${brl(totalJuros)} são juros.${d.noAto ? ' Cálculo com a 1ª parcela paga no ato da assinatura.' : ''}</p>
-        <div class="cmp ${acima ? 'over' : ''}" aria-label="Comparação com a referência">
+        ${mostrarRef ? `<div class="cmp over" aria-label="Comparação com a referência">
           <div class="cmp-track"><div class="cmp-fill" style="width:0" data-w="${wFill}"></div><div class="cmp-mark" style="left:${wMark}%" title="Referência"></div></div>
           <div class="cmp-labels"><span>0%</span><span>Referência: ${pct(limite)}% a.m.</span><span>${pct(escala)}%</span></div>
           <p class="fine" style="margin:6px 0 0">${nota}</p>
         </div>
-        <div class="verdict ${acima ? 'over' : ''}">${acima ? 'Acima do parâmetro de referência' : 'Dentro do parâmetro de referência'}</div>
-        <p>${acima
-          ? `Sua taxa está <strong>${pct(mensal - limite)} ponto(s) percentual(is)</strong> acima da ${textoRef(ref, t)}. Isso é um indício que vale investigar, não uma conclusão sobre o contrato.`
-          : `Pela taxa de juros, seu contrato parece estar dentro da média de mercado (<strong>${textoRef(ref, t)}</strong>).`}</p>
-        <p>${acima
-          ? `<strong>A economia mostrada é só uma estimativa, feita com os números que você informou.</strong> A análise do contrato é que permite conferir esses números e verificar se há outras cobranças, como seguro prestamista e tarifas, que esta simulação não enxerga.`
-          : `<strong>Mas esta calculadora é só uma estimativa da taxa de juros.</strong> O contrato pode incluir seguro prestamista, tarifas e outras cobranças dentro da parcela, e isso só aparece na leitura do contrato. A análise do contrato pode verificar se há algo a questionar nesses itens.`}</p>
-        ${acima ? '' : '<p class="fine" style="margin-top:0">Esta simulação não indica valores a receber.</p>'}
+        <div class="verdict over">Acima do parâmetro de referência</div>
+        <p>Sua taxa está <strong>${pct(mensal - limite)} ponto(s) percentual(is)</strong> acima da ${textoRef(ref, t)}. Isso é um indício que vale investigar, não uma conclusão sobre o contrato.</p>
+        <p><strong>A economia mostrada é só uma estimativa, feita com os números que você informou.</strong></p>` : ''}
+        <p class="alerta-contrato"><strong>Atenção:</strong> os juros são só uma parte do contrato. Muitos financiamentos têm cobranças abusivas ou indevidas embutidas, que não aparecem na taxa e só a análise do contrato identifica.</p>
+        ${mostrarRef ? '' : '<p class="fine" style="margin-top:0">Esta simulação não indica valores a receber.</p>'}
         <div class="free-badge" role="note">${FREE_BADGE_TXT}</div>
-        ${acima && restantes > 0 ? `<div class="saving"><small>Economia estimada nas parcelas restantes (${restantes})</small><b>${brl(economia)}</b>
+        ${mostrarRef && restantes > 0 ? `<div class="saving"><small>Economia estimada nas parcelas restantes (${restantes})</small><b>${brl(economia)}</b>
           <p>≈ ${brl(porParcela)} por parcela, caso o contrato estivesse na taxa de referência. É uma estimativa comparativa: <strong>não indica valores a receber</strong> e a diferença não é devida a você por qualquer instituição.</p></div>` : ''}
-        ${acima && quitado ? '<p class="fine">Como o financiamento já foi quitado, não há parcelas restantes para estimar. A diferença acima é apenas uma comparação de taxas e não indica valores a receber.</p>' : ''}
-        <p class="fine"><strong>Isto é uma estimativa e não substitui a análise do contrato.</strong> Cálculo pelo sistema Price${d.noAto ? ' (1ª parcela no ato)' : ''} com os números informados. Não considera IOF, tarifas, seguros (inclusive seguro prestamista) ou encargos. Não é análise jurídica.</p>`;
+        ${mostrarRef && quitado ? '<p class="fine">Como o financiamento já foi quitado, não há parcelas restantes para estimar. A diferença acima é apenas uma comparação de taxas e não indica valores a receber.</p>' : ''}
+        <p class="fine"><strong>Isto é uma estimativa e não substitui a análise do contrato.</strong> Cálculo pelo sistema Price${d.noAto ? ' (1ª parcela no ato)' : ''} com os números informados. Não considera IOF, tarifas, seguros ou encargos. Não é análise jurídica.</p>`;
 
-      const msgWa = acima
-        ? `Olá! Meu nome é ${k.nome}. Fiz a simulação na ERASE Revisional para ${NOMES[t]} e a taxa calculada foi de ${pct(mensal)}% ao mês. Gostaria de falar com um especialista.`
-        : `Olá! Meu nome é ${k.nome}. Fiz a simulação na ERASE Revisional para ${NOMES[t]}, a taxa calculada foi de ${pct(mensal)}% ao mês (dentro da referência) e gostaria de pedir a análise gratuita do contrato.`;
+      const msgWa = `Olá! Meu nome é ${k.nome}. Fiz a simulação na ERASE Revisional para ${NOMES[t]} e a taxa calculada foi de ${pct(mensal)}% ao mês${mostrarRef ? ` (acima da referência de ${pct(limite)}% ao mês)` : ''}. Quero a análise gratuita do meu contrato.`;
       actions.hidden = false;
-      actions.innerHTML = `<a class="btn btn-wa btn-block" target="_blank" rel="noopener noreferrer" href="${waLink(msgWa)}">${acima ? 'Falar com um especialista no WhatsApp' : 'Quero a análise gratuita do contrato'}</a>
+      actions.innerHTML = `<a class="btn btn-wa btn-block" target="_blank" rel="noopener noreferrer" href="${waLink(msgWa)}">${mostrarRef ? 'Falar com um especialista no WhatsApp' : 'Quero a análise gratuita do contrato'}</a>
         <p class="send-status" id="send-status" role="status">Recebemos seus dados. Um especialista entrará em contato, sem compromisso.</p>`;
       requestAnimationFrame(() => requestAnimationFrame(() => {
         const el = $('.cmp-fill', panelBody); if (el) el.style.width = el.dataset.w + '%';
