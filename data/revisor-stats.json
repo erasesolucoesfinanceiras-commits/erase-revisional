@@ -174,9 +174,11 @@
  "2026-10-23": {
   "nota": {
    "aprovados": 0,
-   "reprovados": 0,
+   "reprovados": 1,
    "sem_novidade": 6,
-   "criterios": {}
+   "criterios": {
+    "fontes": 1
+   }
   }
  }
 }

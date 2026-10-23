@@ -812,3 +812,21 @@
 {"quando":"2026-10-23T14:34:42.845Z","data":"2026-10-23","evento":"gemini","modelo":"gemini-3.8-flash","status":"rede","acao":"espera_e_repete","espera_s":10}
 {"quando":"2026-10-23T14:41:10.581Z","data":"2026-10-23","evento":"erro","tipo":"nota","motivo":"tempo do job esgotado esperando o Gemini"}
 {"quando":"2026-10-23T14:41:10.583Z","data":"2026-10-23","evento":"uso_gemini","pedidos":4,"ok":3,"por_status":{}}
+{"quando":"2026-10-23T17:58:20.635Z","data":"2026-10-23","evento":"gemini","modelo":"gemini-3.8-flash","status":"rede","acao":"espera_e_repete","espera_s":10}
+{"quando":"2026-10-23T18:03:31.415Z","data":"2026-10-23","evento":"gemini","modelo":"gemini-3.8-flash","status":"rede","acao":"espera_e_repete","espera_s":40}
+{"quando":"2026-10-23T18:04:12.063Z","data":"2026-10-23","evento":"gemini","modelo":"gemini-3.8-flash","status":503,"acao":"proximo_modelo","motivo":"erro temporário persistiu"}
+{"quando":"2026-10-23T18:04:19.128Z","data":"2026-10-23","evento":"gemini","modelo":"gemini-3.7-flash","status":503,"acao":"espera_e_repete","espera_s":10}
+{"quando":"2026-10-23T18:04:29.817Z","data":"2026-10-23","evento":"gemini","modelo":"gemini-3.7-flash","status":503,"acao":"espera_e_repete","espera_s":40}
+{"quando":"2026-10-23T18:05:10.230Z","data":"2026-10-23","evento":"gemini","modelo":"gemini-3.7-flash","status":503,"acao":"proximo_modelo","motivo":"erro temporário persistiu"}
+{"quando":"2026-10-23T18:05:17.273Z","data":"2026-10-23","evento":"gemini","modelo":"gemini-3.6-flash","status":503,"acao":"espera_e_repete","espera_s":10}
+{"quando":"2026-10-23T18:05:27.787Z","data":"2026-10-23","evento":"gemini","modelo":"gemini-3.6-flash","status":503,"acao":"espera_e_repete","espera_s":40}
+{"quando":"2026-10-23T18:06:08.270Z","data":"2026-10-23","evento":"gemini","modelo":"gemini-3.6-flash","status":503,"acao":"proximo_modelo","motivo":"erro temporário persistiu"}
+{"quando":"2026-10-23T18:06:15.270Z","data":"2026-10-23","evento":"gemini","modelo":"gemini-3.5-flash","status":503,"acao":"espera_e_repete","espera_s":10}
+{"quando":"2026-10-23T18:06:26.018Z","data":"2026-10-23","evento":"gemini","modelo":"gemini-3.5-flash","status":503,"acao":"espera_e_repete","espera_s":40}
+{"quando":"2026-10-23T18:07:06.464Z","data":"2026-10-23","evento":"gemini","modelo":"gemini-3.5-flash","status":503,"acao":"proximo_modelo","motivo":"erro temporário persistiu"}
+{"quando":"2026-10-23T18:07:13.198Z","data":"2026-10-23","evento":"gemini","modelo":"gemini-2.5-flash","status":404,"acao":"proximo_modelo","motivo":"modelo indisponível ou recusado"}
+{"quando":"2026-10-23T18:07:20.897Z","data":"2026-10-23","evento":"avaliacao","tipo":"nota","tema":"financeiro","tentativa":1,"aprovado":false,"criterios_reprovados":["fontes"]}
+{"quando":"2026-10-23T18:07:20.897Z","data":"2026-10-23","evento":"reprovado","tipo":"nota","tema":"financeiro","tentativa":1,"titulo":"Novas regras do Open Finance aumentam segurança e controle de dados","motivos":["menos de 2 fontes de sites diferentes","menos de 2 fontes publicadas nos últimos 3 dias"],"revisao":{}}
+{"quando":"2026-10-23T18:07:27.216Z","data":"2026-10-23","evento":"gemini","modelo":"gemini-3.8-flash","status":429,"acao":"espera_e_repete","espera_s":70}
+{"quando":"2026-10-23T18:08:37.250Z","data":"2026-10-23","evento":"erro","tipo":"nota","motivo":"tempo do job esgotado esperando o Gemini"}
+{"quando":"2026-10-23T18:08:37.252Z","data":"2026-10-23","evento":"uso_gemini","pedidos":15,"ok":1,"por_status":{"404":1,"429":1,"503":10}}
