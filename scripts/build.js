@@ -392,7 +392,7 @@ ${faq.map(([q, a]) => `<details><summary>${esc(q)}</summary><p>${esc(a)}</p></de
       desc: 'Descubra a taxa de juros mensal embutida no seu financiamento de carro, moto ou máquina agrícola e compare com a média do Banco Central. Simulação gratuita.',
       path: '/calculadora.html', jsonld: faqLd,
     },
-    active: 'calc', body, scripts: ['/assets/js/calculator.js'],
+    active: 'calc', body, scripts: ['/assets/js/calc-core.js', '/assets/js/calculator.js'],
   }));
   urls.push(['/calculadora.html', '0.9', BCB_ATUALIZADO || undefined]); // lastmod = última ALTERAÇÃO real da série, não a conferência
 }
@@ -537,7 +537,7 @@ ${e.email ? `<li><strong>E-mail:</strong> <a href="mailto:${esc(e.email)}">${esc
 
 // ---------------------------------------------------------------- /analise/ (chat de filtro para anúncios; noindex, fora do sitemap e do menu)
 function analise() {
-  const body = `<div class="chat-shell" id="chat">
+  const body = `<div class="chat-shell" id="chat" data-limite-carro="${C.limites.carro}" data-limite-moto="${C.limites.moto}" data-limite-agricola="${C.limites.agricola}">
 <header class="chat-top">
 <a class="chat-logo" href="/" aria-label="ERASE Revisional — início"><img class="logo-img logo-light" src="/assets/img/logo-erase.webp" alt="" width="110" height="20"><img class="logo-img logo-dark" src="/assets/img/logo-erase-dark.webp" alt="" width="110" height="20"></a>
 <h1 class="chat-badge">ANÁLISE GRATUITA</h1>
@@ -550,7 +550,7 @@ function analise() {
 </div>`;
   out('analise/index.html', S.page({
     meta: { title: `Análise gratuita do seu financiamento | ${SITE}`, desc: 'Responda 4 perguntas rápidas e receba a ANÁLISE GRATUITA do seu financiamento de veículo pelo WhatsApp da ERASE.', path: '/analise/', noindex: true },
-    active: '', body, scripts: ['/assets/js/analise.js'], minimal: true, bodyClass: 'chat-page',
+    active: '', body, scripts: ['/assets/js/calc-core.js', '/assets/js/analise.js'], minimal: true, bodyClass: 'chat-page',
   }));
   // não entra no sitemap: é página de campanha
 }

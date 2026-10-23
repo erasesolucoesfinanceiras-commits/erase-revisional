@@ -31,7 +31,7 @@ const BASE = 'http://localhost:8123/analise/';
     return { ctx, pg, reqs, waUrls, trackers };
   }
   const responder = async (pg, texto) => { const alvo = pg.locator('.chat-opt', { hasText: texto }); await alvo.waitFor({ timeout: 8000 }); await alvo.click(); };
-  async function percorrer(pg, [v, p, c, a]) { await responder(pg, v); await responder(pg, p); await responder(pg, c); await responder(pg, a); await pg.waitForSelector('#chat-form', { timeout: 10000 }); }
+  async function percorrer(pg, [v, p, c, a]) { await responder(pg, 'Calcular com a equipe no WhatsApp'); await responder(pg, v); await responder(pg, p); await responder(pg, c); await responder(pg, a); await pg.waitForSelector('#chat-form', { timeout: 10000 }); }
   async function enviar(pg, nome, wa) { await pg.fill('#ch-nome', nome); await pg.fill('#ch-wa', wa); await pg.click('.chat-enviar'); }
 
   // ---- página: destaque, noindex, sem pop-up, sem rolagem lateral
@@ -161,6 +161,98 @@ const BASE = 'http://localhost:8123/analise/';
   await pg.fill('#ch-wa', '(81) 99999-9999'); await pg.click('.chat-enviar'); await pg.waitForTimeout(800);
   t('honeypot preenchido: nada é enviado e a página não sai', reqs.length === 0 && /analise/.test(pg.url()));
   await ctx.close();
+
+
+  // =============== CALCULADORA DENTRO DO CHAT ("Calcular agora") ===============
+  const pill = (pg, txt) => pg.locator('.calc-pill', { hasText: txt }).first().click();
+  async function painelCompleto(pg, { tipo = 'Carro', pv = '40000', parcela = '1500', n = '48', pagas = '10', sit = 'Em dia', contrato = 'Sim, em papel ou PDF' } = {}) {
+    await responder(pg, 'Calcular agora'); await pg.waitForSelector('.calc-painel', { timeout: 8000 });
+    await pill(pg, tipo); await pg.fill('#cp-pv', pv); await pg.fill('#cp-parcela', parcela); await pg.selectOption('#cp-n', n); await pg.fill('#cp-pagas', pagas);
+    await pill(pg, sit); await pill(pg, contrato); await pg.click('.calc-folha button[type=submit]');
+  }
+  // primeira pergunta
+  ({ ctx, pg } = await abrir());
+  await pg.waitForSelector('.chat-opt', { timeout: 8000 });
+  t('1ª pergunta: "Como prefere fazer sua simulação?" com os dois botões', /Como prefere fazer sua simulação\?/.test(await pg.locator('#chat-log').innerText()) && JSON.stringify(await pg.locator('.chat-opt').allInnerTexts()) === '["Calcular agora","Calcular com a equipe no WhatsApp"]');
+  await ctx.close();
+  // painel: abre, valida, fecha
+  ({ ctx, pg, reqs } = await abrir());
+  await responder(pg, 'Calcular agora'); await pg.waitForSelector('.calc-painel', { timeout: 8000 });
+  const pn = await pg.evaluate(() => { const f = document.querySelector('.calc-folha').getBoundingClientRect(); return { dentro: f.left >= 0 && f.right <= innerWidth && f.bottom <= innerHeight + 1, rolaX: document.documentElement.scrollWidth > innerWidth, dialogo: document.querySelector('.calc-painel').getAttribute('role'), inerte: document.getElementById('chat').inert, foco: document.activeElement.name, badge: document.querySelector('.calc-badge').textContent }; });
+  t('painel sobre o chat (390 px): cabe na tela, sem rolagem lateral, é diálogo, chat inerte, foco no 1º campo, ANÁLISE GRATUITA em caixa alta', pn.dentro && !pn.rolaX && pn.dialogo === 'dialog' && pn.inerte && pn.foco === 'cp-tipo' && pn.badge === 'ANÁLISE GRATUITA', JSON.stringify(pn));
+  await pg.click('.calc-folha button[type=submit]');
+  t('painel vazio: avisa, destaca os campos e não fecha', (await pg.locator('.calc-painel .invalid').count()) >= 5 && /Falta preencher/.test(await pg.innerText('#cp-aviso')) && (await pg.locator('.calc-painel').count()) === 1);
+  await pill(pg, 'Carro'); await pg.fill('#cp-pv', '50000'); await pg.fill('#cp-parcela', '500'); await pg.selectOption('#cp-n', '12'); await pill(pg, 'Em dia'); await pill(pg, 'Sim, em papel ou PDF'); await pg.click('.calc-folha button[type=submit]');
+  t('números incoerentes (parcela × prazo ≤ valor): avisa e não fecha', /parcela vezes o prazo/.test(await pg.innerText('#cp-aviso')) && (await pg.locator('.calc-painel').count()) === 1);
+  await pg.keyboard.press('Escape'); await pg.locator('.chat-opt', { hasText: 'Calcular agora' }).waitFor({ timeout: 6000 });
+  t('Esc fecha o painel, o chat volta a perguntar e nada foi enviado', (await pg.locator('.calc-painel').count()) === 0 && !(await pg.evaluate(() => document.getElementById('chat').inert)) && (await pg.locator('.chat-opt', { hasText: 'Calcular agora' }).count()) === 1 && reqs.length === 0);
+  await ctx.close();
+
+  // caminho "acima": resumo em balão, nome + WhatsApp, só então a estimativa
+  let baseChaves;
+  ({ ctx, pg, reqs } = await abrir({ crmAtrasoMs: 300 })); // referência: mesmas chaves do caminho da equipe
+  await percorrer(pg, ['Carro', 'Em dia', 'Sim, em papel ou PDF', 'Não']); await enviar(pg, 'Ana', '(81) 99999-9999'); await pg.waitForURL(/wa\.me/, { timeout: 6000 });
+  baseChaves = Object.keys(reqs[0].body).sort(); await ctx.close();
+
+  ({ ctx, pg, reqs } = await abrir({ crmAtrasoMs: 300 }));
+  await painelCompleto(pg); await pg.waitForSelector('#chat-form', { timeout: 10000 });
+  const resumo = await pg.locator('.chat-msg.eu').last().innerText();
+  t('painel fecha e o chat mostra o balão com o resumo do que foi preenchido', (await pg.locator('.calc-painel').count()) === 0 && /Carro/.test(resumo) && /R\$\s40\.000,00 em 48x de R\$\s1\.500,00 \(10 pagas\)/.test(resumo) && /Em dia/.test(resumo) && /Sim, em papel ou PDF/.test(resumo), resumo);
+  t('antes do envio: nenhum lead no CRM, nenhum evento do Pixel e nenhuma estimativa na tela', reqs.length === 0 && (await pg.evaluate(() => window.__fb.filter((x) => x[0] === 'trackCustom').length)) === 0 && (await pg.locator('.chat-tag').count()) === 0 && /Ver minha estimativa/.test(await pg.innerText('.chat-enviar')));
+  await enviar(pg, 'Ana Maria Souza', '(81) 99999-9999'); await pg.waitForSelector('.chat-wa', { timeout: 9000 });
+  const C2 = reqs[0].body, fb2 = await pg.evaluate(() => window.__fb.filter((x) => x[0] === 'trackCustom'));
+  t('CRM: um lead só, mesma origem e mesmos campos do chat atual (nenhum campo novo)', reqs.length === 1 && C2.origem === 'formulario-analise-revisional' && JSON.stringify(Object.keys(C2).sort()) === JSON.stringify(baseChaves), JSON.stringify({ n: reqs.length, extra: Object.keys(C2).filter((k) => !baseChaves.includes(k)), falta: baseChaves.filter((k) => !(k in C2)) }));
+  t('CRM: só o primeiro nome, urgente "nao" (em dia), contrato sim, acao_anterior vazio, token do Turnstile, lead_id', C2.nome === 'Ana' && C2.urgente === 'nao' && C2.contrato === 'sim' && C2.qualificado === 'sim' && C2.acao_anterior === '' && C2.turnstile === 'token-teste' && C2.telefone === C2.whatsapp && !!C2.lead_id, JSON.stringify(C2));
+  t('CRM: a simulação e o resultado vão como texto no campo "respostas"', /^Simulação feita na calculadora do chat \|/.test(C2.respostas) && /R\$\s40\.000,00 em 48x/.test(C2.respostas) && /Taxa estimada: [\d.,]+% ao mês \(referência [\d.,]+% ao mês\)/.test(C2.respostas), C2.respostas);
+  t('Pixel: um só evento, RevLeadQualificado, eventID = lead_id', fb2.length === 1 && fb2[0][1] === 'RevLeadQualificado' && fb2[0][3].eventID === C2.lead_id, JSON.stringify(fb2));
+  const res = await pg.locator('.chat-msg.bot').last().innerText(), resHtml = await pg.locator('.chat-msg.bot').last().innerHTML();
+  t('resultado: ESTIMATIVA e ANÁLISE GRATUITA em caixa alta, taxa e referência', /ESTIMATIVA/.test(res) && /ANÁLISE GRATUITA/.test(res) && /taxa estimada do seu financiamento é de [\d.,]+% ao mês/.test(res) && /referência de [\d.,]+% ao mês/.test(res) && /acima/.test(res), res);
+  t('resultado: alerta sobre cobranças abusivas ou indevidas em tom de possibilidade; nunca "tudo certo" nem valor a recuperar', /pode ter cobranças abusivas ou indevidas embutidas/.test(res) && /Vale conferir/.test(res) && !/tudo certo|nada a recuperar|não há o que recuperar|você tem direito|vai receber/i.test(res), res);
+  const wa2 = await pg.locator('.chat-wa').getAttribute('href'), tx2 = decodeURIComponent(wa2.split('text=')[1] || '');
+  t('botão "Falar com a equipe": WhatsApp com nome, resumo da estimativa e dados, sem pedir nada de novo', /Falar com a equipe/.test(await pg.innerText('.chat-wa')) && /^https:\/\/wa\.me\/5581991547396/.test(wa2) && /Meu nome é Ana\./.test(tx2) && /Simulação \(estimativa\): taxa de [\d.,]+% ao mês, acima da referência/.test(tx2) && /Financiamento: R\$\s40\.000,00 em 48x/.test(tx2) && !/URGENTE/.test(tx2), tx2);
+  await pg.waitForTimeout(1500);
+  t('não abre o WhatsApp sozinho: a pessoa lê o resultado e clica', /analise/.test(pg.url()));
+  await pg.click('.chat-wa'); await pg.waitForURL(/wa\.me/, { timeout: 6000 });
+  t('o clique abre o WhatsApp e o lead continua sendo um só', /wa\.me/.test(pg.url()) && reqs.length === 1);
+  await ctx.close();
+
+  // caminho "dentro da referência": o alerta continua e não diz que está tudo certo
+  ({ ctx, pg, reqs } = await abrir());
+  await painelCompleto(pg, { parcela: '1100' }); await pg.waitForSelector('#chat-form', { timeout: 10000 }); await enviar(pg, 'Rui', '(81) 99999-9999'); await pg.waitForSelector('.chat-wa', { timeout: 9000 });
+  const res3 = await pg.locator('.chat-msg.bot').last().innerText();
+  t('juros dentro da média: "dentro da referência", mas o alerta de cobranças abusivas ou indevidas continua, sem "tudo certo"', /dentro da referência/.test(res3) && /pode ter cobranças abusivas ou indevidas/.test(res3) && !/tudo certo|nada a recuperar|não há o que recuperar/i.test(res3) && /ESTIMATIVA/.test(res3), res3);
+  await ctx.close();
+
+  // atrasadas + contrato "buscando": urgente, evento Buscando (um só)
+  ({ ctx, pg, reqs } = await abrir());
+  await painelCompleto(pg, { tipo: 'Moto', sit: 'Atrasadas', contrato: 'Não, mas posso pedir ao banco' }); await pg.waitForSelector('#chat-form', { timeout: 10000 }); await enviar(pg, 'Lia', '(81) 98888-7777'); await pg.waitForSelector('.chat-wa', { timeout: 9000 });
+  const fb4 = await pg.evaluate(() => window.__fb.filter((x) => x[0] === 'trackCustom').map((x) => x[1])), tx4 = decodeURIComponent((await pg.locator('.chat-wa').getAttribute('href')).split('text=')[1] || '');
+  t('atrasadas: urgente "sim"; contrato "buscando" dispara só RevLeadBuscandoContrato; WhatsApp leva URGENTE', reqs[0].body.urgente === 'sim' && reqs[0].body.veiculo === 'Moto' && reqs[0].body.contrato === 'buscando' && JSON.stringify(fb4) === '["RevLeadBuscandoContrato"]' && /URGENTE/.test(tx4), JSON.stringify({ u: reqs[0].body.urgente, fb4 }));
+  await ctx.close();
+  ({ ctx, pg, reqs } = await abrir());
+  await painelCompleto(pg, { tipo: 'Caminhão ou máquina agrícola', sit: 'Com busca e apreensão', contrato: 'Não tenho' }); await pg.waitForSelector('#chat-form', { timeout: 10000 }); await enviar(pg, 'Lia', '(81) 98888-7777'); await pg.waitForSelector('.chat-wa', { timeout: 9000 });
+  const fb5 = await pg.evaluate(() => window.__fb.filter((x) => x[0] === 'trackCustom').map((x) => x[1]));
+  t('busca e apreensão: urgente "sim"; "Não tenho" dispara só RevLeadNaoQualificado (nunca o qualificado)', reqs[0].body.urgente === 'sim' && reqs[0].body.contrato === 'nao' && JSON.stringify(fb5) === '["RevLeadNaoQualificado"]', JSON.stringify(fb5));
+  await ctx.close();
+
+  // CRM lento/fora do ar: estimativa aparece em ~5 s e o evento do Pixel já saiu
+  ({ ctx, pg, reqs } = await abrir({ crmAtrasoMs: 9000 }));
+  await painelCompleto(pg); await pg.waitForSelector('#chat-form', { timeout: 10000 });
+  const tLento = Date.now(); await enviar(pg, 'Ana', '(81) 99999-9999'); await pg.waitForSelector('.chat-wa', { timeout: 9000 });
+  t('CRM lento: a estimativa e o botão aparecem em até ~6 s (limite de 5 s), com o Pixel já disparado', Date.now() - tLento < 6500 && (await pg.evaluate(() => window.__fb.filter((x) => x[0] === 'trackCustom').length)) === 1, String(Date.now() - tLento));
+  await ctx.close();
+
+  // debug no caminho da calculadora
+  ({ ctx, pg } = await abrir({ query: '?debug=1' }));
+  await painelCompleto(pg); await pg.waitForSelector('#chat-form', { timeout: 10000 }); await enviar(pg, 'Ana', '(81) 99999-9999'); await pg.waitForSelector('.chat-debug', { timeout: 9000 });
+  t('?debug=1 no caminho da calculadora: mostra crm e turnstile', /debug: crm=confirmou; turnstile=ok/.test(await pg.innerText('.chat-debug')));
+  await ctx.close();
+
+  // texto proibido
+  const fsx = require('fs'), pth = require('path');
+  const arqs = ['assets/js/analise.js', 'assets/js/calc-core.js', 'analise/index.html'].map((f) => fsx.readFileSync(pth.join(__dirname, '../..', f), 'utf8'));
+  t('a expressão "seguro prestamista" não aparece no chat nem no código da calculadora do chat', arqs.every((x) => !/prestamista/i.test(x)));
+  t('/analise/ ainda tem um só h1 e o Pixel/CRM não ganharam evento ou campo novo (eventos: só os 3 de sempre)', (arqs[2].match(/<h1[ >]/g) || []).length === 1 && JSON.stringify([...arqs[0].matchAll(/Rev[A-Za-z]+/g)].map((m) => m[0]).filter((v, i, a) => a.indexOf(v) === i).sort()) === JSON.stringify(['RevLeadBuscandoContrato', 'RevLeadNaoQualificado', 'RevLeadQualificado']));
 
   console.log(`${ok} ok, ${bad} falha(s)`); await b.close(); process.exit(bad ? 1 : 0);
 })();

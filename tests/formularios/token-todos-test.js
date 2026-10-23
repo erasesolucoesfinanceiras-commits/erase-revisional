@@ -8,7 +8,7 @@ const B = 'http://localhost:8123';
 const FLUXOS = {
   async analise(pg) {
     const r = async (txt) => { const a = pg.locator('.chat-opt', { hasText: txt }); await a.waitFor({ timeout: 8000 }); await a.click(); };
-    await r('Carro'); await r('Em dia'); await r('Sim, em papel ou PDF'); await r('Não');
+    await r('Calcular com a equipe no WhatsApp'); await r('Carro'); await r('Em dia'); await r('Sim, em papel ou PDF'); await r('Não');
     await pg.waitForSelector('#chat-form', { timeout: 10000 }); await pg.fill('#ch-nome', 'Ana'); await pg.fill('#ch-wa', '(81) 99999-9999'); await pg.click('.chat-enviar');
   },
   async popup(pg) {
