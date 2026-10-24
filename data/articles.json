@@ -1,5 +1,39 @@
 [
   {
+    "slug": "bc-aprova-regras-para-restringir-oferta-de-credito-e-criar-painel-de-dividas",
+    "categoria": "financeiro",
+    "titulo": "BC aprova regras para restringir oferta de crédito e criar painel de dívidas",
+    "resumo": "O Banco Central editou normas que limitam a oferta ativa de empréstimos, regulamentam o crédito via Pix e estabelecem um painel para acompanhamento de dívidas consolidadas.",
+    "data": "2026-10-24",
+    "fontes": [
+      {
+        "nome": "Notícias R7",
+        "url": "https://noticias.r7.com/prisma/conta-em-dia/banco-central-aprova-novas-regras-de-protecao-e-oferta-de-credito-no-pix-23102026/",
+        "data": "2026-10-23"
+      },
+      {
+        "nome": "Agência Brasil",
+        "url": "https://agenciabrasil.ebc.com.br/economia/noticia/2026-10/bc-reforca-regras-de-protecao-ao-consumidor-nas-ofertas-de-credito",
+        "data": "2026-10-23"
+      },
+      {
+        "nome": "G1 Economia",
+        "url": "https://g1.globo.com/economia/noticia/2026/10/23/bc-exige-autorizacao-previa-para-oferecer-credito-a-clientes-em-situacao-de-vulnerabilidade-financeira.ghtml",
+        "data": "2026-10-23"
+      }
+    ],
+    "corpo": "<p>O Banco Central do Brasil (BC) aprovou três resoluções com diretrizes de proteção na oferta e concessão de crédito a pessoas físicas. O conjunto normativo, formado pelas resoluções BCB 601, 602 e 603, determina a implementação de ferramentas para bloqueio de propagandas bancárias, a criação de um painel de consulta a dívidas consolidadas e a regulamentação para ofertas de empréstimos durante operações via Pix.</p><p>Segundo a autoridade monetária, as medidas têm o objetivo de conter propostas de crédito inadequadas ou excessivas, elevar a transparência das condições contratadas e mitigar riscos relacionados ao superendividamento das famílias. Conforme dados divulgados pelo BC, a taxa de inadimplência das famílias subiu de 5,8% em julho para 6,0% em agosto, atingindo o maior patamar registrado desde março de 2011.</p><h2>Bloqueio de publicidades e exigência de consentimento prévio</h2><p>A Resolução BCB 602 trata das ofertas ativas de crédito, incluindo mensagens e propagandas enviadas diretamente aos consumidores por bancos e instituições financeiras. Pela nova regra, que entra em vigor em 31 de março de 2027, as instituições serão obrigadas a fornecer um mecanismo claro para que qualquer cliente solicite o bloqueio desse tipo de abordagem comercial.</p><p>Para consumidores identificados em situação de vulnerabilidade financeira ou com risco de endividamento excessivo, a regulamentação impõe restrições adicionais. Nesses casos, o contato ativo para ofertar crédito dependerá obrigatoriamente de autorização prévia, específica e inequívoca do cliente.</p><p>Além disso, as ofertas ativas permitidas a esse público não poderão liberar novos recursos para aumento da dívida. As opções autorizadas ficam limitadas a ações que melhorem a condição financeira do consumidor, tais como:</p><ul><li><strong>Renegociação:</strong> reestruturação do contrato visando condições de pagamento mais compatíveis com o orçamento;</li><li><strong>Portabilidade:</strong> transferência da operação de crédito para outra instituição financeira segundo os parâmetros regulamentares;</li><li><strong>Migração de produto:</strong> substituição da modalidade original de crédito por outra linha de menor custo ou condições mais vantajosas.</li></ul><p>O Banco Central destacou que essas exigências incidem sobre o envio de propostas ativas pelas instituições, sem impedir que o cidadão pesquise taxas, compare alternativas e contrate linhas financeiras por iniciativa própria.</p><h2>Painel de Dívidas Consolidadas e alertas de risco</h2><p>Com vigência estabelecida para 1º de julho de 2027, a Resolução BCB 601 exige que as instituições financeiras disponibilizem aos clientes o Painel de Dívidas Consolidadas. Essa ferramenta reunirá as informações sobre os compromissos de crédito contratados, permitindo ao usuário checar o total pendente e o nível de comprometimento da renda com amortizações e encargos.</p><p>Antes da contratação de uma nova linha de crédito, as instituições deverão obrigatoriamente apresentar simulações com o custo detalhado da operação e o impacto financeiro da nova parcela, emitindo alertas expressos caso a transação envolva situações de risco financeiro elevado. Em sua fase inicial, o painel exibirá as operações mantidas na própria instituição onde a conta é movimentada, devendo incorporar, em etapas posteriores, dados do Sistema de Informações de Crédito (SCR) e do Open Finance.</p><h2>Condições para oferta de crédito em transações via Pix</h2><p>A concessão de crédito vinculada à iniciação de transações pelo Pix é disciplinada pela Resolução BCB 603, com início de vigência também fixado em 1º de julho de 2027. O regulamento estabelece que a disponibilização desse tipo de recurso dependerá de consentimento prévio e específico do titular da conta.</p><p>Entre a concessão do consentimento pelo usuário e o envio da primeira proposta de crédito vinculada ao Pix, as instituições deverão respeitar um intervalo mínimo de 24 horas. As empresas financeiras também terão de fornecer um ambiente digital para acompanhamento das operações formalizadas e simuladores de crédito para que o usuário avalie os valores antes de efetuar a transferência.</p><h2>O que o consumidor que financia pode observar na prática</h2><p>Na prática, o consumidor que possui ou pretende contratar linhas de crédito, como o financiamento de veículos, pode observar a partir de 2027 a disponibilidade dessas ferramentas obrigatórias nos canais de atendimento das instituições. A consulta prévia ao painel de dívidas e o acompanhamento das simulações de impacto na renda permitirão analisar com antecedência como cada nova obrigação financeira afeta o orçamento mensal, além de viabilizar o bloqueio de abordagens comerciais ativas caso o titular decida não receber propagandas de empréstimos.</p>",
+    "foto_busca": "credit agreement signing document",
+    "tipo": "noticia",
+    "foto": {
+      "id": 6951993,
+      "autor": "Tumisu",
+      "autorUrl": "https://pixabay.com/users/Tumisu-148124/",
+      "pagina": "https://pixabay.com/photos/contract-agreement-6951993/",
+      "fonte": "Pixabay"
+    }
+  },
+  {
     "slug": "plano-safra-2026-2027-tem-avanco-de-cprs-e-exige-foco-no-caixa",
     "categoria": "credito-rural",
     "titulo": "Plano Safra 2026/2027 tem avanço de CPRs e exige foco no caixa",

@@ -1,5 +1,31 @@
 [
   {
+    "id": "2026-10-24-desenrola-3-0-abre-prazo-para-bancos-apr",
+    "data": "2026-10-24",
+    "categoria": "credito-pessoal",
+    "titulo": "Desenrola 3.0 abre prazo para bancos apresentarem dívidas ao governo",
+    "texto": "O governo federal publicou edital que concede cinco dias úteis para instituições financeiras informarem as carteiras de dívidas que pretendem disponibilizar no Desenrola 3.0. O programa prevê a compra desses débitos pela União com desconto mínimo exigido de 90%, contemplando pendências de cartão e crédito pessoal de até R$ 10 mil para posterior renegociação.",
+    "fontes": [
+      {
+        "nome": "Agência Brasil",
+        "url": "https://agenciabrasil.ebc.com.br/economia/noticia/2026-10/portaria-convoca-instituicoes-financeiras-para-3a-fase-do-desenrola",
+        "data": "2026-10-23"
+      },
+      {
+        "nome": "G1 Economia",
+        "url": "https://g1.globo.com/economia/noticia/2026/10/21/desenrola-30-durigan-diz-que-governo-vai-lancar-edital-para-comprar-dividas-na-quinta.ghtml",
+        "data": "2026-10-21"
+      }
+    ],
+    "foto": {
+      "id": 1730085,
+      "autor": "AhmadArdity",
+      "autorUrl": "https://pixabay.com/users/AhmadArdity-3112014/",
+      "pagina": "https://pixabay.com/photos/credit-card-payment-credit-card-1730085/",
+      "fonte": "Pixabay"
+    }
+  },
+  {
     "id": "2026-10-22-inadimplencia-de-empresas-bate-recorde-c",
     "data": "2026-10-22",
     "categoria": "empresas-mei",
