@@ -1,22 +1,23 @@
-// /analise/ (chat de filtro): fluxo completo no celular, payload ao CRM (CRM simulado), WhatsApp, Pixel, limite de 5 s, ?debug=1 e honeypot.
-// Servir dist/ em :8123 (URLs sem .html) e rodar: node tests/formularios/analise-test.js
+// /analise/ (chat enxuto): fluxo completo no celular (390 px), CRM simulado, Pixel (fila do fbq), Turnstile, limite de 5 s, ?debug=1 e honeypot.
+// Servir dist/ em :8123 (URLs sem .html) e rodar: NODE_PATH=$(npm root -g) node tests/formularios/analise-test.js
 const { chromium } = require('playwright');
+const fs = require('fs'), path = require('path');
+const ROOT = path.join(__dirname, '..', '..');
 const URL_CRM = 'https://lqxwdyjctsmirinvvyow.supabase.co/functions/v1/entrada-site';
 const cors = { 'access-control-allow-origin': '*', 'access-control-allow-headers': 'content-type,x-api-key', 'access-control-allow-methods': 'POST,OPTIONS' };
 let ok = 0, bad = 0; const t = (n, c, x = '') => { c ? ok++ : bad++; console.log(c ? 'OK   ' : 'FALHA', n, c ? '' : x); };
 const BASE = 'http://localhost:8123/analise/';
+const WA = '(81) 99999-9999';
 
 (async () => {
   const b = await chromium.launch({ args: ['--no-sandbox'] });
-  async function abrir({ query = '', crmAtrasoMs = 0, consent = 'nao', semStub = false, ts = null, validade = 0 } = {}) {
+  async function abrir({ query = '', crmAtrasoMs = 0, ts = null } = {}) {
     const ctx = await b.newContext({ viewport: { width: 390, height: 844 }, hasTouch: true });
-    if (ts) { // Turnstile falso configurável: atraso, erro e contagem de gerações (window.__ts)
+    if (ts) {
       const corpo = `var o,n=0;window.__ts={render:0,reset:0};function emit(){setTimeout(function(){${ts.erro ? `o['error-callback']('${ts.erro}')` : "o.callback('tok-'+(++n))"}},${ts.atraso || 0});}window.turnstile={render:function(e,x){o=x;window.__ts.render++;emit();return 'w1'},reset:function(){window.__ts.reset++;emit()}};`;
       await ctx.route(/challenges\.cloudflare\.com/, (r) => r.fulfill({ contentType: 'application/javascript', body: corpo }));
     } else await require('./_turnstile')(ctx);
-    if (validade) await ctx.addInitScript((v) => { window.TS_VALIDADE_MS = v; }, validade);
-    await ctx.addInitScript(([c, stub]) => { try { if (c) localStorage.setItem('erase-cookies', c); } catch (e) {} if (stub) { window.__fb = []; window.fbq = function () { window.__fb.push([].slice.call(arguments)); }; } }, [consent, !semStub]);
-    const trackers = []; ctx.on('request', (r) => { if (/googletagmanager|connect\.facebook\.net/.test(r.url())) trackers.push(r.url()); });
+    const pedidos = []; ctx.on('request', (r) => pedidos.push(r.url()));
     await ctx.route(/fonts\.|googletagmanager|connect\.facebook/, (r) => r.abort());
     const reqs = [], waUrls = [];
     await ctx.route(URL_CRM, async (route, req) => {
@@ -28,246 +29,172 @@ const BASE = 'http://localhost:8123/analise/';
     await ctx.route(/wa\.me/, (route) => { waUrls.push(route.request().url()); route.fulfill({ status: 200, contentType: 'text/html', body: '<h1>wa</h1>' }); });
     const pg = await ctx.newPage();
     await pg.goto(BASE + query);
-    return { ctx, pg, reqs, waUrls, trackers };
+    return { ctx, pg, reqs, waUrls, pedidos };
   }
-  const responder = async (pg, texto) => { const alvo = pg.locator('.chat-opt', { hasText: texto }); await alvo.waitFor({ timeout: 8000 }); await alvo.click(); };
-  async function percorrer(pg, [v, p, c, a]) { await responder(pg, 'Calcular com a equipe no WhatsApp'); await responder(pg, v); await responder(pg, p); await responder(pg, c); await responder(pg, a); await pg.waitForSelector('#chat-form', { timeout: 10000 }); }
-  async function enviar(pg, nome, wa) { await pg.fill('#ch-nome', nome); await pg.fill('#ch-wa', wa); await pg.click('.chat-enviar'); }
+  // eventos do Pixel: o snippet do <head> guarda as chamadas na fila (fbevents.js é bloqueado nos testes)
+  const fb = (pg) => pg.evaluate(() => (window.fbq && window.fbq.queue ? window.fbq.queue.map((a) => [].slice.call(a)) : []));
+  const nomes = async (pg) => (await fb(pg)).filter((x) => x[0] === 'trackCustom').map((x) => x[1]);
+  const opt = async (pg, texto) => { const a = pg.locator('.chat-opt', { hasText: texto }); await a.waitFor({ timeout: 8000 }); await a.click(); };
+  const soft = async (pg, texto) => { const a = pg.locator('.chat-soft', { hasText: texto }); await a.waitFor({ timeout: 8000 }); await a.click(); };
+  const digitar = async (pg, valor, enviarComo = null) => { await pg.locator('#ch-campo').waitFor({ timeout: 8000 }); await pg.fill('#ch-campo', valor); await pg.click('.chat-enviar'); };
+  async function tresCampos(pg, pv = '40000', n = '48', parcela = '1500') { await digitar(pg, pv); await digitar(pg, n); await digitar(pg, parcela); }
+  async function contato(pg, nome = 'Ana Maria Souza', wa = WA) { await digitar(pg, nome); await digitar(pg, wa); }
+  const texto = (pg) => pg.locator('#chat-log').innerText();
 
-  // ---- página: destaque, noindex, sem pop-up, sem rolagem lateral
-  let { ctx, pg } = await abrir();
-  await pg.waitForSelector('.chat-msg.bot:not(.chat-digitando)');
-  const badge = await pg.locator('.chat-badge').boundingBox();
-  t('"ANÁLISE GRATUITA" em caixa alta, visível no topo (celular)', (await pg.innerText('.chat-badge')) === 'ANÁLISE GRATUITA' && badge && badge.y >= 0 && badge.y < 80 && badge.x + badge.width <= 390);
-  t('mensagem inicial do chat traz ANÁLISE GRATUITA em caixa alta', /ANÁLISE GRATUITA/.test(await pg.innerText('.chat-msg.bot:not(.chat-digitando)')));
-  t('noindex na página; fora do menu e do sitemap', /<meta name="robots" content="noindex">/.test(await pg.content()) && !/analise/.test(require('fs').readFileSync(require('path').join(__dirname, '../../sitemap.xml'), 'utf8')));
-  await pg.waitForTimeout(3300);
-  t('pop-up de captação nunca abre aqui', (await pg.locator('.popup').count()) === 0);
-  t('sem rolagem horizontal (390 px)', await pg.evaluate(() => document.documentElement.scrollWidth <= innerWidth));
-  await pg.setViewportSize({ width: 360, height: 640 });
-  t('sem rolagem horizontal (360 px)', await pg.evaluate(() => document.documentElement.scrollWidth <= innerWidth));
-  await ctx.close();
-
-  // ---- cookies: sem banner; Analytics e Pixel carregam ao abrir; rodapé discreto com o aviso; recusa anterior vale
-  let tr;
-  ({ ctx, pg, trackers: tr } = await abrir({ consent: '', semStub: true }));
+  // =============== página: enxuta, sem escolha inicial, Pixel no <head> ===============
+  let { ctx, pg, reqs, pedidos } = await abrir();
   await pg.waitForSelector('.chat-opt', { timeout: 8000 });
-  t('sem banner de cookies com botões na /analise/', (await pg.locator('.cookie-bar').count()) === 0);
-  t('Google Analytics e Meta Pixel carregam direto, sem esperar aceite', tr.some((u) => /googletagmanager\.com\/gtag\/js\?id=G-/.test(u)) && tr.some((u) => /connect\.facebook\.net.*fbevents\.js/.test(u)) && await pg.evaluate(() => typeof window.fbq === 'function' && window.fbq.queue.some((a) => a[0] === 'init' && a[1] === '1740412147210905') && window.fbq.queue.some((a) => a[0] === 'track' && a[1] === 'PageView')), JSON.stringify(tr));
-  const rod = pg.locator('.chat-rodape'), rb = await rod.boundingBox(), fs0 = await rod.evaluate((e) => parseFloat(getComputedStyle(e).fontSize));
-  t('rodapé pequeno e discreto com o aviso e o link da Política de Privacidade, visível sem cobrir o chat', /Ao continuar, você aceita a Política de Privacidade\./.test(await rod.innerText()) && (await rod.locator('a[href="/privacidade"]').count()) === 1 && fs0 <= 13 && rb.y + rb.height <= 844 && (await pg.evaluate(() => getComputedStyle(document.querySelector('.chat-rodape')).position)) === 'static');
-  t('não sobra espaço vazio do Turnstile no chat', await pg.evaluate(() => { const c = document.getElementById('turnstile-caixa'); return !c || c.getBoundingClientRect().height === 0; }));
-  await ctx.close();
-  ({ ctx, pg, trackers: tr } = await abrir({ consent: 'nao', semStub: true }));
-  await pg.waitForSelector('.chat-opt', { timeout: 8000 });
-  t('sem escolha de cookies: mesmo com recusa antiga no navegador, Analytics e Pixel carregam', tr.length >= 2 && (await pg.locator('.cookie-bar').count()) === 0);
-  await ctx.close();
-
-  // ---- cenário A: carro / atrasadas / contrato sim / ação não, com UTM
-  ({ ctx, pg, reqs, waUrls } = await abrir({ query: '?utm_source=meta&utm_campaign=revisional-out' }));
-  await percorrer(pg, ['Carro', 'Atrasadas', 'Sim, em papel ou PDF', 'Não']);
-  t('atrasadas: mensagem de urgência', /urgente/.test(await pg.locator('#chat-log').innerText()));
-  await enviar(pg, 'Maria Souza', '(81) 99999-9999');
-  await pg.waitForURL(/wa\.me/, { timeout: 6000 });
-  const A = reqs[0].body, H = reqs[0].headers;
-  t('CRM: origem nova, x-api-key, turnstile, bot-field vazio, LGPD "sim"', A.origem === 'formulario-analise-revisional' && /^erase_site_/.test(H['x-api-key']) && A.turnstile === 'token-teste' && A['bot-field'] === '' && A.lgpd_aceite === 'sim');
-  t('CRM: só o primeiro nome; whatsapp e telefone iguais', A.nome === 'Maria' && A.whatsapp === '(81) 99999-9999' && A.telefone === A.whatsapp);
-  t('CRM: campos novos (veiculo, parcelas, contrato, acao_anterior, qualificado, urgente, respostas)', A.veiculo === 'Carro' && A.parcelas === 'Atrasadas' && A.contrato === 'sim' && A.acao_anterior === 'Não' && A.qualificado === 'sim' && A.urgente === 'sim' && A.respostas === 'Veículo: Carro | Parcelas: Atrasadas | Contrato: Sim, em papel ou PDF | Ação revisional anterior: Não', JSON.stringify(A));
-  t('CRM: lead_id, data/hora e UTMs', /^[0-9a-f-]{20,}$/.test(A.lead_id) && !!A.data_hora && A.utm_source === 'meta' && A.utm_campaign === 'revisional-out' && A.origem_trafego === 'meta' && A.pagina_envio === '/analise/');
-  const urlWa = decodeURIComponent(waUrls[0] || '');
-  t('WhatsApp da ERASE abre com as respostas na mensagem', /wa\.me\/5581991547396/.test(urlWa) && /Maria/.test(urlWa) && /Carro/.test(urlWa) && /Atrasadas/.test(urlWa) && /Sim, em papel ou PDF/.test(urlWa) && /ANÁLISE GRATUITA/.test(urlWa) && /URGENTE/.test(urlWa), urlWa);
+  const html = await (await ctx.request.get(BASE)).text(), cabeca = html.split('</head>')[0];
+  t('abertura de uma linha, sem escolha inicial; pergunta do veículo com Carro / Moto / Outro e o link "Prefiro falar com a equipe"',
+    /Descubra em 1 minuto se os juros do seu financiamento estão acima do normal\./.test(await texto(pg)) && JSON.stringify(await pg.locator('.chat-opt').allInnerTexts()) === '["Carro","Moto","Outro"]' && (await pg.locator('.chat-soft', { hasText: 'Prefiro falar com a equipe' }).count()) === 1 && !/Como prefere/.test(await texto(pg)));
+  t('Pixel inline no <head> (init + PageView) e nenhum Analytics na página', /fbq\('init','1740412147210905'\);fbq\('track','PageView'\)/.test(cabeca) && !/googletagmanager|gtag\(/.test(html) && !pedidos.some((u) => /googletagmanager/.test(u)));
+  const propria = pedidos.filter((u) => u.startsWith('http://localhost:8123'));
+  t('página enxuta: só chat.css, crm.js, calc-core.js e chat.js (sem style.css, main.js, fonte Inter nem logo escuro)', propria.some((u) => /chat\.css/.test(u)) && propria.some((u) => /crm\.js/.test(u)) && propria.some((u) => /chat\.js/.test(u)) && !propria.some((u) => /style\.css|main\.js|inter-latin|logo-erase-dark|analise\.js/.test(u)), propria.join('\n'));
+  const pesoBytes = ['analise/index.html', 'assets/css/chat.css', 'assets/js/crm.js', 'assets/js/calc-core.js', 'assets/js/chat.js', 'assets/img/logo-erase.webp'].reduce((s, f) => s + fs.statSync(path.join(ROOT, 'dist', f)).size, 0);
+  t(`peso dos arquivos próprios abaixo de 100 KB sem compressão (${Math.round(pesoBytes / 1024)} KB)`, pesoBytes < 100 * 1024);
+  t('h1 "ANÁLISE GRATUITA" (um só), noindex, fora do sitemap, rodapé com CNPJ, e-mail, Termos e Política', (html.match(/<h1[ >]/g) || []).length === 1 && /<h1 class="chat-badge">ANÁLISE GRATUITA<\/h1>/.test(html) && /<meta name="robots" content="noindex">/.test(html) && !/analise/.test(fs.readFileSync(path.join(ROOT, 'sitemap.xml'), 'utf8')) && /59\.449\.234\/0001-63/.test(html) && /atendimento@eraseconsulta\.com\.br/.test(html) && /href="\/termos"/.test(html) && /href="\/privacidade"/.test(html));
+  t('evento de etapa: RevChatIniciado ao abrir', (await nomes(pg)).includes('RevChatIniciado'));
+  t('sem rolagem lateral e sem "seguro prestamista"', !(await pg.evaluate(() => document.documentElement.scrollWidth > innerWidth)) && !/prestamista/i.test(html + fs.readFileSync(path.join(ROOT, 'assets/js/chat.js'), 'utf8')));
   await ctx.close();
 
-  // ---- cenário B: contrato "pedir ao banco" → buscando + dica; Pixel RevLeadBuscandoContrato
-  ({ ctx, pg, reqs, waUrls } = await abrir());
-  await percorrer(pg, ['Moto', 'Em dia', 'Não, mas posso pedir ao banco', 'Sim']);
-  t('dica: o banco é obrigado a fornecer o contrato', /O banco é obrigado a fornecer uma cópia do seu contrato/.test(await pg.locator('#chat-log').innerText()));
-  await enviar(pg, 'João', '(11) 98888-7777'); await pg.waitForURL(/wa\.me/, { timeout: 6000 });
-  const B = reqs[0].body, fbB = await pg.evaluate(() => window.__fb).catch(() => null);
-  t('contrato "buscando": qualificado buscando, urgente nao', B.contrato === 'buscando' && B.qualificado === 'buscando' && B.urgente === 'nao' && B.veiculo === 'Moto' && B.acao_anterior === 'Sim');
+  // =============== caminho completo: calculadora → prévia → contato → perguntas opcionais ===============
+  ({ ctx, pg, reqs } = await abrir());
+  await opt(pg, 'Carro');
+  await pg.locator('#ch-campo').waitFor();
+  const campo1 = await pg.evaluate(() => { const i = document.getElementById('ch-campo'); return { modo: i.getAttribute('inputmode'), soft: !!document.querySelector('.chat-soft'), dinheiro: !!document.querySelector('.chat-money span'), foco: document.activeElement === i }; });
+  t('campo 1 (valor financiado): teclado numérico decimal, prefixo R$, botão discreto "Não sei esse valor"', campo1.modo === 'decimal' && campo1.soft && campo1.dinheiro && /Não sei esse valor/.test(await pg.innerText('.chat-soft')), JSON.stringify(campo1));
+  await digitar(pg, '40000');
+  t('valor formatado em reais no balão da pessoa', /R\$\s40\.000,00/.test(await pg.locator('.chat-msg.eu').last().innerText()));
+  await pg.locator('#ch-campo').waitFor({ timeout: 8000 });
+  const campo2 = await pg.evaluate(() => document.getElementById('ch-campo').getAttribute('inputmode'));
+  await digitar(pg, '48'); await digitar(pg, '1.500');
+  await pg.waitForSelector('.chat-tag', { timeout: 8000 });
+  t('campo 2 (nº de parcelas) com teclado numérico inteiro', campo2 === 'numeric');
+  const previa = await pg.locator('.chat-msg.bot', { has: pg.locator('.chat-tag') }).last().innerText();
+  t('prévia acima do limite: taxa e ≈ ao ano; "parece acima da média do mercado"; só ESTIMATIVA, sem promessa', /A taxa estimada do seu financiamento é de [\d.,]+% ao mês \(≈ [\d.,]+% ao ano\)\./.test(previa) && /Sua taxa estimada parece acima da média do mercado\./.test(previa) && /ESTIMATIVA/.test(previa) && /Não indica valores a receber nem garante resultado/.test(previa) && !/tudo certo|reduz|devolu|vai receber|você tem direito/i.test(previa), previa);
+  t('antes do contato: nenhum lead no CRM e nenhum evento de lead', reqs.length === 0 && !(await nomes(pg)).some((n) => /^RevLead/.test(n)));
+  await pg.locator('#ch-campo').waitFor();
+  t('"Quer receber a análise completa?" e depois nome digitado dentro do chat', /Quer receber a análise completa\?/.test(await texto(pg)) && /primeiro nome/.test(await pg.innerText('#chat-form label')));
+  await digitar(pg, 'Ana Maria Souza');
+  t('nome: só o primeiro nome vai ao balão', /^Ana$/.test(await pg.locator('.chat-msg.eu').last().innerText()));
+  const legal = await pg.innerText('.chat-legal');
+  await digitar(pg, WA);
+  await pg.waitForSelector('.chat-opt', { timeout: 10000 });
+  const C1 = reqs[0].body;
+  const CHAVES = ['acao_anterior', 'contrato', 'data_hora', 'data_hora_local', 'lead_id', 'lgpd_aceite', 'nome', 'origem', 'origem_trafego', 'pagina_entrada', 'pagina_envio', 'parcelas', 'qualificado', 'respostas', 'telefone', 'turnstile', 'urgente', 'utm_campaign', 'utm_content', 'utm_medium', 'utm_source', 'utm_term', 'veiculo', 'whatsapp', 'bot-field'].sort();
+  t('aviso de privacidade junto do WhatsApp', /Política de Privacidade/.test(legal));
+  t('CRM: o lead é salvo ao enviar o WhatsApp — um só envio, mesmas chaves de antes (nenhum campo novo)', reqs.length === 1 && JSON.stringify(Object.keys(C1).sort()) === JSON.stringify(CHAVES), JSON.stringify({ n: reqs.length, extra: Object.keys(C1).filter((k) => !CHAVES.includes(k)), falta: CHAVES.filter((k) => !(k in C1)) }));
+  t('CRM: origem do Revisional, só o primeiro nome, urgente "nao", sem contrato/parcelas ainda, token do Turnstile, lead_id', C1.origem === 'formulario-analise-revisional' && C1.nome === 'Ana' && C1.whatsapp === C1.telefone && C1.veiculo === 'Carro' && C1.parcelas === '' && C1.contrato === '' && C1.qualificado === '' && C1.urgente === 'nao' && C1.acao_anterior === '' && C1.lgpd_aceite === 'sim' && C1.turnstile === 'token-teste' && !!C1.lead_id && C1['bot-field'] === '', JSON.stringify(C1));
+  t('CRM: o caminho feito e a taxa estimada vão no campo "respostas"', /^Caminho: calculadora completa \| Veículo: Carro \| Financiamento: R\$\s40\.000,00 em 48x de R\$\s1\.500,00 \| Taxa estimada: [\d.,]+% ao mês \(referência [\d.,]+% ao mês\)$/.test(C1.respostas), C1.respostas);
+  t('Pixel: eventos por etapa na ordem, e nenhum evento de lead antes de responder o contrato', JSON.stringify((await nomes(pg))) === JSON.stringify(['RevChatIniciado', 'RevChatVeiculo', 'RevChatValorFinanciado', 'RevChatParcelasQtd', 'RevChatValorParcela', 'RevChatViuPrevia', 'RevChatEnviouContato']), JSON.stringify(await nomes(pg)));
+  t('depois do contato salvo: duas perguntas opcionais por botão, com "Pular"', /Suas parcelas estão em dia\?/.test(await texto(pg)) && JSON.stringify(await pg.locator('.chat-opt').allInnerTexts()) === '["Em dia","Atrasadas","Com busca e apreensão"]' && (await pg.locator('.chat-soft', { hasText: 'Pular' }).count()) === 1);
+  await opt(pg, 'Em dia'); await pg.waitForSelector('.chat-opt', { hasText: 'Sim, em papel' });
+  const C2 = reqs[1].body;
+  t('resposta das parcelas atualiza o lead: novo envio (lead_id novo), mesmo nome e WhatsApp, parcelas "Em dia", urgente "nao"', reqs.length === 2 && C2.lead_id !== C1.lead_id && C2.nome === 'Ana' && C2.whatsapp === C1.whatsapp && C2.parcelas === 'Em dia' && C2.urgente === 'nao' && /Parcelas: Em dia/.test(C2.respostas) && /^Caminho: calculadora completa/.test(C2.respostas) && C2.turnstile === 'token-teste', JSON.stringify(C2));
+  t('contrato "Sim": pergunta com as três opções de sempre', /Você tem o contrato do financiamento em mãos \(papel ou PDF\)\?/.test(await texto(pg)) && JSON.stringify(await pg.locator('.chat-opt').allInnerTexts()) === '["Sim, em papel ou PDF","Não, mas posso pedir ao banco","Não tenho"]');
+  await opt(pg, 'Sim, em papel ou PDF'); await pg.waitForSelector('.chat-wa', { timeout: 10000 });
+  const C3 = reqs[2].body, ev3 = (await fb(pg)).filter((x) => x[0] === 'trackCustom' && /^RevLead/.test(x[1]));
+  t('contrato "sim": novo envio com contrato "sim" e qualificado "sim", mantendo as parcelas', reqs.length === 3 && C3.lead_id !== C2.lead_id && C3.contrato === 'sim' && C3.qualificado === 'sim' && C3.parcelas === 'Em dia' && /Contrato: Sim, em papel ou PDF/.test(C3.respostas), JSON.stringify(C3));
+  t('Pixel: RevLeadQualificado (um só evento de lead), com eventID = lead_id do envio do contrato', ev3.length === 1 && ev3[0][1] === 'RevLeadQualificado' && ev3[0][3] && ev3[0][3].eventID === C3.lead_id, JSON.stringify(ev3));
+  t('Pixel: eventos das respostas opcionais', (await nomes(pg)).includes('RevChatRespondeuParcelas') && (await nomes(pg)).includes('RevChatRespondeuContrato'));
+  const wa = await pg.locator('.chat-wa').getAttribute('href'), tx = decodeURIComponent(wa.split('text=')[1] || '');
+  t('botão final "Quero minha ANÁLISE GRATUITA": WhatsApp com nome, taxa, dados e o pedido final; não abre sozinho', (await pg.innerText('.chat-wa')) === 'Quero minha ANÁLISE GRATUITA' && /^https:\/\/wa\.me\/5581991547396/.test(wa) && /Meu nome é Ana\./.test(tx) && /Simulação \(estimativa\): taxa de [\d.,]+% ao mês, acima da média do mercado\./.test(tx) && /Financiamento: R\$\s40\.000,00 em 48x/.test(tx) && tx.endsWith('Quero a análise gratuita do meu contrato.') && !/prestamista/i.test(tx) && /analise/.test(pg.url()), tx);
   await ctx.close();
-  // o Pixel é lido antes da navegação: refaz lendo o stub no momento do clique
-  for (const [resp, evento] of [[['Moto', 'Em dia', 'Não, mas posso pedir ao banco', 'Sim'], 'RevLeadBuscandoContrato'], [['Carro', 'Em dia', 'Sim, em papel ou PDF', 'Não'], 'RevLeadQualificado'], [['Caminhão ou máquina agrícola', 'Com busca e apreensão', 'Não tenho', 'Sim'], 'RevLeadNaoQualificado']]) {
-    ({ ctx, pg, reqs } = await abrir({ query: '?debug=1', crmAtrasoMs: 0 }));
-    await percorrer(pg, resp); await enviar(pg, 'Ana', '(21) 97777-6666'); await pg.waitForSelector('.chat-wa', { timeout: 8000 });
-    const fb = await pg.evaluate(() => window.__fb), C = reqs[0].body;
-    const custom = fb.filter((x) => x[0] === 'trackCustom');
-    t(`Pixel: ${evento} (um só evento, nome exato, eventID = lead_id enviado ao CRM)`, custom.length === 1 && custom[0][1] === evento && custom[0][3] && custom[0][3].eventID === C.lead_id && /^[\w-]{8,}$/.test(C.lead_id), JSON.stringify(fb));
-    if (evento === 'RevLeadNaoQualificado') t('"Não tenho": dica orienta sem descartar; qualificado nao; urgente sim (busca e apreensão)', /Sem problema/.test(await pg.locator('#chat-log').innerText()) && C.contrato === 'nao' && C.qualificado === 'nao' && C.urgente === 'sim' && C.veiculo === 'Caminhão ou máquina agrícola');
+
+  // =============== atrasadas = URGENTE; "Não tenho" e "Não, mas posso pedir ao banco"; "Pular" ===============
+  for (const [parcelasResp, contratoResp, codigo, eventoLead] of [['Atrasadas', 'Não tenho', 'nao', 'RevLeadNaoQualificado'], ['Com busca e apreensão', 'Não, mas posso pedir ao banco', 'buscando', 'RevLeadBuscandoContrato']]) {
+    ({ ctx, pg, reqs } = await abrir());
+    await opt(pg, 'Moto'); await tresCampos(pg); await contato(pg); await pg.waitForSelector('.chat-opt');
+    await opt(pg, parcelasResp); await pg.waitForSelector('.chat-opt', { hasText: 'Sim, em papel' });
+    t(`${parcelasResp}: o chat avisa que o caso é urgente e o envio leva urgente "sim"`, /urgente/.test(await texto(pg)) && reqs[1].body.urgente === 'sim' && reqs[1].body.parcelas === parcelasResp);
+    await opt(pg, contratoResp); await pg.waitForSelector('.chat-wa', { timeout: 10000 });
+    const evs = (await fb(pg)).filter((x) => x[0] === 'trackCustom' && /^RevLead/.test(x[1])).map((x) => x[1]);
+    t(`contrato "${contratoResp}": só ${eventoLead}, nunca RevLeadQualificado; envio com contrato "${codigo}" e urgente "sim"`, JSON.stringify(evs) === JSON.stringify([eventoLead]) && reqs[2].body.contrato === codigo && reqs[2].body.qualificado === codigo && reqs[2].body.urgente === 'sim', JSON.stringify([evs, reqs[2] && reqs[2].body]));
+    t('WhatsApp leva URGENTE', /URGENTE/.test(decodeURIComponent((await pg.locator('.chat-wa').getAttribute('href')).split('text=')[1] || '')));
     await ctx.close();
   }
-
-  // ---- 5 s: CRM lento → segue para o WhatsApp; motivo só com ?debug=1
-  ({ ctx, pg, reqs, waUrls } = await abrir({ crmAtrasoMs: 9000 }));
-  await percorrer(pg, ['Carro', 'Em dia', 'Sim, em papel ou PDF', 'Não']);
-  const t0 = Date.now(); await enviar(pg, 'Rui', '(81) 99999-9999'); await pg.waitForURL(/wa\.me/, { timeout: 8000 }); const dt = Date.now() - t0;
-  t('CRM lento (9 s): segue para o WhatsApp em até ~6 s', dt < 6500, `${dt} ms`);
-  await ctx.close();
-  ({ ctx, pg, reqs } = await abrir({ query: '?debug=1', crmAtrasoMs: 9000 }));
-  await percorrer(pg, ['Carro', 'Em dia', 'Sim, em papel ou PDF', 'Não']); await enviar(pg, 'Rui', '(81) 99999-9999');
-  await pg.waitForSelector('.chat-debug', { timeout: 8000 });
-  t('?debug=1 mostra o resultado (CRM e Turnstile) e não sai sozinho da página', /debug: crm=não confirmou \(.*tempo_esgotado.*\); turnstile=ok/.test(await pg.innerText('.chat-debug')) && /analise/.test(pg.url()) && (await pg.locator('.chat-wa').count()) === 1);
-  await ctx.close();
-  ({ ctx, pg } = await abrir({ crmAtrasoMs: 9000 }));
-  await percorrer(pg, ['Carro', 'Em dia', 'Sim, em papel ou PDF', 'Não']); await enviar(pg, 'Rui', '(81) 99999-9999'); await pg.waitForURL(/wa\.me/, { timeout: 8000 });
-  t('sem ?debug=1 nenhum motivo de falha aparece', true); await ctx.close();
-
-  // ---- Turnstile: token já pronto ao abrir, espera dentro do limite, código de erro no debug, renovação
-  ({ ctx, pg, reqs } = await abrir({ ts: { atraso: 300 } }));
-  await pg.waitForTimeout(1200);
-  const gerados = await pg.evaluate(() => window.__ts.render + window.__ts.reset);
-  t('token do Turnstile gerado ao abrir a página (antes de qualquer pergunta)', gerados === 1, String(gerados));
-  await percorrer(pg, ['Carro', 'Em dia', 'Sim, em papel ou PDF', 'Não']); await enviar(pg, 'Ana', '(81) 99999-9999'); await pg.waitForURL(/wa\.me/, { timeout: 6000 });
-  t('o envio usa o token pronto', reqs[0].body.turnstile === 'tok-1', String(reqs[0].body.turnstile));
-  await ctx.close();
-  ({ ctx, pg, reqs } = await abrir({ ts: { atraso: 7000 } }));
-  await percorrer(pg, ['Carro', 'Em dia', 'Sim, em papel ou PDF', 'Não']);
-  const tw = Date.now(); await enviar(pg, 'Ana', '(81) 99999-9999'); await pg.waitForURL(/wa\.me/, { timeout: 8000 });
-  t('token ainda não pronto: espera por ele dentro do limite de 5 s e envia com o token', reqs[0].body.turnstile === 'tok-1' && Date.now() - tw < 5500, JSON.stringify({ tk: reqs[0].body.turnstile, ms: Date.now() - tw }));
-  await ctx.close();
-  ({ ctx, pg, reqs } = await abrir({ query: '?debug=1', ts: { erro: '110200' } }));
-  await percorrer(pg, ['Carro', 'Em dia', 'Sim, em papel ou PDF', 'Não']);
-  const te = Date.now(); await enviar(pg, 'Ana', '(81) 99999-9999'); await pg.waitForSelector('.chat-debug', { timeout: 8000 });
-  t('erro do Turnstile: o código (110200) aparece no debug e o envio não fica esperando à toa', /turnstile=sem token \(110200\)/.test(await pg.innerText('.chat-debug')) && reqs[0].body.turnstile === null && Date.now() - te < 3000, JSON.stringify({ ms: Date.now() - te, tk: reqs[0] && reqs[0].body.turnstile }));
-  await ctx.close();
-  ({ ctx, pg, reqs } = await abrir({ ts: { atraso: 100 }, validade: 1500 }));
-  await pg.waitForTimeout(4600);
-  const regerados = await pg.evaluate(() => window.__ts.render + window.__ts.reset);
-  await percorrer(pg, ['Carro', 'Em dia', 'Sim, em papel ou PDF', 'Não']); await enviar(pg, 'Ana', '(81) 99999-9999'); await pg.waitForURL(/wa\.me/, { timeout: 6000 });
-  t('token vence: renova sozinho e o envio usa o mais novo', regerados >= 3 && /^tok-([2-9]|\d{2,})$/.test(reqs[0].body.turnstile), JSON.stringify({ regerados, tk: reqs[0].body.turnstile }));
-  await ctx.close();
-  ({ ctx, pg } = await abrir({ query: '?debug=1' }));
-  await percorrer(pg, ['Carro', 'Em dia', 'Sim, em papel ou PDF', 'Não']); await enviar(pg, 'Ana', '(81) 99999-9999'); await pg.waitForSelector('.chat-debug', { timeout: 8000 });
-  t('debug com sucesso: crm=confirmou; turnstile=ok', /debug: crm=confirmou; turnstile=ok/.test(await pg.innerText('.chat-debug')));
-  await ctx.close();
-
-  // ---- Pixel não depende do CRM: com o CRM fora do ar, o evento do lead qualificado sai igual (e só ele)
-  ({ ctx, pg } = await abrir({ query: '?debug=1', crmAtrasoMs: 9000 }));
-  await percorrer(pg, ['Carro', 'Em dia', 'Sim, em papel ou PDF', 'Não']); await enviar(pg, 'Ana', '(81) 99999-9999');
-  await pg.waitForTimeout(800);
-  const fbCedo = await pg.evaluate(() => window.__fb.filter((x) => x[0] === 'trackCustom').map((x) => x[1]));
-  t('RevLeadQualificado sai na hora do envio, sem esperar o CRM', JSON.stringify(fbCedo) === '["RevLeadQualificado"]', JSON.stringify(fbCedo));
-  await ctx.close();
-  t('endereço do site contém "revisional" (regra da conversão personalizada)', /revisional/.test(JSON.parse(require('fs').readFileSync(require('path').join(__dirname, '../../data/config.json'), 'utf8')).siteUrl));
-
-  // ---- validação e honeypot
   ({ ctx, pg, reqs } = await abrir());
-  await percorrer(pg, ['Carro', 'Em dia', 'Sim, em papel ou PDF', 'Não']);
-  await enviar(pg, 'M', '123'); await pg.waitForTimeout(300);
-  t('nome curto ou WhatsApp inválido: avisa e não envia', /primeiro nome/.test(await pg.innerText('#chat-aviso')) && reqs.length === 0);
-  await pg.fill('#ch-nome', 'Maria'); await pg.fill('#ch-wa', '123'); await pg.click('.chat-enviar'); await pg.waitForTimeout(300);
-  t('WhatsApp inválido: avisa e não envia', /WhatsApp válido/.test(await pg.innerText('#chat-aviso')) && reqs.length === 0);
-  await pg.evaluate(() => { document.querySelector('#chat-form input[name="bot-field"]').value = 'spam'; });
-  await pg.fill('#ch-wa', '(81) 99999-9999'); await pg.click('.chat-enviar'); await pg.waitForTimeout(800);
-  t('honeypot preenchido: nada é enviado e a página não sai', reqs.length === 0 && /analise/.test(pg.url()));
+  await opt(pg, 'Carro'); await tresCampos(pg); await contato(pg); await pg.waitForSelector('.chat-opt');
+  await soft(pg, 'Pular'); await pg.waitForSelector('.chat-opt', { hasText: 'Sim, em papel' }); await soft(pg, 'Pular'); await pg.waitForSelector('.chat-wa', { timeout: 10000 });
+  t('"Pular" nas duas: o lead fica como foi salvo (um só envio), nenhum evento RevLead* e o botão do WhatsApp aparece', reqs.length === 1 && !(await nomes(pg)).some((n) => /^RevLead/.test(n)) && (await pg.locator('.chat-wa').count()) === 1);
   await ctx.close();
 
-
-  // =============== CALCULADORA DENTRO DO CHAT ("Calcular agora") ===============
-  const pill = (pg, txt) => pg.locator('.calc-pill', { hasText: txt }).first().click();
-  async function painelCompleto(pg, { tipo = 'Carro', pv = '40000', parcela = '1500', n = '48', pagas = '10', sit = 'Em dia', contrato = 'Sim, em papel ou PDF' } = {}) {
-    await responder(pg, 'Calcular agora'); await pg.waitForSelector('.calc-painel', { timeout: 8000 });
-    await pill(pg, tipo); await pg.fill('#cp-pv', pv); await pg.fill('#cp-parcela', parcela); await pg.selectOption('#cp-n', n); await pg.fill('#cp-pagas', pagas);
-    await pill(pg, sit); await pill(pg, contrato); await pg.click('.calc-folha button[type=submit]');
+  // =============== atalhos: "Não sei esse valor" (cada campo) e "Prefiro falar com a equipe" ===============
+  for (const [passos, campoNome] of [[0, 'valor financiado'], [1, 'nº de parcelas'], [2, 'valor da parcela']]) {
+    ({ ctx, pg, reqs } = await abrir());
+    await opt(pg, 'Moto');
+    if (passos >= 1) await digitar(pg, '40000');
+    if (passos >= 2) await digitar(pg, '48');
+    await soft(pg, 'Não sei esse valor');
+    t(`"Não sei esse valor" (${campoNome}): vai direto para nome e WhatsApp, sem prévia`, (await pg.locator('.chat-tag').count()) === 0 && /primeiro nome/.test(await pg.innerText('#chat-form label')));
+    await contato(pg); await pg.waitForSelector('.chat-opt', { timeout: 10000 });
+    const Cn = reqs[0].body;
+    t(`"Não sei esse valor" (${campoNome}): lead entra sem taxa, com o caminho marcado em "respostas" e o evento de etapa`, reqs.length === 1 && Cn.respostas === `Caminho: não sei o valor (${campoNome}) | Veículo: Moto` && (await nomes(pg)).includes('RevChatNaoSeiValor'), Cn.respostas);
+    await ctx.close();
   }
-  // primeira pergunta
+  ({ ctx, pg, reqs } = await abrir());
+  await soft(pg, 'Prefiro falar com a equipe');
+  t('"Prefiro falar com a equipe": vai direto para nome e WhatsApp e dispara RevChatFalarEquipe', /primeiro nome/.test(await pg.innerText('#chat-form label')) && (await nomes(pg)).includes('RevChatFalarEquipe'));
+  await contato(pg, 'Rui'); await pg.waitForSelector('.chat-opt', { timeout: 10000 });
+  t('"Prefiro falar com a equipe": lead sem veículo nem taxa, com o caminho em "respostas"', reqs.length === 1 && reqs[0].body.respostas === 'Caminho: falar com a equipe' && reqs[0].body.veiculo === '' && reqs[0].body.nome === 'Rui', JSON.stringify(reqs[0] && reqs[0].body));
+  await ctx.close();
+
+  // =============== prévia: "Outro" não compara; limite de 10% sobre a referência; números incoerentes ===============
   ({ ctx, pg } = await abrir());
-  await pg.waitForSelector('.chat-opt', { timeout: 8000 });
-  t('1ª pergunta: "Como prefere fazer sua simulação?" com os dois botões', /Como prefere fazer sua simulação\?/.test(await pg.locator('#chat-log').innerText()) && JSON.stringify(await pg.locator('.chat-opt').allInnerTexts()) === '["Calcular agora","Calcular com a equipe no WhatsApp"]');
+  await opt(pg, 'Outro'); await tresCampos(pg); await pg.waitForSelector('.chat-tag');
+  const pOutro = await pg.locator('.chat-msg.bot', { has: pg.locator('.chat-tag') }).last().innerText();
+  t('"Outro": só a taxa e frase neutra (sem comparação), sem "tudo certo"', /A taxa estimada do seu financiamento é de/.test(pOutro) && !/acima da média/.test(pOutro) && /contrato pode ter outras cobranças/.test(pOutro) && !/tudo certo/i.test(pOutro), pOutro);
   await ctx.close();
-  // painel: abre, valida, fecha
-  ({ ctx, pg, reqs } = await abrir());
-  await responder(pg, 'Calcular agora'); await pg.waitForSelector('.calc-painel', { timeout: 8000 });
-  const pn = await pg.evaluate(() => { const f = document.querySelector('.calc-folha').getBoundingClientRect(); return { dentro: f.left >= 0 && f.right <= innerWidth && f.bottom <= innerHeight + 1, rolaX: document.documentElement.scrollWidth > innerWidth, dialogo: document.querySelector('.calc-painel').getAttribute('role'), inerte: document.getElementById('chat').inert, foco: document.activeElement.name, badge: document.querySelector('.calc-badge').textContent }; });
-  t('painel sobre o chat (390 px): cabe na tela, sem rolagem lateral, é diálogo, chat inerte, foco no 1º campo, ANÁLISE GRATUITA em caixa alta', pn.dentro && !pn.rolaX && pn.dialogo === 'dialog' && pn.inerte && pn.foco === 'cp-tipo' && pn.badge === 'ANÁLISE GRATUITA', JSON.stringify(pn));
-  await pg.click('.calc-folha button[type=submit]');
-  t('painel vazio: avisa, destaca os campos e não fecha', (await pg.locator('.calc-painel .invalid').count()) >= 5 && /Falta preencher/.test(await pg.innerText('#cp-aviso')) && (await pg.locator('.calc-painel').count()) === 1);
-  await pill(pg, 'Carro'); await pg.fill('#cp-pv', '50000'); await pg.fill('#cp-parcela', '500'); await pg.selectOption('#cp-n', '12'); await pill(pg, 'Em dia'); await pill(pg, 'Sim, em papel ou PDF'); await pg.click('.calc-folha button[type=submit]');
-  t('números incoerentes (parcela × prazo ≤ valor): avisa e não fecha', /parcela vezes o prazo/.test(await pg.innerText('#cp-aviso')) && (await pg.locator('.calc-painel').count()) === 1);
-  await pg.keyboard.press('Escape'); await pg.locator('.chat-opt', { hasText: 'Calcular agora' }).waitFor({ timeout: 6000 });
-  t('Esc fecha o painel, o chat volta a perguntar e nada foi enviado', (await pg.locator('.calc-painel').count()) === 0 && !(await pg.evaluate(() => document.getElementById('chat').inert)) && (await pg.locator('.chat-opt', { hasText: 'Calcular agora' }).count()) === 1 && reqs.length === 0);
-  await ctx.close();
-
-  // caminho "acima": resumo em balão, nome + WhatsApp, só então a estimativa
-  let baseChaves;
-  ({ ctx, pg, reqs } = await abrir({ crmAtrasoMs: 300 })); // referência: mesmas chaves do caminho da equipe
-  await percorrer(pg, ['Carro', 'Em dia', 'Sim, em papel ou PDF', 'Não']); await enviar(pg, 'Ana', '(81) 99999-9999'); await pg.waitForURL(/wa\.me/, { timeout: 6000 });
-  baseChaves = Object.keys(reqs[0].body).sort(); await ctx.close();
-
-  ({ ctx, pg, reqs } = await abrir({ crmAtrasoMs: 300 }));
-  await painelCompleto(pg); await pg.waitForSelector('#chat-form', { timeout: 10000 });
-  const resumo = await pg.locator('.chat-msg.eu').last().innerText();
-  t('painel fecha e o chat mostra o balão com o resumo do que foi preenchido', (await pg.locator('.calc-painel').count()) === 0 && /Carro/.test(resumo) && /R\$\s40\.000,00 em 48x de R\$\s1\.500,00 \(10 pagas\)/.test(resumo) && /Em dia/.test(resumo) && /Sim, em papel ou PDF/.test(resumo), resumo);
-  t('antes do envio: nenhum lead no CRM, nenhum evento do Pixel e nenhuma estimativa na tela', reqs.length === 0 && (await pg.evaluate(() => window.__fb.filter((x) => x[0] === 'trackCustom').length)) === 0 && (await pg.locator('.chat-tag').count()) === 0 && /Ver minha estimativa/.test(await pg.innerText('.chat-enviar')));
-  await enviar(pg, 'Ana Maria Souza', '(81) 99999-9999'); await pg.waitForSelector('.chat-wa', { timeout: 9000 });
-  const C2 = reqs[0].body, fb2 = await pg.evaluate(() => window.__fb.filter((x) => x[0] === 'trackCustom'));
-  t('CRM: um lead só, mesma origem e mesmos campos do chat atual (nenhum campo novo)', reqs.length === 1 && C2.origem === 'formulario-analise-revisional' && JSON.stringify(Object.keys(C2).sort()) === JSON.stringify(baseChaves), JSON.stringify({ n: reqs.length, extra: Object.keys(C2).filter((k) => !baseChaves.includes(k)), falta: baseChaves.filter((k) => !(k in C2)) }));
-  t('CRM: só o primeiro nome, urgente "nao" (em dia), contrato sim, acao_anterior vazio, token do Turnstile, lead_id', C2.nome === 'Ana' && C2.urgente === 'nao' && C2.contrato === 'sim' && C2.qualificado === 'sim' && C2.acao_anterior === '' && C2.turnstile === 'token-teste' && C2.telefone === C2.whatsapp && !!C2.lead_id, JSON.stringify(C2));
-  t('CRM: a simulação e o resultado vão como texto no campo "respostas"', /^Simulação feita na calculadora do chat \|/.test(C2.respostas) && /R\$\s40\.000,00 em 48x/.test(C2.respostas) && /Taxa estimada: [\d.,]+% ao mês \(referência [\d.,]+% ao mês\)/.test(C2.respostas), C2.respostas);
-  t('Pixel: um só evento, RevLeadQualificado, eventID = lead_id', fb2.length === 1 && fb2[0][1] === 'RevLeadQualificado' && fb2[0][3].eventID === C2.lead_id, JSON.stringify(fb2));
-  const res = await pg.locator('.chat-msg.bot').last().innerText(), resHtml = await pg.locator('.chat-msg.bot').last().innerHTML();
-  t('resultado acima do limite: ESTIMATIVA e ANÁLISE GRATUITA em caixa alta; taxa, ≈ ao ano e referência (média do Banco Central na época da contratação)', /ESTIMATIVA/.test(res) && /ANÁLISE GRATUITA/.test(res) && /A taxa estimada do seu financiamento é de [\d.,]+% ao mês \(≈ [\d.,]+% ao ano\), acima da referência de [\d.,]+% ao mês \(média do Banco Central na época da contratação\)\./.test(res), res);
-  t('alerta sempre em destaque (texto exato), sem "tudo certo", sem valor a recuperar e sem pedir foto/PDF do contrato', (await pg.locator('.chat-msg.bot').last().locator('.chat-alerta').count()) === 1 && /Atenção: os juros são só uma parte do contrato\. Muitos financiamentos têm cobranças abusivas ou indevidas embutidas, que não aparecem na taxa e só a análise do contrato identifica\./.test(res) && !/tudo certo|nada a recuperar|não há o que recuperar|você tem direito|vai receber|foto|envie o contrato|mande o contrato/i.test(res), res);
-  const wa2 = await pg.locator('.chat-wa').getAttribute('href'), tx2 = decodeURIComponent(wa2.split('text=')[1] || '');
-  t('botão final "Quero minha ANÁLISE GRATUITA": WhatsApp com nome, resumo da estimativa (cita a referência só porque passou do limite) e termina com "Quero a análise gratuita do meu contrato."', (await pg.innerText('.chat-wa')) === 'Quero minha ANÁLISE GRATUITA' && /^https:\/\/wa\.me\/5581991547396/.test(wa2) && /Meu nome é Ana\./.test(tx2) && /taxa de [\d.,]+% ao mês, acima da referência de [\d.,]+% ao mês/.test(tx2) && /Financiamento: R\$\s40\.000,00 em 48x/.test(tx2) && tx2.endsWith('Quero a análise gratuita do meu contrato.') && !/URGENTE/.test(tx2), tx2);
-  await pg.waitForTimeout(1500);
-  t('não abre o WhatsApp sozinho: a pessoa lê o resultado e clica', /analise/.test(pg.url()));
-  await pg.click('.chat-wa'); await pg.waitForURL(/wa\.me/, { timeout: 6000 });
-  t('o clique abre o WhatsApp e o lead continua sendo um só', /wa\.me/.test(pg.url()) && reqs.length === 1);
-  await ctx.close();
-
-  // caminho "dentro da referência": o alerta continua e não diz que está tudo certo
-  ({ ctx, pg, reqs } = await abrir());
-  await painelCompleto(pg, { parcela: '1100' }); await pg.waitForSelector('#chat-form', { timeout: 10000 }); await enviar(pg, 'Rui', '(81) 99999-9999'); await pg.waitForSelector('.chat-wa', { timeout: 9000 });
-  const res3 = await pg.locator('.chat-msg.bot').last().innerText(), tx3 = decodeURIComponent((await pg.locator('.chat-wa').getAttribute('href')).split('text=')[1] || '');
-  t('taxa abaixo do limite: só a taxa e o ≈ ao ano, sem citar referência nem "dentro da média"; alerta em destaque continua; botão igual', /A taxa estimada do seu financiamento é de [\d.,]+% ao mês \(≈ [\d.,]+% ao ano\)\./.test(res3) && !/referência|dentro da|média|abaixo|acima/i.test(res3.split('Atenção')[0].replace(/ANÁLISE GRATUITA|ESTIMATIVA/g, '')) && /Atenção: os juros são só uma parte do contrato\. Muitos financiamentos têm cobranças abusivas ou indevidas embutidas, que não aparecem na taxa e só a análise do contrato identifica\./.test(res3) && !/tudo certo|nada a recuperar/i.test(res3) && (await pg.innerText('.chat-wa')) === 'Quero minha ANÁLISE GRATUITA', res3);
-  await ctx.close();
-
-  // limite de 10%: com a taxa 9% acima da referência não mostra a referência; com 11% acima mostra
-  const fsb = require('fs'), pthb = require('path'), bcbj = JSON.parse(fsb.readFileSync(pthb.join(__dirname, '../../assets/data/bcb-veiculos.json'), 'utf8'));
-  const hoje = new Date(), tt = hoje.getFullYear() * 12 + hoje.getMonth() - 10, chave = `${Math.floor(tt / 12)}-${String((tt % 12) + 1).padStart(2, '0')}`;
-  const refB = bcbj.valores[bcbj.valores[chave] === undefined && chave > bcbj.ultimo_mes ? bcbj.ultimo_mes : chave];
+  const bcbj = JSON.parse(fs.readFileSync(path.join(ROOT, 'assets/data/bcb-veiculos.json'), 'utf8')), refB = bcbj.valores[bcbj.ultimo_mes];
   const pmtB = (pv, i, n) => (pv * i) / (1 - Math.pow(1 + i, -n));
-  const parcelaPara = (fator) => pmtB(40000, (refB * fator) / 100, 48).toFixed(2).replace('.', ',');
-  for (const [fator, mostra] of [[1.09, false], [1.11, true]]) {
+  for (const [fator, acima] of [[1.09, false], [1.11, true]]) {
     ({ ctx, pg } = await abrir());
-    await painelCompleto(pg, { parcela: parcelaPara(fator) }); await pg.waitForSelector('#chat-form', { timeout: 10000 }); await enviar(pg, 'Rui', '(81) 99999-9999'); await pg.waitForSelector('.chat-wa', { timeout: 9000 });
-    const rb = await pg.locator('.chat-msg.bot').last().innerText(), txb = decodeURIComponent((await pg.locator('.chat-wa').getAttribute('href')).split('text=')[1] || '');
-    t(`limite de 10%: taxa ${Math.round((fator - 1) * 100)}% acima da referência (${refB}%) ${mostra ? 'mostra' : 'não mostra'} a referência no resultado e no WhatsApp`, mostra ? (/acima da referência de/.test(rb) && /acima da referência de/.test(txb)) : (!/referência/.test(rb) && !/referência/.test(txb) && txb.endsWith('Quero a análise gratuita do meu contrato.')), rb + ' || ' + txb);
+    await opt(pg, 'Carro'); await tresCampos(pg, '40000', '48', pmtB(40000, (refB * fator) / 100, 48).toFixed(2).replace('.', ',')); await pg.waitForSelector('.chat-tag');
+    const pb = await pg.locator('.chat-msg.bot', { has: pg.locator('.chat-tag') }).last().innerText();
+    t(`limite de 10% (referência ${refB}%): taxa ${Math.round((fator - 1) * 100)}% acima ${acima ? 'diz' : 'não diz'} "parece acima da média" e não cita a referência em número`, acima ? /parece acima da média do mercado/.test(pb) : (!/acima da média/.test(pb) && /contrato pode ter outras cobranças/.test(pb)) && !/referência/.test(pb), pb);
     await ctx.close();
   }
-  t('a constante do limite é uma só (calc-core.js) e vale 1,10', /MARGEM_REFERENCIA = 1\.10;/.test(fsb.readFileSync(pthb.join(__dirname, '../../assets/js/calc-core.js'), 'utf8')) && (fsb.readFileSync(pthb.join(__dirname, '../../assets/js/analise.js'), 'utf8').match(/1\.10/g) || []).length === 0);
-
-  // atrasadas + contrato "buscando": urgente, evento Buscando (um só)
+  t('a constante do limite é uma só (calc-core.js) e vale 1,10', /MARGEM_REFERENCIA = 1\.10;/.test(fs.readFileSync(path.join(ROOT, 'assets/js/calc-core.js'), 'utf8')) && !/1\.10/.test(fs.readFileSync(path.join(ROOT, 'assets/js/chat.js'), 'utf8')));
   ({ ctx, pg, reqs } = await abrir());
-  await painelCompleto(pg, { tipo: 'Moto', sit: 'Atrasadas', contrato: 'Não, mas posso pedir ao banco' }); await pg.waitForSelector('#chat-form', { timeout: 10000 }); await enviar(pg, 'Lia', '(81) 98888-7777'); await pg.waitForSelector('.chat-wa', { timeout: 9000 });
-  const fb4 = await pg.evaluate(() => window.__fb.filter((x) => x[0] === 'trackCustom').map((x) => x[1])), tx4 = decodeURIComponent((await pg.locator('.chat-wa').getAttribute('href')).split('text=')[1] || '');
-  t('atrasadas: urgente "sim"; contrato "buscando" dispara só RevLeadBuscandoContrato; WhatsApp leva URGENTE', reqs[0].body.urgente === 'sim' && reqs[0].body.veiculo === 'Moto' && reqs[0].body.contrato === 'buscando' && JSON.stringify(fb4) === '["RevLeadBuscandoContrato"]' && /URGENTE/.test(tx4), JSON.stringify({ u: reqs[0].body.urgente, fb4 }));
-  await ctx.close();
-  ({ ctx, pg, reqs } = await abrir());
-  await painelCompleto(pg, { tipo: 'Caminhão ou máquina agrícola', sit: 'Com busca e apreensão', contrato: 'Não tenho' }); await pg.waitForSelector('#chat-form', { timeout: 10000 }); await enviar(pg, 'Lia', '(81) 98888-7777'); await pg.waitForSelector('.chat-wa', { timeout: 9000 });
-  const fb5 = await pg.evaluate(() => window.__fb.filter((x) => x[0] === 'trackCustom').map((x) => x[1]));
-  t('busca e apreensão: urgente "sim"; "Não tenho" dispara só RevLeadNaoQualificado (nunca o qualificado)', reqs[0].body.urgente === 'sim' && reqs[0].body.contrato === 'nao' && JSON.stringify(fb5) === '["RevLeadNaoQualificado"]', JSON.stringify(fb5));
+  await opt(pg, 'Carro'); await tresCampos(pg, '50000', '12', '500'); await pg.waitForSelector('.chat-tag');
+  t('números incoerentes: avisa que não deu para estimar e segue para o contato', /Não conseguimos estimar a taxa/.test(await pg.locator('.chat-msg.bot', { has: pg.locator('.chat-tag') }).last().innerText()) && (await nomes(pg)).includes('RevChatViuPrevia'));
+  await contato(pg); await pg.waitForSelector('.chat-opt', { timeout: 10000 });
+  t('números incoerentes: o lead entra com "não foi possível estimar"', /Caminho: calculadora completa .* Taxa estimada: não foi possível estimar/.test(reqs[0].body.respostas), reqs[0].body.respostas);
   await ctx.close();
 
-  // CRM lento/fora do ar: estimativa aparece em ~5 s e o evento do Pixel já saiu
+  // =============== validações e honeypot ===============
+  ({ ctx, pg, reqs } = await abrir());
+  await opt(pg, 'Carro');
+  await digitar(pg, ''); t('valor financiado vazio: avisa e não avança', /valor financiado/.test(await pg.innerText('.chat-aviso')) && (await pg.locator('.chat-tag').count()) === 0);
+  await digitar(pg, '40000'); await digitar(pg, '0'); t('parcelas 0: avisa e não avança', /1 a 120/.test(await pg.innerText('.chat-aviso')));
+  await digitar(pg, '121'); t('parcelas 121: avisa e não avança', /1 a 120/.test(await pg.innerText('.chat-aviso')));
+  await digitar(pg, '48'); await digitar(pg, ''); t('parcela vazia: avisa e não avança', /valor da parcela/.test(await pg.innerText('.chat-aviso')));
+  await digitar(pg, '1500'); await pg.waitForSelector('#ch-campo');
+  await digitar(pg, 'M'); t('nome curto: avisa e não avança', /primeiro nome/.test(await pg.innerText('.chat-aviso')));
+  await digitar(pg, 'Maria'); await digitar(pg, '123'); t('WhatsApp inválido: avisa e não envia', /WhatsApp válido/.test(await pg.innerText('.chat-aviso')) && reqs.length === 0);
+  await pg.evaluate(() => { document.querySelector('#chat-form input[name="bot-field"]').value = 'spam'; });
+  await pg.fill('#ch-campo', WA); await pg.click('.chat-enviar'); await pg.waitForTimeout(800);
+  t('honeypot preenchido: nada é enviado', reqs.length === 0);
+  await ctx.close();
+
+  // =============== CRM lento, Turnstile e debug ===============
   ({ ctx, pg, reqs } = await abrir({ crmAtrasoMs: 9000 }));
-  await painelCompleto(pg); await pg.waitForSelector('#chat-form', { timeout: 10000 });
-  const tLento = Date.now(); await enviar(pg, 'Ana', '(81) 99999-9999'); await pg.waitForSelector('.chat-wa', { timeout: 9000 });
-  t('CRM lento: a estimativa e o botão aparecem em até ~6 s (limite de 5 s), com o Pixel já disparado', Date.now() - tLento < 6500 && (await pg.evaluate(() => window.__fb.filter((x) => x[0] === 'trackCustom').length)) === 1, String(Date.now() - tLento));
+  await opt(pg, 'Carro'); await tresCampos(pg); await contato(pg);
+  const tLento = Date.now(); await pg.waitForSelector('.chat-opt', { timeout: 9000 });
+  t('CRM lento: o chat segue em até ~6 s (limite de 5 s) para as perguntas opcionais', Date.now() - tLento < 6500, String(Date.now() - tLento));
   await ctx.close();
-
-  // debug no caminho da calculadora
+  ({ ctx, pg, reqs } = await abrir({ ts: { atraso: 2500 } }));
+  await soft(pg, 'Prefiro falar com a equipe'); await contato(pg); await pg.waitForSelector('.chat-opt', { timeout: 10000 });
+  t('Turnstile atrasado: o envio espera pelo código dentro do limite e segue', reqs.length === 1 && /^tok-\d+$/.test(reqs[0].body.turnstile), JSON.stringify(reqs[0] && reqs[0].body.turnstile));
+  await ctx.close();
+  ({ ctx, pg, reqs } = await abrir({ ts: { erro: '110200' } }));
+  await soft(pg, 'Prefiro falar com a equipe'); await contato(pg); await pg.waitForSelector('.chat-opt', { timeout: 10000 });
+  t('Turnstile com erro: o envio segue sem token e não trava', reqs.length === 1 && reqs[0].body.turnstile === null);
+  await ctx.close();
   ({ ctx, pg } = await abrir({ query: '?debug=1' }));
-  await painelCompleto(pg); await pg.waitForSelector('#chat-form', { timeout: 10000 }); await enviar(pg, 'Ana', '(81) 99999-9999'); await pg.waitForSelector('.chat-debug', { timeout: 9000 });
-  t('?debug=1 no caminho da calculadora: mostra crm e turnstile', /debug: crm=confirmou; turnstile=ok/.test(await pg.innerText('.chat-debug')));
+  await soft(pg, 'Prefiro falar com a equipe'); await contato(pg); await pg.waitForSelector('.chat-debug', { timeout: 10000 });
+  t('?debug=1: mostra o resultado de cada envio (CRM e Turnstile)', /debug \(contato\): crm=confirmou; turnstile=ok/.test(await pg.innerText('.chat-debug')));
   await ctx.close();
-
-  // texto proibido
-  const fsx = require('fs'), pth = require('path');
-  const arqs = ['assets/js/analise.js', 'assets/js/calc-core.js', 'analise/index.html'].map((f) => fsx.readFileSync(pth.join(__dirname, '../..', f), 'utf8'));
-  t('a expressão "seguro prestamista" não aparece no chat nem no código da calculadora do chat', arqs.every((x) => !/prestamista/i.test(x)));
-  t('/analise/ ainda tem um só h1 e o Pixel/CRM não ganharam evento ou campo novo (eventos: só os 3 de sempre)', (arqs[2].match(/<h1[ >]/g) || []).length === 1 && JSON.stringify([...arqs[0].matchAll(/Rev[A-Za-z]+/g)].map((m) => m[0]).filter((v, i, a) => a.indexOf(v) === i).sort()) === JSON.stringify(['RevLeadBuscandoContrato', 'RevLeadNaoQualificado', 'RevLeadQualificado']));
 
   console.log(`${ok} ok, ${bad} falha(s)`); await b.close(); process.exit(bad ? 1 : 0);
 })();

@@ -211,7 +211,42 @@ ${dados ? `<p class="company">${esc(dados)}</p>` : ''}
 // Monta a página completa.
 const pixelOk = /^\d{8,20}$/.test(String(config.metaPixelId || ''));
 /** `minimal`: página de campanha (sem menu nem rodapé do portal; o corpo traz o próprio cabeçalho). */
-function page({ meta, active, body, scripts = [], minimal = false, bodyClass = '' }) {
+/** Cabeçalho do chat /analise (enxuto): sem Inter nem style.css do site, sem Analytics; o Pixel entra inline, no <head>, para contar a visita logo. */
+function headChat({ title, desc, path: p, image, noindex }) {
+  const url = absUrl(p), img = absUrl(image || ogPadrao());
+  const pixel = pixelOk ? `<script>!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');fbq('init','${config.metaPixelId}');fbq('track','PageView');</script>\n` : '';
+  return `<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>${esc(title)}</title>
+<meta name="description" content="${esc(desc)}">
+${noindex ? '<meta name="robots" content="noindex">\n' : ''}<link rel="canonical" href="${url}">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="${esc(config.siteNome)}">
+<meta property="og:locale" content="pt_BR">
+<meta property="og:title" content="${esc(title)}">
+<meta property="og:description" content="${esc(desc)}">
+<meta property="og:url" content="${url}">
+<meta property="og:image" content="${img}">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="/assets/img/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="/assets/css/chat.css?v=${assetVer('/assets/css/chat.css')}">
+${pixel}</head>`;
+}
+
+function page({ meta, active, body, scripts = [], minimal = false, bodyClass = '', lean = false }) {
+  if (lean) {   // chat /analise: só crm.js + chat.js (sem main.js, sem Analytics; o Pixel está no <head>)
+    return `${headChat(meta)}
+<body${bodyClass ? ` class="${bodyClass}"` : ''} data-wa="${esc(config.whatsapp)}">
+${body}
+<script src="${jsUrl('/assets/js/crm.js')}" defer></script>
+${scripts.map((s) => `<script src="${jsUrl(s)}" defer></script>`).join('\n')}
+</body>
+</html>
+`;
+  }
   return `${head(meta)}
 <body${bodyClass ? ` class="${bodyClass}"` : ''} data-wa="${esc(config.whatsapp)}"${gaOk ? ` data-ga="${config.gaId}"` : ''}${pixelOk ? ` data-pixel="${config.metaPixelId}"` : ''}>
 ${minimal ? '' : header(active)}
@@ -219,6 +254,7 @@ ${minimal ? '' : header(active)}
 ${body}
 </main>
 ${minimal ? '' : footer()}
+<script src="${jsUrl('/assets/js/crm.js')}" defer></script>
 <script src="${jsUrl('/assets/js/main.js')}" defer></script>
 ${scripts.map((s) => `<script src="${jsUrl(s)}" defer></script>`).join('\n')}
 </body>

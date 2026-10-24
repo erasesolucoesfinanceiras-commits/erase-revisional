@@ -1,5 +1,5 @@
 // Auditoria da matemática da calculadora contra a Calculadora do Cidadão do Banco Central
-// (Financiamento com prestações fixas — Tabela Price). Testa o CÓDIGO REAL de assets/js/calculator.js.
+// (Financiamento com prestações fixas — Tabela Price). Testa o CÓDIGO REAL de assets/js/calc-core.js.
 //   node --test tests/calculadora/price.test.js
 // Tolerâncias: R$ 0,05 na prestação e 0,01 ponto percentual na taxa.
 const test = require('node:test');
@@ -9,8 +9,8 @@ const path = require('path');
 const vm = require('vm');
 
 const ROOT = path.join(__dirname, '..', '..');
-const src = fs.readFileSync(path.join(ROOT, 'assets', 'js', 'calculator.js'), 'utf8');
-const trecho = src.slice(src.indexOf('function pmtPrice'), src.indexOf('// ---- Formatação'));
+const src = fs.readFileSync(path.join(ROOT, 'assets', 'js', 'calc-core.js'), 'utf8');
+const trecho = src.slice(src.indexOf('function pmtPrice'), src.indexOf('const brl = '));
 const ctx = {};
 vm.runInNewContext(`${trecho};this.pmtPrice=pmtPrice;this.resolverTaxa=resolverTaxa;this.pmtPriceNoAto=pmtPriceNoAto;`, ctx);
 const { pmtPrice, resolverTaxa, pmtPriceNoAto } = ctx;

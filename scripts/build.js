@@ -535,13 +535,12 @@ ${e.email ? `<li><strong>E-mail:</strong> <a href="mailto:${esc(e.email)}">${esc
   urls.push(['/sobre.html', '0.5', SOBRE_DATE]);
 }
 
-// ---------------------------------------------------------------- /analise/ (chat de filtro para anúncios; noindex, fora do sitemap e do menu)
+// ---------------------------------------------------------------- /analise/ (chat de filtro para anúncios; noindex, fora do sitemap e do menu; página enxuta)
 function analise() {
-  const body = `<div class="chat-shell" id="chat" data-limite-carro="${C.limites.carro}" data-limite-moto="${C.limites.moto}" data-limite-agricola="${C.limites.agricola}">
+  const body = `<div class="chat-shell" id="chat" data-limite-carro="${C.limites.carro}" data-limite-moto="${C.limites.moto}">
 <header class="chat-top">
-<a class="chat-logo" href="/" aria-label="ERASE Revisional — início"><img class="logo-img logo-light" src="/assets/img/logo-erase.webp" alt="" width="110" height="20"><img class="logo-img logo-dark" src="/assets/img/logo-erase-dark.webp" alt="" width="110" height="20"></a>
+<a class="chat-logo" href="/" aria-label="ERASE Revisional — início"><img class="logo-img" src="/assets/img/logo-erase.webp" alt="" width="110" height="20"></a>
 <h1 class="chat-badge">ANÁLISE GRATUITA</h1>
-<p class="chat-prog" id="chat-progresso" aria-live="polite">&nbsp;</p>
 </header>
 <div class="chat-log" id="chat-log" role="log" aria-live="polite" aria-label="Conversa"></div>
 <div class="chat-acoes" id="chat-acoes"></div>
@@ -549,8 +548,8 @@ function analise() {
 <noscript><p class="chat-sem-js">Esta página precisa de JavaScript. Fale com a gente pelo <a href="/contato">Fale Conosco</a>.</p></noscript>
 </div>`;
   out('analise/index.html', S.page({
-    meta: { title: `Análise gratuita do seu financiamento | ${SITE}`, desc: 'Responda 4 perguntas rápidas e receba a ANÁLISE GRATUITA do seu financiamento de veículo pelo WhatsApp da ERASE.', path: '/analise/', noindex: true },
-    active: '', body, scripts: ['/assets/js/calc-core.js', '/assets/js/analise.js'], minimal: true, bodyClass: 'chat-page',
+    meta: { title: `Análise gratuita do seu financiamento | ${SITE}`, desc: 'Descubra em 1 minuto se os juros do seu financiamento estão acima do normal. ANÁLISE GRATUITA pelo WhatsApp da ERASE.', path: '/analise/', noindex: true },
+    active: '', body, scripts: ['/assets/js/calc-core.js', '/assets/js/chat.js'], minimal: true, lean: true, bodyClass: 'chat-page',
   }));
   // não entra no sitemap: é página de campanha
 }
