@@ -67,7 +67,7 @@ const MSG_FALHA = 'Não conseguimos enviar agora. Seus dados continuam aqui: con
  * (HTTP 2xx e corpo sem erro). Nunca lança: qualquer falha resolve false.
  */
 let ultimoErroCRM = ''; // motivo da última falha de envio (só aparece na tela com ?debug=1 em /analise)
-async function enviarParaCRM(origem, dados, { limiteMs } = {}) {
+async function enviarParaCRM(origem, dados, { limiteMs, keepalive } = {}) {
   // limiteMs: orçamento TOTAL (token do Turnstile + envio, sem nova tentativa); o token usa no máximo 60% dele.
   const ctrl = new AbortController();
   const timer = setTimeout(() => ctrl.abort(), limiteMs || ENVIO_TIMEOUT_MS);
@@ -81,6 +81,7 @@ async function enviarParaCRM(origem, dados, { limiteMs } = {}) {
       headers: { 'Content-Type': 'application/json', 'x-api-key': CRM_API_KEY },
       body: JSON.stringify({ origem, 'bot-field': '', ...dados, turnstile }),
       signal: ctrl.signal,
+      keepalive: !!keepalive, // o chat /analise abre o WhatsApp logo depois do envio: a requisição termina mesmo com a página saindo
     });
     let corpo = null;
     try { corpo = await r.json(); } catch (e) { /* corpo vazio ou não-JSON */ }
@@ -146,12 +147,12 @@ function idDoEnvio(form, chave) {
 const CAMPOS_CAMPANHA = ['origem_trafego', 'pagina_entrada', 'pagina_envio', ...UTM_KEYS];
 function soCampanha() { const a = atribuicao(); return Object.fromEntries(CAMPOS_CAMPANHA.map((k) => [k, a[k]])); }
 /** Envia o lead ao CRM; `comAtribuicao`: lead_id + origem/UTM/data-hora (calculadora, pop-up); `campanha`: só origem/UTM/páginas. */
-async function enviarLead(form, dados, { comAtribuicao = true, campanha = false, comLeadId = false, limiteMs, leadId } = {}) {
+async function enviarLead(form, dados, { comAtribuicao = true, campanha = false, comLeadId = false, limiteMs, leadId, keepalive } = {}) {
   // `leadId`: id escolhido por quem chama (o chat usa o mesmo id como eventID do Pixel, para a API de Conversões do CRM deduplicar)
   const extra = comAtribuicao ? { ...atribuicao(), lead_id: leadId || idDoEnvio(form, JSON.stringify(dados)) } : campanha ? soCampanha() : {};
   // `comLeadId`: só o lead_id (mesmo formato da calculadora/pop-up); fica igual nas novas tentativas do mesmo envio.
   if (!comAtribuicao && comLeadId) extra.lead_id = idDoEnvio(form, JSON.stringify(dados));
-  const ok = await enviarParaCRM(form, { ...dados, ...extra }, { limiteMs });
+  const ok = await enviarParaCRM(form, { ...dados, ...extra }, { limiteMs, keepalive });
   if (ok) { delete idsPendentes[form]; rastrear(form); }
   return ok;
 }

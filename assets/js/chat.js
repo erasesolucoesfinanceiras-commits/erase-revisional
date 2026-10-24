@@ -1,15 +1,15 @@
 /* /analise/ — chat enxuto para anúncios. Usa crm.js (enviarLead, Turnstile, máscaras, waLink, $) e calc-core.js (o mesmo cálculo da calculadora do site).
  *
  * Fluxo: abertura de uma linha → veículo (Carro/Moto/Outro) → valor financiado → nº de parcelas → valor da parcela (um por vez, com "Não sei esse valor")
- *        → prévia da taxa (só quem preencheu os três) → nome e WhatsApp digitados no chat → o lead é salvo no CRM → duas perguntas opcionais
- *        (parcelas em dia? contrato em mãos?) que atualizam o mesmo lead. Atalho "Prefiro falar com a equipe" vai direto para nome e WhatsApp.
+ *        → prévia da taxa (só quem preencheu os três) → nome → "parcelas em dia?" → "contrato em mãos?" → WhatsApp (sem botão: "É esse número?" com
+ *        "Sim, enviar" / "Corrigir") → um único envio ao CRM com tudo → abre o WhatsApp da ERASE na mesma aba (link de reserva só se o navegador bloquear).
+ *        Atalho "Prefiro falar com a equipe" (e "Não sei esse valor") vai para o nome e segue as mesmas perguntas.
  *
- * CRM: o primeiro envio cria o lead (origem "formulario-analise-revisional"). O CRM trata o mesmo lead_id como repetição e ignora; por isso cada
- * atualização das perguntas opcionais é um novo envio (lead_id novo) com o mesmo nome/WhatsApp, que o CRM junta ao lead aberto. O caminho feito e a taxa
- * estimada vão no campo "respostas" (texto) — nenhum campo novo é enviado.
- * Pixel: o snippet está no <head>; eventos por etapa (RevChat*) e os de lead de sempre (RevLeadQualificado / RevLeadBuscandoContrato / RevLeadNaoQualificado,
- * disparados quando a pessoa responde o contrato, com eventID = lead_id do envio dessa resposta).
- * ?debug=1 mostra o resultado de cada envio (CRM e Turnstile). */
+ * CRM: um único envio (origem "formulario-analise-revisional") com as respostas, a urgência e o caminho/taxa estimada no campo "respostas" (texto):
+ * nenhum campo novo é enviado.
+ * Pixel: o snippet está no <head>; eventos por etapa (RevChat*); RevLeadQualificado sai quando o lead é enviado (eventID = lead_id do envio); ao responder o
+ * contrato seguem RevLeadBuscandoContrato / RevLeadNaoQualificado, como antes.
+ * ?debug=1 mostra o resultado do envio (CRM e Turnstile) e não abre o WhatsApp sozinho. */
 (function chat() {
   const raiz = $('#chat');
   if (!raiz) return;
@@ -71,7 +71,7 @@
   }
 
   /** Um campo por vez, no estilo de chat. tipo: 'moeda' | 'inteiro' | 'texto' | 'tel'. `validar(v)` devolve {valor} ou {erro}. `naoSei`: texto do link que pula o campo. */
-  function campo({ rotulo, tipo, placeholder, botao = 'Continuar', validar, naoSei, legal, auto }) {
+  function campo({ rotulo, tipo, placeholder, botao = 'Continuar', validar, naoSei }) {
     return new Promise((resolve) => {
       const entrada = tipo === 'moeda'
         ? `<div class="chat-money"><span>R$</span><input id="ch-campo" inputmode="decimal" maxlength="14" autocomplete="off" placeholder="${placeholder}"></div>`
@@ -81,8 +81,7 @@
 <label for="ch-campo">${rotulo}</label>
 ${entrada}
 <p class="chat-aviso" role="alert"></p>
-${auto ? '' : `<button class="btn btn-primary btn-block chat-enviar" type="submit">${botao}</button>`}
-${legal ? `<p class="chat-legal">${legal}</p>` : ''}
+<button class="btn btn-primary btn-block chat-enviar" type="submit">${botao}</button>
 ${naoSei ? `<button type="button" class="chat-soft">${naoSei}</button>` : ''}
 </form>`;
       const f = $('#chat-form'), inp = $('#ch-campo'), aviso = $('.chat-aviso', f);
@@ -90,22 +89,55 @@ ${naoSei ? `<button type="button" class="chat-soft">${naoSei}</button>` : ''}
       if (tipo === 'tel') maskPhone(inp);
       rolarDepois();
       if (!reduzir) inp.focus({ preventScroll: true });
-      let feito = false, espera = null;
+      let feito = false;
       const tentar = () => { // valida e, se estiver certo, avança (uma vez só)
         if (feito) return;
         if (f['bot-field'].value) return; // honeypot preenchido: é robô, descarta sem avisar
         const r = validar(inp.value.trim());
         if (r.erro) { aviso.textContent = r.erro; return; }
-        feito = true; clearTimeout(espera); acoes.innerHTML = ''; resolve(r.valor);
+        feito = true; acoes.innerHTML = ''; resolve(r.valor);
       };
       f.addEventListener('submit', (e) => { e.preventDefault(); tentar(); inp.focus(); });
       // Enter / OK do teclado do celular: o formulário tem 2 campos de texto (o isca do honeypot), então o envio implícito não acontece sozinho
       inp.addEventListener('keydown', (e) => { if (e.key === 'Enter') { e.preventDefault(); tentar(); } });
-      if (auto) inp.addEventListener('input', () => { // sem botão: ~1 s depois de o número ficar completo, confere e avança sozinho
-        clearTimeout(espera); aviso.textContent = '';
-        if (inp.value.replace(/\D/g, '').length >= 10) espera = setTimeout(tentar, reduzir ? 0 : 1000);
-      });
       if (naoSei) $('.chat-soft', f).addEventListener('click', () => { acoes.innerHTML = ''; resolve(SOFT); }, { once: true });
+    });
+  }
+
+  /** Pergunta o WhatsApp sem botão: quando o número está completo e passa nas checagens, mostra "É esse número?" com "Sim, enviar" e "Corrigir". */
+  function perguntarWhatsApp(inicial) {
+    return new Promise((resolve) => {
+      acoes.innerHTML = `<form id="chat-form" novalidate>
+<input type="text" name="bot-field" class="hp" tabindex="-1" autocomplete="off" aria-hidden="true">
+<label for="ch-campo">Seu WhatsApp (com DDD)</label>
+<input id="ch-campo" inputmode="tel" maxlength="15" autocomplete="tel" enterkeyhint="go" placeholder="(81) 99999-0000">
+<p class="chat-aviso" role="alert"></p>
+<p class="chat-legal">Ao enviar, você concorda com a <a href="/privacidade" target="_blank" rel="noopener">Política de Privacidade</a>: usamos seus dados só para a análise e para falar com você.</p>
+</form>`;
+      const f = $('#chat-form'), inp = $('#ch-campo'), aviso = $('.chat-aviso', f);
+      maskPhone(inp);
+      if (inicial) inp.value = inicial;
+      rolarDepois();
+      if (!reduzir) { inp.focus({ preventScroll: true }); inp.setSelectionRange(inp.value.length, inp.value.length); }
+      let espera = null;
+      const conferir = () => {
+        if (f['bot-field'].value) return; // honeypot preenchido: é robô, descarta sem avisar
+        const r = checarWhatsApp(inp.value.trim());
+        if (r.erro) { aviso.textContent = r.erro; return; }
+        clearTimeout(espera);
+        const numero = r.valor;
+        acoes.innerHTML = `<div class="chat-opcoes" role="group"><p class="chat-conf">É esse número? <strong>${numero}</strong></p><button type="button" class="chat-opt chat-opt-forte" data-r="sim">Sim, enviar</button><button type="button" class="chat-opt" data-r="corrigir">Corrigir</button></div>`;
+        rolarDepois();
+        const sim = $('[data-r="sim"]', acoes); if (!reduzir) sim.focus({ preventScroll: true });
+        sim.addEventListener('click', () => { acoes.innerHTML = ''; evento('RevChatConfirmouNumero'); resolve(numero); }, { once: true });
+        $('[data-r="corrigir"]', acoes).addEventListener('click', () => { evento('RevChatCorrigirNumero'); perguntarWhatsApp(numero).then(resolve); }, { once: true });
+      };
+      f.addEventListener('submit', (e) => { e.preventDefault(); clearTimeout(espera); conferir(); });
+      inp.addEventListener('keydown', (e) => { if (e.key === 'Enter') { e.preventDefault(); clearTimeout(espera); conferir(); } });
+      inp.addEventListener('input', () => { // número completo (10 ou 11 dígitos) e parado por um instante: confere (aviso ou confirmação); nunca envia sozinho
+        clearTimeout(espera); aviso.textContent = '';
+        if (inp.value.replace(/\D/g, '').length >= 10) espera = setTimeout(conferir, reduzir ? 0 : 700);
+      });
     });
   }
 
@@ -147,13 +179,6 @@ ${naoSei ? `<button type="button" class="chat-soft">${naoSei}</button>` : ''}
     d.textContent = `debug (${o}): crm=${ok ? 'confirmou' : 'não confirmou (' + (ultimoErroCRM || 'sem detalhe') + ')'}; turnstile=${tsStatus || 'não usado'}.`;
     log.appendChild(d); rolar();
   }
-  /** Um envio ao CRM (limite de 5 s). Cada envio leva um lead_id novo: o CRM ignora lead_id repetido e junta o novo envio ao lead aberto do mesmo WhatsApp. */
-  async function enviar(leadId, origemDoEnvio) {
-    const ok = await enviarLead(ORIGEM, dadosDoLead(), { limiteMs: LIMITE_MS, leadId });
-    linhaDebug(ok, origemDoEnvio);
-    return ok;
-  }
-
   // ---- prévia ----------------------------------------------------------------
   function estimar() {
     const tipo = TIPO[R.veiculo] || null;
@@ -176,15 +201,63 @@ ${naoSei ? `<button type="button" class="chat-soft">${naoSei}</button>` : ''}
     await bot('Que veículo você financiou?', 350);
     const v = await opcoes(['Carro', 'Moto', 'Outro'], 'Prefiro falar com a equipe');
     prepararTurnstile(); // o código do Turnstile nasce na 1ª resposta e se renova sozinho
-    if (v === SOFT) { R.caminho = 'falar com a equipe'; evento('RevChatFalarEquipe'); return contato('Sem problema! Um especialista faz o cálculo com você. Para começar,'); }
+    if (v === SOFT) { R.caminho = 'falar com a equipe'; evento('RevChatFalarEquipe'); return seguir('Sem problema! Um especialista faz o cálculo com você. Para começar,'); }
     R.veiculo = v; bolha('eu', v); evento('RevChatVeiculo', { veiculo: v });
     if (TIPO[v]) CalcCore.bcbSerie().then((j) => { bcb = j; });
     return calculadora();
   }
 
+  /** Depois da calculadora (ou dos atalhos): nome → parcelas em dia? → contrato em mãos? → WhatsApp (com confirmação) → envio único e abertura do WhatsApp. */
+  async function seguir(abertura) {
+    await bot(`${abertura} qual é o seu <strong>primeiro nome</strong>?`, 400);
+    const nome = await campo({ rotulo: 'Seu primeiro nome', tipo: 'texto', placeholder: 'Ex.: Maria', validar: (t) => { const n = t.split(/\s+/)[0] || ''; return /^\p{L}{2,}/u.test(n) ? { valor: n } : { erro: 'Informe o seu primeiro nome (mínimo 2 letras).' }; } });
+    R.nome = nome; bolha('eu', nome);
+    await perguntas();
+    await bot('Por último, qual é o seu <strong>WhatsApp</strong> (com DDD)? A equipe da ERASE fala com você por lá.', 350);
+    R.wa = await perguntarWhatsApp('');
+    bolha('eu', R.wa);
+    return enviarEAbrir();
+  }
+
+  async function perguntas() {
+    await bot(`Prazer, ${limpo(R.nome)}! Suas parcelas estão em dia?`, 350);
+    const p = await opcoes(['Em dia', 'Atrasadas', 'Com busca e apreensão']);
+    R.parcelas = p; bolha('eu', p); evento('RevChatRespondeuParcelas', { parcelas: p });
+    if (p !== 'Em dia') await bot('Entendi. O seu caso é <strong>urgente</strong>: vamos priorizar o seu atendimento.', 350);
+    await bot('Você tem o contrato do financiamento em mãos (papel ou PDF)?', 350);
+    const c = await opcoes(Object.keys(CODIGO));
+    R.contrato = c; bolha('eu', c);
+    const codigo = CODIGO[c];
+    evento('RevChatRespondeuContrato', { contrato: codigo });
+    // os dois eventos de contrato que já existiam; o RevLeadQualificado sai quando o lead é enviado (abaixo)
+    if (codigo !== 'sim') evento(EVENTO_LEAD[codigo], { urgente: urgente(), veiculo: R.veiculo, parcelas: R.parcelas, contrato: codigo }, { eventID: uuid() });
+    if (DICAS[c]) await bot(DICAS[c], 350);
+  }
+
+  const mensagemWa = () => {
+    const v = R.veiculo ? `${R.veiculo === 'Outro' ? 'outro veículo' : R.veiculo.toLowerCase()}` : '';
+    return `Olá! Sou ${R.nome}, fiz a análise no site.${v ? ` Financiamento de ${v}.` : ''} Quero minha análise GRATUITA.${CODIGO[R.contrato] === 'sim' ? ' Tenho o contrato e posso enviar aqui.' : ''}`;
+  };
+  /** "Sim, enviar": um único envio ao CRM com tudo; RevLeadQualificado; espera o envio e o evento (até ~1,5 s) e abre o WhatsApp na mesma aba. Sem botão: só se o navegador bloquear, aparece o link de reserva. */
+  async function enviarEAbrir() {
+    const leadId = uuid();
+    evento('RevChatEnviouContato', { caminho: R.caminho });
+    // lead enviado = lead qualificado; eventID = lead_id deste envio (a API de Conversões do CRM usa o mesmo id)
+    evento('RevLeadQualificado', { caminho: R.caminho, veiculo: R.veiculo, urgente: urgente() }, { eventID: leadId });
+    const espera = tsToken ? 1500 : 3500; // com o código do Turnstile pronto o envio sai na hora; sem ele, espera um pouco mais para não perder o lead
+    const envio = enviarLead(ORIGEM, dadosDoLead(), { limiteMs: LIMITE_MS, leadId, keepalive: true }).then((ok) => { linhaDebug(ok, 'envio'); return ok; });
+    await Promise.race([envio, new Promise((r) => setTimeout(r, espera))]); // o envio segue em segundo plano (keepalive) mesmo se a página sair
+    const link = waLink(mensagemWa());
+    const reserva = () => { acoes.innerHTML = `<a class="chat-wa-reserva btn btn-wa btn-block" href="${link}">Toque aqui para falar com a equipe no WhatsApp</a>`; rolarDepois(); };
+    if (debug) { reserva(); return; } // em ?debug=1 nada abre sozinho
+    evento('RevChatAbriuWhatsApp');
+    location.href = link;
+    setTimeout(() => { if (document.visibilityState === 'visible') reserva(); }, 3000); // WhatsApp não abriu (bloqueio do navegador): link de reserva
+  }
+
   const num = (re, msg, min, max) => (t) => { const v = re(t); return v >= min && v <= max ? { valor: v } : { erro: msg }; };
   async function calculadora() {
-    const falta = async (qual) => { R.caminho = 'não sei o valor (' + qual + ')'; bolha('eu', 'Não sei esse valor'); evento('RevChatNaoSeiValor', { campo: qual }); return contato('Sem problema! Um especialista confere esse número com você. Para continuar,'); };
+    const falta = async (qual) => { R.caminho = 'não sei o valor (' + qual + ')'; bolha('eu', 'Não sei esse valor'); evento('RevChatNaoSeiValor', { campo: qual }); return seguir('Sem problema! Um especialista confere esse número com você. Para continuar,'); };
     await bot('Qual foi o valor financiado?', 350);
     const pv = await campo({ rotulo: 'Valor financiado', tipo: 'moeda', placeholder: '0,00', naoSei: 'Não sei esse valor', validar: num((t) => CalcCore.parseMoney(t), 'Informe o valor financiado (ex.: 40.000).', 500, 50000000) });
     if (pv === SOFT) return falta('valor financiado');
@@ -204,64 +277,10 @@ ${naoSei ? `<button type="button" class="chat-soft">${naoSei}</button>` : ''}
     if (!e) {
       await bot('<p class="chat-tags"><span class="chat-tag">ESTIMATIVA</span></p><p>Não conseguimos estimar a taxa com esses números, mas a nossa equipe confere o cálculo com você.</p>', 500);
     } else {
-      await bot(`<p class="chat-tags"><span class="chat-tag">ESTIMATIVA</span></p><p>A taxa estimada do seu financiamento é de <strong>${pct(e.mensal)}% ao mês</strong> (≈ ${pct(e.anual)}% ao ano).</p><p>${e.acima ? 'Sua taxa estimada <strong>parece acima da média do mercado</strong>.' : 'Essa é só uma estimativa: o contrato pode ter outras cobranças que só a análise do contrato identifica.'}</p>${fim}`, 600);
+      await bot(`<p class="chat-tags"><span class="chat-tag">ESTIMATIVA</span></p><p>A taxa estimada do seu financiamento é de <strong>${pct(e.mensal)}% ao mês</strong> (≈ ${pct(e.anual)}% ao ano).</p><p>${e.acima ? 'Sua taxa estimada <strong>parece acima da média do mercado</strong>. A <strong>ANÁLISE</strong> do seu contrato é <strong>GRATUITA</strong>.' : 'Mesmo quando a taxa parece dentro da média, o contrato pode ter cobranças abusivas. A <strong>ANÁLISE</strong> do seu contrato é <strong>GRATUITA</strong>.'}</p>${fim}`, 600);
     }
     evento('RevChatViuPrevia', { resultado: !e ? 'sem_estimativa' : e.acima ? 'acima' : 'neutra' });
-    return contato('Quer receber a <strong>análise completa</strong>? É gratuita. Para começar,');
-  }
-
-  async function contato(abertura) {
-    await bot(`${abertura} qual é o seu <strong>primeiro nome</strong>?`, 400);
-    const nome = await campo({ rotulo: 'Seu primeiro nome', tipo: 'texto', placeholder: 'Ex.: Maria', validar: (t) => { const n = t.split(/\s+/)[0] || ''; return /^\p{L}{2,}/u.test(n) ? { valor: n } : { erro: 'Informe o seu primeiro nome (mínimo 2 letras).' }; } });
-    R.nome = nome; bolha('eu', nome);
-    await bot(`Prazer, ${limpo(nome)}! Qual é o seu <strong>WhatsApp</strong> (com DDD)?`, 350);
-    const wa = await campo({ rotulo: 'Seu WhatsApp (com DDD)', tipo: 'tel', placeholder: '(81) 99999-0000', auto: true, legal: 'Ao enviar, você concorda com a <a href="/privacidade" target="_blank" rel="noopener">Política de Privacidade</a>: usamos seus dados só para a análise e para falar com você.', validar: checarWhatsApp });
-    R.wa = wa; bolha('eu', wa);
-    const leadId = uuid();
-    evento('RevChatEnviouContato', { caminho: R.caminho });
-    // lead salvo = lead qualificado: o evento sai na hora do envio (não espera o CRM), com eventID = lead_id deste envio (a API de Conversões do CRM usa o mesmo id)
-    evento('RevLeadQualificado', { caminho: R.caminho, veiculo: R.veiculo }, { eventID: leadId });
-    await enviar(leadId, 'contato');
-    await bot(`Pronto, ${limpo(nome)}! Recebemos os seus dados e um especialista da ERASE fala com você pelo WhatsApp.`, 350);
-    return opcionais();
-  }
-
-  async function opcionais() {
-    await bot('Para agilizar a sua <strong>ANÁLISE GRATUITA</strong>, responda duas perguntas rápidas (se preferir, pule).', 350);
-    await bot('Suas parcelas estão em dia?', 300);
-    const p = await opcoes(['Em dia', 'Atrasadas', 'Com busca e apreensão'], 'Pular');
-    if (p !== SOFT) {
-      R.parcelas = p; bolha('eu', p); evento('RevChatRespondeuParcelas', { parcelas: p });
-      if (p !== 'Em dia') await bot('Entendi. O seu caso é <strong>urgente</strong>: vamos priorizar o seu atendimento.', 350);
-      await enviar(uuid(), 'parcelas');
-    }
-    await bot('Você tem o contrato do financiamento em mãos (papel ou PDF)?', 300);
-    const c = await opcoes(Object.keys(CODIGO), 'Pular');
-    if (c !== SOFT) {
-      R.contrato = c; bolha('eu', c);
-      const leadId = uuid(), codigo = CODIGO[c];
-      evento('RevChatRespondeuContrato', { contrato: codigo });
-      // RevLeadQualificado já saiu quando o lead foi salvo; aqui seguem só os dois eventos de contrato que já existiam (sem repetir o qualificado)
-      if (codigo !== 'sim') evento(EVENTO_LEAD[codigo], { urgente: urgente(), veiculo: R.veiculo, parcelas: R.parcelas, contrato: codigo }, { eventID: leadId });
-      if (DICAS[c]) await bot(DICAS[c], 350);
-      await enviar(leadId, 'contrato');
-    }
-    return final();
-  }
-
-  async function final() {
-    const linhas = [`Olá! Meu nome é ${R.nome}.`];
-    if (R.taxa) linhas.push(`Simulação (estimativa): taxa de ${pct(R.taxa.mensal)}% ao mês${R.taxa.acima ? ', acima da média do mercado' : ''}.`);
-    if (R.veiculo) linhas.push(`Veículo: ${R.veiculo}`);
-    if (financ()) linhas.push(`Financiamento: ${financ()}`);
-    if (R.parcelas) linhas.push(`Parcelas: ${R.parcelas}`);
-    if (R.contrato) linhas.push(`Contrato: ${R.contrato}`);
-    if (urgente() === 'sim') linhas.push('URGENTE');
-    linhas.push('Quero a análise gratuita do meu contrato.');
-    await bot('Quando quiser, chame a equipe no WhatsApp:', 350);
-    acoes.innerHTML = '';
-    const a = document.createElement('a'); a.className = 'btn btn-wa btn-block chat-wa'; a.href = waLink(linhas.join('\n')); a.textContent = 'Quero minha ANÁLISE GRATUITA';
-    acoes.appendChild(a); rolarDepois();
+    return seguir('Quer receber a <strong>análise completa</strong>? É gratuita. Para começar,');
   }
 
   inicio();
