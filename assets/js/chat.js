@@ -71,17 +71,17 @@
   }
 
   /** Um campo por vez, no estilo de chat. tipo: 'moeda' | 'inteiro' | 'texto' | 'tel'. `validar(v)` devolve {valor} ou {erro}. `naoSei`: texto do link que pula o campo. */
-  function campo({ rotulo, tipo, placeholder, botao = 'Continuar', validar, naoSei, legal }) {
+  function campo({ rotulo, tipo, placeholder, botao = 'Continuar', validar, naoSei, legal, auto }) {
     return new Promise((resolve) => {
       const entrada = tipo === 'moeda'
         ? `<div class="chat-money"><span>R$</span><input id="ch-campo" inputmode="decimal" maxlength="14" autocomplete="off" placeholder="${placeholder}"></div>`
-        : `<input id="ch-campo" ${tipo === 'inteiro' ? 'inputmode="numeric" maxlength="3" autocomplete="off"' : tipo === 'tel' ? 'inputmode="tel" maxlength="15" autocomplete="tel"' : 'maxlength="40" autocomplete="given-name"'} placeholder="${placeholder}">`;
+        : `<input id="ch-campo" ${tipo === 'inteiro' ? 'inputmode="numeric" maxlength="3" autocomplete="off"' : tipo === 'tel' ? 'inputmode="tel" maxlength="15" autocomplete="tel" enterkeyhint="go"' : 'maxlength="40" autocomplete="given-name"'} placeholder="${placeholder}">`;
       acoes.innerHTML = `<form id="chat-form" novalidate>
 <input type="text" name="bot-field" class="hp" tabindex="-1" autocomplete="off" aria-hidden="true">
 <label for="ch-campo">${rotulo}</label>
 ${entrada}
 <p class="chat-aviso" role="alert"></p>
-<button class="btn btn-primary btn-block chat-enviar" type="submit">${botao}</button>
+${auto ? '' : `<button class="btn btn-primary btn-block chat-enviar" type="submit">${botao}</button>`}
 ${legal ? `<p class="chat-legal">${legal}</p>` : ''}
 ${naoSei ? `<button type="button" class="chat-soft">${naoSei}</button>` : ''}
 </form>`;
@@ -90,15 +90,35 @@ ${naoSei ? `<button type="button" class="chat-soft">${naoSei}</button>` : ''}
       if (tipo === 'tel') maskPhone(inp);
       rolarDepois();
       if (!reduzir) inp.focus({ preventScroll: true });
-      f.addEventListener('submit', (e) => {
-        e.preventDefault();
+      let feito = false, espera = null;
+      const tentar = () => { // valida e, se estiver certo, avança (uma vez só)
+        if (feito) return;
         if (f['bot-field'].value) return; // honeypot preenchido: é robô, descarta sem avisar
         const r = validar(inp.value.trim());
-        if (r.erro) { aviso.textContent = r.erro; inp.focus(); return; }
-        acoes.innerHTML = ''; resolve(r.valor);
+        if (r.erro) { aviso.textContent = r.erro; return; }
+        feito = true; clearTimeout(espera); acoes.innerHTML = ''; resolve(r.valor);
+      };
+      f.addEventListener('submit', (e) => { e.preventDefault(); tentar(); inp.focus(); });
+      // Enter / OK do teclado do celular: o formulário tem 2 campos de texto (o isca do honeypot), então o envio implícito não acontece sozinho
+      inp.addEventListener('keydown', (e) => { if (e.key === 'Enter') { e.preventDefault(); tentar(); } });
+      if (auto) inp.addEventListener('input', () => { // sem botão: ~1 s depois de o número ficar completo, confere e avança sozinho
+        clearTimeout(espera); aviso.textContent = '';
+        if (inp.value.replace(/\D/g, '').length >= 10) espera = setTimeout(tentar, reduzir ? 0 : 1000);
       });
       if (naoSei) $('.chat-soft', f).addEventListener('click', () => { acoes.innerHTML = ''; resolve(SOFT); }, { once: true });
     });
+  }
+
+  /** WhatsApp: DDD + 9 dígitos, DDD que existe, celular começa com 9 e sem sequência óbvia. Devolve {valor} ou {erro} (aviso curto). */
+  const GENERICO = 'Confira o número com DDD, ex.: (81) 99999-0000';
+  function checarWhatsApp(texto) {
+    const d = texto.replace(/\D/g, '');
+    if (d.length === 10) return { erro: 'Faltou o 9 na frente do número?' };
+    if (d.length !== 11 || !DDDS.has(d.slice(0, 2)) || d[2] !== '9') return { erro: GENERICO };
+    const assin = d.slice(2); // 9 dígitos do celular
+    const passo = (x) => { const k = +x[1] - +x[0]; return Math.abs(k) === 1 && [...x].every((c, i) => i === 0 || +c - +x[i - 1] === k); };
+    if (/^(\d)\1+$/.test(assin) || /^(\d)\1+$/.test(d) || passo(assin.slice(1)) || passo(assin)) return { erro: GENERICO };
+    return { valor: texto };
   }
 
   // ---- texto do lead (CRM e WhatsApp) -----------------------------------
@@ -195,12 +215,15 @@ ${naoSei ? `<button type="button" class="chat-soft">${naoSei}</button>` : ''}
     const nome = await campo({ rotulo: 'Seu primeiro nome', tipo: 'texto', placeholder: 'Ex.: Maria', validar: (t) => { const n = t.split(/\s+/)[0] || ''; return /^\p{L}{2,}/u.test(n) ? { valor: n } : { erro: 'Informe o seu primeiro nome (mínimo 2 letras).' }; } });
     R.nome = nome; bolha('eu', nome);
     await bot(`Prazer, ${limpo(nome)}! Qual é o seu <strong>WhatsApp</strong> (com DDD)?`, 350);
-    const wa = await campo({ rotulo: 'Seu WhatsApp', tipo: 'tel', placeholder: '(81) 99999-9999', botao: 'Quero minha ANÁLISE GRATUITA', legal: 'Ao enviar, você concorda com a <a href="/privacidade" target="_blank" rel="noopener">Política de Privacidade</a>: usamos seus dados só para a análise e para falar com você.', validar: (t) => (phoneOk(t) ? { valor: t } : { erro: 'Informe um WhatsApp válido, com DDD e 9 dígitos.' }) });
+    const wa = await campo({ rotulo: 'Seu WhatsApp (com DDD)', tipo: 'tel', placeholder: '(81) 99999-0000', auto: true, legal: 'Ao enviar, você concorda com a <a href="/privacidade" target="_blank" rel="noopener">Política de Privacidade</a>: usamos seus dados só para a análise e para falar com você.', validar: checarWhatsApp });
     R.wa = wa; bolha('eu', wa);
+    const leadId = uuid();
     evento('RevChatEnviouContato', { caminho: R.caminho });
-    const ok = await enviar(uuid(), 'contato');
+    // lead salvo = lead qualificado: o evento sai na hora do envio (não espera o CRM), com eventID = lead_id deste envio (a API de Conversões do CRM usa o mesmo id)
+    evento('RevLeadQualificado', { caminho: R.caminho, veiculo: R.veiculo }, { eventID: leadId });
+    await enviar(leadId, 'contato');
     await bot(`Pronto, ${limpo(nome)}! Recebemos os seus dados e um especialista da ERASE fala com você pelo WhatsApp.`, 350);
-    return opcionais(ok);
+    return opcionais();
   }
 
   async function opcionais() {
@@ -218,8 +241,8 @@ ${naoSei ? `<button type="button" class="chat-soft">${naoSei}</button>` : ''}
       R.contrato = c; bolha('eu', c);
       const leadId = uuid(), codigo = CODIGO[c];
       evento('RevChatRespondeuContrato', { contrato: codigo });
-      // evento de lead de sempre, na hora da resposta ao contrato (qualificado = contrato em mãos); eventID = lead_id do envio dela
-      evento(EVENTO_LEAD[codigo], { urgente: urgente(), veiculo: R.veiculo, parcelas: R.parcelas, contrato: codigo }, { eventID: leadId });
+      // RevLeadQualificado já saiu quando o lead foi salvo; aqui seguem só os dois eventos de contrato que já existiam (sem repetir o qualificado)
+      if (codigo !== 'sim') evento(EVENTO_LEAD[codigo], { urgente: urgente(), veiculo: R.veiculo, parcelas: R.parcelas, contrato: codigo }, { eventID: leadId });
       if (DICAS[c]) await bot(DICAS[c], 350);
       await enviar(leadId, 'contrato');
     }

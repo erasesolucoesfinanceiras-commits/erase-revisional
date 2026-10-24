@@ -7,7 +7,7 @@ const URL_CRM = 'https://lqxwdyjctsmirinvvyow.supabase.co/functions/v1/entrada-s
 const cors = { 'access-control-allow-origin': '*', 'access-control-allow-headers': 'content-type,x-api-key', 'access-control-allow-methods': 'POST,OPTIONS' };
 let ok = 0, bad = 0; const t = (n, c, x = '') => { c ? ok++ : bad++; console.log(c ? 'OK   ' : 'FALHA', n, c ? '' : x); };
 const BASE = 'http://localhost:8123/analise/';
-const WA = '(81) 99999-9999';
+const WA = '(81) 98421-7365';
 
 (async () => {
   const b = await chromium.launch({ args: ['--no-sandbox'] });
@@ -38,7 +38,9 @@ const WA = '(81) 99999-9999';
   const soft = async (pg, texto) => { const a = pg.locator('.chat-soft', { hasText: texto }); await a.waitFor({ timeout: 8000 }); await a.click(); };
   const digitar = async (pg, valor, enviarComo = null) => { await pg.locator('#ch-campo').waitFor({ timeout: 8000 }); await pg.fill('#ch-campo', valor); await pg.click('.chat-enviar'); };
   async function tresCampos(pg, pv = '40000', n = '48', parcela = '1500') { await digitar(pg, pv); await digitar(pg, n); await digitar(pg, parcela); }
-  async function contato(pg, nome = 'Ana Maria Souza', wa = WA) { await digitar(pg, nome); await digitar(pg, wa); }
+  // WhatsApp não tem botão: ~1 s depois de o número ficar completo e válido o chat avança sozinho
+  const wapp = async (pg, numero = WA) => { await pg.locator('#ch-campo').waitFor({ timeout: 8000 }); await pg.fill('#ch-campo', numero); };
+  async function contato(pg, nome = 'Ana Maria Souza', wa = WA) { await digitar(pg, nome); await wapp(pg, wa); }
   const texto = (pg) => pg.locator('#chat-log').innerText();
 
   // =============== página: enxuta, sem escolha inicial, Pixel no <head> ===============
@@ -72,13 +74,13 @@ const WA = '(81) 99999-9999';
   t('campo 2 (nº de parcelas) com teclado numérico inteiro', campo2 === 'numeric');
   const previa = await pg.locator('.chat-msg.bot', { has: pg.locator('.chat-tag') }).last().innerText();
   t('prévia acima do limite: taxa e ≈ ao ano; "parece acima da média do mercado"; só ESTIMATIVA, sem promessa', /A taxa estimada do seu financiamento é de [\d.,]+% ao mês \(≈ [\d.,]+% ao ano\)\./.test(previa) && /Sua taxa estimada parece acima da média do mercado\./.test(previa) && /ESTIMATIVA/.test(previa) && /Não indica valores a receber nem garante resultado/.test(previa) && !/tudo certo|reduz|devolu|vai receber|você tem direito/i.test(previa), previa);
-  t('antes do contato: nenhum lead no CRM e nenhum evento de lead', reqs.length === 0 && !(await nomes(pg)).some((n) => /^RevLead/.test(n)));
+  t('antes do contato: nenhum lead no CRM e nenhum evento RevLeadQualificado', reqs.length === 0 && !(await nomes(pg)).some((n) => /^RevLead/.test(n)));
   await pg.locator('#ch-campo').waitFor();
   t('"Quer receber a análise completa?" e depois nome digitado dentro do chat', /Quer receber a análise completa\?/.test(await texto(pg)) && /primeiro nome/.test(await pg.innerText('#chat-form label')));
   await digitar(pg, 'Ana Maria Souza');
   t('nome: só o primeiro nome vai ao balão', /^Ana$/.test(await pg.locator('.chat-msg.eu').last().innerText()));
   const legal = await pg.innerText('.chat-legal');
-  await digitar(pg, WA);
+  const t0wa = Date.now(); await wapp(pg, WA);
   await pg.waitForSelector('.chat-opt', { timeout: 10000 });
   const C1 = reqs[0].body;
   const CHAVES = ['acao_anterior', 'contrato', 'data_hora', 'data_hora_local', 'lead_id', 'lgpd_aceite', 'nome', 'origem', 'origem_trafego', 'pagina_entrada', 'pagina_envio', 'parcelas', 'qualificado', 'respostas', 'telefone', 'turnstile', 'urgente', 'utm_campaign', 'utm_content', 'utm_medium', 'utm_source', 'utm_term', 'veiculo', 'whatsapp', 'bot-field'].sort();
@@ -86,7 +88,7 @@ const WA = '(81) 99999-9999';
   t('CRM: o lead é salvo ao enviar o WhatsApp — um só envio, mesmas chaves de antes (nenhum campo novo)', reqs.length === 1 && JSON.stringify(Object.keys(C1).sort()) === JSON.stringify(CHAVES), JSON.stringify({ n: reqs.length, extra: Object.keys(C1).filter((k) => !CHAVES.includes(k)), falta: CHAVES.filter((k) => !(k in C1)) }));
   t('CRM: origem do Revisional, só o primeiro nome, urgente "nao", sem contrato/parcelas ainda, token do Turnstile, lead_id', C1.origem === 'formulario-analise-revisional' && C1.nome === 'Ana' && C1.whatsapp === C1.telefone && C1.veiculo === 'Carro' && C1.parcelas === '' && C1.contrato === '' && C1.qualificado === '' && C1.urgente === 'nao' && C1.acao_anterior === '' && C1.lgpd_aceite === 'sim' && C1.turnstile === 'token-teste' && !!C1.lead_id && C1['bot-field'] === '', JSON.stringify(C1));
   t('CRM: o caminho feito e a taxa estimada vão no campo "respostas"', /^Caminho: calculadora completa \| Veículo: Carro \| Financiamento: R\$\s40\.000,00 em 48x de R\$\s1\.500,00 \| Taxa estimada: [\d.,]+% ao mês \(referência [\d.,]+% ao mês\)$/.test(C1.respostas), C1.respostas);
-  t('Pixel: eventos por etapa na ordem, e nenhum evento de lead antes de responder o contrato', JSON.stringify((await nomes(pg))) === JSON.stringify(['RevChatIniciado', 'RevChatVeiculo', 'RevChatValorFinanciado', 'RevChatParcelasQtd', 'RevChatValorParcela', 'RevChatViuPrevia', 'RevChatEnviouContato']), JSON.stringify(await nomes(pg)));
+  t('Pixel: eventos por etapa na ordem; RevLeadQualificado sai quando o lead é salvo (nome e WhatsApp enviados), antes de qualquer pergunta opcional', JSON.stringify((await nomes(pg))) === JSON.stringify(['RevChatIniciado', 'RevChatVeiculo', 'RevChatValorFinanciado', 'RevChatParcelasQtd', 'RevChatValorParcela', 'RevChatViuPrevia', 'RevChatEnviouContato', 'RevLeadQualificado']), JSON.stringify(await nomes(pg)));
   t('depois do contato salvo: duas perguntas opcionais por botão, com "Pular"', /Suas parcelas estão em dia\?/.test(await texto(pg)) && JSON.stringify(await pg.locator('.chat-opt').allInnerTexts()) === '["Em dia","Atrasadas","Com busca e apreensão"]' && (await pg.locator('.chat-soft', { hasText: 'Pular' }).count()) === 1);
   await opt(pg, 'Em dia'); await pg.waitForSelector('.chat-opt', { hasText: 'Sim, em papel' });
   const C2 = reqs[1].body;
@@ -95,7 +97,7 @@ const WA = '(81) 99999-9999';
   await opt(pg, 'Sim, em papel ou PDF'); await pg.waitForSelector('.chat-wa', { timeout: 10000 });
   const C3 = reqs[2].body, ev3 = (await fb(pg)).filter((x) => x[0] === 'trackCustom' && /^RevLead/.test(x[1]));
   t('contrato "sim": novo envio com contrato "sim" e qualificado "sim", mantendo as parcelas', reqs.length === 3 && C3.lead_id !== C2.lead_id && C3.contrato === 'sim' && C3.qualificado === 'sim' && C3.parcelas === 'Em dia' && /Contrato: Sim, em papel ou PDF/.test(C3.respostas), JSON.stringify(C3));
-  t('Pixel: RevLeadQualificado (um só evento de lead), com eventID = lead_id do envio do contrato', ev3.length === 1 && ev3[0][1] === 'RevLeadQualificado' && ev3[0][3] && ev3[0][3].eventID === C3.lead_id, JSON.stringify(ev3));
+  t('Pixel: um só RevLeadQualificado (disparado ao salvar o lead, eventID = lead_id do 1º envio); responder "Sim" ao contrato não dispara outro', ev3.length === 1 && ev3[0][1] === 'RevLeadQualificado' && ev3[0][3] && ev3[0][3].eventID === C1.lead_id, JSON.stringify(ev3));
   t('Pixel: eventos das respostas opcionais', (await nomes(pg)).includes('RevChatRespondeuParcelas') && (await nomes(pg)).includes('RevChatRespondeuContrato'));
   const wa = await pg.locator('.chat-wa').getAttribute('href'), tx = decodeURIComponent(wa.split('text=')[1] || '');
   t('botão final "Quero minha ANÁLISE GRATUITA": WhatsApp com nome, taxa, dados e o pedido final; não abre sozinho', (await pg.innerText('.chat-wa')) === 'Quero minha ANÁLISE GRATUITA' && /^https:\/\/wa\.me\/5581991547396/.test(wa) && /Meu nome é Ana\./.test(tx) && /Simulação \(estimativa\): taxa de [\d.,]+% ao mês, acima da média do mercado\./.test(tx) && /Financiamento: R\$\s40\.000,00 em 48x/.test(tx) && tx.endsWith('Quero a análise gratuita do meu contrato.') && !/prestamista/i.test(tx) && /analise/.test(pg.url()), tx);
@@ -109,14 +111,14 @@ const WA = '(81) 99999-9999';
     t(`${parcelasResp}: o chat avisa que o caso é urgente e o envio leva urgente "sim"`, /urgente/.test(await texto(pg)) && reqs[1].body.urgente === 'sim' && reqs[1].body.parcelas === parcelasResp);
     await opt(pg, contratoResp); await pg.waitForSelector('.chat-wa', { timeout: 10000 });
     const evs = (await fb(pg)).filter((x) => x[0] === 'trackCustom' && /^RevLead/.test(x[1])).map((x) => x[1]);
-    t(`contrato "${contratoResp}": só ${eventoLead}, nunca RevLeadQualificado; envio com contrato "${codigo}" e urgente "sim"`, JSON.stringify(evs) === JSON.stringify([eventoLead]) && reqs[2].body.contrato === codigo && reqs[2].body.qualificado === codigo && reqs[2].body.urgente === 'sim', JSON.stringify([evs, reqs[2] && reqs[2].body]));
+    t(`contrato "${contratoResp}": RevLeadQualificado (ao salvar) + ${eventoLead}; envio com contrato "${codigo}" e urgente "sim"`, JSON.stringify(evs) === JSON.stringify(['RevLeadQualificado', eventoLead]) && reqs[2].body.contrato === codigo && reqs[2].body.qualificado === codigo && reqs[2].body.urgente === 'sim', JSON.stringify([evs, reqs[2] && reqs[2].body]));
     t('WhatsApp leva URGENTE', /URGENTE/.test(decodeURIComponent((await pg.locator('.chat-wa').getAttribute('href')).split('text=')[1] || '')));
     await ctx.close();
   }
   ({ ctx, pg, reqs } = await abrir());
   await opt(pg, 'Carro'); await tresCampos(pg); await contato(pg); await pg.waitForSelector('.chat-opt');
   await soft(pg, 'Pular'); await pg.waitForSelector('.chat-opt', { hasText: 'Sim, em papel' }); await soft(pg, 'Pular'); await pg.waitForSelector('.chat-wa', { timeout: 10000 });
-  t('"Pular" nas duas: o lead fica como foi salvo (um só envio), nenhum evento RevLead* e o botão do WhatsApp aparece', reqs.length === 1 && !(await nomes(pg)).some((n) => /^RevLead/.test(n)) && (await pg.locator('.chat-wa').count()) === 1);
+  t('"Pular" nas duas: o lead fica como foi salvo (um só envio), só o RevLeadQualificado do salvamento e o botão do WhatsApp aparece', reqs.length === 1 && JSON.stringify((await nomes(pg)).filter((n) => /^RevLead/.test(n))) === '["RevLeadQualificado"]' && (await pg.locator('.chat-wa').count()) === 1);
   await ctx.close();
 
   // =============== atalhos: "Não sei esse valor" (cada campo) e "Prefiro falar com a equipe" ===============
@@ -162,6 +164,45 @@ const WA = '(81) 99999-9999';
   t('números incoerentes: o lead entra com "não foi possível estimar"', /Caminho: calculadora completa .* Taxa estimada: não foi possível estimar/.test(reqs[0].body.respostas), reqs[0].body.respostas);
   await ctx.close();
 
+  // =============== WhatsApp: sem botão, avança sozinho em ~1 s, Enter avança na hora, regras do número ===============
+  ({ ctx, pg, reqs } = await abrir());
+  await soft(pg, 'Prefiro falar com a equipe'); await digitar(pg, 'Ana'); await pg.locator('#ch-campo').waitFor();
+  const campoWa = await pg.evaluate(() => { const i = document.getElementById('ch-campo'); return { botao: document.querySelectorAll('.chat-enviar').length, modo: i.getAttribute('inputmode'), enter: i.getAttribute('enterkeyhint') }; });
+  t('campo do WhatsApp: sem botão de enviar, teclado de telefone e tecla "go/OK" do teclado', campoWa.botao === 0 && campoWa.modo === 'tel' && campoWa.enter === 'go', JSON.stringify(campoWa));
+  const INVALIDOS = [
+    ['(81) 8421-7365', 'Faltou o 9 na frente do número?'],
+    ...['00', '10', '20', '23', '25', '26', '29', '30', '36', '39', '40', '50', '52', '56', '57', '58', '59', '60', '70', '72', '76', '78', '80', '90'].map((d) => [`(${d}) 98421-7365`, 'Confira o número com DDD, ex.: (81) 99999-0000']),
+    ['(81) 88421-7365', 'Confira o número com DDD, ex.: (81) 99999-0000'], ['(81) 99999-9999', 'Confira o número com DDD, ex.: (81) 99999-0000'], ['(11) 11111-1111', 'Confira o número com DDD, ex.: (81) 99999-0000'],
+    ['(81) 98765-4321', 'Confira o número com DDD, ex.: (81) 99999-0000'], ['(81) 91234-5678', 'Confira o número com DDD, ex.: (81) 99999-0000'], ['(81) 123456789', 'Confira o número com DDD, ex.: (81) 99999-0000'],
+    ['(81) 9842', 'Confira o número com DDD, ex.: (81) 99999-0000'],
+  ];
+  const falhas = [];
+  for (const [num, msg] of INVALIDOS) {
+    await pg.fill('#ch-campo', num); await pg.keyboard.press('Enter');
+    const av = await pg.innerText('.chat-aviso'), ainda = (await pg.locator('#ch-campo').count()) === 1;
+    if (av !== msg || !ainda) falhas.push(`${num} => "${av}" ${ainda ? '' : '(avançou!)'}`);
+  }
+  t(`números barrados (${INVALIDOS.length} casos: 10 dígitos, DDD inexistente, sem 9, sequências): aviso curto embaixo do campo e o chat não avança`, falhas.length === 0 && reqs.length === 0, falhas.join(' | '));
+  await pg.fill('#ch-campo', '(11) 99999-0000'); await pg.keyboard.press('Enter');
+  const tEnter = Date.now(); await pg.locator('#ch-campo').waitFor({ state: 'detached', timeout: 3000 });
+  t('número válido + Enter/OK do teclado: avança na hora (o exemplo do aviso, (11) 99999-0000, é aceito)', Date.now() - tEnter < 800 && reqs.length >= 0, String(Date.now() - tEnter));
+  await ctx.close();
+  ({ ctx, pg, reqs } = await abrir());
+  await soft(pg, 'Prefiro falar com a equipe'); await digitar(pg, 'Ana'); await pg.locator('#ch-campo').waitFor();
+  await pg.fill('#ch-campo', WA); await pg.waitForTimeout(500);
+  const aindaEm05 = (await pg.locator('#ch-campo').count()) === 1;
+  await pg.locator('#ch-campo').waitFor({ state: 'detached', timeout: 3000 });
+  t('número válido sem apertar nada: espera cerca de 1 s e avança sozinho', aindaEm05);
+  await pg.waitForSelector('.chat-opt', { timeout: 10000 });
+  t('o avanço automático salva o lead (um envio com o WhatsApp digitado)', reqs.length === 1 && reqs[0].body.whatsapp === WA, JSON.stringify(reqs[0] && reqs[0].body.whatsapp));
+  await ctx.close();
+  ({ ctx, pg, reqs } = await abrir());
+  await soft(pg, 'Prefiro falar com a equipe'); await digitar(pg, 'Ana'); await pg.locator('#ch-campo').waitFor();
+  await pg.fill('#ch-campo', '(81) 98421-736'); await pg.waitForTimeout(1500);
+  await pg.fill('#ch-campo', '(81) 8421-7365'); await pg.waitForTimeout(1500);
+  t('10 dígitos digitados e parados: depois de ~1 s aparece "Faltou o 9 na frente do número?" e não avança', /Faltou o 9 na frente do número\?/.test(await pg.innerText('.chat-aviso')) && (await pg.locator('#ch-campo').count()) === 1 && reqs.length === 0);
+  await ctx.close();
+
   // =============== validações e honeypot ===============
   ({ ctx, pg, reqs } = await abrir());
   await opt(pg, 'Carro');
@@ -171,16 +212,17 @@ const WA = '(81) 99999-9999';
   await digitar(pg, '48'); await digitar(pg, ''); t('parcela vazia: avisa e não avança', /valor da parcela/.test(await pg.innerText('.chat-aviso')));
   await digitar(pg, '1500'); await pg.waitForSelector('#ch-campo');
   await digitar(pg, 'M'); t('nome curto: avisa e não avança', /primeiro nome/.test(await pg.innerText('.chat-aviso')));
-  await digitar(pg, 'Maria'); await digitar(pg, '123'); t('WhatsApp inválido: avisa e não envia', /WhatsApp válido/.test(await pg.innerText('.chat-aviso')) && reqs.length === 0);
+  await digitar(pg, 'Maria'); await wapp(pg, '123'); await pg.keyboard.press('Enter');
+  t('WhatsApp curto + Enter: aviso curto embaixo do campo, não avança e não há botão de enviar', /Confira o número com DDD, ex\.: \(81\) 99999-0000/.test(await pg.innerText('.chat-aviso')) && reqs.length === 0 && (await pg.locator('.chat-enviar').count()) === 0);
   await pg.evaluate(() => { document.querySelector('#chat-form input[name="bot-field"]').value = 'spam'; });
-  await pg.fill('#ch-campo', WA); await pg.click('.chat-enviar'); await pg.waitForTimeout(800);
+  await pg.fill('#ch-campo', WA); await pg.keyboard.press('Enter'); await pg.waitForTimeout(1600);
   t('honeypot preenchido: nada é enviado', reqs.length === 0);
   await ctx.close();
 
   // =============== CRM lento, Turnstile e debug ===============
   ({ ctx, pg, reqs } = await abrir({ crmAtrasoMs: 9000 }));
   await opt(pg, 'Carro'); await tresCampos(pg); await contato(pg);
-  const tLento = Date.now(); await pg.waitForSelector('.chat-opt', { timeout: 9000 });
+  await pg.locator('#ch-campo').waitFor({ state: 'detached', timeout: 4000 }); const tLento = Date.now(); await pg.waitForSelector('.chat-opt', { timeout: 9000 });
   t('CRM lento: o chat segue em até ~6 s (limite de 5 s) para as perguntas opcionais', Date.now() - tLento < 6500, String(Date.now() - tLento));
   await ctx.close();
   ({ ctx, pg, reqs } = await abrir({ ts: { atraso: 2500 } }));

@@ -9,7 +9,7 @@ const FLUXOS = {
   async analise(pg) {
     await pg.locator('.chat-soft', { hasText: 'Prefiro falar com a equipe' }).click();
     await pg.locator('#ch-campo').waitFor({ timeout: 8000 }); await pg.fill('#ch-campo', 'Ana'); await pg.click('.chat-enviar');
-    await pg.locator('#ch-campo').waitFor({ timeout: 8000 }); await pg.fill('#ch-campo', '(81) 99999-9999'); await pg.click('.chat-enviar');
+    await pg.locator('#ch-campo').waitFor({ timeout: 8000 }); await pg.fill('#ch-campo', '(81) 98421-7365'); await pg.keyboard.press('Enter');
   },
   async popup(pg) {
     await pg.waitForSelector('.popup', { timeout: 6000 }); await pg.fill('#pp-nome', 'Joao Souza'); await pg.fill('#pp-tel', '81991547396');
