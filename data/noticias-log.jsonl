@@ -874,3 +874,4 @@
 {"quando":"2026-10-24T11:54:46.093Z","data":"2026-10-24","evento":"uso_gemini","pedidos":31,"ok":18,"por_status":{"429":6,"503":7}}
 {"quando":"2026-10-24T11:55:21.057Z","data":"2026-10-24","evento":"indexnow","resultado":"enviado","status":200,"enviadas":6,"ainda_pendentes":0,"urls":["https://revisional.eraseconsulta.com.br/noticias/bc-aprova-regras-para-restringir-oferta-de-credito-e-criar-painel-de-dividas","https://revisional.eraseconsulta.com.br/","https://revisional.eraseconsulta.com.br/artigos","https://revisional.eraseconsulta.com.br/radar","https://revisional.eraseconsulta.com.br/categoria-financeiro","https://revisional.eraseconsulta.com.br/categoria-credito-pessoal"],"resposta":""}
 {"quando":"2026-10-24T14:13:04.016Z","data":"2026-10-24","evento":"uso_gemini","pedidos":0,"ok":0,"por_status":{}}
+{"quando":"2026-10-24T17:47:36.071Z","data":"2026-10-24","evento":"uso_gemini","pedidos":0,"ok":0,"por_status":{}}
