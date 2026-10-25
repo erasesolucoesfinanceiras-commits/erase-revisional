@@ -1,5 +1,31 @@
 [
   {
+    "id": "2026-10-25-ipca-15-desacelera-para-0-32-em-outubro",
+    "data": "2026-10-25",
+    "categoria": "economia",
+    "titulo": "IPCA-15 desacelera para 0,32% em outubro, mas acumula 4,62% em 12 meses",
+    "texto": "O IPCA-15 desacelerou para 0,32% em outubro, após registrar 0,70% em setembro, informou o IBGE. No acumulado de 12 meses, o índice atingiu 4,62%, superando o teto da meta de inflação de 4,5%. Para o consumidor, a permanência da prévia da inflação acima do limite de tolerância pode levar o Banco Central a manter juros elevados, o que tende a sustentar o custo de novos financiamentos de veículos e linhas de crédito.",
+    "fontes": [
+      {
+        "nome": "Valor Econômico",
+        "url": "https://valor.globo.com/brasil/noticia/2026/10/23/ipca-15-sobe-032percent-em-outubro.ghtml",
+        "data": "2026-10-23"
+      },
+      {
+        "nome": "Agência Brasil",
+        "url": "https://agenciabrasil.ebc.com.br/economia/noticia/2026-10/previa-da-inflacao-oficial-cai-pela-metade-e-fecha-outubro-em-032",
+        "data": "2026-10-23"
+      }
+    ],
+    "foto": {
+      "id": 435452,
+      "autor": "itkannan4u",
+      "autorUrl": "https://pixabay.com/users/itkannan4u-151888/",
+      "pagina": "https://pixabay.com/photos/supermarket-shopping-sales-store-435452/",
+      "fonte": "Pixabay"
+    }
+  },
+  {
     "id": "2026-10-24-desenrola-3-0-abre-prazo-para-bancos-apr",
     "data": "2026-10-24",
     "categoria": "credito-pessoal",
