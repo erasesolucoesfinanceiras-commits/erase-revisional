@@ -976,3 +976,4 @@
 {"quando":"2026-10-26T17:52:59.770Z","data":"2026-10-26","evento":"uso_gemini","pedidos":67,"ok":22,"por_status":{"404":1,"429":13,"500":2,"503":27}}
 {"quando":"2026-10-26T17:53:35.324Z","data":"2026-10-26","evento":"indexnow","resultado":"enviado","status":200,"enviadas":6,"ainda_pendentes":0,"urls":["https://revisional.eraseconsulta.com.br/noticias/mercado-de-eletricos-indica-desafios-de-revenda-e-manutencao","https://revisional.eraseconsulta.com.br/","https://revisional.eraseconsulta.com.br/artigos","https://revisional.eraseconsulta.com.br/radar","https://revisional.eraseconsulta.com.br/categoria-mercado","https://revisional.eraseconsulta.com.br/categoria-economia"],"resposta":""}
 {"quando":"2026-10-26T19:39:04.177Z","data":"2026-10-26","evento":"uso_gemini","pedidos":0,"ok":0,"por_status":{}}
+{"quando":"2026-10-26T21:42:57.167Z","data":"2026-10-26","evento":"uso_gemini","pedidos":0,"ok":0,"por_status":{}}
