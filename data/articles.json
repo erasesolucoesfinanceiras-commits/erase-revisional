@@ -1,5 +1,34 @@
 [
   {
+    "slug": "mercado-de-eletricos-indica-desafios-de-revenda-e-manutencao",
+    "categoria": "mercado",
+    "titulo": "Mercado de elétricos indica desafios de revenda e manutenção",
+    "resumo": "Levantamentos do Google Trends e órgãos internacionais apontam avanço nas buscas por elétricos no Brasil e retração no valor de revenda em mercados maduros.",
+    "data": "2026-10-26",
+    "fontes": [
+      {
+        "nome": "Gazeta do Povo",
+        "url": "https://www.gazetadopovo.com.br/automoveis/futuro-carros-eletricos-brasil-experiencia-outros-paises/",
+        "data": "2026-10-24"
+      },
+      {
+        "nome": "Tribuna PR",
+        "url": "https://www.tribunapr.com.br/noticias/automoveis/carros-eletricos-chineses-desvalorizacao-brasil/",
+        "data": "2026-10-26"
+      }
+    ],
+    "corpo": "<p>De acordo com dados do Google Trends divulgados em reportagens publicadas nos veículos Gazeta do Povo e Tribuna PR, o interesse do público brasileiro por carros elétricos de marcas chinesas apresentou um crescimento de 250% nos últimos cinco anos, atingindo o maior nível de pesquisas em 2026. Enquanto o mercado nacional vivencia o avanço dessa frota nas ruas, indicadores apurados em países com frotas eletrificadas mais maduras indicam desdobramentos importantes sobre a desvalorização de seminovos e a capacidade técnica da rede de pós-venda.</p><h2>Retenção de valor em mercados mais consolidados</h2><p>O comportamento do mercado automotivo na China reflete como o envelhecimento dos modelos elétricos impacta os preços no mercado secundário. Segundo os levantamentos citados pelas publicações, o país asiático encerrou o ano de 2025 com cerca de 44 milhões de veículos elétricos em circulação. No mesmo período, a comercialização de carros elétricos usados ultrapassou 1,5 milhão de unidades.</p><p>Entretanto, a expansão nas vendas de seminovos ocorreu sob forte pressão de desvalorização. No ano de 2024, um automóvel elétrico chinês com três anos de uso mantinha, em média, 46% do seu preço original, em comparação com 55% registrados na média geral do mercado de veículos usados. Ao final de 2025, a taxa média de retenção de valor para os elétricos caiu para 42% no mercado chinês.</p><p>Além dessa retração nos valores de revenda, cerca de 80% dos lojistas de veículos usados na China passaram a recusar a compra de modelos elétricos com mais de cinco anos de fabricação. Essa movimentação é explicada em parte pela rápida evolução tecnológica e pela queda nos custos de produção: no ano de 2025, o preço médio dos automóveis elétricos novos registrou recuo superior a 10% na China, o que pressionou diretamente a cotação dos modelos já existentes no mercado de usados.</p><h2>Comportamento na Europa e desafios da manutenção no Brasil</h2><p>As oscilações no valor residual dos automóveis movidos a bateria também são registradas no continente europeu. Conforme dados divulgados pela Agência Internacional de Energia (IEA, na sigla em inglês), a taxa de retenção de valor dos carros elétricos caiu de aproximadamente 50% em 2022 para 35% em 2025 nos mercados monitorados pela entidade.</p><p>Paralelamente às questões de precificação na revenda, o crescimento da frota eletrificada impõe exigências para a infraestrutura de manutenção e reparo. Diferente dos veículos equipados exclusivamente com motores a combustão interna, a manutenção de modelos elétricos demanda capacitação técnica voltada a sistemas de alta tensão, conjuntos de baterias e módulos eletrônicos de controle.</p><p>No cenário nacional, a preparação da rede independente de reparação ainda está em fase inicial. Conforme declaração de Evaldo Kosters, diretor do Sindicato das Empresas de Reparação de Veículos, a grande maioria das oficinas mecânicas do Brasil ainda não possui estrutura e treinamento adequados para realizar os serviços exigidos pelos veículos eletrificados.</p><h2>O que observar antes de contratar um financiamento</h2><p>Para quem avalia a contratação de um financiamento de veículo elétrico, o comportamento do mercado secundário e a disponibilidade de serviços técnicos são pontos relevantes de análise. Como o prazo das parcelas de um crédito automotivo pode se estender por anos, é recomendável analisar a estimativa de desvalorização do modelo em relação ao saldo devedor do contrato. Além disso, averiguar a presença de oficinas preparadas na região onde o veículo circulará e acompanhar o ritmo de substituição das tecnologias pode auxiliar no planejamento financeiro para a futura revenda ou substituição do bem.</p>",
+    "foto_busca": "electric vehicle charging station",
+    "tipo": "noticia",
+    "foto": {
+      "id": 4381728,
+      "autor": "andreas160578",
+      "autorUrl": "https://pixabay.com/users/andreas160578-2383079/",
+      "pagina": "https://pixabay.com/photos/electric-car-automobile-carsharing-4381728/",
+      "fonte": "Pixabay"
+    }
+  },
+  {
     "slug": "bc-aprova-regras-para-restringir-oferta-de-credito-e-criar-painel-de-dividas",
     "categoria": "financeiro",
     "titulo": "BC aprova regras para restringir oferta de crédito e criar painel de dívidas",

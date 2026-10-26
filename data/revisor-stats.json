@@ -207,5 +207,23 @@
    "sem_novidade": 0,
    "criterios": {}
   }
+ },
+ "2026-10-26": {
+  "artigo": {
+   "aprovados": 1,
+   "reprovados": 1,
+   "sem_novidade": 4,
+   "criterios": {
+    "sem_generico": 1
+   }
+  },
+  "nota": {
+   "aprovados": 1,
+   "reprovados": 1,
+   "sem_novidade": 7,
+   "criterios": {
+    "sem_repeticao": 1
+   }
+  }
  }
 }
