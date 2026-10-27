@@ -1,5 +1,31 @@
 [
   {
+    "id": "2026-10-27-absolar-aponta-cortes-na-geracao-solar-e",
+    "data": "2026-10-27",
+    "categoria": "energia-solar",
+    "titulo": "Absolar aponta cortes na geração solar e defende leilões de baterias",
+    "texto": "Segundo a Absolar, 17,2% do potencial de geração solar e eólica do país foi cortado no primeiro trimestre de 2026. Para conter o desperdício, a entidade defende a regulamentação do Redata e a realização dos leilões de capacidade para baterias previstos para 2 e 4 de dezembro.",
+    "fontes": [
+      {
+        "nome": "Valor Econômico",
+        "url": "https://valor.globo.com/empresas/noticia/2026/10/26/novo-ciclo-exigir-dilogo-institucional-e-construo-de-consensos-diz-absolar.ghtml",
+        "data": "2026-10-26"
+      },
+      {
+        "nome": "Tele.Síntese",
+        "url": "https://telesintese.com.br/absolar-ve-data-centers-como-solucao-para-curtailment/",
+        "data": "2026-10-26"
+      }
+    ],
+    "foto": {
+      "id": 5622969,
+      "autor": "fietzfotos",
+      "autorUrl": "https://pixabay.com/users/fietzfotos-6795508/",
+      "pagina": "https://pixabay.com/photos/solar-energy-solar-panels-5622969/",
+      "fonte": "Pixabay"
+    }
+  },
+  {
     "id": "2026-10-26-boletim-focus-ajusta-projecoes-da-econom",
     "data": "2026-10-26",
     "categoria": "economia",

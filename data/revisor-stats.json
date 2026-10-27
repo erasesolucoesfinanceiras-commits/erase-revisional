@@ -225,5 +225,13 @@
     "sem_repeticao": 1
    }
   }
+ },
+ "2026-10-27": {
+  "nota": {
+   "aprovados": 1,
+   "reprovados": 0,
+   "sem_novidade": 0,
+   "criterios": {}
+  }
  }
 }
