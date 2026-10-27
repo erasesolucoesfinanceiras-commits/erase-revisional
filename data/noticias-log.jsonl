@@ -1019,3 +1019,4 @@
 {"quando":"2026-10-27T16:32:19.851Z","data":"2026-10-27","evento":"uso_gemini","pedidos":36,"ok":4,"por_status":{"429":6,"503":25}}
 {"quando":"2026-10-27T16:32:54.732Z","data":"2026-10-27","evento":"indexnow","resultado":"enviado","status":200,"enviadas":3,"ainda_pendentes":0,"urls":["https://revisional.eraseconsulta.com.br/","https://revisional.eraseconsulta.com.br/radar","https://revisional.eraseconsulta.com.br/categoria-energia-solar"],"resposta":""}
 {"quando":"2026-10-27T19:03:28.632Z","data":"2026-10-27","evento":"uso_gemini","pedidos":0,"ok":0,"por_status":{}}
+{"quando":"2026-10-27T21:24:35.838Z","data":"2026-10-27","evento":"uso_gemini","pedidos":0,"ok":0,"por_status":{}}
