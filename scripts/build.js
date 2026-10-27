@@ -21,14 +21,14 @@ const notas = S.loadNotas();
 const SITE = C.siteNome;
 const hasBcb = fs.existsSync(path.join(S.ROOT, 'assets', 'data', 'bcb-veiculos.json')); // série histórica do Banco Central presente?
 const urls = []; // para o sitemap
-const LEGAL_DATE = '2026-10-21'; // data de vigência dos textos legais (altere ao revisá-los)
+const LEGAL_DATE = '2026-10-27'; // data de vigência dos textos legais (altere ao revisá-los)
 // Datas do sitemap: SÓ datas reais (publicação ou revisão de verdade). Sem data real, sem <lastmod>.
 const maiorData = (...ds) => ds.flat().filter(Boolean).sort().pop();
 let BCB_ATUALIZADO = '', BCB_CONFERIDO = ''; // datas REAIS (scripts/update-bcb.js): última alteração da série e última consulta ao BCB que funcionou
 try { const b = S.readJSON('assets/data/bcb-veiculos.json'); BCB_ATUALIZADO = b.atualizado_em || ''; BCB_CONFERIDO = b.conferido_em || ''; } catch (e) { /* sem série */ }
 
 // ---------------------------------------------------------------- HOME
-const nl = `<form class="newsletter" id="newsletter-form" novalidate>
+const nl = `<form class="newsletter" id="newsletter-form" novalidate data-clarity-mask="true">
 <label class="sr-only" for="nl-email">Seu e-mail</label>
 <input id="nl-email" name="email" type="email" maxlength="120" placeholder="Seu melhor e-mail" autocomplete="email" required>
 <input type="text" name="bot-field" class="hp" tabindex="-1" autocomplete="off" aria-hidden="true">
@@ -294,7 +294,7 @@ function calculadora() {
 <div class="calc-card">
 <div class="calc-bar"><div class="calc-bar-top"><strong>Simulação em tempo real</strong><span id="progress-text">Preencha seus dados para iniciar...</span></div>
 <div class="progress" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="progress"><div class="progress-fill" id="progress-fill"></div></div></div>
-<form id="calc-form" novalidate>
+<form id="calc-form" novalidate data-clarity-mask="true">
 <fieldset class="vtype"><legend>Tipo de veículo <span class="req">*</span></legend>
 <label><input type="radio" name="tipo" value="carro" checked><span>Carro</span></label>
 <label><input type="radio" name="tipo" value="moto"><span>Moto</span></label>
@@ -332,7 +332,7 @@ ${S.freeBadge("block")}
 
 <aside class="panel" id="analise" data-state="coletando" aria-live="polite">
 <div class="panel-head"><strong>Análise em tempo real</strong><span class="status" id="status">Coletando</span></div>
-<div id="panel-body">
+<div id="panel-body" data-clarity-mask="true">
 <h2 class="panel-title">Aguardando seu contrato...</h2>
 <p>À medida que você preencher o formulário, preparamos o cálculo e, depois do envio dos seus dados, mostramos o resultado: calculamos a taxa que está sendo cobrada e comparamos com a média de mercado para <span id="tipo-label">carro</span>.</p>
 <ul class="steps-list">
@@ -422,7 +422,7 @@ function legais() {
 <h2>5. Conteúdo</h2>
 <p>Os artigos têm caráter informativo e podem ser atualizados a qualquer momento. As fontes são indicadas ao final de cada texto. Parte do conteúdo é produzida com apoio de inteligência artificial e passa por revisão automática, como explicado em <a href="/como-produzimos.html">Como produzimos nosso conteúdo</a>. O conteúdo não substitui a orientação de um profissional habilitado.</p>
 <h2>6. Links, anúncios e serviços de terceiros</h2>
-<p>O site traz links para fontes externas (órgãos oficiais e veículos de imprensa) e usa serviços de terceiros, como Google Analytics${S.pixelOk ? ', Meta Pixel' : ''} e Cloudflare (hospedagem e Turnstile, que protege os formulários contra robôs). Não controlamos esses sites e serviços e não respondemos pelo conteúdo ou pelas políticas deles. Poderemos exibir anúncios de terceiros, como os do Google AdSense; nesse caso, os anúncios serão identificados, não influenciam o conteúdo editorial e a presença de um anúncio não é recomendação nem indicação de que a ${razao} o endossa.</p>
+<p>O site traz links para fontes externas (órgãos oficiais e veículos de imprensa) e usa serviços de terceiros, como Google Analytics${S.pixelOk ? ', Meta Pixel' : ''}, Microsoft Clarity e Cloudflare (hospedagem e Turnstile, que protege os formulários contra robôs). Não controlamos esses sites e serviços e não respondemos pelo conteúdo ou pelas políticas deles. Poderemos exibir anúncios de terceiros, como os do Google AdSense; nesse caso, os anúncios serão identificados, não influenciam o conteúdo editorial e a presença de um anúncio não é recomendação nem indicação de que a ${razao} o endossa.</p>
 <h2>7. Cookies e privacidade</h2>
 <p>O uso de cookies e o tratamento de dados pessoais estão descritos na <a href="/privacidade.html">Política de Privacidade</a>. Usamos cookies de estatística e de medição de anúncios, e a Política explica como recusá-los.</p>
 <h2>8. Propriedade intelectual</h2>
@@ -443,9 +443,9 @@ function legais() {
 <li><strong>Fale Conosco:</strong> nome, e-mail e mensagem.</li></ul>
 <h2>2. Para que usamos</h2>
 <p>Usamos os dados para devolver a análise solicitada, avaliar o seu caso e priorizar o atendimento, entrar em contato por WhatsApp, telefone ou e-mail quando você autoriza, permitir o atendimento por um especialista da ERASE, responder mensagens e enviar novidades quando você se inscreve na newsletter.</p>
-<p><strong>Em que nos apoiamos para usar os seus dados (base legal).</strong> Usamos os seus dados com o seu <strong>consentimento</strong> quando você envia o chat /analise ou outro formulário. Se você virar cliente, passamos a usar os dados também para <strong>executar o contrato</strong>. Para medir o desempenho do site e dos nossos anúncios (Google Analytics e Meta Pixel), nos apoiamos no nosso <strong>legítimo interesse</strong>.</p>
+<p><strong>Em que nos apoiamos para usar os seus dados (base legal).</strong> Usamos os seus dados com o seu <strong>consentimento</strong> quando você envia o chat /analise ou outro formulário. Se você virar cliente, passamos a usar os dados também para <strong>executar o contrato</strong>. Para medir o desempenho do site e dos nossos anúncios e para melhorar a navegação (Google Analytics, Meta Pixel e Microsoft Clarity), nos apoiamos no nosso <strong>legítimo interesse</strong>.</p>
 <h2>3. Com quem compartilhamos</h2>
-<p>Os dados enviados nos formulários e no chat /analise são recebidos e armazenados em nosso sistema de relacionamento (CRM) e são usados pela equipe da ${razao} para entrar em contato com você. Ao abrir a conversa no WhatsApp, as respostas seguem na mensagem que você mesmo envia. Não vendemos seus dados. Usamos prestadores que tratam dados em nosso nome: a Cloudflare (hospedagem do site e verificação anti-robô nos formulários), o Google (Google Analytics, conforme a seção 6)${S.pixelOk ? ' e a Meta (Meta Pixel e API de Conversões, conforme a seção 6)' : ''}. Alguns desses fornecedores (Cloudflare, Supabase, Meta e Google) podem armazenar ou processar os dados em servidores fora do Brasil.</p>
+<p>Os dados enviados nos formulários e no chat /analise são recebidos e armazenados em nosso sistema de relacionamento (CRM) e são usados pela equipe da ${razao} para entrar em contato com você. Ao abrir a conversa no WhatsApp, as respostas seguem na mensagem que você mesmo envia. Não vendemos seus dados. Usamos prestadores que tratam dados em nosso nome: a Cloudflare (hospedagem do site e verificação anti-robô nos formulários), o Google (Google Analytics, conforme a seção 6), a Microsoft (Microsoft Clarity, conforme a seção 6)${S.pixelOk ? ' e a Meta (Meta Pixel e API de Conversões, conforme a seção 6)' : ''}. Alguns desses fornecedores (Cloudflare, Supabase, Meta, Google e Microsoft) podem armazenar ou processar os dados em servidores fora do Brasil.</p>
 <h2>4. Por quanto tempo guardamos</h2>
 <ul><li><strong>Quem não virou cliente:</strong> guardamos os dados por até 12 meses após o último contato. Depois disso, eles são apagados ou anonimizados.</li>
 <li><strong>Clientes:</strong> guardamos os dados por até 5 anos após o fim do contrato, para cumprir obrigações legais e fiscais e para a nossa defesa em eventuais processos.</li></ul>
@@ -454,10 +454,11 @@ function legais() {
 <h2 id="cookies">6. Cookies, Google Analytics e anúncios</h2>
 <p><strong>Armazenamento essencial do navegador.</strong> Usamos o armazenamento local para lembrar a sua escolha de tema (claro/escuro), exibir o pop-up uma vez por sessão e guardar a origem do acesso (UTMs e página de entrada). Eles não servem para publicidade.</p>
 <p><strong>Estatísticas (Google Analytics).</strong> Usamos o Google Analytics 4, serviço do Google, que grava cookies e identificadores para contar visitas, páginas vistas, tempo no site, tipo de aparelho e origem do acesso, e para medir o resultado dos formulários (sem enviar seu nome, telefone ou e-mail). Ele é carregado quando você abre qualquer página do site, com base no nosso legítimo interesse de medir o desempenho do site.</p>
+<p><strong>Análise de navegação (Microsoft Clarity).</strong> Usamos o Microsoft Clarity, ferramenta de análise da Microsoft, para entender como as pessoas usam o site e melhorar a experiência. Ele registra, de forma anônima, cliques, rolagem e movimentos do mouse ou do dedo na tela, e pode usar cookies ou identificadores do navegador. Os campos de formulário e tudo o que você digita (como nome, WhatsApp e valores do financiamento) são mascarados e não são enviados ao Clarity. Não usamos o Clarity para identificar você. Ele é carregado quando você abre qualquer página do site, com base no nosso legítimo interesse de melhorar o site. Saiba mais na <a href="https://privacy.microsoft.com/privacystatement" target="_blank" rel="noopener noreferrer">Política de Privacidade da Microsoft</a>.</p>
 <p><strong>Proteção contra robôs.</strong> Usamos o Cloudflare Turnstile para proteger os nossos formulários contra robôs. Para isso, ele pode coletar dados técnicos do seu navegador (como o endereço IP e o tipo de navegador). Saiba mais no <a href="https://www.cloudflare.com/turnstile-privacy-policy/" target="_blank" rel="noopener">Turnstile Privacy Addendum da Cloudflare</a>.</p>
 ${S.pixelOk ? '<p><strong>Anúncios da Meta (Facebook e Instagram).</strong> Usamos o Meta Pixel para medir se os nossos anúncios levaram a um contato (por exemplo, conclusão do formulário /analise). A Meta recebe o identificador do navegador e o evento ocorrido. Além do Pixel, os seus dados de contato (telefone e e-mail) podem ser enviados à Meta de forma criptografada (hash) pela API de Conversões, para medir os anúncios. Ele é carregado quando você abre qualquer página do site, com base no nosso legítimo interesse de medir o desempenho dos anúncios.</p>' : ''}
 <p><strong>Anúncios do Google (AdSense) — futuro.</strong> Poderemos exibir anúncios do Google AdSense. Quando isso acontecer, o Google e seus parceiros poderão usar cookies para mostrar anúncios com base nas suas visitas a este e a outros sites, e só os ativaremos com o seu consentimento. Você poderá desativar a personalização de anúncios em <a href="https://adssettings.google.com" target="_blank" rel="noopener noreferrer">adssettings.google.com</a> e saber como o Google usa dados de sites parceiros em <a href="https://policies.google.com/technologies/partner-sites" target="_blank" rel="noopener noreferrer">policies.google.com/technologies/partner-sites</a>. Esta política será atualizada antes de os anúncios entrarem no ar.</p>
-<p><strong>Como recusar a medição.</strong> O site não tem um botão de aceitar ou recusar cookies: o Google Analytics${S.pixelOk ? ' e o Meta Pixel' : ''} carregam quando você abre a página. Se você não quiser ser medido, pode: (1) bloquear ou apagar os cookies nas configurações do seu navegador; (2) navegar em uma janela anônima; (3) instalar o <a href="https://tools.google.com/dlpage/gaoptout" target="_blank" rel="noopener noreferrer">complemento de desativação do Google Analytics</a>; ${S.pixelOk ? '(4) ajustar as preferências de anúncios na sua conta do Facebook ou Instagram, pela Central de Contas da Meta (<a href="https://www.meta.com/pt-br/help/accounts-center/1894490827562393/" target="_blank" rel="noopener noreferrer">ajuda da Meta</a>); ' : ''}ou (${S.pixelOk ? '5' : '4'}) pedir a oposição ao uso dos seus dados pelo e-mail <a href="mailto:atendimento@eraseconsulta.com.br">atendimento@eraseconsulta.com.br</a>.${S.pixelOk ? ' O envio pela API de Conversões acontece em nossos servidores, então bloquear cookies no navegador não o impede; para isso, use o pedido por e-mail.' : ''}</p>
+<p><strong>Como recusar a medição.</strong> O site não tem um botão de aceitar ou recusar cookies: o Google Analytics${S.pixelOk ? ', o Meta Pixel' : ''} e o Microsoft Clarity carregam quando você abre a página. Se você não quiser ser medido, pode: (1) bloquear ou apagar os cookies nas configurações do seu navegador; (2) navegar em uma janela anônima; (3) instalar o <a href="https://tools.google.com/dlpage/gaoptout" target="_blank" rel="noopener noreferrer">complemento de desativação do Google Analytics</a>; ${S.pixelOk ? '(4) ajustar as preferências de anúncios na sua conta do Facebook ou Instagram, pela Central de Contas da Meta (<a href="https://www.meta.com/pt-br/help/accounts-center/1894490827562393/" target="_blank" rel="noopener noreferrer">ajuda da Meta</a>); ' : ''}ou (${S.pixelOk ? '5' : '4'}) pedir a oposição ao uso dos seus dados pelo e-mail <a href="mailto:atendimento@eraseconsulta.com.br">atendimento@eraseconsulta.com.br</a>.${S.pixelOk ? ' O envio pela API de Conversões acontece em nossos servidores, então bloquear cookies no navegador não o impede; para isso, use o pedido por e-mail.' : ''}</p>
 <h2>7. Contato</h2>
 <p>Controladora dos dados: ${razao}, CNPJ ${esc(C.empresa.cnpj)}. E-mail: <a href="mailto:atendimento@eraseconsulta.com.br">atendimento@eraseconsulta.com.br</a>. Você também pode falar conosco pela página <a href="/contato.html">Fale Conosco</a>.</p>`, 'Política de Privacidade do ERASE Revisional: dados que coletamos e para quê, cookies e Google Analytics, anúncios do Google e seus direitos pela LGPD.');
 }
@@ -559,7 +560,7 @@ function contato() {
 <section class="page-head"><div class="container"><h1>Fale Conosco</h1>
 <p class="lead">Tem alguma dúvida ou quer pedir a exclusão dos seus dados? Envie uma mensagem ou fale direto pelo WhatsApp.</p></div></section>
 <section class="container contact-grid">
-<form id="contact-form" class="card-form" novalidate>
+<form id="contact-form" class="card-form" novalidate data-clarity-mask="true">
 <div class="field"><label for="c-nome">Nome</label><input id="c-nome" name="nome" maxlength="80" autocomplete="name" required></div>
 <div class="field"><label for="c-email">E-mail</label><input id="c-email" name="email" type="email" maxlength="120" autocomplete="email" required></div>
 <div class="field"><label for="c-msg">Mensagem</label><textarea id="c-msg" name="mensagem" rows="6" maxlength="2000" required></textarea></div>

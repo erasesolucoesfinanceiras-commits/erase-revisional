@@ -31,21 +31,23 @@
   const DICAS = { 'Não, mas posso pedir ao banco': 'O banco é obrigado a fornecer uma cópia do seu contrato quando você pede.', 'Não tenho': 'Sem problema: peça uma cópia ao banco (aplicativo, central de atendimento ou agência) e, se não conseguir, a gente orienta você no WhatsApp.' };
 
   // a área de botões é fixa no rodapé: as mensagens rolam até ficar acima dela
+  acoes.setAttribute('data-clarity-mask', 'true'); // campos, confirmação do número e botões
   if (window.ResizeObserver) new ResizeObserver(() => document.documentElement.style.setProperty('--acoes-h', acoes.offsetHeight + 'px')).observe(acoes);
   const esperar = (ms) => new Promise((r) => setTimeout(r, reduzir ? 0 : ms));
   const rolar = () => { const u = log.lastElementChild; if (u) u.scrollIntoView({ block: 'end', behavior: reduzir ? 'auto' : 'smooth' }); };
   const rolarDepois = () => { rolar(); setTimeout(rolar, 80); setTimeout(rolar, 300); };
-  function bolha(quem, conteudo, html) {
+  function bolha(quem, conteudo, html, mascarar) {
     const d = document.createElement('div');
     d.className = `chat-msg ${quem}`;
+    if (quem === 'eu' || mascarar) d.setAttribute('data-clarity-mask', 'true'); // o que a pessoa digita e os valores do financiamento nunca vão ao Clarity
     if (html) d.innerHTML = conteudo; else d.textContent = conteudo;
     log.appendChild(d); rolar(); return d;
   }
   /** Mensagem do robô com "digitando…" curto. `html` só recebe texto fixo daqui (nunca texto digitado pela pessoa). */
-  async function bot(html, ms = 450) {
+  async function bot(html, ms = 450, mascarar) {
     const t = document.createElement('div'); t.className = 'chat-msg bot chat-digitando'; t.setAttribute('aria-hidden', 'true'); t.innerHTML = '<i></i><i></i><i></i>';
     log.appendChild(t); rolar(); await esperar(ms); t.remove();
-    return bolha('bot', html, true);
+    return bolha('bot', html, true, mascarar);
   }
   const limpo = (t) => String(t).replace(/[<>&]/g, '');
 
@@ -275,9 +277,9 @@ ${naoSei ? `<button type="button" class="chat-soft">${naoSei}</button>` : ''}
     const e = R.taxa;
     const fim = '<p class="chat-fine">Estimativa feita com os números que você informou (sistema Price, sem IOF e tarifas). Não indica valores a receber nem garante resultado.</p>';
     if (!e) {
-      await bot('<p class="chat-tags"><span class="chat-tag">ESTIMATIVA</span></p><p>Não conseguimos estimar a taxa com esses números, mas a nossa equipe confere o cálculo com você.</p>', 500);
+      await bot('<p class="chat-tags"><span class="chat-tag">ESTIMATIVA</span></p><p>Não conseguimos estimar a taxa com esses números, mas a nossa equipe confere o cálculo com você.</p>', 500, true);
     } else {
-      await bot(`<p class="chat-tags"><span class="chat-tag">ESTIMATIVA</span></p><p>A taxa estimada do seu financiamento é de <strong>${pct(e.mensal)}% ao mês</strong> (≈ ${pct(e.anual)}% ao ano).</p><p>${e.acima ? 'Sua taxa estimada <strong>parece acima da média do mercado</strong>. A <strong>ANÁLISE</strong> do seu contrato é <strong>GRATUITA</strong>.' : 'Mesmo quando a taxa parece dentro da média, o contrato pode ter cobranças abusivas. A <strong>ANÁLISE</strong> do seu contrato é <strong>GRATUITA</strong>.'}</p>${fim}`, 600);
+      await bot(`<p class="chat-tags"><span class="chat-tag">ESTIMATIVA</span></p><p>A taxa estimada do seu financiamento é de <strong>${pct(e.mensal)}% ao mês</strong> (≈ ${pct(e.anual)}% ao ano).</p><p>${e.acima ? 'Sua taxa estimada <strong>parece acima da média do mercado</strong>. A <strong>ANÁLISE</strong> do seu contrato é <strong>GRATUITA</strong>.' : 'Mesmo quando a taxa parece dentro da média, o contrato pode ter cobranças abusivas. A <strong>ANÁLISE</strong> do seu contrato é <strong>GRATUITA</strong>.'}</p>${fim}`, 600, true);
     }
     evento('RevChatViuPrevia', { resultado: !e ? 'sem_estimativa' : e.acima ? 'acima' : 'neutra' });
     return seguir('Quer receber a <strong>análise completa</strong>? É gratuita. Para começar,');

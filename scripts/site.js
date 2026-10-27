@@ -144,7 +144,7 @@ ${noindex ? '<meta name="robots" content="noindex">\n' : ''}<link rel="canonical
 <script>try{var t=localStorage.getItem('erase-theme');document.documentElement.setAttribute('data-theme',t==='dark'?'dark':'light')}catch(e){document.documentElement.setAttribute('data-theme','light')}</script>
 <link rel="preload" href="/assets/fonts/inter-latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="/assets/css/style.css?v=${cssVer}">
-${jsonld ? `<script type="application/ld+json">${jsonLd(jsonld)}</script>\n` : ''}</head>`;
+${jsonld ? `<script type="application/ld+json">${jsonLd(jsonld)}</script>\n` : ''}${clarityTag()}</head>`;
 }
 
 function header(active) {
@@ -210,6 +210,11 @@ ${dados ? `<p class="company">${esc(dados)}</p>` : ''}
 
 // Monta a página completa.
 const pixelOk = /^\d{8,20}$/.test(String(config.metaPixelId || ''));
+// Microsoft Clarity (mapa de cliques e rolagem): o ID fica só em data/config.json ("clarityId"). Script oficial, assíncrono, no <head> de todas as páginas.
+// Nenhum dado pessoal é enviado: o site não usa as chamadas de identificação nem de etiquetas do Clarity (identify/set); os campos de formulário e os dados do financiamento levam
+// data-clarity-mask="true" (reforço ao mascaramento "Strict" do painel).
+const clarityOk = /^[a-z0-9]{8,12}$/.test(String(config.clarityId || ''));
+const clarityTag = () => clarityOk ? `<script>(function(c,l,a,r,i,t,y){c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);})(window,document,"clarity","script","${config.clarityId}");</script>\n` : '';
 /** `minimal`: página de campanha (sem menu nem rodapé do portal; o corpo traz o próprio cabeçalho). */
 /** Cabeçalho do chat /analise (enxuto): sem Inter nem style.css do site, sem Analytics; o Pixel entra inline, no <head>, para contar a visita logo. */
 function headChat({ title, desc, path: p, image, noindex }) {
@@ -233,7 +238,7 @@ ${noindex ? '<meta name="robots" content="noindex">\n' : ''}<link rel="canonical
 <meta name="twitter:card" content="summary_large_image">
 <link rel="icon" href="/assets/img/favicon.svg" type="image/svg+xml">
 <link rel="stylesheet" href="/assets/css/chat.css?v=${assetVer('/assets/css/chat.css')}">
-${pixel}</head>`;
+${pixel}${clarityTag()}</head>`;
 }
 
 function page({ meta, active, body, scripts = [], minimal = false, bodyClass = '', lean = false }) {
@@ -477,7 +482,7 @@ ${dest.length ? `<section class="side-box" aria-labelledby="sb-dest"><h2 id="sb-
 ${redes ? `<div class="socials" aria-label="Redes sociais">${redes}</div>` : ''}
 </section>
 <section class="side-box" aria-labelledby="sb-news"><h2 id="sb-news">Receba as novidades</h2>
-<form id="sb-news-form" class="side-news" novalidate>
+<form id="sb-news-form" class="side-news" novalidate data-clarity-mask="true">
 <div class="field" data-campo="email"><label for="sb-email">E-mail <span class="req">*</span></label><input id="sb-email" name="email" type="email" maxlength="120" inputmode="email" autocomplete="email" placeholder="seu@email.com" aria-required="true" aria-describedby="sb-err-email"><small class="err" id="sb-err-email">Informe um e-mail válido</small></div>
 <input type="text" name="bot-field" class="hp" tabindex="-1" autocomplete="off" aria-hidden="true">
 <div class="field check" data-campo="lgpd"><label><input type="checkbox" id="sb-lgpd" name="lgpd" aria-required="true" aria-describedby="sb-err-lgpd"><span>Autorizo a ERASE a me enviar o resumo semanal por e-mail, conforme a <a href="/privacidade.html" target="_blank" rel="noopener">Política de Privacidade</a>. <span class="req">*</span></span></label><small class="err" id="sb-err-lgpd">Marque para autorizar o envio</small></div>

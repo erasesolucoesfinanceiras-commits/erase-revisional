@@ -145,7 +145,7 @@ if (ct) {
           <p class="popup-art-text">Entenda o que está dentro do seu contrato de financiamento.</p>
         </aside>
         <div class="popup-main">
-          <form id="popup-form" novalidate>
+          <form id="popup-form" novalidate data-clarity-mask="true">
             <div class="pp-head">
               <p class="free-badge">ANÁLISE TOTALMENTE GRATUITA</p>
               <h2 id="popup-title">Seu financiamento merece uma segunda olhada</h2>
