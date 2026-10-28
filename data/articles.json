@@ -1,5 +1,34 @@
 [
   {
+    "slug": "bradesco-eleva-taxas-do-credito-imobiliario-apos-alta-de-juros",
+    "categoria": "imoveis",
+    "titulo": "Bradesco eleva taxas do crédito imobiliário após alta de juros",
+    "resumo": "Após oscilações e aumento das taxas nos juros futuros no mercado financeiro, o Bradesco reajustou os juros cobrados em suas linhas de financiamento imobiliário residencial.",
+    "data": "2026-10-28",
+    "fontes": [
+      {
+        "nome": "VEJA",
+        "url": "https://veja.abril.com.br/economia/bradesco-eleva-taxa-do-credito-imobiliario-apos-disparada-dos-juros/",
+        "data": "2026-10-28"
+      },
+      {
+        "nome": "InfoMoney",
+        "url": "https://www.infomoney.com.br/minhas-financas/bradesco-sobe-juros-do-credito-imobiliario-por-que-e-os-outros-bancos/",
+        "data": "2026-10-28"
+      }
+    ],
+    "corpo": "<p>O mercado de financiamento habitacional registrou alterações nas condições praticadas por instituições financeiras privadas. O Bradesco reajustou as taxas de juros cobradas em modalidades de crédito imobiliário. O banco justificou que a atualização ocorreu em função da elevação observada nas taxas de juros do mercado financeiro, ressaltando que as condições finais dos contratos continuam sendo negociadas mediante análise individual de cada proposta.</p><h2>Mudanças nas taxas por segmento de clientes</h2><p>De acordo com as informações divulgadas pela instituição financeira, os reajustes alteraram tanto a taxa mínima operacional quanto os limites máximos cobrados em diferentes faixas de atendimento. No financiamento habitacional residencial, a taxa mínima passou de 11,7% para 15% ao ano, mantendo-se a incidência da Taxa Referencial (TR), atualmente fixada em 2% ao ano.</p><p>Além da elevação da taxa mínima geral, os limites teto aplicados conforme o segmento do cliente também registraram reajustes:</p><ul><li><strong>Segmento Principal:</strong> o limite máximo cobrado passou de 10,90% para 14,10% ao ano, o que representa uma elevação de 3,2 pontos percentuais.</li><li><strong>Segmento Private:</strong> o teto subiu 2,15 pontos percentuais, passando de 11,45% para 13,60% ao ano, acrescido da variação da TR.</li><li><strong>Segmento Comercial e Pessoa Jurídica (PJ):</strong> o teto avançou 2,51 pontos percentuais, subindo de 13,99% para 16,50% ao ano.</li></ul><h2>Comportamento dos juros futuros e estrutura do setor</h2><p>A elevação da tabela promovida pela instituição financeira ocorreu na sequência de oscilações no mercado de renda fixa e derivativos. O contrato futuro de Depósitos Interfinanceiros (DI) com vencimento em janeiro de 2037 subiu 2,65 pontos percentuais entre o fechamento do pregão do dia 23 de outubro e o de segunda-feira. Com a movimentação, a taxa desse contrato passou de 12,65% para 15,30% ao ano.</p><p>A oscilação das taxas no financiamento imobiliário está diretamente relacionada às fontes de captação utilizadas pelas instituições. Dados da Associação Brasileira das Entidades de Crédito Imobiliário e Poupança (Abecip) referentes a dezembro de 2025 indicam que, enquanto a caderneta de poupança responde por quase 30% dos recursos do setor, os instrumentos do mercado de capitais também possuem papel relevante.</p><p>As Letras de Crédito Imobiliário (LCIs) representavam 19% da estrutura de recursos em dezembro de 2025, ao passo que os Certificados de Recebíveis Imobiliários (CRIs) somavam outros 10%. Juntos, esses dois instrumentos alcançavam cerca de R$ 768 bilhões, correspondendo a 29% da estrutura de captação do setor imobiliário. Como esses títulos acompanham as variações do CDI e as expectativas da curva de juros, movimentações abruptas nos juros futuros encarecem o custo de captação dos bancos.</p><h2>O que o tomador de crédito pode observar na prática</h2><p>Diante do reajuste das taxas no crédito imobiliário pelas instituições financeiras, quem planeja contratar um financiamento habitacional pode tomar alguns cuidados práticos no momento da simulação:</p><ul><li><strong>Custo Efetivo Total (CET):</strong> analisar além da taxa de juros nominal, checando tarifas operacionais e seguros obrigatórios informados na proposta;</li><li><strong>Correção pela TR:</strong> lembrar que contratos atrelados à Taxa Referencial têm o saldo devedor e as prestações ajustados periodicamente por esse indicador;</li><li><strong>Comparação de propostas:</strong> realizar simulações em diferentes bancos para verificar qual instituição oferece condições mais adequadas ao perfil financeiro exigido;</li><li><strong>Capacidade de pagamento:</strong> certificar-se de que o valor da prestação não comprometa o orçamento familiar no longo prazo.</li></ul>",
+    "foto_busca": "house keys contract mortgage",
+    "tipo": "noticia",
+    "foto": {
+      "id": 3337032,
+      "autor": "Tumisu",
+      "autorUrl": "https://pixabay.com/users/Tumisu-148124/",
+      "pagina": "https://pixabay.com/photos/real-estate-agent-sale-home-keys-3337032/",
+      "fonte": "Pixabay"
+    }
+  },
+  {
     "slug": "mercado-de-eletricos-indica-desafios-de-revenda-e-manutencao",
     "categoria": "mercado",
     "titulo": "Mercado de elétricos indica desafios de revenda e manutenção",

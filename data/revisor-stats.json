@@ -233,5 +233,21 @@
    "sem_novidade": 0,
    "criterios": {}
   }
+ },
+ "2026-10-28": {
+  "artigo": {
+   "aprovados": 1,
+   "reprovados": 1,
+   "sem_novidade": 0,
+   "criterios": {
+    "fatos": 1
+   }
+  },
+  "nota": {
+   "aprovados": 1,
+   "reprovados": 0,
+   "sem_novidade": 0,
+   "criterios": {}
+  }
  }
 }

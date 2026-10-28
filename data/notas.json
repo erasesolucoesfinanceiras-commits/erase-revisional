@@ -1,5 +1,31 @@
 [
   {
+    "id": "2026-10-28-byd-king-dispara-nas-vendas-de-sedas-em",
+    "data": "2026-10-28",
+    "categoria": "mercado",
+    "titulo": "BYD King dispara nas vendas de sedãs em outubro",
+    "texto": "Dados parciais da Fenabrave até 25 de outubro mostram o BYD King com 1.537 emplacamentos, vendendo quase seis vezes mais que o Toyota Corolla no período e encostando na liderança do segmento de sedãs médios no país.",
+    "fontes": [
+      {
+        "nome": "Notícias R7",
+        "url": "https://noticias.r7.com/prisma/autos-carros/sedas-mais-vendidos-confira-os-tres-volumes-preferidos-do-brasil-em-2026-28102026/",
+        "data": "2026-10-27"
+      },
+      {
+        "nome": "diariodamidia",
+        "url": "https://diariodamidia.com.br/byd-king-encosta-no-volkswagen-virtus-apos-salto-nas-vendas",
+        "data": "2026-10-27"
+      }
+    ],
+    "foto": {
+      "id": 2194371,
+      "autor": "SHRAVANKUMAR",
+      "autorUrl": "https://pixabay.com/users/SHRAVANKUMAR-1679909/",
+      "pagina": "https://pixabay.com/photos/showroom-cars-automobile-2194371/",
+      "fonte": "Pixabay"
+    }
+  },
+  {
     "id": "2026-10-27-absolar-aponta-cortes-na-geracao-solar-e",
     "data": "2026-10-27",
     "categoria": "energia-solar",
