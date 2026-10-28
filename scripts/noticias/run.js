@@ -61,17 +61,7 @@ const semNovidade = (tipo) => { try { fs.mkdirSync(path.dirname(F_STATS), { recu
 
 definirLog((evento, dados) => log(evento, dados)); // esperas, novas tentativas e trocas de modelo do Gemini ficam no log
 
-const PERMITIDAS = new Set(['p', 'h2', 'h3', 'ul', 'ol', 'li', 'strong', 'em', 'a', 'blockquote', 'br']);
-/** Só tags simples, sem atributos (nem links dentro do corpo: as fontes ficam no rodapé do artigo). */
-function sanitizar(html) {
-  return String(html)
-    .replace(/<(script|style|iframe|object|embed)[\s\S]*?<\/\1>/gi, '')
-    .replace(/<\/?([a-z0-9]+)[^>]*>/gi, (m, tag) => {
-      tag = tag.toLowerCase();
-      if (!PERMITIDAS.has(tag) || tag === 'a') return '';
-      return m.startsWith('</') ? `</${tag}>` : `<${tag}>`;
-    }).trim();
-}
+const { sanitizar, ESQUEMA_PERIGOSO } = require('./sanitizar'); // portão único do HTML dos artigos (também usado por revisar-guia.js e build.js)
 const slugify = (s) => s.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '').slice(0, 80);
 
 // Despublicados (data/despublicados.json) ficam na lista de "assuntos já tratados" para sempre: o robô não republica o mesmo assunto.
@@ -107,17 +97,18 @@ async function tentarTema(tipo, tema, modo, recentes) {
       if (tentativa === 1) { log('pulado', { tipo, tema, motivo: 'sem novidade real: ' + String(r.motivo || '').slice(0, 200) }); semNovidade(tipo); return { status: 'sem_novidade' }; }
       log('reprovado', { tipo, tema, tentativa, motivos: ['reescrita impossível com as fontes reais'] }); return { status: 'reprovado' };
     }
-    let motivos = [];
+    let motivos = [], corpoBruto = '';
     const revisoes = {}, sugestoes = []; // sugestões de estilo do revisor: ficam no log e não reprovam
     if (!r || !r.titulo) motivos = ['resposta fora do formato JSON esperado'];
     else {
       const semMarcas = (x) => String(x || '').replace(/[<>]/g, '').replace(/\s+/g, ' ').trim(); // título/resumo vão para <title> e JSON-LD: nunca com < ou >
       r.titulo = semMarcas(r.titulo);
       if (tipo === 'nota') r.texto = String(r.texto || '').replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
-      else { r.corpo = sanitizar(r.corpo || ''); r.resumo = semMarcas(r.resumo); }
+      else { corpoBruto = String(r.corpo || ''); r.corpo = sanitizar(corpoBruto); r.resumo = semMarcas(r.resumo); }
       const fo = V.checarFontes(r, tipo, modo, cands, hoje, diasMax);
       motivos = V.checarRegras(r, tipo, { recentes, textosFontes: fo.textos });
       motivos.push(...fo.motivos);
+      if (tipo !== 'nota' && ESQUEMA_PERIGOSO.test(corpoBruto)) motivos.push('o texto contém link ou esquema javascript:');
       const copia = V.trechoCopiado(tipo === 'nota' ? r.texto : V.semHtml(r.corpo), fo.textos);
       if (copia) motivos.push(`copia trecho da fonte ("${copia}...")`);
       // números: todo número/percentual/valor/data do texto tem de aparecer nas fontes coletadas

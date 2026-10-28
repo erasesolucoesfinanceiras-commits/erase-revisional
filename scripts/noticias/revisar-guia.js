@@ -3,6 +3,7 @@
 // Só se o texto MUDAR DE VERDADE e passar nas mesmas verificações e no mesmo revisor dos artigos, grava o texto novo e a data
 // real em `atualizado` ("Atualizado em"). Se mudar e for reprovado, ou se não mudar, guia e datas ficam intocados.
 const P = require('./prompts');
+const { ESQUEMA_PERIGOSO } = require('./sanitizar');
 
 const INTERVALO_DIAS = 3;
 const FINAIS = new Set(['atualizado', 'fontes_citadas', 'sem_mudanca', 'reprovado']); // resultados que contam como "verificou"; erro/sem fontes tentam de novo
@@ -45,7 +46,7 @@ async function revisarGuia({ artigos, hoje, linhasDoLog, deps }) {
     const { texto } = await chamar({ prompt: P.revisaoGuia({ guia: g, hoje, tema: TEMAS[tema], cands, motivos: motivosAnt, anterior, semFontes }), temperatura: 0.3 });
     let r; try { r = extrairJSON(texto); } catch (e) { r = null; }
     if (!r || (r.sem_mudanca === true && !semFontes) || !r.corpo) return { resultado: 'sem_mudanca', slug: g.slug };
-    const corpo = sanitizar(r.corpo), textoNovo = V.semHtml(corpo);
+    const corpo = sanitizar(r.corpo), perigoso = ESQUEMA_PERIGOSO.test(String(r.corpo)), textoNovo = V.semHtml(corpo);
     // mudou de verdade? precisa declarar a mudança E alterar números/datas ou boa parte do texto (reescrita só de estilo não conta)
     const nA = nums(textoAntigo), nN = nums(textoNovo), difNums = [...nA].some((x) => !nN.has(x)) || [...nN].some((x) => !nA.has(x));
     const mudou = Array.isArray(r.mudancas) && r.mudancas.length > 0 && (difNums || simil(V, textoAntigo, textoNovo) < 0.9);
@@ -53,6 +54,7 @@ async function revisarGuia({ artigos, hoje, linhasDoLog, deps }) {
     const rasc = { titulo: g.titulo, resumo: g.resumo, corpo, fontes_usadas: r.fontes_usadas };
     const fo = V.checarFontes(rasc, 'artigo', 'guia', cands, hoje, 60);
     let motivos = [...V.checarRegras(rasc, 'artigo', { recentes: [], textosFontes: fo.textos }), ...fo.motivos];
+    if (perigoso) motivos.push('o texto contém link ou esquema javascript:');
     const copia = V.trechoCopiado(textoNovo, fo.textos); if (copia) motivos.push(`copia trecho da fonte ("${copia}...")`);
     if (AVISO_RESULTADO.test(textoAntigo) && !AVISO_RESULTADO.test(textoNovo)) motivos.push('a revisão removeu o aviso de que não há resultado garantido');
     const textoArt = `${g.titulo}. ${g.resumo}. ${corpo}`;

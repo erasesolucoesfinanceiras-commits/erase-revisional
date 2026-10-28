@@ -49,6 +49,35 @@ const ler = (f) => fs.readFileSync(path.join(ROOT, f), 'utf8');
   const blocosRun = (c) => { const L = c.split('\n'), out = []; for (let i = 0; i < L.length; i++) { const m = /^(\s*)(?:- )?run:\s*(.*)$/.exec(L[i]); if (!m) continue; let b = m[2]; const ind = m[1].length; for (let k = i + 1; k < L.length && (L[k].trim() === '' || L[k].search(/\S/) > ind); k++) b += '\n' + L[k]; out.push(b); } return out; };
   t('entradas manuais e dados de eventos nunca coladas em comandos "run:" (só via env)', wfs.every(([, c]) => blocosRun(c).length > 0 && blocosRun(c).every((b) => !/\$\{\{\s*(inputs|github\.event)\./.test(b))));
 
+  // ---- sanitizar() REAL (o mesmo portão usado por run.js, revisar-guia.js e build.js)
+  const { sanitizar, ESQUEMA_PERIGOSO } = require(path.join(ROOT, 'scripts/noticias/sanitizar'));
+  const soPermitido = (h) => !/<(?!\/?(?:p|h2|h3|ul|ol|li|strong|em|blockquote|br|sup|sub)>)/i.test(h); // nenhum "<" fora das tags simples permitidas
+  const maus = {
+    'tag remontada': '<p>x</p><<a>img src=x onerror=alert(1)>',
+    'tag sem ">" no fim': '<p>x</p><img src=x onerror=alert(document.domain)',
+    'javascript: em link': '<p>veja <a href="javascript:alert(1)">aqui</a></p>',
+    'aninhada': '<<<a>a>script>alert(1)</script>',
+    'atributo em tag permitida': '<p onclick="alert(1)">x</p><h2 style="x">t</h2>',
+  };
+  for (const [nome, entrada] of Object.entries(maus)) { const saida = sanitizar(entrada); t(`sanitizar real: ${nome} sai sem tag ativa, sem atributo e sem "<" solto`, soPermitido(saida) && !/\son\w+\s*=/.test(saida.replace(/&lt;[^<]*/g, '')) && !/<[^>]*\s\w+=/.test(saida), JSON.stringify(saida)); }
+  t('sanitizar real: a tag remontada não vira <img> e a tag sem ">" vira texto (&lt;)', !/<img/i.test(sanitizar(maus['tag remontada'])) && sanitizar(maus['tag sem ">" no fim']).includes('&lt;img') && !/<img/i.test(sanitizar(maus['tag sem ">" no fim'])));
+  t('sanitizar real: link javascript: some (a tag não sobrevive) e o esquema é reconhecido pela regra de recusa', !/<a\b/i.test(sanitizar(maus['javascript: em link'])) && ESQUEMA_PERIGOSO.test(maus['javascript: em link']) && ESQUEMA_PERIGOSO.test('JavaScript :x') && !ESQUEMA_PERIGOSO.test('texto comum com a palavra java e script'));
+  t('sanitizar real: repetir a limpeza não muda nada (idempotente) e mantém as tags simples', Object.values(maus).every((e) => sanitizar(sanitizar(e)) === sanitizar(e)) && sanitizar('<P CLASS=x>a <STRONG>b</STRONG></P><br/>') === '<p>a <strong>b</strong></p><br>');
+  const artigosPub = JSON.parse(ler('data/articles.json'));
+  const mudados = artigosPub.filter((a) => sanitizar(a.corpo) !== a.corpo).map((a) => a.slug);
+  t(`todo artigo já publicado continua IGUAL depois do sanitizar (${artigosPub.length} artigos)`, artigosPub.length > 0 && !mudados.length, mudados.join(' '));
+  const runSrc = ler('scripts/noticias/run.js'), buildSrc = ler('scripts/build.js'), guiaSrc = ler('scripts/noticias/revisar-guia.js');
+  t('run.js e build.js usam o sanitizar compartilhado (sem cópia própria) e o build limpa o corpo antes de gravar', /require\('\.\/sanitizar'\)/.test(runSrc) && !/function sanitizar/.test(runSrc) && /require\('\.\/noticias\/sanitizar'\)/.test(buildSrc) && /injectCTA\(sanitizar\(a\.corpo\)/.test(buildSrc) && /ESQUEMA_PERIGOSO/.test(guiaSrc) && /ESQUEMA_PERIGOSO/.test(runSrc));
+  t('links de fontes/fotos/redes: só http(s) vão para href (javascript: e data: viram "#")', S.urlHttp('javascript:alert(1)') === '#' && S.urlHttp(' data:text/html,x') === '#' && S.urlHttp('') === '#' && S.urlHttp('https://pixabay.com/users/x') === 'https://pixabay.com/users/x' && S.urlHttp('HTTP://a.b/c') === 'HTTP://a.b/c');
+
+  // ---- despublicar, cabeçalhos e Dependabot
+  const desp = ler('.github/workflows/despublicar.yml');
+  t('despublicar.yml: grupo de concorrência próprio e falha (exit 1) quando o push não acontece', /group:\s*despublicar\b/.test(desp) && !/group:\s*noticias/.test(desp) && /enviado=0/.test(desp) && /exit 1/.test(desp) && /enviado" != 1/.test(desp));
+  const cab = ler('dist/_headers'), blocoCab = /^\/\*\n((?:  .*\n)+)/m.exec(cab);
+  t('cabeçalhos: COOP same-origin-allow-popups e CORP same-site no /*; CSP segue só em modo relatório (sem Content-Security-Policy que bloqueie)', !!blocoCab && /Cross-Origin-Opener-Policy: same-origin-allow-popups/.test(blocoCab[1]) && /Cross-Origin-Resource-Policy: same-site/.test(blocoCab[1]) && /Content-Security-Policy-Report-Only:/.test(blocoCab[1]) && !/^\s+Content-Security-Policy:/m.test(cab));
+  const dep = ler('.github/dependabot.yml');
+  t('dependabot.yml: npm e github-actions só com atualização de segurança (limite de PRs de versão = 0)', /package-ecosystem: "npm"/.test(dep) && /package-ecosystem: "github-actions"/.test(dep) && (dep.match(/open-pull-requests-limit: 0/g) || []).length === 2);
+
   // ---- formulários: limites e honeypot
   const contato = ler('contato.html'), calc = ler('calculadora.html'), idx = ler('index.html'), main = ler('assets/js/main.js'), calcjs = ler('assets/js/calculator.js');
   const mx = (h, id, n) => new RegExp(`id="${id}"[^>]*maxlength="${n}"`).test(h);

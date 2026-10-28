@@ -1,0 +1,14 @@
+# Só alertas e atualizações de SEGURANÇA: open-pull-requests-limit 0 desliga as atualizações de versão (sem PRs de rotina).
+# Os alertas e as atualizações de segurança também precisam estar ligados em Settings → Code security do repositório.
+version: 2
+updates:
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 0
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 0

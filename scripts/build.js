@@ -6,6 +6,7 @@
 const fs = require('fs');
 const path = require('path');
 const S = require('./site');
+const { sanitizar } = require('./noticias/sanitizar'); // o corpo vai cru para a página: passa de novo pelo portão antes de gravar
 const { config: C, esc, fmtPct, fmtData, catNome, catUrl, artUrl, absUrl, coverUrl, coverImg, ICON } = S;
 
 // Páginas .html: links internos saem sem a extensão (href="/calculadora.html" -> "/calculadora").
@@ -42,7 +43,7 @@ const notaHtml = (n) => `<article class="nota" id="${esc(n.id)}">
 <div class="nota-meta"><a class="tag" href="${catUrl(n.categoria)}">${esc(catNome(n.categoria))}</a><time datetime="${n.data}">${fmtData(n.data)}</time></div>
 <h3>${esc(n.titulo)}</h3>
 <p>${esc(n.texto)}</p>
-${n.foto ? `<p class="nota-src">Foto: <a href="${esc(n.foto.autorUrl)}" target="_blank" rel="noopener noreferrer nofollow">${esc(n.foto.autor)}</a> (<a href="${esc(n.foto.pagina)}" target="_blank" rel="noopener noreferrer nofollow">${esc(n.foto.fonte)}</a>)</p>\n` : ''}<p class="nota-src">Fontes: ${n.fontes.map((f) => `<a href="${esc(f.url)}" target="_blank" rel="noopener noreferrer nofollow">${esc(f.nome)}</a>`).join(' · ')}</p>
+${n.foto ? `<p class="nota-src">Foto: <a href="${esc(S.urlHttp(n.foto.autorUrl))}" target="_blank" rel="noopener noreferrer nofollow">${esc(n.foto.autor)}</a> (<a href="${esc(S.urlHttp(n.foto.pagina))}" target="_blank" rel="noopener noreferrer nofollow">${esc(n.foto.fonte)}</a>)</p>\n` : ''}<p class="nota-src">Fontes: ${n.fontes.map((f) => `<a href="${esc(S.urlHttp(f.url))}" target="_blank" rel="noopener noreferrer nofollow">${esc(f.nome)}</a>`).join(' · ')}</p>
 </article>`;
 function radarHome() {
   if (!notas.length) return '';
@@ -191,7 +192,7 @@ function artigos() {
   for (const a of articles) {
     const fs_ = a.fontes && a.fontes.length ? a.fontes : a.fonte && a.fonte.nome ? [a.fonte] : [];
     const fonteHtml = fs_.length
-      ? `<p class="source">${fs_.length > 1 ? 'Fontes' : 'Fonte'}: ${fs_.map((f) => f.url ? `<a href="${esc(f.url)}" target="_blank" rel="noopener noreferrer nofollow">${esc(f.nome)}</a>` : esc(f.nome)).join(' · ')}</p>`
+      ? `<p class="source">${fs_.length > 1 ? 'Fontes' : 'Fonte'}: ${fs_.map((f) => f.url ? `<a href="${esc(S.urlHttp(f.url))}" target="_blank" rel="noopener noreferrer nofollow">${esc(f.nome)}</a>` : esc(f.nome)).join(' · ')}</p>`
       : '';
     const jsonld = {
       '@context': 'https://schema.org',
@@ -218,9 +219,9 @@ function artigos() {
 <h1>${esc(a.titulo)}</h1>
 <p class="lead">${esc(a.resumo)}</p>
 <p class="meta">${S.selo(S.seloTxt(a), S.ehGuia(a) ? 'selo-guia' : 'selo-artigo')} Por Equipe ERASE${S.ehGuia(a) ? (a.atualizado ? ` · <time datetime="${a.atualizado}">Atualizado em ${fmtData(a.atualizado)}</time>` : '') : ` · <time datetime="${a.data}">${fmtData(a.data)}</time>`}</p>
-<figure class="article-fig">${coverImg(a, { width: 860, height: 430, sizes: '(max-width: 860px) 100vw, 860px', eager: true, cls: 'article-cover', alt: a.titulo })}${a.foto ? `<figcaption>Foto: <a href="${esc(a.foto.autorUrl)}" target="_blank" rel="noopener noreferrer">${esc(a.foto.autor)}</a> / <a href="${esc(a.foto.pagina)}" target="_blank" rel="noopener noreferrer">${esc(a.foto.fonte || 'Pixabay')}</a></figcaption>` : ''}</figure>
+<figure class="article-fig">${coverImg(a, { width: 860, height: 430, sizes: '(max-width: 860px) 100vw, 860px', eager: true, cls: 'article-cover', alt: a.titulo })}${a.foto ? `<figcaption>Foto: <a href="${esc(S.urlHttp(a.foto.autorUrl))}" target="_blank" rel="noopener noreferrer">${esc(a.foto.autor)}</a> / <a href="${esc(S.urlHttp(a.foto.pagina))}" target="_blank" rel="noopener noreferrer">${esc(a.foto.fonte || 'Pixabay')}</a></figcaption>` : ''}</figure>
 <div class="article-body">
-${injectCTA(a.corpo, a.categoria)}
+${injectCTA(sanitizar(a.corpo), a.categoria)}
 </div>
 ${fonteHtml}
 <p class="disclaimer">Conteúdo informativo. Não constitui parecer jurídico ou financeiro nem promessa de resultado.</p>

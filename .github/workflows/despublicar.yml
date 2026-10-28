@@ -17,7 +17,7 @@ permissions:
   contents: write
 
 concurrency:
-  group: noticias
+  group: despublicar   # grupo próprio: não é cancelado/enfileirado atrás das rodadas de notícias e fotos
   cancel-in-progress: false
 
 jobs:
@@ -39,4 +39,13 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add -A
           git commit -m "Despublica texto (manual)"
-          for i in 1 2 3; do git pull --rebase origin "${GITHUB_REF_NAME}" && git push origin "HEAD:${GITHUB_REF_NAME}" && break; sleep 5; done
+          enviado=0
+          for i in 1 2 3; do
+            if git pull --rebase origin "${GITHUB_REF_NAME}" && git push origin "HEAD:${GITHUB_REF_NAME}"; then enviado=1; break; fi
+            git rebase --abort 2>/dev/null || true
+            sleep 5
+          done
+          if [ "$enviado" != 1 ]; then
+            echo "::error::A despublicação NÃO foi enviada para ${GITHUB_REF_NAME} (conflito ou falha no push). O texto continua no ar: rode de novo."
+            exit 1
+          fi

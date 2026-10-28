@@ -25,6 +25,8 @@ const loadNotas = () => {
 const loadArticles = () =>
   readJSON('data/articles.json').sort((a, b) => (a.data < b.data ? 1 : a.data > b.data ? -1 : 0));
 
+/** Só links http(s) vão para href (javascript:, data: etc. viram "#"). */
+const urlHttp = (u) => (/^\s*https?:\/\//i.test(String(u || '')) ? String(u).trim() : '#');
 const esc = (s) =>
   String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 
@@ -508,6 +510,7 @@ const FREE_TXT = 'ANÁLISE DO CONTRATO 100% GRATUITA';
 const freeBadge = (cls = '') => `<p class="free-badge ${cls}" role="note">${FREE_TXT}</p>`;
 
 module.exports = {
+  urlHttp,
   FREE_TXT, freeBadge,
   ROOT, config, catsComItens, loadArticles, loadNotas, ehGuia, selo, seloTxt, ordenarConteudo, ultimaPublicacao, rowCardNota, cardDe, readJSON, itemDe, dataHtml, maisRecentes, cardV, miniItem, carrossel, exploreTopicos, escolhaDaEquipe, relacionados, sidebar, socialLinks, usaContato, esc, pixelOk, jsonLd, ogArtigo, tituloSeo, descSeo, fmtPct, fmtData, catNome, catUrl, artUrl, absUrl, coverUrl, catFoto, coverImg,
   ICON, page, rowCard, promoCard, trustBadges, ctaBanner,
