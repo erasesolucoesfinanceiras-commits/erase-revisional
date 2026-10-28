@@ -1088,3 +1088,4 @@
 {"quando":"2026-10-28T17:33:55.721Z","data":"2026-10-28","evento":"indexnow","resultado":"enviado","status":200,"enviadas":6,"ainda_pendentes":0,"urls":["https://revisional.eraseconsulta.com.br/noticias/bradesco-eleva-taxas-do-credito-imobiliario-apos-alta-de-juros","https://revisional.eraseconsulta.com.br/","https://revisional.eraseconsulta.com.br/artigos","https://revisional.eraseconsulta.com.br/radar","https://revisional.eraseconsulta.com.br/categoria-mercado","https://revisional.eraseconsulta.com.br/categoria-imoveis"],"resposta":""}
 {"quando":"2026-10-28T19:11:41.313Z","data":"2026-10-28","evento":"uso_gemini","pedidos":0,"ok":0,"por_status":{}}
 {"quando":"2026-10-28T21:46:36.106Z","data":"2026-10-28","evento":"uso_gemini","pedidos":0,"ok":0,"por_status":{}}
+{"quando":"2026-10-28T23:23:52.161Z","data":"2026-10-28","evento":"verificacao","origem":"verificacao-diaria","acao":"tudo_certo","motivo":"último artigo 2026-10-28 (0 dia(s)), na capa do site"}
