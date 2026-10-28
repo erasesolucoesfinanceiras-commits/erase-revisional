@@ -98,7 +98,11 @@ const tmp = () => fs.mkdtempSync(path.join(os.tmpdir(), 'cont-'));
     t('capa: faixa "Última publicação" + "Taxas conferidas com o Banco Central em" (data da consulta) + data da última alteração da série', /Última publicação: <time datetime="\d{4}-\d{2}-\d{2}">[^<]+<\/time> · <span title="Última alteração da série do Banco Central: [^"]+">Taxas conferidas com o Banco Central em <time datetime="\d{4}-\d{2}-\d{2}">[^<]+<\/time> <small>\(série alterada em/.test(home));
     t('guia revisado: página mostra "Atualizado em", JSON-LD tem dateModified = revisão e datePublished = data original (intocada)', /Atualizado em/.test(pg) && pg.includes('"dateModified":"2026-10-12"') && pg.includes(`"datePublished":"${dataOriginal}"`));
     t('guia sem revisão: sem data na página e SEM dateModified', !/<time/.test(/<p class="meta">[\s\S]*?<\/p>/.exec(pgOutro)[0]) && !pgOutro.includes('dateModified'));
-    t('sitemap: lastmod do guia revisado = data da revisão; só datas reais (nenhuma "de hoje")', sm.includes(`/noticias/${guia.slug}</loc><lastmod>2026-10-12`) && [...sm.matchAll(/<lastmod>([\d-]+)/g)].every((m) => m[1] <= '2026-10-12'));
+    { // datas reais calculadas dos próprios arquivos (publicação/revisão dos artigos, data das notas, última alteração da série do BCB): nenhuma data fixa
+      const lerD = (f) => JSON.parse(fs.readFileSync(path.join(d, f), 'utf8'));
+      const reais = new Set([...arqs.flatMap((a) => [a.data, a.atualizado]), ...lerD('data/notas.json').map((n) => n.data), lerD('assets/data/bcb-veiculos.json').atualizado_em].filter(Boolean));
+      const lastmods = [...sm.matchAll(/<lastmod>([\d-]+)/g)].map((m) => m[1]);
+      t('sitemap: lastmod do guia revisado = data da revisão; só datas reais dos arquivos (nenhuma "de hoje")', sm.includes(`/noticias/${guia.slug}</loc><lastmod>${guia.atualizado}`) && lastmods.length > 0 && lastmods.every((x) => reais.has(x)), lastmods.filter((x) => !reais.has(x)).join()); }
     const ap = fs.readFileSync(path.join(d, 'artigos.html'), 'utf8').match(/<article class="row-card[\s\S]*?<\/article>/g);
     t('página Artigos: mesma ordem (datados, depois guias) e selos', ap.findIndex((c) => />Guia</.test(c)) > ap.map((c) => />Artigo</.test(c)).lastIndexOf(true) && ap.every((c) => />(Artigo|Guia)</.test(c)));
     fs.rmSync(d, { recursive: true, force: true }); }
