@@ -1120,3 +1120,4 @@
 {"quando":"2026-10-29T19:38:21.926Z","data":"2026-10-29","evento":"uso_gemini","pedidos":9,"ok":3,"por_status":{"429":1,"503":3}}
 {"quando":"2026-10-29T19:38:59.095Z","data":"2026-10-29","evento":"indexnow","resultado":"enviado","status":200,"enviadas":3,"ainda_pendentes":0,"urls":["https://revisional.eraseconsulta.com.br/","https://revisional.eraseconsulta.com.br/radar","https://revisional.eraseconsulta.com.br/categoria-imoveis"],"resposta":""}
 {"quando":"2026-10-29T21:53:32.703Z","data":"2026-10-29","evento":"uso_gemini","pedidos":0,"ok":0,"por_status":{}}
+{"quando":"2026-10-29T23:29:31.942Z","data":"2026-10-29","evento":"verificacao","origem":"verificacao-diaria","acao":"tudo_certo","motivo":"último artigo 2026-10-28 (1 dia(s)), na capa do site"}
