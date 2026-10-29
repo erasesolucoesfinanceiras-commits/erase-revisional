@@ -1,5 +1,31 @@
 [
   {
+    "id": "2026-10-29-itau-eleva-taxa-minima-do-financiamento",
+    "data": "2026-10-29",
+    "categoria": "imoveis",
+    "titulo": "Itaú eleva taxa mínima do financiamento imobiliário para 12,95% ao ano",
+    "texto": "O Itaú Unibanco elevou a taxa mínima de juros para financiamento imobiliário para 12,95% ao ano. Em comunicado, a instituição explicou que o reajuste reflete as condições atuais de captação e busca preservar a sustentabilidade das operações diante do avanço dos juros futuros. O banco ressalta que as taxas finais variam conforme o perfil e o relacionamento do cliente.",
+    "fontes": [
+      {
+        "nome": "Valor Econômico",
+        "url": "https://valor.globo.com/financas/noticia/2026/10/29/bancos-elevam-taxas-de-financiamento-imobilirio-aps-disparada-dos-juros-futuros.ghtml",
+        "data": "2026-10-29"
+      },
+      {
+        "nome": "VEJA",
+        "url": "https://veja.abril.com.br/economia/itau-segue-bradesco-e-eleva-taxa-do-financiamento-imobiliario-apos-vitoria-de-lula/",
+        "data": "2026-10-29"
+      }
+    ],
+    "foto": {
+      "id": 2922214,
+      "autor": "anncapictures",
+      "autorUrl": "https://pixabay.com/users/anncapictures-1564471/",
+      "pagina": "https://pixabay.com/photos/toy-cash-register-to-play-money-2922214/",
+      "fonte": "Pixabay"
+    }
+  },
+  {
     "id": "2026-10-28-byd-king-dispara-nas-vendas-de-sedas-em",
     "data": "2026-10-28",
     "categoria": "mercado",
