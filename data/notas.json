@@ -1,5 +1,31 @@
 [
   {
+    "id": "2026-10-30-usina-solar-de-4-5-mw-com-baterias-e-ina",
+    "data": "2026-10-30",
+    "categoria": "energia-solar",
+    "titulo": "Usina solar de 4,5 MW com baterias é inaugurada para irrigação na Bahia",
+    "texto": "O Projeto Público de Irrigação Maniçoba, em Juazeiro (BA), inaugurou uma usina solar de 4,5 MW integrada a um sistema de armazenamento em baterias (BESS). O investimento de quase R$ 25 milhões foi financiado pelo Banco do Nordeste, com prazo de dez anos para pagamento, visando reduzir custos com o bombeamento de água na fruticultura.",
+    "fontes": [
+      {
+        "nome": "Canal Solar",
+        "url": "https://canalsolar.com.br/bahia-usina-solar-bess-producao-frutas/",
+        "data": "2026-10-30"
+      },
+      {
+        "nome": "Click Petróleo e Gás",
+        "url": "https://clickpetroleoegas.com.br/com-producao-de-90-mil-toneladas-de-manga-por-ano-projeto-de-irrigacao-na-bahia-instala-usina-solar-de-45-mw-e-aposta-em-baterias-para-reduzir-gastos-com-eletricidade-ama01/",
+        "data": "2026-10-29"
+      }
+    ],
+    "foto": {
+      "id": 2666770,
+      "autor": "RoyBuri",
+      "autorUrl": "https://pixabay.com/users/RoyBuri-3128024/",
+      "pagina": "https://pixabay.com/photos/solar-roof-solar-energy-2666770/",
+      "fonte": "Pixabay"
+    }
+  },
+  {
     "id": "2026-10-29-itau-eleva-taxa-minima-do-financiamento",
     "data": "2026-10-29",
     "categoria": "imoveis",

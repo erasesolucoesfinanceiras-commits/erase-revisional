@@ -1,5 +1,34 @@
 [
   {
+    "slug": "mercado-projeta-mais-de-60-de-chance-de-manutencao-da-selic-na-reuniao-do-copom",
+    "categoria": "economia",
+    "titulo": "Mercado projeta mais de 60% de chance de manutenção da Selic na reunião do Copom",
+    "resumo": "Contratos de opções negociados na B3 apontam probabilidade superior a 60% de estabilidade da Selic em 13,75% ao ano, indicando possível pausa nos cortes.",
+    "data": "2026-10-30",
+    "fontes": [
+      {
+        "nome": "Valor Econômico",
+        "url": "https://valor.globo.com/financas/noticia/2026/10/30/analise-sem-rumo-fiscal-claro-no-lula-4-copom-enfrenta-teste-como-unica-ancora-da-economia.ghtml",
+        "data": "2026-10-30"
+      },
+      {
+        "nome": "Money Times",
+        "url": "https://www.moneytimes.com.br/apos-cinco-quedas-seguidas-selic-pode-ficar-parada-em-novembro-mlim/",
+        "data": "2026-10-29"
+      }
+    ],
+    "corpo": "<p>As negociações no mercado financeiro passaram a indicar uma probabilidade majoritária de interrupção na sequência de redução da taxa básica de juros no Brasil. Dados apurados com base nos contratos de Opções de Copom negociados na B3 revelam que a projeção de manutenção da taxa Selic no patamar de 13,75% ao ano ganhou força expressiva entre os operadores para o encontro do Comitê de Política Monetária (Copom) do Banco Central, agendado para os dias 3 e 4 de novembro.</p><h2>Inversão nas probabilidades negociadas na B3</h2><p>As posições assumidas pelos agentes financeiros apresentaram uma virada relevante de direção nos últimos dias úteis de negociação. Até sexta-feira (23), o cenário com maior probabilidade estimada pelo mercado era o de continuidade no alívio monetário, concentrando 76% das apostas em um corte de 0,25 ponto percentual, o que reduziria a taxa para 13,5% ao ano. Essa perspectiva daria sequência ao histórico recente de cinco cortes consecutivos na taxa básica.</p><p>Contudo, a precificação dos derivativos registrou alteração substancial. Nos dados apurados até 27 de outubro e divulgados pela B3 em 29 de outubro, a probabilidade atribuída à manutenção da Selic em 13,75% ao ano saltou para 60,90%. Com essa movimentação, a aposta em um corte de 0,25 ponto percentual recuou para a segunda colocação entre as alternativas, somando 36% do volume negociado. Na mesma medição, a aposta em uma redução de 0,5 ponto percentual (que levaria os juros para 13,25% ao ano) figurava com 0,55%, enquanto a hipótese de uma elevação de mesma magnitude alcançou 1,57%.</p><p>A tendência de manutenção da taxa seguiu em alta no fechamento seguinte informado pelo mercado: as opções do Copom monitoradas na B3 registraram 66% de chances de manutenção dos juros em 13,75% ao ano, ao passo que a aposta em um corte de 0,25 ponto percentual passou a situar-se em 32%.</p><p>A B3 esclarece formalmente que esses percentuais não correspondem a projeções oficiais da instituição e nem constituem uma pesquisa direta com economistas. Trata-se de cálculos técnicos decorrentes dos preços praticados nos contratos de opções negociados no pregão, os quais representam diretamente as posições e estratégias de proteção adotadas pelos investidores frente às expectativas para a política monetária.</p><h2>Cenário de pressões sobre a inflação futura</h2><p>A reorganização das expectativas no ambiente de mercado ocorre em meio a sinais de margem limitada para afrouxamento monetário adicional. Conforme apontam análises econômicas do setor, o espaço para dar andamento aos cortes na taxa básica já enfrentava restrições diante de acontecimentos que podem manter a inflação pressionada ao longo de 2027.</p><p>Entre os eventos identificados no radar econômico encontram-se:</p><ul><li>O cenário de tensão internacional com a guerra no Irã;</li><li>As influências meteorológicas provocadas pelo fenômeno El Niño;</li><li>Os desdobramentos sobre a dinâmica do trabalho com o fim da escala 6 por 1;</li><li>A etapa de implantação prática da reforma tributária;</li><li>As discussões e incertezas a respeito da condução e do ajuste das contas públicas.</li></ul><p>Esses fatores exercem influência direta sobre as cotações de câmbio e sobre as taxas de juros futuras praticadas na dívida pública, fatores que são monitorados pelo Banco Central na definição da taxa de juros necessária para o cumprimento das metas vigentes.</p><h2>Impactos para o consumidor no crédito e financiamento de veículos</h2><p>A taxa básica de juros da economia atua como o principal balizador para o custo financeiro geral do país. Quando a taxa Selic permanece estabilizada em níveis elevados, como 13,75% ao ano, o custo que as instituições financeiras enfrentam para captar recursos continua alto, o que impede uma redução imediata nas taxas cobradas do consumidor final em linhas de crédito pessoal, imobiliário e financiamento automotivo.</p><p>Para quem já possui um financiamento de veículo contratado sob taxas prefixadas, a eventual decisão do Banco Central de interromper os cortes de juros não altera as parcelas já fixadas em contrato, as quais devem ser cumpridas exatamente nas condições pactuadas até o término da vigência da operação.</p><p>Já o consumidor que planeja adquirir um veículo financiado neste momento deve observar que as taxas de novas contratações refletem as condições de mercado vigentes. Por essa razão, é recomendável analisar criteriosamente a planilha do Custo Efetivo Total (CET) disponibilizada pela financeira, conferindo não apenas os juros nominais, mas todos os encargos, tarifas de cadastro e seguros embutidos, comparando propostas entre diferentes bancos antes de fechar a proposta.</p>",
+    "foto_busca": "car financing contract interest",
+    "tipo": "noticia",
+    "foto": {
+      "id": 1523383,
+      "autor": "stevepb",
+      "autorUrl": "https://pixabay.com/users/stevepb-282134/",
+      "pagina": "https://pixabay.com/photos/coins-currency-investment-insurance-1523383/",
+      "fonte": "Pixabay"
+    }
+  },
+  {
     "slug": "bradesco-eleva-taxas-do-credito-imobiliario-apos-alta-de-juros",
     "categoria": "imoveis",
     "titulo": "Bradesco eleva taxas do crédito imobiliário após alta de juros",
