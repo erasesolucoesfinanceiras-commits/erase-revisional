@@ -1169,3 +1169,32 @@
 {"quando":"2026-10-30T18:55:17.116Z","data":"2026-10-30","evento":"uso_gemini","pedidos":0,"ok":0,"por_status":{}}
 {"quando":"2026-10-30T21:37:59.808Z","data":"2026-10-30","evento":"uso_gemini","pedidos":0,"ok":0,"por_status":{}}
 {"quando":"2026-10-30T23:06:23.816Z","data":"2026-10-30","evento":"verificacao","origem":"verificacao-diaria","acao":"tudo_certo","motivo":"último artigo 2026-10-30 (0 dia(s)), na capa do site"}
+{"quando":"2026-10-31T15:57:12.168Z","data":"2026-10-31","evento":"gemini","modelo":"gemini-3.8-flash","status":503,"acao":"espera_e_repete","espera_s":10}
+{"quando":"2026-10-31T15:57:22.693Z","data":"2026-10-31","evento":"gemini","modelo":"gemini-3.8-flash","status":503,"acao":"espera_e_repete","espera_s":40}
+{"quando":"2026-10-31T15:58:03.571Z","data":"2026-10-31","evento":"gemini","modelo":"gemini-3.8-flash","status":503,"acao":"proximo_modelo","motivo":"erro temporário persistiu"}
+{"quando":"2026-10-31T15:58:10.269Z","data":"2026-10-31","evento":"gemini","modelo":"gemini-3.7-flash","status":503,"acao":"espera_e_repete","espera_s":10}
+{"quando":"2026-10-31T15:58:24.172Z","data":"2026-10-31","evento":"gemini","modelo":"gemini-3.7-flash","status":503,"acao":"espera_e_repete","espera_s":40}
+{"quando":"2026-10-31T15:59:04.777Z","data":"2026-10-31","evento":"gemini","modelo":"gemini-3.7-flash","status":503,"acao":"proximo_modelo","motivo":"erro temporário persistiu"}
+{"quando":"2026-10-31T15:59:29.779Z","data":"2026-10-31","evento":"pulado","tipo":"nota","tema":"consorcio-seguros","motivo":"sem novidade real: Não há duas fontes de sites diferentes tratando exatamente do mesmo fato recente relacionado ao tema de consórcios ou financiamentos."}
+{"quando":"2026-10-31T15:59:29.780Z","data":"2026-10-31","evento":"tema_trocado","tipo":"nota","de":"consorcio-seguros","para":"credito-pessoal","motivo":"fontes insuficientes ou sem novidade real","ultimos_motivos":["sem novidade real: Não há duas fontes de sites diferentes tratando exatamente do mesmo fato recente relacionado ao tema de consórcios ou financiamentos."]}
+{"quando":"2026-10-31T16:04:02.612Z","data":"2026-10-31","evento":"pulado","tipo":"nota","tema":"credito-pessoal","motivo":"sem novidade real: Não há ao menos duas fontes de veículos diferentes abordando o mesmo fato recente sobre o tema."}
+{"quando":"2026-10-31T16:04:02.612Z","data":"2026-10-31","evento":"tema_trocado","tipo":"nota","de":"credito-pessoal","para":"credito-rural","motivo":"fontes insuficientes ou sem novidade real","ultimos_motivos":["sem novidade real: Não há ao menos duas fontes de veículos diferentes abordando o mesmo fato recente sobre o tema."]}
+{"quando":"2026-10-31T16:09:13.826Z","data":"2026-10-31","evento":"gemini","modelo":"gemini-3.8-flash","status":"rede","acao":"espera_e_repete","espera_s":10}
+{"quando":"2026-10-31T16:13:26.760Z","data":"2026-10-31","evento":"pulado","tipo":"nota","tema":"credito-rural","motivo":"sem novidade real: Não há pelo menos duas fontes de sites diferentes abordando o mesmo fato recente sobre crédito rural e agronegócio."}
+{"quando":"2026-10-31T16:13:26.761Z","data":"2026-10-31","evento":"tema_trocado","tipo":"nota","de":"credito-rural","para":"empresas-mei","motivo":"fontes insuficientes ou sem novidade real","ultimos_motivos":["sem novidade real: Não há pelo menos duas fontes de sites diferentes abordando o mesmo fato recente sobre crédito rural e agronegócio."]}
+{"quando":"2026-10-31T16:13:26.761Z","data":"2026-10-31","evento":"sem_publicacao","tipo":"nota","motivo":"orçamento de tempo do dia esgotado"}
+{"quando":"2026-10-31T16:13:30.782Z","data":"2026-10-31","evento":"gemini","modelo":"gemini-3.8-flash","status":503,"acao":"espera_e_repete","espera_s":10}
+{"quando":"2026-10-31T16:13:41.225Z","data":"2026-10-31","evento":"gemini","modelo":"gemini-3.8-flash","status":503,"acao":"espera_e_repete","espera_s":40}
+{"quando":"2026-10-31T16:14:21.645Z","data":"2026-10-31","evento":"gemini","modelo":"gemini-3.8-flash","status":503,"acao":"proximo_modelo","motivo":"erro temporário persistiu"}
+{"quando":"2026-10-31T16:14:28.817Z","data":"2026-10-31","evento":"gemini","modelo":"gemini-3.7-flash","status":503,"acao":"espera_e_repete","espera_s":10}
+{"quando":"2026-10-31T16:14:39.335Z","data":"2026-10-31","evento":"gemini","modelo":"gemini-3.7-flash","status":503,"acao":"espera_e_repete","espera_s":40}
+{"quando":"2026-10-31T16:15:19.688Z","data":"2026-10-31","evento":"gemini","modelo":"gemini-3.7-flash","status":503,"acao":"proximo_modelo","motivo":"erro temporário persistiu"}
+{"quando":"2026-10-31T16:15:40.938Z","data":"2026-10-31","evento":"gemini","modelo":"gemini-3.6-flash","status":503,"acao":"espera_e_repete","espera_s":10}
+{"quando":"2026-10-31T16:15:52.241Z","data":"2026-10-31","evento":"gemini","modelo":"gemini-3.6-flash","status":503,"acao":"espera_e_repete","espera_s":40}
+{"quando":"2026-10-31T16:16:36.063Z","data":"2026-10-31","evento":"gemini","modelo":"gemini-3.6-flash","status":503,"acao":"proximo_modelo","motivo":"erro temporário persistiu"}
+{"quando":"2026-10-31T16:16:39.819Z","data":"2026-10-31","evento":"gemini","modelo":"gemini-3.5-flash","status":503,"acao":"espera_e_repete","espera_s":10}
+{"quando":"2026-10-31T16:16:51.337Z","data":"2026-10-31","evento":"gemini","modelo":"gemini-3.5-flash","status":503,"acao":"espera_e_repete","espera_s":40}
+{"quando":"2026-10-31T16:17:31.904Z","data":"2026-10-31","evento":"gemini","modelo":"gemini-3.5-flash","status":503,"acao":"proximo_modelo","motivo":"erro temporário persistiu"}
+{"quando":"2026-10-31T16:17:38.479Z","data":"2026-10-31","evento":"gemini","modelo":"gemini-2.5-flash","status":404,"acao":"proximo_modelo","motivo":"modelo indisponível ou recusado"}
+{"quando":"2026-10-31T16:17:45.999Z","data":"2026-10-31","evento":"revisao_guia","resultado":"sem_mudanca","slug":"taxa-nominal-x-taxa-efetiva-entenda-a-diferenca"}
+{"quando":"2026-10-31T16:17:46.000Z","data":"2026-10-31","evento":"uso_gemini","pedidos":24,"ok":4,"por_status":{"404":1,"503":18}}
