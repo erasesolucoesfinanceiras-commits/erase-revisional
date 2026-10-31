@@ -1,5 +1,31 @@
 [
   {
+    "id": "2026-10-31-juro-do-cartao-rotativo-sobe-para-451-7",
+    "data": "2026-10-31",
+    "categoria": "credito-pessoal",
+    "titulo": "Juro do cartão rotativo sobe para 451,7% ao ano em setembro, informa BC",
+    "texto": "Segundo dados do Banco Central, a taxa média do cartão de crédito rotativo subiu de 444,9% ao ano em agosto para 451,7% em setembro. No mesmo período, a taxa do parcelado passou de 192,1% para 193%, fazendo o juro total do cartão subir de 97,8% para 100,3% ao ano. Pela legislação em vigor desde janeiro de 2024, os juros e encargos acumulados não podem ultrapassar 100% do valor principal da dívida.",
+    "fontes": [
+      {
+        "nome": "Valor Econômico",
+        "url": "https://valor.globo.com/financas/noticia/2026/10/29/juro-do-cartao-de-credito-rotativo-sobe-a-4517percent-ao-ano-em-setembro-mostra-bc.ghtml",
+        "data": "2026-10-29"
+      },
+      {
+        "nome": "O POVO",
+        "url": "https://www.opovo.com.br/noticias/economia/2026/10/29/juro-medio-do-rotativo-do-cartao-de-credito-sobe-a-4517-ao-ano-em-setembro-diz-bc.html",
+        "data": "2026-10-29"
+      }
+    ],
+    "foto": {
+      "id": 6012583,
+      "autor": "viarami",
+      "autorUrl": "https://pixabay.com/users/viarami-13458823/",
+      "pagina": "https://pixabay.com/photos/card-credit-card-mastercard-6012583/",
+      "fonte": "Pixabay"
+    }
+  },
+  {
     "id": "2026-10-30-usina-solar-de-4-5-mw-com-baterias-e-ina",
     "data": "2026-10-30",
     "categoria": "energia-solar",
