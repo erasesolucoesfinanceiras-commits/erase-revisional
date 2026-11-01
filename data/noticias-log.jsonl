@@ -1249,3 +1249,14 @@
 {"quando":"2026-11-01T17:29:14.149Z","data":"2026-11-01","evento":"revisao_guia","resultado":"sem_fontes","slug":"cet-custo-efetivo-total-o-que-entra-na-conta","motivo":"só 0 fonte(s) oficial(is) legível(is)"}
 {"quando":"2026-11-01T17:29:14.150Z","data":"2026-11-01","evento":"uso_gemini","pedidos":14,"ok":11,"por_status":{"503":3}}
 {"quando":"2026-11-01T17:29:48.558Z","data":"2026-11-01","evento":"indexnow","resultado":"enviado","status":200,"enviadas":4,"ainda_pendentes":0,"urls":["https://revisional.eraseconsulta.com.br/noticias/simples-nacional-termina-prazo-para-definir-recolhimento-de-ibs-e-cbs","https://revisional.eraseconsulta.com.br/","https://revisional.eraseconsulta.com.br/artigos","https://revisional.eraseconsulta.com.br/categoria-empresas-mei"],"resposta":""}
+{"quando":"2026-11-01T18:44:52.881Z","data":"2026-11-01","evento":"gemini","modelo":"gemini-3.8-flash","status":"rede","acao":"espera_e_repete","espera_s":10}
+{"quando":"2026-11-01T18:45:56.290Z","data":"2026-11-01","evento":"pulado","tipo":"nota","tema":"mercado","motivo":"sem novidade real: Não há duas fontes de sites distintos tratando do mesmo fato recente."}
+{"quando":"2026-11-01T18:45:56.291Z","data":"2026-11-01","evento":"tema_trocado","tipo":"nota","de":"mercado","para":"energia-solar","motivo":"fontes insuficientes ou sem novidade real","ultimos_motivos":["sem novidade real: Não há duas fontes de sites distintos tratando do mesmo fato recente."]}
+{"quando":"2026-11-01T18:51:08.737Z","data":"2026-11-01","evento":"gemini","modelo":"gemini-3.8-flash","status":"rede","acao":"espera_e_repete","espera_s":10}
+{"quando":"2026-11-01T18:51:21.588Z","data":"2026-11-01","evento":"gemini","modelo":"gemini-3.8-flash","status":503,"acao":"espera_e_repete","espera_s":40}
+{"quando":"2026-11-01T18:52:03.990Z","data":"2026-11-01","evento":"gemini","modelo":"gemini-3.8-flash","status":503,"acao":"proximo_modelo","motivo":"erro temporário persistiu"}
+{"quando":"2026-11-01T18:55:40.848Z","data":"2026-11-01","evento":"pulado","tipo":"nota","tema":"energia-solar","motivo":"sem novidade real: Não há pelo menos duas fontes de veículos distintos tratando do mesmo fato sobre o tema."}
+{"quando":"2026-11-01T18:55:40.849Z","data":"2026-11-01","evento":"tema_trocado","tipo":"nota","de":"energia-solar","para":"imoveis","motivo":"fontes insuficientes ou sem novidade real","ultimos_motivos":["sem novidade real: Não há pelo menos duas fontes de veículos distintos tratando do mesmo fato sobre o tema."]}
+{"quando":"2026-11-01T18:55:40.849Z","data":"2026-11-01","evento":"sem_publicacao","tipo":"nota","motivo":"orçamento de tempo do dia esgotado"}
+{"quando":"2026-11-01T18:58:12.266Z","data":"2026-11-01","evento":"revisao_guia","resultado":"sem_mudanca","slug":"cet-custo-efetivo-total-o-que-entra-na-conta"}
+{"quando":"2026-11-01T18:58:12.266Z","data":"2026-11-01","evento":"uso_gemini","pedidos":7,"ok":3,"por_status":{"503":2}}
