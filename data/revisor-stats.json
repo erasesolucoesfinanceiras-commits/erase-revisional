@@ -281,5 +281,21 @@
    "sem_novidade": 8,
    "criterios": {}
   }
+ },
+ "2026-11-01": {
+  "artigo": {
+   "aprovados": 1,
+   "reprovados": 1,
+   "sem_novidade": 0,
+   "criterios": {
+    "seguro": 1
+   }
+  },
+  "nota": {
+   "aprovados": 0,
+   "reprovados": 0,
+   "sem_novidade": 5,
+   "criterios": {}
+  }
  }
 }
