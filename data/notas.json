@@ -1,5 +1,31 @@
 [
   {
+    "id": "2026-11-01-honda-cr-v-hibrido-registra-133-emplacam",
+    "data": "2026-11-01",
+    "categoria": "mercado",
+    "titulo": "Honda CR-V híbrido registra 133 emplacamentos no Brasil em 2026",
+    "texto": "Segundo a Associação Brasileira do Veículo Elétrico, o Honda CR-V somou apenas 133 emplacamentos no Brasil em 2026, contrastando com as mais de 226 mil unidades vendidas nos Estados Unidos no primeiro semestre. Comercializado a R$ 353.500, o modelo enfrenta concorrência de SUVs eletrificados como o BYD Atto 8, vendido a R$ 399 mil e com 1.231 unidades registradas.",
+    "fontes": [
+      {
+        "nome": "G1 Carros",
+        "url": "https://g1.globo.com/carros/noticia/2026/11/01/teste-honda-cr-v.ghtml",
+        "data": "2026-11-01"
+      },
+      {
+        "nome": "Diário do Centro do Mundo",
+        "url": "https://www.diariodocentrodomundo.com.br/essencial/honda-cr-v-vendas-brasil-sucesso-eua/",
+        "data": "2026-10-31"
+      }
+    ],
+    "foto": {
+      "id": 8297138,
+      "autor": "narleymedia",
+      "autorUrl": "https://pixabay.com/users/narleymedia-17737186/",
+      "pagina": "https://pixabay.com/photos/car-truck-vehicle-chevrolet-8297138/",
+      "fonte": "Pixabay"
+    }
+  },
+  {
     "id": "2026-10-31-juro-do-cartao-rotativo-sobe-para-451-7",
     "data": "2026-10-31",
     "categoria": "credito-pessoal",
