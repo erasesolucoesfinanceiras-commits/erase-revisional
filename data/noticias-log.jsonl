@@ -1286,3 +1286,4 @@
 {"quando":"2026-11-02T21:04:05.183Z","data":"2026-11-02","evento":"revisao_guia","resultado":"sem_mudanca","slug":"portabilidade-de-credito-quando-vale-a-pena"}
 {"quando":"2026-11-02T21:04:05.184Z","data":"2026-11-02","evento":"uso_gemini","pedidos":13,"ok":8,"por_status":{"503":5}}
 {"quando":"2026-11-02T21:04:42.045Z","data":"2026-11-02","evento":"indexnow","resultado":"enviado","status":200,"enviadas":3,"ainda_pendentes":0,"urls":["https://revisional.eraseconsulta.com.br/","https://revisional.eraseconsulta.com.br/radar","https://revisional.eraseconsulta.com.br/categoria-credito-rural"],"resposta":""}
+{"quando":"2026-11-02T22:31:24.892Z","data":"2026-11-02","evento":"uso_gemini","pedidos":0,"ok":0,"por_status":{}}
