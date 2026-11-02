@@ -1,5 +1,31 @@
 [
   {
+    "id": "2026-11-02-prazo-para-renegociar-credito-rural-pela",
+    "data": "2026-11-02",
+    "categoria": "credito-rural",
+    "titulo": "Prazo para renegociar crédito rural pela MP 1.376 termina em 12 de novembro",
+    "texto": "O Banco do Brasil atingiu R$ 17,5 bilhões em renegociações de crédito rural sob a Medida Provisória 1.376/2026, de um potencial estimado em até R$ 100 bilhões. O prazo para agricultores formalizarem os pedidos junto à instituição financeira termina em 12 de novembro de 2026, mediante comprovação de prejuízos decorrentes de oscilações de mercado ou eventos climáticos.",
+    "fontes": [
+      {
+        "nome": "Regionalzão Notícias",
+        "url": "https://regionalzao.com.br/economia/banco-do-brasil-reune-r-2-36-bilhoes-em-renegociacoes-de-credito-rural-em-minas-gerais-daa494ac/",
+        "data": "2026-11-01"
+      },
+      {
+        "nome": "Valor Econômico",
+        "url": "https://valor.globo.com/financas/noticia/2026/10/30/perto-do-fim-do-prazo-de-mp-bb-no-renegociou-nem-20-pontos-percentuais-do-potencial-com-produtores-rurais.ghtml",
+        "data": "2026-10-30"
+      }
+    ],
+    "foto": {
+      "id": 371250,
+      "autor": "tmcsparron",
+      "autorUrl": "https://pixabay.com/users/tmcsparron-300191/",
+      "pagina": "https://pixabay.com/photos/tractor-old-antique-abandoned-371250/",
+      "fonte": "Pixabay"
+    }
+  },
+  {
     "id": "2026-11-01-honda-cr-v-hibrido-registra-133-emplacam",
     "data": "2026-11-01",
     "categoria": "mercado",
