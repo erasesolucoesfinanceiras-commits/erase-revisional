@@ -1,5 +1,31 @@
 [
   {
+    "id": "2026-11-03-bancos-privados-elevam-juros-do-financia",
+    "data": "2026-11-03",
+    "categoria": "imoveis",
+    "titulo": "Bancos privados elevam juros do financiamento imobiliário",
+    "texto": "Três grandes bancos privados aumentaram as taxas do crédito imobiliário após a alta dos juros futuros. Segundo levantamento da Anefac, o Bradesco passou a cobrar de 13,6% a 15% ao ano mais TR, enquanto Itaú e Santander elevaram suas taxas mínimas para 12,95% e 12,49% ao ano, respectivamente, impactando o custo da casa própria.",
+    "fontes": [
+      {
+        "nome": "O GLOBO",
+        "url": "https://oglobo.globo.com/economia/noticia/2026/10/31/bancos-aumentam-juros-do-credito-para-casa-propria.ghtml",
+        "data": "2026-10-31"
+      },
+      {
+        "nome": "Extra",
+        "url": "https://extra.globo.com/economia/noticia/2026/10/casa-propria-mais-cara-bradesco-itau-e-santander-aumentam-taxa-de-juros-do-financiamento-imobiliario.ghtml",
+        "data": "2026-10-31"
+      }
+    ],
+    "foto": {
+      "id": 163870,
+      "autor": "PublicDomainPictures",
+      "autorUrl": "https://pixabay.com/users/PublicDomainPictures-14/",
+      "pagina": "https://pixabay.com/photos/business-profession-occupation-163870/",
+      "fonte": "Pixabay"
+    }
+  },
+  {
     "id": "2026-11-02-prazo-para-renegociar-credito-rural-pela",
     "data": "2026-11-02",
     "categoria": "credito-rural",
