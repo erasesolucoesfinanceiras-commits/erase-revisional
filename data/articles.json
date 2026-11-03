@@ -1,5 +1,39 @@
 [
   {
+    "slug": "consorcio-avanca-em-2026-entenda-as-regras-de-funcionamento-e-gestao-dos-grupos",
+    "categoria": "consorcio-seguros",
+    "titulo": "Consórcio avança em 2026: entenda as regras de funcionamento e gestão dos grupos",
+    "resumo": "Com crescimento impulsionado no país e regulação do Banco Central, o sistema de consórcios exige atenção quanto a contratos, custos e regras de contemplação.",
+    "data": "2026-11-03",
+    "fontes": [
+      {
+        "nome": "Notícias R7",
+        "url": "https://noticias.r7.com/prisma/blog-do-galante/consorcio-de-carros-o-gigante-de-r-152-bilhoes-que-desafia-as-montadoras-29102026/",
+        "data": "2026-10-28"
+      },
+      {
+        "nome": "O GLOBO",
+        "url": "https://oglobo.globo.com/patrocinado/dino/noticia/2026/10/30/expansao-do-consorcio-exige-mais-educacao-no-setor-1.ghtml",
+        "data": "2026-10-30"
+      },
+      {
+        "nome": "InfoMoney",
+        "url": "https://www.infomoney.com.br/minhas-financas/dinheiro-que-voce-paga-no-consorcio/",
+        "data": "2026-10-20"
+      }
+    ],
+    "corpo": "<h2>Expansão do mercado de consórcios atinge marcas históricas em 2026</h2><p>O mercado brasileiro de consórcios apresentou indicadores expressivos no decorrer de 2026. Dados divulgados pela Associação Brasileira de Administradoras de Consórcios (ABAC) indicam que o sistema alcançou a marca de 12,85 milhões de participantes ativos em fevereiro de 2026, o que representa um avanço de 12,6% em comparação ao mesmo período do ano anterior.</p><p>No segmento de veículos leves, o setor registra uma sequência de alta que se mantém há mais de 13 anos. A média mensal de comercialização de cotas para esses veículos atingiu a marca de 170 mil cotas por mês em 2026. Com base nesse volume e no valor médio das cartas de crédito, a projeção de faturamento potencial para o setor atinge R$ 152 bilhões no ano, segundo informações repassadas pela entidade setorial.</p><h2>Regulamentação do Banco Central e a Lei dos Consórcios</h2><p>Diferente de modalidades de empréstimo tradicional, o consórcio funciona como um sistema de compra coletiva regulamentado e fiscalizado pelo Banco Central do Brasil. A estrutura jurídica da modalidade é fundamentada na Lei nº 11.795/2008, conhecida como a Lei dos Consórcios.</p><p>De acordo com essa legislação, o dinheiro pago mensalmente pelos consorciados não fica sob custódia livre da administradora. Conforme explica Leonardo Baldez Augusto, fundador da ISF Crédito, cada grupo possui patrimônio próprio e separado dos recursos da empresa administradora, e a lei proíbe a reunião desses valores em um caixa único corporativo.</p><p>Os recursos arrecadados de cada grupo devem ser depositados em instituições financeiras e aplicados conforme as diretrizes do Banco Central. Segundo Juciel Oliveira, fundador e CEO da Monteo, a regulamentação autoriza aplicações em títulos públicos federais (incluindo operações compromissadas) e fundos abertos de renda fixa de curto prazo, referenciados ou simples. As modalidades de aplicação são definidas pelos consorciados na primeira assembleia do grupo.</p><h2>Transparência, taxas e regras de contemplação</h2><p>A gestão do grupo e as atribuições de transparência são fiscalizadas pelo órgão regulador. De acordo com a Resolução BCB nº 285/2023, a administradora deve disponibilizar demonstrativos individuais informando a situação financeira do participante e do grupo antes de cada assembleia ordinária.</p><p>Para quem ingressa nessa modalidade, o acompanhamento das regras contratuais é fundamental. Conforme orientações do Banco Central, a contemplação ocorre exclusivamente por meio de sorteios ou lances realizados durante as assembleias, ficando condicionada à existência de recursos no fundo do grupo. O pagamento antecipado de parcelas não assegura a liberação imediata do crédito.</p><p>Além disso, o custo da modalidade é composto pela taxa de administração — responsável por remunerar os serviços de gestão prestados pela administradora —, pelo fundo de reserva e por reajustes previstos no contrato. Para Dan Silva, especialista no setor e fundador da Prefiro Consórcio, o crescimento do número de consorciados exige que as regras sejam informadas com clareza, reforçando que o consórcio é voltado para objetivos planejados e não para necessidades imediatas de crédito.</p><h2>O que observar na prática</h2><p>Na prática, o consorciado ou quem pretende contratar um plano pode acompanhar os demonstrativos financeiros periódicos enviados pela administradora para conferir o registro dos seus pagamentos e a saúde financeira do grupo. Também é recomendável consultar a base de dados do Banco Central para verificar se a empresa administradora possui autorização oficial de funcionamento, além de checar no contrato o percentual da taxa de administração e o funcionamento das regras de sorteio e lance.</p>",
+    "foto_busca": "car financing contract",
+    "tipo": "noticia",
+    "foto": {
+      "id": 852239,
+      "autor": "JillWellington",
+      "autorUrl": "https://pixabay.com/users/JillWellington-334088/",
+      "pagina": "https://pixabay.com/photos/vintage-car-steering-wheel-turquoise-852239/",
+      "fonte": "Pixabay"
+    }
+  },
+  {
     "slug": "simples-nacional-termina-prazo-para-definir-recolhimento-de-ibs-e-cbs",
     "categoria": "empresas-mei",
     "titulo": "Simples Nacional: termina prazo para definir recolhimento de IBS e CBS",
