@@ -326,9 +326,11 @@
  "2026-11-04": {
   "nota": {
    "aprovados": 0,
-   "reprovados": 0,
-   "sem_novidade": 2,
-   "criterios": {}
+   "reprovados": 1,
+   "sem_novidade": 4,
+   "criterios": {
+    "neutralidade/dois_lados": 1
+   }
   }
  }
 }
