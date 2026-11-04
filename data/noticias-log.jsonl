@@ -1394,3 +1394,34 @@
 {"quando":"2026-11-03T22:24:04.096Z","data":"2026-11-03","evento":"revisao_guia","resultado":"sem_fontes","slug":"por-que-motos-pagam-juros-mais-altos-que-carros","motivo":"só 0 fonte(s) oficial(is) legível(is)"}
 {"quando":"2026-11-03T22:24:04.096Z","data":"2026-11-03","evento":"uso_gemini","pedidos":0,"ok":0,"por_status":{}}
 {"quando":"2026-11-04T00:06:36.347Z","data":"2026-11-03","evento":"verificacao","origem":"verificacao-diaria","acao":"tudo_certo","motivo":"último artigo 2026-11-03 (0 dia(s)), na capa do site"}
+{"quando":"2026-11-04T18:29:17.462Z","data":"2026-11-04","evento":"gemini","modelo":"gemini-3.8-flash","status":503,"acao":"espera_e_repete","espera_s":10}
+{"quando":"2026-11-04T18:29:44.959Z","data":"2026-11-04","evento":"gemini","modelo":"gemini-3.8-flash","status":503,"acao":"espera_e_repete","espera_s":40}
+{"quando":"2026-11-04T18:30:25.584Z","data":"2026-11-04","evento":"gemini","modelo":"gemini-3.8-flash","status":503,"acao":"proximo_modelo","motivo":"erro temporário persistiu"}
+{"quando":"2026-11-04T18:31:14.437Z","data":"2026-11-04","evento":"gemini","modelo":"gemini-3.7-flash","status":503,"acao":"espera_e_repete","espera_s":10}
+{"quando":"2026-11-04T18:31:34.754Z","data":"2026-11-04","evento":"gemini","modelo":"gemini-3.7-flash","status":503,"acao":"espera_e_repete","espera_s":40}
+{"quando":"2026-11-04T18:32:16.164Z","data":"2026-11-04","evento":"gemini","modelo":"gemini-3.7-flash","status":503,"acao":"proximo_modelo","motivo":"erro temporário persistiu"}
+{"quando":"2026-11-04T18:32:28.165Z","data":"2026-11-04","evento":"gemini","modelo":"gemini-3.6-flash","status":503,"acao":"espera_e_repete","espera_s":10}
+{"quando":"2026-11-04T18:32:40.942Z","data":"2026-11-04","evento":"gemini","modelo":"gemini-3.6-flash","status":503,"acao":"espera_e_repete","espera_s":40}
+{"quando":"2026-11-04T18:33:31.010Z","data":"2026-11-04","evento":"gemini","modelo":"gemini-3.6-flash","status":503,"acao":"proximo_modelo","motivo":"erro temporário persistiu"}
+{"quando":"2026-11-04T18:33:42.360Z","data":"2026-11-04","evento":"gemini","modelo":"gemini-3.5-flash","status":503,"acao":"espera_e_repete","espera_s":10}
+{"quando":"2026-11-04T18:33:53.943Z","data":"2026-11-04","evento":"gemini","modelo":"gemini-3.5-flash","status":503,"acao":"espera_e_repete","espera_s":40}
+{"quando":"2026-11-04T18:34:47.591Z","data":"2026-11-04","evento":"gemini","modelo":"gemini-3.5-flash","status":503,"acao":"proximo_modelo","motivo":"erro temporário persistiu"}
+{"quando":"2026-11-04T18:34:47.679Z","data":"2026-11-04","evento":"gemini","modelo":"gemini-2.5-flash","status":404,"acao":"proximo_modelo","motivo":"modelo indisponível ou recusado"}
+{"quando":"2026-11-04T18:34:55.670Z","data":"2026-11-04","evento":"pulado","tipo":"nota","tema":"credito-rural","motivo":"sem novidade real: Nao ha fatos novos e recentes sobre credito rural e agronegocio nas fontes listadas que cumpram os criterios exigidos."}
+{"quando":"2026-11-04T18:34:55.707Z","data":"2026-11-04","evento":"tema_trocado","tipo":"nota","de":"credito-rural","para":"empresas-mei","motivo":"fontes insuficientes ou sem novidade real","ultimos_motivos":["sem novidade real: Nao ha fatos novos e recentes sobre credito rural e agronegocio nas fontes listadas que cumpram os criterios exigidos."]}
+{"quando":"2026-11-04T18:37:07.356Z","data":"2026-11-04","evento":"pulado","tipo":"nota","tema":"empresas-mei","motivo":"sem novidade real: Não há pelo menos duas fontes de veículos diferentes cobrindo o mesmo fato recente sobre empresas, MEI ou crédito para pequenos negócios, além do tema de IBS/CBS já ter sido abordado recentemente."}
+{"quando":"2026-11-04T18:37:07.357Z","data":"2026-11-04","evento":"tema_trocado","tipo":"nota","de":"empresas-mei","para":"financeiro","motivo":"fontes insuficientes ou sem novidade real","ultimos_motivos":["sem novidade real: Não há pelo menos duas fontes de veículos diferentes cobrindo o mesmo fato recente sobre empresas, MEI ou crédito para pequenos negócios, além do tema de IBS/CBS já ter sido abordado recentemente."]}
+{"quando":"2026-11-04T18:37:27.296Z","data":"2026-11-04","evento":"gemini","modelo":"gemini-3.8-flash","status":503,"acao":"espera_e_repete","espera_s":10}
+{"quando":"2026-11-04T18:37:38.031Z","data":"2026-11-04","evento":"gemini","modelo":"gemini-3.8-flash","status":503,"acao":"espera_e_repete","espera_s":40}
+{"quando":"2026-11-04T18:38:18.829Z","data":"2026-11-04","evento":"gemini","modelo":"gemini-3.8-flash","status":503,"acao":"proximo_modelo","motivo":"erro temporário persistiu"}
+{"quando":"2026-11-04T18:38:25.573Z","data":"2026-11-04","evento":"gemini","modelo":"gemini-3.7-flash","status":503,"acao":"espera_e_repete","espera_s":10}
+{"quando":"2026-11-04T18:38:40.389Z","data":"2026-11-04","evento":"gemini","modelo":"gemini-3.7-flash","status":503,"acao":"espera_e_repete","espera_s":40}
+{"quando":"2026-11-04T18:39:52.495Z","data":"2026-11-04","evento":"gemini","modelo":"gemini-3.7-flash","status":503,"acao":"proximo_modelo","motivo":"erro temporário persistiu"}
+{"quando":"2026-11-04T18:39:53.102Z","data":"2026-11-04","evento":"gemini","modelo":"gemini-3.6-flash","status":503,"acao":"espera_e_repete","espera_s":10}
+{"quando":"2026-11-04T18:40:05.217Z","data":"2026-11-04","evento":"gemini","modelo":"gemini-3.6-flash","status":503,"acao":"espera_e_repete","espera_s":40}
+{"quando":"2026-11-04T18:40:47.205Z","data":"2026-11-04","evento":"gemini","modelo":"gemini-3.6-flash","status":503,"acao":"proximo_modelo","motivo":"erro temporário persistiu"}
+{"quando":"2026-11-04T18:40:52.658Z","data":"2026-11-04","evento":"gemini","modelo":"gemini-3.5-flash","status":503,"acao":"espera_e_repete","espera_s":10}
+{"quando":"2026-11-04T18:41:04.405Z","data":"2026-11-04","evento":"gemini","modelo":"gemini-3.5-flash","status":503,"acao":"espera_e_repete","espera_s":40}
+{"quando":"2026-11-04T18:45:45.977Z","data":"2026-11-04","evento":"erro","tipo":"nota","motivo":"tempo do job esgotado esperando o Gemini"}
+{"quando":"2026-11-04T18:45:46.706Z","data":"2026-11-04","evento":"revisao_guia","resultado":"sem_fontes","slug":"por-que-motos-pagam-juros-mais-altos-que-carros","motivo":"só 0 fonte(s) oficial(is) legível(is)"}
+{"quando":"2026-11-04T18:45:46.707Z","data":"2026-11-04","evento":"uso_gemini","pedidos":27,"ok":3,"por_status":{"404":1,"503":23}}
