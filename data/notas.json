@@ -1,5 +1,31 @@
 [
   {
+    "id": "2026-11-04-comissao-analisa-mp-com-r-18-5-bi-em-cre",
+    "data": "2026-11-04",
+    "categoria": "credito-rural",
+    "titulo": "Comissão analisa MP com R$ 18,5 bi em crédito subsidiado",
+    "texto": "Em 4 de novembro de 2026, foi instalada a comissão mista encarregada de avaliar a Medida Provisória 1.379/2026, que libera R$ 18,5 bilhões em financiamentos subsidiados para exportadores e segmentos como agricultura e pecuária. O montante reúne R$ 13,5 bilhões do Tesouro Nacional e R$ 5 bilhões do BNDES. A MP precisa de aprovação no Congresso até 18 de novembro para manter a validade.",
+    "fontes": [
+      {
+        "nome": "Senado Federal",
+        "url": "https://www12.senado.leg.br/noticias/materias/2026/11/04/comissao-da-mp-do-plano-brasil-soberano-3-elege-presidente-vice-e-relatora",
+        "data": "2026-11-04"
+      },
+      {
+        "nome": "Agência Câmara",
+        "url": "https://www.camara.leg.br/noticias/1316107-instalada-comissao-que-vai-analisar-linhas-de-credito-para-empresas-atingidas-por-tarifaco",
+        "data": "2026-11-04"
+      }
+    ],
+    "foto": {
+      "id": 7375252,
+      "autor": "dendoktoor",
+      "autorUrl": "https://pixabay.com/users/dendoktoor-14802912/",
+      "pagina": "https://pixabay.com/photos/tractor-farm-implement-field-7375252/",
+      "fonte": "Pixabay"
+    }
+  },
+  {
     "id": "2026-11-03-bancos-privados-elevam-juros-do-financia",
     "data": "2026-11-03",
     "categoria": "imoveis",

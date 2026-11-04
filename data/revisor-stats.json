@@ -325,11 +325,12 @@
  },
  "2026-11-04": {
   "nota": {
-   "aprovados": 0,
-   "reprovados": 1,
+   "aprovados": 1,
+   "reprovados": 2,
    "sem_novidade": 4,
    "criterios": {
-    "neutralidade/dois_lados": 1
+    "neutralidade/dois_lados": 1,
+    "fontes": 1
    }
   }
  }
