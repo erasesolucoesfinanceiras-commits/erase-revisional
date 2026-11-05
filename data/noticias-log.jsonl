@@ -1480,3 +1480,4 @@
 {"quando":"2026-11-04T22:55:26.568Z","data":"2026-11-04","evento":"revisao_guia","resultado":"sem_fontes","slug":"por-que-motos-pagam-juros-mais-altos-que-carros","motivo":"só 0 fonte(s) oficial(is) legível(is)"}
 {"quando":"2026-11-04T22:55:26.569Z","data":"2026-11-04","evento":"uso_gemini","pedidos":27,"ok":8,"por_status":{"404":1,"429":11,"503":7}}
 {"quando":"2026-11-04T22:57:02.271Z","data":"2026-11-04","evento":"indexnow","resultado":"enviado","status":200,"enviadas":3,"ainda_pendentes":0,"urls":["https://revisional.eraseconsulta.com.br/","https://revisional.eraseconsulta.com.br/radar","https://revisional.eraseconsulta.com.br/categoria-credito-rural"],"resposta":""}
+{"quando":"2026-11-05T00:29:08.893Z","data":"2026-11-04","evento":"verificacao","origem":"verificacao-diaria","acao":"tudo_certo","motivo":"último artigo 2026-11-03 (1 dia(s)), na capa do site"}
