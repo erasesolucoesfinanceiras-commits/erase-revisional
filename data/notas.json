@@ -1,5 +1,31 @@
 [
   {
+    "id": "2026-11-05-fenabrave-eleva-projecao-de-vendas-de-ve",
+    "data": "2026-11-05",
+    "categoria": "mercado",
+    "titulo": "Fenabrave eleva projeção de vendas de veículos para 12,8% em 2026",
+    "texto": "A Fenabrave revisou a estimativa de crescimento na venda de veículos novos em 2026 de 8,6% para 12,8%, projetando cerca de 5,6 milhões de unidades comercializadas. O desempenho é impulsionado pelos modelos eletrificados, cujos emplacamentos cresceram mais de 130% entre janeiro e outubro, alcançando 524.766 unidades e 20,54% de participação nos automóveis e comerciais leves.",
+    "fontes": [
+      {
+        "nome": "Agência Brasil",
+        "url": "https://agenciabrasil.ebc.com.br/economia/noticia/2026-11/fenabrave-preve-aumento-de-128-na-venda-de-veiculos-novos-em-2026",
+        "data": "2026-11-04"
+      },
+      {
+        "nome": "Valor Econômico",
+        "url": "https://valor.globo.com/empresas/noticia/2026/11/04/venda-de-veiculos-novos-cresce-187percent-em-outubro-aponta-fenabrave.ghtml",
+        "data": "2026-11-04"
+      }
+    ],
+    "foto": {
+      "id": 2705402,
+      "autor": "Tama66",
+      "autorUrl": "https://pixabay.com/users/Tama66-1032521/",
+      "pagina": "https://pixabay.com/photos/ford-mustang-car-vehicle-red-car-2705402/",
+      "fonte": "Pixabay"
+    }
+  },
+  {
     "id": "2026-11-04-comissao-analisa-mp-com-r-18-5-bi-em-cre",
     "data": "2026-11-04",
     "categoria": "credito-rural",

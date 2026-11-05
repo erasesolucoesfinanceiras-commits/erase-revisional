@@ -333,5 +333,19 @@
     "fontes": 1
    }
   }
+ },
+ "2026-11-05": {
+  "artigo": {
+   "aprovados": 1,
+   "reprovados": 0,
+   "sem_novidade": 0,
+   "criterios": {}
+  },
+  "nota": {
+   "aprovados": 1,
+   "reprovados": 0,
+   "sem_novidade": 0,
+   "criterios": {}
+  }
  }
 }
