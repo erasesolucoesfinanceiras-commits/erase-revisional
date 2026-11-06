@@ -1531,3 +1531,4 @@
 {"quando":"2026-11-05T20:52:38.274Z","data":"2026-11-05","evento":"uso_gemini","pedidos":0,"ok":0,"por_status":{}}
 {"quando":"2026-11-05T22:43:42.542Z","data":"2026-11-05","evento":"revisao_guia","resultado":"sem_fontes","slug":"por-que-motos-pagam-juros-mais-altos-que-carros","motivo":"só 0 fonte(s) oficial(is) legível(is)"}
 {"quando":"2026-11-05T22:43:42.542Z","data":"2026-11-05","evento":"uso_gemini","pedidos":0,"ok":0,"por_status":{}}
+{"quando":"2026-11-06T00:29:26.173Z","data":"2026-11-05","evento":"verificacao","origem":"verificacao-diaria","acao":"tudo_certo","motivo":"último artigo 2026-11-05 (0 dia(s)), na capa do site"}
