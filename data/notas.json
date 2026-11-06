@@ -1,5 +1,31 @@
 [
   {
+    "id": "2026-11-06-pf-investiga-fraude-em-financiamento-de",
+    "data": "2026-11-06",
+    "categoria": "revisional",
+    "titulo": "PF investiga fraude em financiamento de veículos no Maranhão",
+    "texto": "A Polícia Federal cumpriu, nesta quinta-feira (5/11), um mandado de busca e apreensão em São Luís (MA) durante investigação sobre fraudes em financiamentos de veículos. Segundo as apurações, suspeitos ofereciam brindes para coletar a biometria de vítimas sem autorização e formalizar os contratos, descobertos apenas quando as dívidas eram cobradas pelas instituições financeiras.",
+    "fontes": [
+      {
+        "nome": "GOV.BR",
+        "url": "https://www.gov.br/pf/pt-br/assuntos/noticias/2026/11/pf-investiga-financiamentos-fraudulentos-em-sao-luis-ma",
+        "data": "2026-11-05"
+      },
+      {
+        "nome": "g1",
+        "url": "https://g1.globo.com/ma/maranhao/noticia/2026/11/05/pf-investiga-esquema-de-fraude-em-financiamento-de-veiculos-no-maranhao.ghtml",
+        "data": "2026-11-05"
+      }
+    ],
+    "foto": {
+      "id": 5235220,
+      "autor": "dbelkin",
+      "autorUrl": "https://pixabay.com/users/dbelkin-15846153/",
+      "pagina": "https://pixabay.com/photos/keys-hands-give-giving-car-keys-5235220/",
+      "fonte": "Pixabay"
+    }
+  },
+  {
     "id": "2026-11-05-fenabrave-eleva-projecao-de-vendas-de-ve",
     "data": "2026-11-05",
     "categoria": "mercado",
