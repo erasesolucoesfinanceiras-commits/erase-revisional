@@ -1532,3 +1532,17 @@
 {"quando":"2026-11-05T22:43:42.542Z","data":"2026-11-05","evento":"revisao_guia","resultado":"sem_fontes","slug":"por-que-motos-pagam-juros-mais-altos-que-carros","motivo":"só 0 fonte(s) oficial(is) legível(is)"}
 {"quando":"2026-11-05T22:43:42.542Z","data":"2026-11-05","evento":"uso_gemini","pedidos":0,"ok":0,"por_status":{}}
 {"quando":"2026-11-06T00:29:26.173Z","data":"2026-11-05","evento":"verificacao","origem":"verificacao-diaria","acao":"tudo_certo","motivo":"último artigo 2026-11-05 (0 dia(s)), na capa do site"}
+{"quando":"2026-11-06T17:49:16.560Z","data":"2026-11-06","evento":"gemini","modelo":"gemini-3.8-flash","status":503,"acao":"espera_e_repete","espera_s":10}
+{"quando":"2026-11-06T17:49:30.057Z","data":"2026-11-06","evento":"gemini","modelo":"gemini-3.8-flash","status":503,"acao":"espera_e_repete","espera_s":40}
+{"quando":"2026-11-06T17:55:10.843Z","data":"2026-11-06","evento":"gemini","modelo":"gemini-3.8-flash","status":"rede","acao":"proximo_modelo","motivo":"erro temporário persistiu"}
+{"quando":"2026-11-06T17:55:13.730Z","data":"2026-11-06","evento":"gemini","modelo":"gemini-3.7-flash","status":503,"acao":"espera_e_repete","espera_s":10}
+{"quando":"2026-11-06T17:55:26.210Z","data":"2026-11-06","evento":"gemini","modelo":"gemini-3.7-flash","status":503,"acao":"espera_e_repete","espera_s":40}
+{"quando":"2026-11-06T17:57:05.703Z","data":"2026-11-06","evento":"gemini","modelo":"gemini-3.7-flash","status":503,"acao":"proximo_modelo","motivo":"erro temporário persistiu"}
+{"quando":"2026-11-06T17:57:21.277Z","data":"2026-11-06","evento":"pulado","tipo":"nota","tema":"empresas-mei","motivo":"sem novidade real: Não existem duas fontes de sites diferentes cobrindo o mesmo fato relevante sobre crédito e capital de giro para empresas e MEI."}
+{"quando":"2026-11-06T17:57:21.278Z","data":"2026-11-06","evento":"tema_trocado","tipo":"nota","de":"empresas-mei","para":"financeiro","motivo":"fontes insuficientes ou sem novidade real","ultimos_motivos":["sem novidade real: Não existem duas fontes de sites diferentes cobrindo o mesmo fato relevante sobre crédito e capital de giro para empresas e MEI."]}
+{"quando":"2026-11-06T17:58:02.506Z","data":"2026-11-06","evento":"gemini","modelo":"gemini-3.8-flash","status":503,"acao":"espera_e_repete","espera_s":10}
+{"quando":"2026-11-06T18:03:13.291Z","data":"2026-11-06","evento":"gemini","modelo":"gemini-3.8-flash","status":"rede","acao":"espera_e_repete","espera_s":40}
+{"quando":"2026-11-06T18:04:07.072Z","data":"2026-11-06","evento":"gemini","modelo":"gemini-3.8-flash","status":503,"acao":"proximo_modelo","motivo":"erro temporário persistiu"}
+{"quando":"2026-11-06T18:04:07.073Z","data":"2026-11-06","evento":"erro","tipo":"nota","motivo":"tempo do job esgotado esperando o Gemini"}
+{"quando":"2026-11-06T18:04:07.618Z","data":"2026-11-06","evento":"revisao_guia","resultado":"sem_fontes","slug":"por-que-motos-pagam-juros-mais-altos-que-carros","motivo":"só 0 fonte(s) oficial(is) legível(is)"}
+{"quando":"2026-11-06T18:04:07.618Z","data":"2026-11-06","evento":"uso_gemini","pedidos":10,"ok":1,"por_status":{"503":7}}
