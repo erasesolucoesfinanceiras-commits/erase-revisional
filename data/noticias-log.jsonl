@@ -1546,3 +1546,17 @@
 {"quando":"2026-11-06T18:04:07.073Z","data":"2026-11-06","evento":"erro","tipo":"nota","motivo":"tempo do job esgotado esperando o Gemini"}
 {"quando":"2026-11-06T18:04:07.618Z","data":"2026-11-06","evento":"revisao_guia","resultado":"sem_fontes","slug":"por-que-motos-pagam-juros-mais-altos-que-carros","motivo":"só 0 fonte(s) oficial(is) legível(is)"}
 {"quando":"2026-11-06T18:04:07.618Z","data":"2026-11-06","evento":"uso_gemini","pedidos":10,"ok":1,"por_status":{"503":7}}
+{"quando":"2026-11-06T20:08:46.432Z","data":"2026-11-06","evento":"gemini","modelo":"gemini-3.8-flash","status":503,"acao":"espera_e_repete","espera_s":10}
+{"quando":"2026-11-06T20:09:02.666Z","data":"2026-11-06","evento":"gemini","modelo":"gemini-3.8-flash","status":503,"acao":"espera_e_repete","espera_s":40}
+{"quando":"2026-11-06T20:09:44.747Z","data":"2026-11-06","evento":"gemini","modelo":"gemini-3.8-flash","status":503,"acao":"proximo_modelo","motivo":"erro temporário persistiu"}
+{"quando":"2026-11-06T20:09:53.585Z","data":"2026-11-06","evento":"gemini","modelo":"gemini-3.7-flash","status":503,"acao":"espera_e_repete","espera_s":10}
+{"quando":"2026-11-06T20:10:06.342Z","data":"2026-11-06","evento":"gemini","modelo":"gemini-3.7-flash","status":503,"acao":"espera_e_repete","espera_s":40}
+{"quando":"2026-11-06T20:15:47.169Z","data":"2026-11-06","evento":"gemini","modelo":"gemini-3.7-flash","status":"rede","acao":"proximo_modelo","motivo":"erro temporário persistiu"}
+{"quando":"2026-11-06T20:16:03.177Z","data":"2026-11-06","evento":"pulado","tipo":"nota","tema":"empresas-mei","motivo":"sem novidade real: Não há pelo menos duas fontes nacionais ou oficiais tratando do mesmo fato recente relacionado a empresas, MEI ou crédito empresarial."}
+{"quando":"2026-11-06T20:16:03.178Z","data":"2026-11-06","evento":"tema_trocado","tipo":"nota","de":"empresas-mei","para":"financeiro","motivo":"fontes insuficientes ou sem novidade real","ultimos_motivos":["sem novidade real: Não há pelo menos duas fontes nacionais ou oficiais tratando do mesmo fato recente relacionado a empresas, MEI ou crédito empresarial."]}
+{"quando":"2026-11-06T20:21:12.535Z","data":"2026-11-06","evento":"gemini","modelo":"gemini-3.8-flash","status":"rede","acao":"espera_e_repete","espera_s":10}
+{"quando":"2026-11-06T20:21:25.132Z","data":"2026-11-06","evento":"gemini","modelo":"gemini-3.8-flash","status":503,"acao":"espera_e_repete","espera_s":40}
+{"quando":"2026-11-06T20:27:05.950Z","data":"2026-11-06","evento":"gemini","modelo":"gemini-3.8-flash","status":"rede","acao":"proximo_modelo","motivo":"erro temporário persistiu"}
+{"quando":"2026-11-06T20:27:05.951Z","data":"2026-11-06","evento":"erro","tipo":"nota","motivo":"tempo do job esgotado esperando o Gemini"}
+{"quando":"2026-11-06T20:27:06.763Z","data":"2026-11-06","evento":"revisao_guia","resultado":"sem_fontes","slug":"por-que-motos-pagam-juros-mais-altos-que-carros","motivo":"só 0 fonte(s) oficial(is) legível(is)"}
+{"quando":"2026-11-06T20:27:06.763Z","data":"2026-11-06","evento":"uso_gemini","pedidos":10,"ok":1,"por_status":{"503":6}}
