@@ -1601,3 +1601,4 @@
 {"quando":"2026-11-07T17:18:19.597Z","data":"2026-11-07","evento":"erro","tipo":"nota","motivo":"tempo do job esgotado esperando o Gemini"}
 {"quando":"2026-11-07T17:18:20.207Z","data":"2026-11-07","evento":"revisao_guia","resultado":"sem_fontes","slug":"por-que-motos-pagam-juros-mais-altos-que-carros","motivo":"só 0 fonte(s) oficial(is) legível(is)"}
 {"quando":"2026-11-07T17:18:20.207Z","data":"2026-11-07","evento":"uso_gemini","pedidos":19,"ok":9,"por_status":{"503":9}}
+{"quando":"2026-11-07T17:18:55.286Z","data":"2026-11-07","evento":"indexnow","resultado":"enviado","status":200,"enviadas":4,"ainda_pendentes":0,"urls":["https://revisional.eraseconsulta.com.br/noticias/cnpe-cria-grupo-para-mobilidade-eletrica-apos-vendas-somarem-381-6-mil-veiculos","https://revisional.eraseconsulta.com.br/","https://revisional.eraseconsulta.com.br/artigos","https://revisional.eraseconsulta.com.br/categoria-mercado"],"resposta":""}
