@@ -1624,3 +1624,5 @@
 {"quando":"2026-11-07T18:34:11.583Z","data":"2026-11-07","evento":"revisao_guia","resultado":"sem_fontes","slug":"por-que-motos-pagam-juros-mais-altos-que-carros","motivo":"só 0 fonte(s) oficial(is) legível(is)"}
 {"quando":"2026-11-07T18:34:11.583Z","data":"2026-11-07","evento":"uso_gemini","pedidos":15,"ok":8,"por_status":{"429":6,"503":1}}
 {"quando":"2026-11-07T18:34:44.783Z","data":"2026-11-07","evento":"indexnow","resultado":"enviado","status":200,"enviadas":3,"ainda_pendentes":0,"urls":["https://revisional.eraseconsulta.com.br/","https://revisional.eraseconsulta.com.br/radar","https://revisional.eraseconsulta.com.br/categoria-consorcio-seguros"],"resposta":""}
+{"quando":"2026-11-07T20:59:36.271Z","data":"2026-11-07","evento":"revisao_guia","resultado":"sem_fontes","slug":"por-que-motos-pagam-juros-mais-altos-que-carros","motivo":"só 1 fonte(s) oficial(is) legível(is)"}
+{"quando":"2026-11-07T20:59:36.271Z","data":"2026-11-07","evento":"uso_gemini","pedidos":0,"ok":0,"por_status":{}}
