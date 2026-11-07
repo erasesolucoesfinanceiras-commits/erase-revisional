@@ -1,5 +1,31 @@
 [
   {
+    "id": "2026-11-07-seguro-prestamista-movimenta-r-16-6-bilh",
+    "data": "2026-11-07",
+    "categoria": "consorcio-seguros",
+    "titulo": "Seguro prestamista movimenta R$ 16,6 bilhões até agosto de 2026",
+    "texto": "Segundo dados da Susep, as seguradoras arrecadaram R$ 16,6 bilhões em prêmios de seguro prestamista entre janeiro e agosto de 2026, um avanço real de 12,8% em relação ao mesmo período de 2025. Oferecida em operações de crédito e consórcios, essa modalidade quita ou amortiza parcelas devedoras em situações previstas na apólice.",
+    "fontes": [
+      {
+        "nome": "InfoMoney",
+        "url": "https://www.infomoney.com.br/minhas-financas/seguro-prestamista-tire-5-duvidas-antes-de-contratar-a-protecao-que-paga-dividas/",
+        "data": "2026-11-05"
+      },
+      {
+        "nome": "SpaceMoney",
+        "url": "https://www.spacemoney.com.br/credito/seguro-prestamista-duvidas-contratacao-credito/",
+        "data": "2026-11-05"
+      }
+    ],
+    "foto": {
+      "id": 1941670,
+      "autor": "ElisaRiva",
+      "autorUrl": "https://pixabay.com/users/ElisaRiva-1348268/",
+      "pagina": "https://pixabay.com/photos/machine-ferrari-toy-car-red-toy-car-1941670/",
+      "fonte": "Pixabay"
+    }
+  },
+  {
     "id": "2026-11-06-pf-investiga-fraude-em-financiamento-de",
     "data": "2026-11-06",
     "categoria": "revisional",
