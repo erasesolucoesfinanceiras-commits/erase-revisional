@@ -1,5 +1,31 @@
 [
   {
+    "id": "2026-11-08-inadimplencia-da-alta-renda-sobe-mais-de",
+    "data": "2026-11-08",
+    "categoria": "financeiro",
+    "titulo": "Inadimplência da alta renda sobe mais de 35% em um ano, aponta Banco Central",
+    "texto": "Dados do Sistema de Informações de Créditos do Banco Central mostram alta na inadimplência entre brasileiros de maior renda. Em agosto, o atraso subiu 38,8% para quem recebe de 10 a 20 salários mínimos e 35,8% na faixa acima de 20 salários mínimos em relação ao mesmo mês do ano anterior, avançando em ritmo proporcionalmente superior ao verificado nas faixas de menor renda.",
+    "fontes": [
+      {
+        "nome": "Brasil do Trecho",
+        "url": "https://brasildotrecho.com.br/2026/11/inadimplencia-alta-renda-banco-central/",
+        "data": "2026-11-07"
+      },
+      {
+        "nome": "G1 Economia",
+        "url": "https://g1.globo.com/economia/noticia/2026/11/05/inadimplencia-alta-renda.ghtml",
+        "data": "2026-11-05"
+      }
+    ],
+    "foto": {
+      "id": 4393990,
+      "autor": "djedj",
+      "autorUrl": "https://pixabay.com/users/djedj-59194/",
+      "pagina": "https://pixabay.com/photos/car-vintage-car-classic-car-4393990/",
+      "fonte": "Pixabay"
+    }
+  },
+  {
     "id": "2026-11-07-seguro-prestamista-movimenta-r-16-6-bilh",
     "data": "2026-11-07",
     "categoria": "consorcio-seguros",
