@@ -369,5 +369,15 @@
    "sem_novidade": 7,
    "criterios": {}
   }
+ },
+ "2026-11-08": {
+  "nota": {
+   "aprovados": 0,
+   "reprovados": 1,
+   "sem_novidade": 0,
+   "criterios": {
+    "fatos": 1
+   }
+  }
  }
 }

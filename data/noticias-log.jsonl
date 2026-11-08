@@ -1627,3 +1627,11 @@
 {"quando":"2026-11-07T20:59:36.271Z","data":"2026-11-07","evento":"revisao_guia","resultado":"sem_fontes","slug":"por-que-motos-pagam-juros-mais-altos-que-carros","motivo":"só 1 fonte(s) oficial(is) legível(is)"}
 {"quando":"2026-11-07T20:59:36.271Z","data":"2026-11-07","evento":"uso_gemini","pedidos":0,"ok":0,"por_status":{}}
 {"quando":"2026-11-07T22:54:13.391Z","data":"2026-11-07","evento":"verificacao","origem":"verificacao-diaria","acao":"tudo_certo","motivo":"último artigo 2026-11-07 (0 dia(s)), na capa do site"}
+{"quando":"2026-11-08T16:59:56.444Z","data":"2026-11-08","evento":"gemini","modelo":"gemini-3.8-flash","status":"rede","acao":"espera_e_repete","espera_s":10}
+{"quando":"2026-11-08T17:03:43.248Z","data":"2026-11-08","evento":"avaliacao","tipo":"nota","tema":"financeiro","tentativa":1,"aprovado":false,"criterios_reprovados":["fatos"]}
+{"quando":"2026-11-08T17:03:43.249Z","data":"2026-11-08","evento":"reprovado","tipo":"nota","tema":"financeiro","tentativa":1,"titulo":"Inadimplência cresce mais de 35% na alta renda, aponta Banco Central","motivos":["número(s) que não aparecem nas fontes: \"35\" (em: Inadimplência cresce mais de 35% na alta renda, aponta Banco Central.)"],"revisao":{}}
+{"quando":"2026-11-08T17:03:46.598Z","data":"2026-11-08","evento":"gemini","modelo":"gemini-3.8-flash","status":503,"acao":"espera_e_repete","espera_s":10}
+{"quando":"2026-11-08T17:04:07.210Z","data":"2026-11-08","evento":"gemini","modelo":"gemini-3.8-flash","status":503,"acao":"espera_e_repete","espera_s":40}
+{"quando":"2026-11-08T17:10:44.721Z","data":"2026-11-08","evento":"erro","tipo":"nota","motivo":"tempo do job esgotado esperando o Gemini"}
+{"quando":"2026-11-08T17:10:46.335Z","data":"2026-11-08","evento":"revisao_guia","resultado":"sem_fontes","slug":"por-que-motos-pagam-juros-mais-altos-que-carros","motivo":"só 1 fonte(s) oficial(is) legível(is)"}
+{"quando":"2026-11-08T17:10:46.335Z","data":"2026-11-08","evento":"uso_gemini","pedidos":6,"ok":3,"por_status":{"503":2}}
