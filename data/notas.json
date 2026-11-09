@@ -1,5 +1,31 @@
 [
   {
+    "id": "2026-11-09-byd-dolphin-mini-alcanca-3-lugar-geral-d",
+    "data": "2026-11-09",
+    "categoria": "mercado",
+    "titulo": "BYD Dolphin Mini alcança 3º lugar geral de vendas em outubro",
+    "texto": "Com 8.432 unidades emplacadas em outubro de 2026, o BYD Dolphin Mini liderou o segmento de carros 100% elétricos e alcançou a terceira posição no ranking geral de veículos do Brasil, de acordo com registros da Fenabrave. O modelo compacto foi o único elétrico entre os dez mais vendidos do país no mês, superado apenas por Fiat Strada e Hyundai HB20.",
+    "fontes": [
+      {
+        "nome": "Autoesporte",
+        "url": "https://autoesporte.globo.com/setor-automotivo/mercado-automotivo/noticia/2026/11/carros-eletricos-hibridos-mais-vendidos-brasil-outubro-2026.ghtml",
+        "data": "2026-11-09"
+      },
+      {
+        "nome": "O Liberal",
+        "url": "https://www.oliberal.com/para/carro-eletrico-fica-entre-os-mais-vendidos-no-para-e-em-outros-13-estados-veja-1.1192105",
+        "data": "2026-11-09"
+      }
+    ],
+    "foto": {
+      "id": 4322521,
+      "autor": "pixel2013",
+      "autorUrl": "https://pixabay.com/users/pixel2013-2364555/",
+      "pagina": "https://pixabay.com/photos/fiat-500-automobile-trees-4322521/",
+      "fonte": "Pixabay"
+    }
+  },
+  {
     "id": "2026-11-08-inadimplencia-da-alta-renda-sobe-mais-de",
     "data": "2026-11-08",
     "categoria": "financeiro",

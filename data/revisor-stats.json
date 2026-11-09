@@ -379,5 +379,21 @@
     "fatos": 1
    }
   }
+ },
+ "2026-11-09": {
+  "artigo": {
+   "aprovados": 1,
+   "reprovados": 1,
+   "sem_novidade": 0,
+   "criterios": {
+    "fatos": 1
+   }
+  },
+  "nota": {
+   "aprovados": 1,
+   "reprovados": 0,
+   "sem_novidade": 0,
+   "criterios": {}
+  }
  }
 }
