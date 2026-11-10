@@ -1689,3 +1689,21 @@
 {"quando":"2026-11-10T18:54:59.391Z","data":"2026-11-10","evento":"gemini","modelo":"gemini-3.8-flash","status":"rede","acao":"espera_e_repete","espera_s":40}
 {"quando":"2026-11-10T18:55:39.407Z","data":"2026-11-10","evento":"revisao_guia","resultado":"erro","motivo":"tempo do job esgotado esperando o Gemini"}
 {"quando":"2026-11-10T18:55:39.407Z","data":"2026-11-10","evento":"uso_gemini","pedidos":8,"ok":0,"por_status":{"503":4}}
+{"quando":"2026-11-10T20:48:20.558Z","data":"2026-11-10","evento":"gemini","modelo":"gemini-3.8-flash","status":503,"acao":"espera_e_repete","espera_s":10}
+{"quando":"2026-11-10T20:53:31.346Z","data":"2026-11-10","evento":"gemini","modelo":"gemini-3.8-flash","status":"rede","acao":"espera_e_repete","espera_s":40}
+{"quando":"2026-11-10T20:54:11.386Z","data":"2026-11-10","evento":"erro","tipo":"nota","motivo":"tempo do job esgotado esperando o Gemini"}
+{"quando":"2026-11-10T20:54:20.405Z","data":"2026-11-10","evento":"gemini","modelo":"gemini-3.8-flash","status":503,"acao":"espera_e_repete","espera_s":10}
+{"quando":"2026-11-10T20:54:30.750Z","data":"2026-11-10","evento":"gemini","modelo":"gemini-3.8-flash","status":503,"acao":"espera_e_repete","espera_s":40}
+{"quando":"2026-11-10T20:55:14.388Z","data":"2026-11-10","evento":"gemini","modelo":"gemini-3.8-flash","status":503,"acao":"proximo_modelo","motivo":"erro temporário persistiu"}
+{"quando":"2026-11-10T20:55:38.699Z","data":"2026-11-10","evento":"gemini","modelo":"gemini-3.7-flash","status":503,"acao":"espera_e_repete","espera_s":10}
+{"quando":"2026-11-10T20:55:50.929Z","data":"2026-11-10","evento":"gemini","modelo":"gemini-3.7-flash","status":503,"acao":"espera_e_repete","espera_s":40}
+{"quando":"2026-11-10T20:56:31.615Z","data":"2026-11-10","evento":"gemini","modelo":"gemini-3.7-flash","status":503,"acao":"proximo_modelo","motivo":"erro temporário persistiu"}
+{"quando":"2026-11-10T20:56:38.218Z","data":"2026-11-10","evento":"gemini","modelo":"gemini-3.6-flash","status":503,"acao":"espera_e_repete","espera_s":10}
+{"quando":"2026-11-10T20:56:49.552Z","data":"2026-11-10","evento":"gemini","modelo":"gemini-3.6-flash","status":503,"acao":"espera_e_repete","espera_s":40}
+{"quando":"2026-11-10T20:57:29.867Z","data":"2026-11-10","evento":"gemini","modelo":"gemini-3.6-flash","status":503,"acao":"proximo_modelo","motivo":"erro temporário persistiu"}
+{"quando":"2026-11-10T20:57:37.102Z","data":"2026-11-10","evento":"gemini","modelo":"gemini-3.5-flash","status":503,"acao":"espera_e_repete","espera_s":10}
+{"quando":"2026-11-10T20:57:47.577Z","data":"2026-11-10","evento":"gemini","modelo":"gemini-3.5-flash","status":503,"acao":"espera_e_repete","espera_s":40}
+{"quando":"2026-11-10T20:58:27.940Z","data":"2026-11-10","evento":"gemini","modelo":"gemini-3.5-flash","status":503,"acao":"proximo_modelo","motivo":"erro temporário persistiu"}
+{"quando":"2026-11-10T20:58:34.858Z","data":"2026-11-10","evento":"gemini","modelo":"gemini-2.5-flash","status":404,"acao":"proximo_modelo","motivo":"modelo indisponível ou recusado"}
+{"quando":"2026-11-10T20:58:42.687Z","data":"2026-11-10","evento":"revisao_guia","resultado":"sem_mudanca","slug":"por-que-motos-pagam-juros-mais-altos-que-carros"}
+{"quando":"2026-11-10T20:58:42.688Z","data":"2026-11-10","evento":"uso_gemini","pedidos":17,"ok":2,"por_status":{"404":1,"503":13}}
