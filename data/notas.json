@@ -1,5 +1,31 @@
 [
   {
+    "id": "2026-11-10-copom-mantem-juros-altos-por-mais-tempo",
+    "data": "2026-11-10",
+    "categoria": "economia",
+    "titulo": "Copom mantém juros altos por mais tempo",
+    "texto": "A ata do Copom divulgada em 10/11/2026 indica que o Banco Central manterá a taxa Selic em 13,75% ao ano por mais tempo devido à piora nas expectativas de inflação. Para quem possui ou busca crédito, o cenário de juros restritos encarece o custo das operações de financiamento.",
+    "fontes": [
+      {
+        "nome": "g1",
+        "url": "https://g1.globo.com/economia/noticia/2026/11/10/ata-do-copom-banco-central-diz-que-piora-nas-expectativas-de-inflacao-exige-juros-mais-altos-e-por-tempo-maior.ghtml",
+        "data": "2026-11-10"
+      },
+      {
+        "nome": "Agência Brasil",
+        "url": "https://agenciabrasil.ebc.com.br/economia/noticia/2026-11/ata-do-copom-indica-que-desaceleracao-da-economia-nao-conteve-inflacao",
+        "data": "2026-11-10"
+      }
+    ],
+    "foto": {
+      "id": 2180330,
+      "autor": "kschneider2991",
+      "autorUrl": "https://pixabay.com/users/kschneider2991-4936815/",
+      "pagina": "https://pixabay.com/photos/money-coins-stack-stacked-coins-2180330/",
+      "fonte": "Pixabay"
+    }
+  },
+  {
     "id": "2026-11-09-byd-dolphin-mini-alcanca-3-lugar-geral-d",
     "data": "2026-11-09",
     "categoria": "mercado",
