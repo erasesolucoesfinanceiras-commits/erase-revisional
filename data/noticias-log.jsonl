@@ -1678,3 +1678,14 @@
 {"quando":"2026-11-10T00:45:24.508Z","data":"2026-11-09","evento":"uso_gemini","pedidos":0,"ok":0,"por_status":{}}
 {"quando":"2026-11-10T02:20:19.954Z","data":"2026-11-09","evento":"resumo_revisor_semana","origem":"verificacao-diaria","motivo":"Revisor de 2026-11-03 a 2026-11-09: artigo: 4 aprovado(s), 4 reprovado(s), 3 sem novidade | reprovações por critério: original 3, fatos 3 || nota: 7 aprovado(s), 3 reprovado(s), 19 sem novidade | reprovações por critério: neutralidade/dois_lados 1, fontes 1, fatos 1","de":"2026-11-03","ate":"2026-11-09","por_tipo":{"artigo":{"aprovados":4,"reprovados":4,"sem_novidade":3,"criterios":{"original":3,"fatos":3}},"nota":{"aprovados":7,"reprovados":3,"sem_novidade":19,"criterios":{"neutralidade/dois_lados":1,"fontes":1,"fatos":1}}}}
 {"quando":"2026-11-10T02:20:19.954Z","data":"2026-11-09","evento":"verificacao","origem":"verificacao-diaria","acao":"tudo_certo","motivo":"último artigo 2026-11-09 (0 dia(s)), na capa do site"}
+{"quando":"2026-11-10T18:30:36.186Z","data":"2026-11-10","evento":"gemini","modelo":"gemini-3.8-flash","status":503,"acao":"espera_e_repete","espera_s":10}
+{"quando":"2026-11-10T18:31:00.531Z","data":"2026-11-10","evento":"gemini","modelo":"gemini-3.8-flash","status":503,"acao":"espera_e_repete","espera_s":40}
+{"quando":"2026-11-10T18:36:41.353Z","data":"2026-11-10","evento":"gemini","modelo":"gemini-3.8-flash","status":"rede","acao":"proximo_modelo","motivo":"erro temporário persistiu"}
+{"quando":"2026-11-10T18:41:42.139Z","data":"2026-11-10","evento":"gemini","modelo":"gemini-3.7-flash","status":"rede","acao":"espera_e_repete","espera_s":10}
+{"quando":"2026-11-10T18:41:55.238Z","data":"2026-11-10","evento":"gemini","modelo":"gemini-3.7-flash","status":503,"acao":"espera_e_repete","espera_s":40}
+{"quando":"2026-11-10T18:44:45.189Z","data":"2026-11-10","evento":"gemini","modelo":"gemini-3.7-flash","status":503,"acao":"proximo_modelo","motivo":"erro temporário persistiu"}
+{"quando":"2026-11-10T18:44:45.189Z","data":"2026-11-10","evento":"erro","tipo":"nota","motivo":"tempo do job esgotado esperando o Gemini"}
+{"quando":"2026-11-10T18:49:48.609Z","data":"2026-11-10","evento":"gemini","modelo":"gemini-3.8-flash","status":"rede","acao":"espera_e_repete","espera_s":10}
+{"quando":"2026-11-10T18:54:59.391Z","data":"2026-11-10","evento":"gemini","modelo":"gemini-3.8-flash","status":"rede","acao":"espera_e_repete","espera_s":40}
+{"quando":"2026-11-10T18:55:39.407Z","data":"2026-11-10","evento":"revisao_guia","resultado":"erro","motivo":"tempo do job esgotado esperando o Gemini"}
+{"quando":"2026-11-10T18:55:39.407Z","data":"2026-11-10","evento":"uso_gemini","pedidos":8,"ok":0,"por_status":{"503":4}}
