@@ -1,5 +1,31 @@
 [
   {
+    "id": "2026-11-11-vendas-de-veiculos-sobem-16-1-no-ano-e-c",
+    "data": "2026-11-11",
+    "categoria": "revisional",
+    "titulo": "Vendas de veículos sobem 16,1% no ano e China lidera importações no Brasil",
+    "texto": "Segundo dados da Anfavea, o Brasil comercializou 2,522 milhões de veículos de janeiro a outubro de 2026, alta de 16,1% em relação a 2025. No mesmo período, as importações somaram 520,7 mil unidades, puxadas pelos modelos da China, que registraram 288 mil emplacamentos e superaram os 143 mil trazidos da Argentina.",
+    "fontes": [
+      {
+        "nome": "G1 Carros",
+        "url": "https://g1.globo.com/carros/noticia/2026/11/11/resultados-anfavea.ghtml",
+        "data": "2026-11-11"
+      },
+      {
+        "nome": "Agência Brasil",
+        "url": "https://agenciabrasil.ebc.com.br/economia/noticia/2026-11/em-alta-producao-de-veiculos-ultrapassa-250-mil-unidades-em-outubro",
+        "data": "2026-11-11"
+      }
+    ],
+    "foto": {
+      "id": 4011416,
+      "autor": "geralt",
+      "autorUrl": "https://pixabay.com/users/geralt-9301/",
+      "pagina": "https://pixabay.com/photos/handshake-autokaufmann-automobile-4011416/",
+      "fonte": "Pixabay"
+    }
+  },
+  {
     "id": "2026-11-10-copom-mantem-juros-altos-por-mais-tempo",
     "data": "2026-11-10",
     "categoria": "economia",

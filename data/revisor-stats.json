@@ -403,5 +403,22 @@
    "sem_novidade": 0,
    "criterios": {}
   }
+ },
+ "2026-11-11": {
+  "artigo": {
+   "aprovados": 0,
+   "reprovados": 4,
+   "sem_novidade": 0,
+   "criterios": {
+    "sem_generico": 3,
+    "original": 1
+   }
+  },
+  "nota": {
+   "aprovados": 1,
+   "reprovados": 0,
+   "sem_novidade": 0,
+   "criterios": {}
+  }
  }
 }
