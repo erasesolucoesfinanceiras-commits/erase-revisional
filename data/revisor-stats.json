@@ -406,12 +406,13 @@
  },
  "2026-11-11": {
   "artigo": {
-   "aprovados": 0,
-   "reprovados": 4,
+   "aprovados": 1,
+   "reprovados": 8,
    "sem_novidade": 0,
    "criterios": {
-    "sem_generico": 3,
-    "original": 1
+    "sem_generico": 4,
+    "original": 3,
+    "fatos": 2
    }
   },
   "nota": {

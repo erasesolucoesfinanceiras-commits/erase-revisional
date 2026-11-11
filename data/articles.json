@@ -1,5 +1,39 @@
 [
   {
+    "slug": "aneel-propoe-tarifa-hora-certa-e-gera-debates-no-setor-de-energia-solar",
+    "categoria": "energia-solar",
+    "titulo": "ANEEL propõe Tarifa Hora Certa e gera debates no setor de energia solar",
+    "resumo": "Área técnica da ANEEL apresenta proposta para implementar tarifa horária na baixa tensão. Medida prevê enquadramento automático para novas conexões de geração distribuída solar.",
+    "data": "2026-11-11",
+    "fontes": [
+      {
+        "nome": "Canal Solar",
+        "url": "https://canalsolar.com.br/tarifa-hora-certa-associacoes-o-que-dizem/",
+        "data": "2026-11-11"
+      },
+      {
+        "nome": "Canal Solar",
+        "url": "https://canalsolar.com.br/tarifa-hora-certa-aneel-sistemas-solares-veiculos-eletricos/",
+        "data": "2026-11-09"
+      },
+      {
+        "nome": "Brasil 247",
+        "url": "https://www.brasil247.com/economia/aneel-sugere-tarifa-horaria-compulsoria-para-novas-conexoes-de-gd-solar/",
+        "data": "2026-11-10"
+      }
+    ],
+    "corpo": "<p>A área técnica da Agência Nacional de Energia Elétrica (ANEEL) apresentou, no dia 9 de novembro de 2026, a proposta da Tarifa Hora Certa. A medida reformula a estrutura de cobrança de energia elétrica para a baixa tensão, estabelecendo valores diferenciados para o quilowatt-hora conforme o horário do dia. A nova modalidade tarifária, que busca incentivar a utilização de energia em momentos de menor demanda no Sistema Interligado Nacional (SIN), abrange consumidores de maior porte e estabelece regras específicas para a produção própria por meio de sistemas solares fotovoltaicos.</p><h2>Como funciona a proposta da Tarifa Hora Certa</h2><p>O modelo proposto prevê tarifas mais baixas durante os períodos de maior oferta de energia e preços mais elevados nos horários de pico de consumo, como no início da noite. A implantação deve ocorrer de forma gradual a partir de 2028, com a estimativa de alcançar cerca de 5,7 milhões de unidades consumidoras até 2031. O documento elaborado pelas áreas técnicas da autarquia precisa passar pela deliberação da diretoria colegiada da ANEEL, cuja expectativa de conclusão da tramitação é até dezembro de 2026.</p><p>O enquadramento automático na nova tarifa será aplicado aos consumidores da baixa tensão pertencentes aos subgrupos B1 (residencial), B2 (rural) e B3 (comercial, industrial e outras atividades) que apresentem consumo médio ou injeção de energia igual ou superior a 500 quilowatts-hora (kWh) por mês, considerando uma janela de avaliação de 12 meses. Como o consumo residencial médio no Brasil é de aproximadamente 160 kWh mensais, a maioria dos domicílios não será transferida compulsoriamente. Além disso, a proposta mantém excluídos os beneficiários da Tarifa Social e do Desconto Social.</p><h2>Regras para a geração distribuída e estações de recarga</h2><p>A proposta da agência reguladora estabelece tratamentos distintos para os sistemas de micro e minigeração distribuída (MMGD) existentes e para novas instalações. As unidades consumidoras que aderirem ao Sistema de Compensação de Energia Elétrica (SCEE), com pedido de conexão apresentado a partir de 90 dias após a publicação da norma definitiva, entrarão na Tarifa Hora Certa sem a opção de retorno ao modelo tradicional, independentemente do volume consumido ou injetado. A cobrança compulsória por horário também será aplicada às novas estações comerciais de recarga de veículos elétricos.</p><p>Para os sistemas solares que já estão conectados à rede elétrica, a proposta permite a opção de permanência em uma modalidade sem variação horária durante a fase de transição. Contudo, a partir de 2033, com o término da Tarifa Plana Temporária, a migração para a Tarifa Hora Certa passará a ser obrigatória também para as unidades de geração distribuída já existentes, incluindo as enquadradas como GD1, desde que atinjam os critérios definidos de consumo ou injeção.</p><h2>Avaliação das entidades do setor elétrico</h2><p>Representantes de associações do setor de energia acompanham as discussões sobre a nova estrutura tarifária. A Associação Brasileira de Energia Solar Fotovoltaica (ABSOLAR), por meio da presidente do seu Conselho de Administração, Bárbara Rubim, reconheceu que a criação de sinais de preço para a baixa tensão representa uma evolução para o equilíbrio operacional do sistema elétrico. Entretanto, a dirigente questionou se a diferenciação de valores por horário será suficiente para provocar mudanças efetivas no comportamento dos consumidores ou para incentivar investimentos em armazenamento por baterias.</p><p>Para embasar essa avaliação, a representante da ABSOLAR citou dados de mercados internacionais, como Inglaterra, Alemanha, Austrália, Itália e os estados do Texas e da Califórnia nos Estados Unidos, onde a introdução de tarifas horárias não alterou significativamente os hábitos de consumo por si só. De acordo com a associação, a efetividade da medida dependerá da amplitude da diferença entre os preços cobrados em cada período do dia.</p><h2>O que observar na prática ao planejar investimentos</h2><p>Na prática, consumidores que pretendem instalar ou financiar sistemas de energia solar fotovoltaica na baixa tensão devem acompanhar os prazos finais da regulamentação. Quem solicitar a conexão após o período de 90 dias da publicação da regra definitiva terá seu faturamento enquadrado diretamente na estrutura horária. Assim, na análise de viabilidade e financiamento de projetos solares, torna-se relevante avaliar o perfil de consumo e de injeção ao longo do dia para prever com precisão o impacto financeiro na conta de luz sob as novas diretrizes da ANEEL.</p>",
+    "foto_busca": "solar panels house roof",
+    "tipo": "noticia",
+    "foto": {
+      "id": 2666770,
+      "autor": "RoyBuri",
+      "autorUrl": "https://pixabay.com/users/RoyBuri-3128024/",
+      "pagina": "https://pixabay.com/photos/solar-roof-solar-energy-2666770/",
+      "fonte": "Pixabay"
+    }
+  },
+  {
     "slug": "focus-eleva-projecao-da-selic-para-13-75-e-amplia-estimativa-do-ipca-de-2027",
     "categoria": "economia",
     "titulo": "Focus eleva projeção da Selic para 13,75% e amplia estimativa do IPCA de 2027",
