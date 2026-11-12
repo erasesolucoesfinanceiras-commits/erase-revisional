@@ -1863,3 +1863,20 @@
 {"quando":"2026-11-12T21:29:44.803Z","data":"2026-11-12","evento":"tema_trocado","tipo":"nota","de":"imoveis","para":"consorcio-seguros","motivo":"fontes insuficientes ou sem novidade real","ultimos_motivos":["sem novidade real: Não há duas fontes de veículos diferentes cobrindo o mesmo fato recente inédito."]}
 {"quando":"2026-11-12T21:29:44.803Z","data":"2026-11-12","evento":"sem_publicacao","tipo":"nota","motivo":"orçamento de tempo do dia esgotado"}
 {"quando":"2026-11-12T21:29:44.813Z","data":"2026-11-12","evento":"uso_gemini","pedidos":18,"ok":2,"por_status":{"404":1,"429":5,"503":10}}
+{"quando":"2026-11-12T22:47:44.738Z","data":"2026-11-12","evento":"gemini","modelo":"gemini-3.8-flash","status":429,"acao":"espera_e_repete","espera_s":70}
+{"quando":"2026-11-12T22:48:54.997Z","data":"2026-11-12","evento":"gemini","modelo":"gemini-3.8-flash","status":429,"acao":"espera_e_repete","espera_s":70}
+{"quando":"2026-11-12T22:50:05.377Z","data":"2026-11-12","evento":"gemini","modelo":"gemini-3.8-flash","status":429,"acao":"proximo_modelo","motivo":"cota por minuto ainda esgotada após esperas"}
+{"quando":"2026-11-12T22:50:12.301Z","data":"2026-11-12","evento":"gemini","modelo":"gemini-3.7-flash","status":429,"acao":"espera_e_repete","espera_s":70}
+{"quando":"2026-11-12T22:51:22.622Z","data":"2026-11-12","evento":"gemini","modelo":"gemini-3.7-flash","status":429,"acao":"espera_e_repete","espera_s":70}
+{"quando":"2026-11-12T22:52:32.897Z","data":"2026-11-12","evento":"gemini","modelo":"gemini-3.7-flash","status":429,"acao":"proximo_modelo","motivo":"cota por minuto ainda esgotada após esperas"}
+{"quando":"2026-11-12T22:52:43.731Z","data":"2026-11-12","evento":"gemini","modelo":"gemini-3.6-flash","status":503,"acao":"espera_e_repete","espera_s":10}
+{"quando":"2026-11-12T22:52:55.981Z","data":"2026-11-12","evento":"gemini","modelo":"gemini-3.6-flash","status":503,"acao":"espera_e_repete","espera_s":40}
+{"quando":"2026-11-12T22:55:47.764Z","data":"2026-11-12","evento":"pulado","tipo":"nota","tema":"energia-solar","motivo":"sem novidade real: O tema principal sobre a proposta da Tarifa Hora Certa da ANEEL já foi abordado nos últimos 15 dias e os demais tópicos possuem apenas uma fonte disponível ou abrangência regional."}
+{"quando":"2026-11-12T22:55:47.765Z","data":"2026-11-12","evento":"tema_trocado","tipo":"nota","de":"energia-solar","para":"imoveis","motivo":"fontes insuficientes ou sem novidade real","ultimos_motivos":["sem novidade real: O tema principal sobre a proposta da Tarifa Hora Certa da ANEEL já foi abordado nos últimos 15 dias e os demais tópicos possuem apenas uma fonte disponível ou abrangência regional."]}
+{"quando":"2026-11-12T22:56:02.352Z","data":"2026-11-12","evento":"gemini","modelo":"gemini-3.6-flash","status":503,"acao":"espera_e_repete","espera_s":10}
+{"quando":"2026-11-12T22:56:13.401Z","data":"2026-11-12","evento":"gemini","modelo":"gemini-3.6-flash","status":503,"acao":"espera_e_repete","espera_s":40}
+{"quando":"2026-11-12T22:57:09.334Z","data":"2026-11-12","evento":"pulado","tipo":"nota","tema":"imoveis","motivo":"sem novidade real: Não há duas fontes de sites diferentes tratando do mesmo fato recente e que não tenha sido abordado nos últimos 15 dias."}
+{"quando":"2026-11-12T22:57:09.335Z","data":"2026-11-12","evento":"tema_trocado","tipo":"nota","de":"imoveis","para":"consorcio-seguros","motivo":"fontes insuficientes ou sem novidade real","ultimos_motivos":["sem novidade real: Não há duas fontes de sites diferentes tratando do mesmo fato recente e que não tenha sido abordado nos últimos 15 dias."]}
+{"quando":"2026-11-12T23:02:19.676Z","data":"2026-11-12","evento":"gemini","modelo":"gemini-3.6-flash","status":"rede","acao":"espera_e_repete","espera_s":10}
+{"quando":"2026-11-12T23:02:29.687Z","data":"2026-11-12","evento":"erro","tipo":"nota","motivo":"tempo do job esgotado esperando o Gemini"}
+{"quando":"2026-11-12T23:02:29.691Z","data":"2026-11-12","evento":"uso_gemini","pedidos":13,"ok":2,"por_status":{"429":6,"503":4}}
