@@ -1806,3 +1806,38 @@
 {"quando":"2026-11-11T21:11:04.690Z","data":"2026-11-11","evento":"indexnow","resultado":"enviado","status":200,"enviadas":4,"ainda_pendentes":0,"urls":["https://revisional.eraseconsulta.com.br/noticias/aneel-propoe-tarifa-hora-certa-e-gera-debates-no-setor-de-energia-solar","https://revisional.eraseconsulta.com.br/","https://revisional.eraseconsulta.com.br/artigos","https://revisional.eraseconsulta.com.br/categoria-energia-solar"],"resposta":""}
 {"quando":"2026-11-11T23:33:05.261Z","data":"2026-11-11","evento":"uso_gemini","pedidos":0,"ok":0,"por_status":{}}
 {"quando":"2026-11-12T01:37:37.981Z","data":"2026-11-11","evento":"verificacao","origem":"verificacao-diaria","acao":"tudo_certo","motivo":"último artigo 2026-11-11 (0 dia(s)), na capa do site"}
+{"quando":"2026-11-12T18:41:43.324Z","data":"2026-11-12","evento":"gemini","modelo":"gemini-3.8-flash","status":503,"acao":"espera_e_repete","espera_s":10}
+{"quando":"2026-11-12T18:41:56.991Z","data":"2026-11-12","evento":"gemini","modelo":"gemini-3.8-flash","status":503,"acao":"espera_e_repete","espera_s":40}
+{"quando":"2026-11-12T18:42:37.873Z","data":"2026-11-12","evento":"gemini","modelo":"gemini-3.8-flash","status":503,"acao":"proximo_modelo","motivo":"erro temporário persistiu"}
+{"quando":"2026-11-12T18:42:50.184Z","data":"2026-11-12","evento":"gemini","modelo":"gemini-3.7-flash","status":503,"acao":"espera_e_repete","espera_s":10}
+{"quando":"2026-11-12T18:43:03.950Z","data":"2026-11-12","evento":"gemini","modelo":"gemini-3.7-flash","status":503,"acao":"espera_e_repete","espera_s":40}
+{"quando":"2026-11-12T18:44:03.996Z","data":"2026-11-12","evento":"gemini","modelo":"gemini-3.7-flash","status":503,"acao":"proximo_modelo","motivo":"erro temporário persistiu"}
+{"quando":"2026-11-12T18:44:10.883Z","data":"2026-11-12","evento":"pulado","tipo":"nota","tema":"energia-solar","motivo":"sem novidade real: O assunto principal das fontes aborda a Tarifa Hora Certa da ANEEL, tópico já publicado recentemente e proibido de repetição, enquanto os outros temas possuem apenas uma fonte disponível."}
+{"quando":"2026-11-12T18:44:10.884Z","data":"2026-11-12","evento":"tema_trocado","tipo":"nota","de":"energia-solar","para":"imoveis","motivo":"fontes insuficientes ou sem novidade real","ultimos_motivos":["sem novidade real: O assunto principal das fontes aborda a Tarifa Hora Certa da ANEEL, tópico já publicado recentemente e proibido de repetição, enquanto os outros temas possuem apenas uma fonte disponível."]}
+{"quando":"2026-11-12T18:44:26.522Z","data":"2026-11-12","evento":"gemini","modelo":"gemini-3.8-flash","status":503,"acao":"espera_e_repete","espera_s":10}
+{"quando":"2026-11-12T18:45:34.154Z","data":"2026-11-12","evento":"gemini","modelo":"gemini-3.8-flash","status":503,"acao":"espera_e_repete","espera_s":40}
+{"quando":"2026-11-12T18:46:16.304Z","data":"2026-11-12","evento":"gemini","modelo":"gemini-3.8-flash","status":503,"acao":"proximo_modelo","motivo":"erro temporário persistiu"}
+{"quando":"2026-11-12T18:46:33.376Z","data":"2026-11-12","evento":"gemini","modelo":"gemini-3.7-flash","status":503,"acao":"espera_e_repete","espera_s":10}
+{"quando":"2026-11-12T18:46:48.168Z","data":"2026-11-12","evento":"gemini","modelo":"gemini-3.7-flash","status":503,"acao":"espera_e_repete","espera_s":40}
+{"quando":"2026-11-12T18:47:31.264Z","data":"2026-11-12","evento":"gemini","modelo":"gemini-3.7-flash","status":503,"acao":"proximo_modelo","motivo":"erro temporário persistiu"}
+{"quando":"2026-11-12T18:47:54.436Z","data":"2026-11-12","evento":"pulado","tipo":"nota","tema":"imoveis","motivo":"sem novidade real: Não há duas fontes de veículos diferentes tratando do mesmo fato inédito sobre o mercado imobiliário."}
+{"quando":"2026-11-12T18:47:54.436Z","data":"2026-11-12","evento":"tema_trocado","tipo":"nota","de":"imoveis","para":"consorcio-seguros","motivo":"fontes insuficientes ou sem novidade real","ultimos_motivos":["sem novidade real: Não há duas fontes de veículos diferentes tratando do mesmo fato inédito sobre o mercado imobiliário."]}
+{"quando":"2026-11-12T18:49:04.189Z","data":"2026-11-12","evento":"gemini","modelo":"gemini-3.8-flash","status":503,"acao":"espera_e_repete","espera_s":10}
+{"quando":"2026-11-12T18:49:16.427Z","data":"2026-11-12","evento":"gemini","modelo":"gemini-3.8-flash","status":503,"acao":"espera_e_repete","espera_s":40}
+{"quando":"2026-11-12T18:49:59.363Z","data":"2026-11-12","evento":"gemini","modelo":"gemini-3.8-flash","status":503,"acao":"proximo_modelo","motivo":"erro temporário persistiu"}
+{"quando":"2026-11-12T18:50:10.480Z","data":"2026-11-12","evento":"gemini","modelo":"gemini-3.7-flash","status":503,"acao":"espera_e_repete","espera_s":10}
+{"quando":"2026-11-12T18:50:25.267Z","data":"2026-11-12","evento":"gemini","modelo":"gemini-3.7-flash","status":503,"acao":"espera_e_repete","espera_s":40}
+{"quando":"2026-11-12T18:51:15.518Z","data":"2026-11-12","evento":"gemini","modelo":"gemini-3.7-flash","status":503,"acao":"proximo_modelo","motivo":"erro temporário persistiu"}
+{"quando":"2026-11-12T18:56:24.417Z","data":"2026-11-12","evento":"gemini","modelo":"gemini-3.8-flash","status":"rede","acao":"espera_e_repete","espera_s":10}
+{"quando":"2026-11-12T18:56:34.428Z","data":"2026-11-12","evento":"erro","tipo":"nota","motivo":"tempo do job esgotado esperando o Gemini"}
+{"quando":"2026-11-12T18:56:46.752Z","data":"2026-11-12","evento":"gemini","modelo":"gemini-3.8-flash","status":429,"acao":"espera_e_repete","espera_s":70}
+{"quando":"2026-11-12T18:57:56.948Z","data":"2026-11-12","evento":"gemini","modelo":"gemini-3.8-flash","status":429,"acao":"espera_e_repete","espera_s":70}
+{"quando":"2026-11-12T18:59:07.242Z","data":"2026-11-12","evento":"gemini","modelo":"gemini-3.8-flash","status":429,"acao":"proximo_modelo","motivo":"cota por minuto ainda esgotada após esperas"}
+{"quando":"2026-11-12T18:59:15.508Z","data":"2026-11-12","evento":"gemini","modelo":"gemini-3.7-flash","status":503,"acao":"espera_e_repete","espera_s":10}
+{"quando":"2026-11-12T18:59:25.749Z","data":"2026-11-12","evento":"gemini","modelo":"gemini-3.7-flash","status":429,"acao":"espera_e_repete","espera_s":70}
+{"quando":"2026-11-12T19:01:14.719Z","data":"2026-11-12","evento":"gemini","modelo":"gemini-3.7-flash","status":503,"acao":"proximo_modelo","motivo":"erro temporário persistiu"}
+{"quando":"2026-11-12T19:01:15.849Z","data":"2026-11-12","evento":"gemini","modelo":"gemini-3.6-flash","status":503,"acao":"espera_e_repete","espera_s":10}
+{"quando":"2026-11-12T19:01:27.009Z","data":"2026-11-12","evento":"gemini","modelo":"gemini-3.6-flash","status":503,"acao":"espera_e_repete","espera_s":40}
+{"quando":"2026-11-12T19:02:19.149Z","data":"2026-11-12","evento":"gemini","modelo":"gemini-3.6-flash","status":503,"acao":"proximo_modelo","motivo":"erro temporário persistiu"}
+{"quando":"2026-11-12T19:02:49.461Z","data":"2026-11-12","evento":"revisao_guia","resultado":"sem_mudanca","slug":"juros-acima-da-media-sao-abusivos-o-que-diz-o-stj"}
+{"quando":"2026-11-12T19:02:49.461Z","data":"2026-11-12","evento":"uso_gemini","pedidos":32,"ok":4,"por_status":{"429":4,"503":23}}
