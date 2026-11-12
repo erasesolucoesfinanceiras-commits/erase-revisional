@@ -1805,3 +1805,4 @@
 {"quando":"2026-11-11T21:09:58.825Z","data":"2026-11-11","evento":"uso_gemini","pedidos":17,"ok":8,"por_status":{"429":4,"503":5}}
 {"quando":"2026-11-11T21:11:04.690Z","data":"2026-11-11","evento":"indexnow","resultado":"enviado","status":200,"enviadas":4,"ainda_pendentes":0,"urls":["https://revisional.eraseconsulta.com.br/noticias/aneel-propoe-tarifa-hora-certa-e-gera-debates-no-setor-de-energia-solar","https://revisional.eraseconsulta.com.br/","https://revisional.eraseconsulta.com.br/artigos","https://revisional.eraseconsulta.com.br/categoria-energia-solar"],"resposta":""}
 {"quando":"2026-11-11T23:33:05.261Z","data":"2026-11-11","evento":"uso_gemini","pedidos":0,"ok":0,"por_status":{}}
+{"quando":"2026-11-12T01:37:37.981Z","data":"2026-11-11","evento":"verificacao","origem":"verificacao-diaria","acao":"tudo_certo","motivo":"último artigo 2026-11-11 (0 dia(s)), na capa do site"}
