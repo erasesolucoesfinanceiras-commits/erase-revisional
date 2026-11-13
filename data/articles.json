@@ -1,5 +1,39 @@
 [
   {
+    "slug": "caixa-estuda-reajuste-nas-taxas-do-credito-imobiliario-devido-ao-custo-de-captac",
+    "categoria": "imoveis",
+    "titulo": "Caixa estuda reajuste nas taxas do crédito imobiliário devido ao custo de captação",
+    "resumo": "A Caixa Econômica Federal analisa a elevação dos juros no financiamento habitacional. O avanço do crédito e a busca por fontes alternativas de recursos pressionam a operação do banco.",
+    "data": "2026-11-13",
+    "fontes": [
+      {
+        "nome": "InfoMoney",
+        "url": "https://www.infomoney.com.br/minhas-financas/caixa-estuda-aumentar-juros-do-financiamento-imobiliario-diz-vice-presidente/",
+        "data": "2026-11-13"
+      },
+      {
+        "nome": "Valor Econômico",
+        "url": "https://valor.globo.com/financas/noticia/2026/11/13/caixa-estuda-reajuste-da-taxa-de-juros-do-credito-imobiliario-diz-magalhaes.ghtml",
+        "data": "2026-11-13"
+      },
+      {
+        "nome": "Exame",
+        "url": "https://exame.com/mercado-imobiliario/caixa-estuda-aumentar-juros-da-casa-propria-entenda-a-conta-por-tras-da-decisao/",
+        "data": "2026-11-13"
+      }
+    ],
+    "corpo": "<p>A Caixa Econômica Federal informou que está avaliando a possibilidade de alterar as taxas de juros cobradas em suas modalidades de crédito imobiliário. O anúncio foi feito durante a divulgação do balanço financeiro referente ao terceiro trimestre de 2026, ocorrida em 13 de novembro de 2026, na cidade de São Paulo. A vice-presidente de Habitação do banco, Inês Magalhães, declarou que o eventual ajuste das condições de financiamento dependerá do orçamento que está sendo finalizado para 2027 e do volume global de recursos a ser ofertado nos trimestres seguintes.</p><p>A sinalização ocorre em um momento de reformulação na composição das fontes de financiamento utilizadas pelas instituições financeiras do país, onde o avanço da demanda por moradia pressiona a busca por recursos no mercado de capitais.</p><h2>Mudanças no funding e autonomia decisória da instituição</h2><p>O cenário que fundamenta o estudo de reajuste está ligado às alterações no custo de captação do dinheiro emprestado. O vice-presidente de Finanças e Controladoria do banco, Marcos Brasiliano Rosa, esclareceu que as operações originadas entre o ano de 2020 e o primeiro semestre de 2022 foram custeadas de forma integral por depósitos da caderneta de poupança, fonte que historicamente garantia custos mais baixos e previsíveis para contratos de longo prazo.</p><p>Com o crescimento do volume de crédito imobiliário em ritmo superior ao saldo de novos depósitos na poupança, a instituição financeira passou a utilizar com maior frequência alternativas de captação como as Letras de Crédito Imobiliário (LCIs), cujos rendimentos acompanham as flutuações das taxas de mercado. O saldo de LCIs sob gestão da Caixa atingiu R$ 268,7 bilhões em setembro de 2026, o que representa uma elevação de 13,8% na comparação com os 12 meses anteriores. No total, o estoque nacional da poupança gira em torno de R$ 1 trilhão, do qual a instituição retém 40,3%, frente aos 38,8% registrados no mesmo período do ano passado.</p><p>O executivo ressaltou ainda que a Caixa possui autonomia para estipular os percentuais de juros aplicados em suas operações de crédito, sem necessidade de obter autorização prévia junto ao controlador federal. Por outro lado, Rosa observou que, devido à responsabilidade de responder por quase 70% do sistema habitacional do país, qualquer alteração exige calibração cuidadosa para equilibrar o volume ofertado e a viabilidade das operações.</p><h2>Desempenho da carteira imobiliária e balanço do trimestre</h2><p>No encerramento de setembro de 2026, a carteira de crédito habitacional do banco somou R$ 1,043 trilhão, número que equivale a uma alta de 15,5% em 12 meses e consolida uma participação de 68,2% de todo o mercado imobiliário brasileiro. Levantamento da Associação Brasileira das Entidades de Crédito Imobiliário e Poupança (Abecip) aponta que, de janeiro a agosto de 2026, a Caixa respondeu por 48,6% dos financiamentos concedidos com recursos oriundos da poupança.</p><p>Segundo o presidente da instituição, Carlos Vieira, o volume financeiro destinado à habitação registrou expansão contínua nos últimos anos: foram R$ 180 bilhões em 2023 e R$ 249 bilhões em 2025, com a expectativa de que o montante acumulado em 2026 supere ligeiramente o valor do ano anterior. No tocante aos resultados financeiros, o lucro líquido recorrente do banco no terceiro trimestre de 2026 ficou em R$ 3,5 bilhões, registrando queda de 7,4% na comparação com o trimestre imediatamente anterior.</p><h2>O que observar na prática ao pesquisar um financiamento</h2><p>Diante do estudo de reajuste nas taxas de juros do crédito habitacional, o consumidor que pretende adquirir um imóvel nos próximos meses pode observar variações no custo das parcelas e nas exigências das propostas. Na prática, recomenda-se analisar atentamente o Custo Efetivo Total (CET), indicador que engloba a taxa de juros, os seguros obrigatórios e as tarifas de administração do contrato. Além disso, vale comparar o percentual de entrada exigido, o grau de comprometimento da renda familiar e a diferença entre os sistemas de amortização disponíveis, como a tabela SAC e a tabela Price.</p>",
+    "foto_busca": "real estate financing contract",
+    "tipo": "noticia",
+    "foto": {
+      "id": 6688945,
+      "autor": "OleksandrPidvalnyi",
+      "autorUrl": "https://pixabay.com/users/OleksandrPidvalnyi-4638469/",
+      "pagina": "https://pixabay.com/photos/real-estate-homeownership-homebuying-6688945/",
+      "fonte": "Pixabay"
+    }
+  },
+  {
     "slug": "aneel-propoe-tarifa-hora-certa-e-gera-debates-no-setor-de-energia-solar",
     "categoria": "energia-solar",
     "titulo": "ANEEL propõe Tarifa Hora Certa e gera debates no setor de energia solar",

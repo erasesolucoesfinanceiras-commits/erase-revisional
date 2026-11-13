@@ -1,5 +1,31 @@
 [
   {
+    "id": "2026-11-13-anfavea-quer-debater-nova-politica-autom",
+    "data": "2026-11-13",
+    "categoria": "mercado",
+    "titulo": "Anfavea quer debater nova política automotiva com o governo a partir de 2027",
+    "texto": "A Associação Nacional dos Fabricantes de Veículos Automotores (Anfavea) planeja iniciar discussões com o governo federal sobre uma nova política automotiva pós-Mover. Segundo o presidente da entidade, Igor Calvet, a intenção é definir incentivos para o desenvolvimento local de baterias, inteligência artificial e componentes eletrônicos no país.",
+    "fontes": [
+      {
+        "nome": "Valor Econômico",
+        "url": "https://valor.globo.com/empresas/noticia/2026/11/11/venda-de-veiculos-cresce-161percent-no-ano-e-anfavea-fala-em-discutir-politica-para-o-setor-com-o-governo-reeleito.ghtml",
+        "data": "2026-11-11"
+      },
+      {
+        "nome": "Terra",
+        "url": "https://www.terra.com.br/economia/producao-e-venda-de-veiculos-no-brasil-caem-em-outubro-ante-setembro-diz-anfavea,b254117a22fed39378d4427874e4d5d3kwsbebby.html",
+        "data": "2026-11-11"
+      }
+    ],
+    "foto": {
+      "id": 2138927,
+      "autor": "andreas160578",
+      "autorUrl": "https://pixabay.com/users/andreas160578-2383079/",
+      "pagina": "https://pixabay.com/photos/car-dealer-auto-sales-automobile-2138927/",
+      "fonte": "Pixabay"
+    }
+  },
+  {
     "id": "2026-11-11-vendas-de-veiculos-sobem-16-1-no-ano-e-c",
     "data": "2026-11-11",
     "categoria": "revisional",
