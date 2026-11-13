@@ -1928,3 +1928,4 @@
 {"quando":"2026-11-13T18:47:51.483Z","data":"2026-11-13","evento":"uso_gemini","pedidos":43,"ok":16,"por_status":{"429":4,"503":22}}
 {"quando":"2026-11-13T18:48:26.454Z","data":"2026-11-13","evento":"indexnow","resultado":"enviado","status":200,"enviadas":6,"ainda_pendentes":0,"urls":["https://revisional.eraseconsulta.com.br/noticias/caixa-estuda-reajuste-nas-taxas-do-credito-imobiliario-devido-ao-custo-de-captac","https://revisional.eraseconsulta.com.br/","https://revisional.eraseconsulta.com.br/artigos","https://revisional.eraseconsulta.com.br/radar","https://revisional.eraseconsulta.com.br/categoria-mercado","https://revisional.eraseconsulta.com.br/categoria-imoveis"],"resposta":""}
 {"quando":"2026-11-13T20:42:05.247Z","data":"2026-11-13","evento":"uso_gemini","pedidos":0,"ok":0,"por_status":{}}
+{"quando":"2026-11-13T22:43:54.441Z","data":"2026-11-13","evento":"uso_gemini","pedidos":0,"ok":0,"por_status":{}}
