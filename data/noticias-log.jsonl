@@ -1975,3 +1975,15 @@
 {"quando":"2026-11-14T19:18:49.588Z","data":"2026-11-14","evento":"gemini","modelo":"gemini-3.6-flash","status":503,"acao":"espera_e_repete","espera_s":10}
 {"quando":"2026-11-14T19:19:08.302Z","data":"2026-11-14","evento":"revisao_guia","resultado":"sem_mudanca","slug":"taxa-nominal-x-taxa-efetiva-entenda-a-diferenca"}
 {"quando":"2026-11-14T19:19:08.302Z","data":"2026-11-14","evento":"uso_gemini","pedidos":18,"ok":3,"por_status":{"429":9,"503":4}}
+{"quando":"2026-11-14T21:36:13.047Z","data":"2026-11-14","evento":"gemini","modelo":"gemini-3.8-flash","status":503,"acao":"espera_e_repete","espera_s":10}
+{"quando":"2026-11-14T21:41:23.846Z","data":"2026-11-14","evento":"gemini","modelo":"gemini-3.8-flash","status":"rede","acao":"espera_e_repete","espera_s":40}
+{"quando":"2026-11-14T21:42:27.170Z","data":"2026-11-14","evento":"gemini","modelo":"gemini-3.8-flash","status":503,"acao":"proximo_modelo","motivo":"erro temporário persistiu"}
+{"quando":"2026-11-14T21:42:27.288Z","data":"2026-11-14","evento":"gemini","modelo":"gemini-3.7-flash","status":429,"acao":"espera_e_repete","espera_s":70}
+{"quando":"2026-11-14T21:45:06.865Z","data":"2026-11-14","evento":"gemini","modelo":"gemini-3.7-flash","status":503,"acao":"espera_e_repete","espera_s":40}
+{"quando":"2026-11-14T21:45:47.033Z","data":"2026-11-14","evento":"gemini","modelo":"gemini-3.7-flash","status":429,"acao":"proximo_modelo","motivo":"cota por minuto ainda esgotada após esperas"}
+{"quando":"2026-11-14T21:46:02.643Z","data":"2026-11-14","evento":"pulado","tipo":"nota","tema":"imoveis","motivo":"sem novidade real: O assunto sobre o estudo de reajuste das taxas de juros do crédito imobiliário pela Caixa já foi publicado nos últimos 15 dias."}
+{"quando":"2026-11-14T21:46:02.644Z","data":"2026-11-14","evento":"tema_trocado","tipo":"nota","de":"imoveis","para":"consorcio-seguros","motivo":"fontes insuficientes ou sem novidade real","ultimos_motivos":["sem novidade real: O assunto sobre o estudo de reajuste das taxas de juros do crédito imobiliário pela Caixa já foi publicado nos últimos 15 dias."]}
+{"quando":"2026-11-14T21:46:10.275Z","data":"2026-11-14","evento":"gemini","modelo":"gemini-3.8-flash","status":429,"acao":"espera_e_repete","espera_s":70}
+{"quando":"2026-11-14T21:49:53.598Z","data":"2026-11-14","evento":"gemini","modelo":"gemini-3.8-flash","status":429,"acao":"espera_e_repete","espera_s":70}
+{"quando":"2026-11-14T21:51:03.663Z","data":"2026-11-14","evento":"erro","tipo":"nota","motivo":"tempo do job esgotado esperando o Gemini"}
+{"quando":"2026-11-14T21:51:03.670Z","data":"2026-11-14","evento":"uso_gemini","pedidos":10,"ok":2,"por_status":{"429":4,"503":3}}
