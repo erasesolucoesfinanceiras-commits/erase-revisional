@@ -1955,3 +1955,23 @@
 {"quando":"2026-11-14T17:19:33.781Z","data":"2026-11-14","evento":"gemini","modelo":"gemini-3.6-flash","status":503,"acao":"espera_e_repete","espera_s":10}
 {"quando":"2026-11-14T17:19:43.788Z","data":"2026-11-14","evento":"revisao_guia","resultado":"erro","motivo":"tempo do job esgotado esperando o Gemini"}
 {"quando":"2026-11-14T17:19:43.788Z","data":"2026-11-14","evento":"uso_gemini","pedidos":22,"ok":2,"por_status":{"429":2,"503":16}}
+{"quando":"2026-11-14T18:59:13.154Z","data":"2026-11-14","evento":"gemini","modelo":"gemini-3.8-flash","status":"rede","acao":"espera_e_repete","espera_s":10}
+{"quando":"2026-11-14T19:01:36.347Z","data":"2026-11-14","evento":"pulado","tipo":"nota","tema":"imoveis","motivo":"sem novidade real: O tema sobre os estudos da Caixa para reajuste dos juros do crédito imobiliário já foi publicado nos últimos 15 dias."}
+{"quando":"2026-11-14T19:01:36.348Z","data":"2026-11-14","evento":"tema_trocado","tipo":"nota","de":"imoveis","para":"consorcio-seguros","motivo":"fontes insuficientes ou sem novidade real","ultimos_motivos":["sem novidade real: O tema sobre os estudos da Caixa para reajuste dos juros do crédito imobiliário já foi publicado nos últimos 15 dias."]}
+{"quando":"2026-11-14T19:02:03.842Z","data":"2026-11-14","evento":"gemini","modelo":"gemini-3.8-flash","status":503,"acao":"espera_e_repete","espera_s":10}
+{"quando":"2026-11-14T19:02:18.214Z","data":"2026-11-14","evento":"gemini","modelo":"gemini-3.8-flash","status":503,"acao":"espera_e_repete","espera_s":40}
+{"quando":"2026-11-14T19:04:34.678Z","data":"2026-11-14","evento":"gemini","modelo":"gemini-3.8-flash","status":429,"acao":"espera_e_repete","espera_s":70}
+{"quando":"2026-11-14T19:05:44.868Z","data":"2026-11-14","evento":"gemini","modelo":"gemini-3.8-flash","status":429,"acao":"espera_e_repete","espera_s":70}
+{"quando":"2026-11-14T19:06:59.964Z","data":"2026-11-14","evento":"gemini","modelo":"gemini-3.8-flash","status":503,"acao":"proximo_modelo","motivo":"erro temporário persistiu"}
+{"quando":"2026-11-14T19:07:02.056Z","data":"2026-11-14","evento":"gemini","modelo":"gemini-3.7-flash","status":429,"acao":"espera_e_repete","espera_s":70}
+{"quando":"2026-11-14T19:08:12.210Z","data":"2026-11-14","evento":"gemini","modelo":"gemini-3.7-flash","status":429,"acao":"espera_e_repete","espera_s":70}
+{"quando":"2026-11-14T19:09:22.266Z","data":"2026-11-14","evento":"erro","tipo":"nota","motivo":"tempo do job esgotado esperando o Gemini"}
+{"quando":"2026-11-14T19:14:51.867Z","data":"2026-11-14","evento":"gemini","modelo":"gemini-3.8-flash","status":"rede","acao":"espera_e_repete","espera_s":10}
+{"quando":"2026-11-14T19:15:02.041Z","data":"2026-11-14","evento":"gemini","modelo":"gemini-3.8-flash","status":429,"acao":"espera_e_repete","espera_s":70}
+{"quando":"2026-11-14T19:16:12.231Z","data":"2026-11-14","evento":"gemini","modelo":"gemini-3.8-flash","status":429,"acao":"proximo_modelo","motivo":"cota por minuto ainda esgotada após esperas"}
+{"quando":"2026-11-14T19:16:19.220Z","data":"2026-11-14","evento":"gemini","modelo":"gemini-3.7-flash","status":429,"acao":"espera_e_repete","espera_s":70}
+{"quando":"2026-11-14T19:17:29.405Z","data":"2026-11-14","evento":"gemini","modelo":"gemini-3.7-flash","status":429,"acao":"espera_e_repete","espera_s":70}
+{"quando":"2026-11-14T19:18:39.553Z","data":"2026-11-14","evento":"gemini","modelo":"gemini-3.7-flash","status":429,"acao":"proximo_modelo","motivo":"cota por minuto ainda esgotada após esperas"}
+{"quando":"2026-11-14T19:18:49.588Z","data":"2026-11-14","evento":"gemini","modelo":"gemini-3.6-flash","status":503,"acao":"espera_e_repete","espera_s":10}
+{"quando":"2026-11-14T19:19:08.302Z","data":"2026-11-14","evento":"revisao_guia","resultado":"sem_mudanca","slug":"taxa-nominal-x-taxa-efetiva-entenda-a-diferenca"}
+{"quando":"2026-11-14T19:19:08.302Z","data":"2026-11-14","evento":"uso_gemini","pedidos":18,"ok":3,"por_status":{"429":9,"503":4}}
