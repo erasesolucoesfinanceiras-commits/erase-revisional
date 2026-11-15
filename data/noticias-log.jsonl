@@ -2070,3 +2070,4 @@
 {"quando":"2026-11-15T22:09:02.472Z","data":"2026-11-15","evento":"gemini","modelo":"gemini-3.7-flash","status":429,"acao":"espera_e_repete","espera_s":70}
 {"quando":"2026-11-15T22:10:12.520Z","data":"2026-11-15","evento":"erro","tipo":"nota","motivo":"tempo do job esgotado esperando o Gemini"}
 {"quando":"2026-11-15T22:10:12.525Z","data":"2026-11-15","evento":"uso_gemini","pedidos":14,"ok":6,"por_status":{"429":8}}
+{"quando":"2026-11-15T23:28:22.966Z","data":"2026-11-15","evento":"verificacao","origem":"verificacao-diaria","acao":"tudo_certo","motivo":"último artigo 2026-11-15 (0 dia(s)), na capa do site"}
