@@ -1,0 +1,72 @@
+# Alertas automáticos no Telegram do Site revisional (robô "Central de Alertas ERASE"). Segredos já cadastrados: ALERTA_TELEGRAM_TOKEN e ALERTA_TELEGRAM_CHAT_ID.
+#  - job "falha": quando QUALQUER workflow da lista abaixo falha, é cancelado ou estoura o tempo NA MAIN (nunca em ramo de trabalho como claude/*):
+#    projeto, o que falhou, motivo em português simples (inclui o motivo do log dos robôs de notícias), link da execução e se tenta de novo.
+#  - job "vigia" (de hora em hora): robô que devia rodar e não rodou, site e /analise/ fora do ar, deploy do Cloudflare Pages que falhou, cota de builds ≥ 80%,
+#    e o "✅ resolvido" de tudo que voltou ao normal. Aviso já enviado de problema aberto não é reenviado (estado = Issue com rótulo alerta-telegram).
+# Workflow novo: acrescente o nome na lista `workflows:` e em scripts/alertas/workflows.mjs (tests/noticias/alertas-test.js exige).
+# Só LÊ o repositório (checkout da branch padrão, nunca de pull request) e a API do GitHub; nada de dado pessoal vai na mensagem. Não mexe em páginas nem artigos.
+name: Alertas no Telegram
+
+on:
+  workflow_run:
+    workflows: ["Notícias automáticas", "Atualizar série do Banco Central", "Verificar artigo recente", "Resumo semanal das notícias (e-mail)", "Buscar fotos dos artigos (Pixabay)", "Fotos das categorias (Unsplash)", "Despublicar texto"]
+    types: [completed]
+  schedule:
+    - cron: "7 * * * *"   # a cada hora, no minuto 7
+  workflow_dispatch:
+    inputs:
+      teste:
+        description: "Marque para mandar 1 aviso de teste ao Telegram"
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+  actions: read
+  issues: write   # o estado dos avisos (aberto = ainda não resolvido) fica em Issues
+
+concurrency:
+  group: alertas-${{ github.event.workflow_run.name || github.event_name }}
+  cancel-in-progress: false
+
+jobs:
+  falha:
+    if: github.event_name == 'workflow_run' && github.event.workflow_run.head_branch == 'main' && contains(fromJSON('["failure","cancelled","timed_out"]'), github.event.workflow_run.conclusion)
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5.1.0
+        with:
+          persist-credentials: false
+      - name: Avisar no Telegram
+        env:
+          GH_TOKEN: ${{ github.token }}
+          ALERTA_TELEGRAM_TOKEN: ${{ secrets.ALERTA_TELEGRAM_TOKEN }}
+          ALERTA_TELEGRAM_CHAT_ID: ${{ secrets.ALERTA_TELEGRAM_CHAT_ID }}
+          WF_NOME: ${{ github.event.workflow_run.name }}
+          WF_RUN_ID: ${{ github.event.workflow_run.id }}
+          WF_CONCLUSAO: ${{ github.event.workflow_run.conclusion }}
+          WF_EVENTO: ${{ github.event.workflow_run.event }}
+          WF_BRANCH: ${{ github.event.workflow_run.head_branch }}
+          WF_TENTATIVA: ${{ github.event.workflow_run.run_attempt }}
+          WF_URL: ${{ github.event.workflow_run.html_url }}
+          WF_FIM: ${{ github.event.workflow_run.updated_at }}
+        run: node scripts/alertas/falha.mjs
+
+  vigia:
+    if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5.1.0
+        with:
+          persist-credentials: false
+      - name: Conferir e avisar
+        env:
+          GH_TOKEN: ${{ github.token }}
+          ALERTA_TELEGRAM_TOKEN: ${{ secrets.ALERTA_TELEGRAM_TOKEN }}
+          ALERTA_TELEGRAM_CHAT_ID: ${{ secrets.ALERTA_TELEGRAM_CHAT_ID }}
+          TESTE: ${{ inputs.teste }}
+        run: |
+          if [ "$TESTE" = "true" ]; then node scripts/alertas/vigia.mjs --teste; exit $?; fi
+          node scripts/alertas/vigia.mjs
