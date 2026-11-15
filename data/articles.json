@@ -1,5 +1,39 @@
 [
   {
+    "slug": "bc-determina-liquidacao-de-administradora-de-consorcios-e-cooperativa-de-credito",
+    "categoria": "consorcio-seguros",
+    "titulo": "BC determina liquidação de administradora de consórcios e cooperativa de crédito",
+    "resumo": "Em 12 de novembro de 2026, o Banco Central interrompeu as atividades da Administradora Roma e da Cooperagre por falhas regulatórias, somando 21 intervenções no ano.",
+    "data": "2026-11-15",
+    "fontes": [
+      {
+        "nome": "Metrópoles",
+        "url": "https://www.metropoles.com/brasil/banco-central-decreta-liquidacao-instituicoes-financeiras",
+        "data": "2026-11-12"
+      },
+      {
+        "nome": "Valor Econômico",
+        "url": "https://valor.globo.com/financas/noticia/2026/11/12/bc-decreta-liquidao-extrajudicial-de-mais-duas-instituies-financeiras-e-total-sobe-para-21-neste-ano.ghtml",
+        "data": "2026-11-12"
+      },
+      {
+        "nome": "Money Times",
+        "url": "https://www.moneytimes.com.br/banco-central-decreta-liquidacao-da-cooperagre-por-violacoes-graves-as-regras-do-sistema-financeiro-miql/",
+        "data": "2026-11-12"
+      }
+    ],
+    "corpo": "<p>Em 12 de novembro de 2026, o Banco Central determinou o encerramento forçado das atividades de duas entidades financeiras: a Cooperativa Administradora de Consórcios Roma e a Cooperativa de Crédito Rural do Agreste Alagoano, conhecida como Cooperagre. Conforme os comunicados divulgados pela autarquia reguladora, as medidas foram motivadas pelo descumprimento recorrente e gravoso das diretrizes operacionais do Sistema Financeiro Nacional.</p><p>Com esses dois novos decretos, o total de instituições financeiras submetidas à liquidação extrajudicial ou intervenção pelo regulador alcançou a marca de 21 entidades ao longo do ano de 2026. A determinação busca afastar as administradoras inadimplentes do mercado e preservar as normas do setor bancário e de consórcios.</p><h2>Motivos do encerramento da administradora de consórcios</h2><p>Com sede localizada em Alphaville, no município de Barueri (SP), a Cooperativa Administradora de Consórcios Roma atuava na gestão de grupos voltados à compra de bens móveis e imóveis. A instituição operava respaldada pelo ambiente transitório definido pela Lei nº 11.795, de 2008. Até o mês de junho de 2026, a entidade gerenciava 28 grupos distintos, reunindo aproximadamente 16 mil cotas operantes vinculadas a 8,3 mil participantes.</p><p>Em termos de escala de mercado, a empresa figurava na 49ª colocação em total de consorciados ativos, no universo de 129 administradoras autorizadas no país. De acordo com o Banco Central, a fiscalização identificou falhas de natureza estrutural na condução dos negócios da empresa. As divergências apontadas pelo órgão regulador envolvem os seguintes pontos centrais:</p><ul><li>Inconformidades na forma de oferta e comercialização das cotas;</li><li>Taxas elevadas de desligamento ou exclusão de consorciados dos grupos;</li><li>Deficiências e inconsistências na estrutura de remuneração paga à própria administradora.</li></ul><p>A autoridade monetária pontuou que os problemas persistiram a despeito das sanções e procedimentos de acompanhamento aplicados anteriormente. Diante do quadro contínuo de irregularidades e da ausência de planos viáveis de adequação por vias administrativas brandas, o órgão decretou a liquidação com o propósito de organizar a saída da empresa do mercado e resguardar os direitos dos consorciados.</p><h2>Medidas adotadas em relação à cooperativa de crédito rural</h2><p>Na mesma data, o Banco Central encerrou as operações da Cooperagre, entidade regional sediada na cidade de Igaci, no Estado de Alagoas. A instituição focava o atendimento no fornecimento de linhas de crédito a pequenos agricultores e produtores rurais locais. Segundo o órgão supervisor, a decisão resultou da apuração de infrações severas às diretrizes vigentes para o segmento cooperativo.</p><p>Classificada na regulação prudencial sob o enquadramento S5 — voltado a instituições de porte reduzido e com patrimônio inferior a 0,1% do Produto Interno Bruto —, a Cooperagre representava 0,0000222% dos ativos totais apurados no Sistema Financeiro Nacional em setembro de 2025. O regulador decretou a indisponibilidade patrimonial dos antigos diretores da entidade. O Banco Central indicou ainda que os depósitos captados pela cooperativa contam com a proteção do Fundo Garantidor do Cooperativismo de Crédito (FGCOOP).</p><h2>Trâmite dos processos e orientações operacionais</h2><p>O regulador ressaltou que a decretação do encerramento forçado não conclui o apuramento de condutas individuais. As eventuais responsabilidades administrativas e civis dos gestores serão investigadas em procedimentos autônomos pelas instâncias competentes.</p><p>Para quem mantinha cotas ativas na administradora de consórcios, a orientação divulgada pela autarquia é acompanhar as instruções que serão emitidas pelo liquidante nomeado, além dos comunicados disponibilizados nas mídias oficiais da instituição e no portal do Banco Central.</p><h2>O que observar na prática</h2><p>Consumidores que possuem contratos em administradoras de consórcios ou cooperativas de crédito podem verificar rotineiramente a regularidade cadastral da instituição diretamente nas ferramentas públicas do Banco Central. Diante de episódios de intervenção ou decretação de liquidação, é prudente conferir as orientações trazidas pelo liquidante para tomar conhecimento sobre o andamento das assembleias, as formas de apuração de haveres e a restituição de valores no âmbito dos grupos afetados.</p>",
+    "foto_busca": "finance contract document office",
+    "tipo": "noticia",
+    "foto": {
+      "id": 428305,
+      "autor": "jarmoluk",
+      "autorUrl": "https://pixabay.com/users/jarmoluk-143740/",
+      "pagina": "https://pixabay.com/photos/pen-document-energy-certificate-428305/",
+      "fonte": "Pixabay"
+    }
+  },
+  {
     "slug": "caixa-estuda-reajuste-nas-taxas-do-credito-imobiliario-devido-ao-custo-de-captac",
     "categoria": "imoveis",
     "titulo": "Caixa estuda reajuste nas taxas do crédito imobiliário devido ao custo de captação",
