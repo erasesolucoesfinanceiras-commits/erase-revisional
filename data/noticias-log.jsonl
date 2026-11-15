@@ -2032,3 +2032,4 @@
 {"quando":"2026-11-15T18:27:37.575Z","data":"2026-11-15","evento":"gemini","modelo":"gemini-3.7-flash","status":429,"acao":"proximo_modelo","motivo":"cota por minuto ainda esgotada após esperas"}
 {"quando":"2026-11-15T18:27:50.596Z","data":"2026-11-15","evento":"revisao_guia","resultado":"sem_mudanca","slug":"cet-custo-efetivo-total-o-que-entra-na-conta"}
 {"quando":"2026-11-15T18:27:50.597Z","data":"2026-11-15","evento":"uso_gemini","pedidos":33,"ok":13,"por_status":{"429":7,"503":11}}
+{"quando":"2026-11-15T18:28:25.227Z","data":"2026-11-15","evento":"indexnow","resultado":"enviado","status":200,"enviadas":4,"ainda_pendentes":0,"urls":["https://revisional.eraseconsulta.com.br/noticias/bc-determina-liquidacao-de-administradora-de-consorcios-e-cooperativa-de-credito","https://revisional.eraseconsulta.com.br/","https://revisional.eraseconsulta.com.br/artigos","https://revisional.eraseconsulta.com.br/categoria-consorcio-seguros"],"resposta":""}
