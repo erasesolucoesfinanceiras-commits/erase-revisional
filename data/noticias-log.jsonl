@@ -2071,3 +2071,31 @@
 {"quando":"2026-11-15T22:10:12.520Z","data":"2026-11-15","evento":"erro","tipo":"nota","motivo":"tempo do job esgotado esperando o Gemini"}
 {"quando":"2026-11-15T22:10:12.525Z","data":"2026-11-15","evento":"uso_gemini","pedidos":14,"ok":6,"por_status":{"429":8}}
 {"quando":"2026-11-15T23:28:22.966Z","data":"2026-11-15","evento":"verificacao","origem":"verificacao-diaria","acao":"tudo_certo","motivo":"último artigo 2026-11-15 (0 dia(s)), na capa do site"}
+{"quando":"2026-11-16T20:48:09.377Z","data":"2026-11-16","evento":"gemini","modelo":"gemini-3.8-flash","status":503,"acao":"espera_e_repete","espera_s":10}
+{"quando":"2026-11-16T20:48:23.096Z","data":"2026-11-16","evento":"gemini","modelo":"gemini-3.8-flash","status":503,"acao":"espera_e_repete","espera_s":40}
+{"quando":"2026-11-16T20:49:30.551Z","data":"2026-11-16","evento":"gemini","modelo":"gemini-3.8-flash","status":503,"acao":"proximo_modelo","motivo":"erro temporário persistiu"}
+{"quando":"2026-11-16T20:49:34.502Z","data":"2026-11-16","evento":"gemini","modelo":"gemini-3.7-flash","status":503,"acao":"espera_e_repete","espera_s":10}
+{"quando":"2026-11-16T20:49:45.953Z","data":"2026-11-16","evento":"gemini","modelo":"gemini-3.7-flash","status":503,"acao":"espera_e_repete","espera_s":40}
+{"quando":"2026-11-16T20:50:27.738Z","data":"2026-11-16","evento":"gemini","modelo":"gemini-3.7-flash","status":503,"acao":"proximo_modelo","motivo":"erro temporário persistiu"}
+{"quando":"2026-11-16T20:50:58.804Z","data":"2026-11-16","evento":"pulado","tipo":"nota","tema":"consorcio-seguros","motivo":"sem novidade real: Não há duas ou mais fontes disponíveis tratando do mesmo fato recente sobre o tema."}
+{"quando":"2026-11-16T20:50:58.805Z","data":"2026-11-16","evento":"tema_trocado","tipo":"nota","de":"consorcio-seguros","para":"credito-pessoal","motivo":"fontes insuficientes ou sem novidade real","ultimos_motivos":["sem novidade real: Não há duas ou mais fontes disponíveis tratando do mesmo fato recente sobre o tema."]}
+{"quando":"2026-11-16T20:51:27.437Z","data":"2026-11-16","evento":"gemini","modelo":"gemini-3.8-flash","status":503,"acao":"espera_e_repete","espera_s":10}
+{"quando":"2026-11-16T20:51:38.558Z","data":"2026-11-16","evento":"gemini","modelo":"gemini-3.8-flash","status":503,"acao":"espera_e_repete","espera_s":40}
+{"quando":"2026-11-16T20:52:58.682Z","data":"2026-11-16","evento":"gemini","modelo":"gemini-3.8-flash","status":503,"acao":"proximo_modelo","motivo":"erro temporário persistiu"}
+{"quando":"2026-11-16T20:53:15.711Z","data":"2026-11-16","evento":"gemini","modelo":"gemini-3.7-flash","status":503,"acao":"espera_e_repete","espera_s":10}
+{"quando":"2026-11-16T20:53:36.156Z","data":"2026-11-16","evento":"gemini","modelo":"gemini-3.7-flash","status":503,"acao":"espera_e_repete","espera_s":40}
+{"quando":"2026-11-16T20:54:52.581Z","data":"2026-11-16","evento":"gemini","modelo":"gemini-3.7-flash","status":503,"acao":"proximo_modelo","motivo":"erro temporário persistiu"}
+{"quando":"2026-11-16T20:59:43.740Z","data":"2026-11-16","evento":"gemini","modelo":"gemini-3.8-flash","status":503,"acao":"espera_e_repete","espera_s":10}
+{"quando":"2026-11-16T21:00:45.008Z","data":"2026-11-16","evento":"gemini","modelo":"gemini-3.8-flash","status":503,"acao":"espera_e_repete","espera_s":40}
+{"quando":"2026-11-16T21:01:31.434Z","data":"2026-11-16","evento":"gemini","modelo":"gemini-3.8-flash","status":503,"acao":"proximo_modelo","motivo":"erro temporário persistiu"}
+{"quando":"2026-11-16T21:02:07.358Z","data":"2026-11-16","evento":"gemini","modelo":"gemini-3.7-flash","status":503,"acao":"espera_e_repete","espera_s":10}
+{"quando":"2026-11-16T21:02:44.100Z","data":"2026-11-16","evento":"gemini","modelo":"gemini-3.7-flash","status":503,"acao":"espera_e_repete","espera_s":40}
+{"quando":"2026-11-16T21:03:24.136Z","data":"2026-11-16","evento":"erro","tipo":"nota","motivo":"tempo do job esgotado esperando o Gemini"}
+{"quando":"2026-11-16T21:04:05.285Z","data":"2026-11-16","evento":"gemini","modelo":"gemini-3.8-flash","status":429,"acao":"espera_e_repete","espera_s":70}
+{"quando":"2026-11-16T21:05:23.028Z","data":"2026-11-16","evento":"gemini","modelo":"gemini-3.8-flash","status":503,"acao":"espera_e_repete","espera_s":40}
+{"quando":"2026-11-16T21:06:06.578Z","data":"2026-11-16","evento":"gemini","modelo":"gemini-3.8-flash","status":503,"acao":"proximo_modelo","motivo":"erro temporário persistiu"}
+{"quando":"2026-11-16T21:06:13.096Z","data":"2026-11-16","evento":"gemini","modelo":"gemini-3.7-flash","status":503,"acao":"espera_e_repete","espera_s":10}
+{"quando":"2026-11-16T21:06:27.868Z","data":"2026-11-16","evento":"gemini","modelo":"gemini-3.7-flash","status":503,"acao":"espera_e_repete","espera_s":40}
+{"quando":"2026-11-16T21:10:45.237Z","data":"2026-11-16","evento":"gemini","modelo":"gemini-3.7-flash","status":503,"acao":"proximo_modelo","motivo":"erro temporário persistiu"}
+{"quando":"2026-11-16T21:11:12.510Z","data":"2026-11-16","evento":"revisao_guia","resultado":"sem_mudanca","slug":"portabilidade-de-credito-quando-vale-a-pena"}
+{"quando":"2026-11-16T21:11:12.511Z","data":"2026-11-16","evento":"uso_gemini","pedidos":26,"ok":3,"por_status":{"429":1,"503":22}}
