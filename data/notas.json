@@ -1,5 +1,31 @@
 [
   {
+    "id": "2026-11-16-lei-do-superendividamento-permite-negoci",
+    "data": "2026-11-16",
+    "categoria": "credito-pessoal",
+    "titulo": "Lei do Superendividamento permite negociar dívidas em até cinco anos",
+    "texto": "Consumidores com dificuldades financeiras podem recorrer à Lei do Superendividamento para reunir credores e negociar débitos de consumo em um plano de pagamento de até cinco anos. A regulamentação federal fixa o valor do mínimo existencial em R$ 600 para preservar as despesas básicas do devedor e de sua família.",
+    "fontes": [
+      {
+        "nome": "Extra",
+        "url": "https://extra.globo.com/economia/financas/noticia/2026/11/superendividamento-veja-como-buscar-ajuda-para-renegociar-as-contas-sem-comprometer-despesas-basicas.ghtml",
+        "data": "2026-11-15"
+      },
+      {
+        "nome": "ContilNet Notícias",
+        "url": "https://contilnetnoticias.com.br/cotidiano/esta-endividado-e-nao-consegue-pagar-as-contas-lei-permite-renegociar-dividas/",
+        "data": "2026-11-15"
+      }
+    ],
+    "foto": {
+      "id": "u-9uxRcupG36I",
+      "autor": "Андрей Сизов",
+      "autorUrl": "https://unsplash.com/@alpridephoto?utm_source=erase-revisional&utm_medium=referral",
+      "pagina": "https://unsplash.com/photos/a-close-up-of-a-credit-card-9uxRcupG36I?utm_source=erase-revisional&utm_medium=referral",
+      "fonte": "Unsplash"
+    }
+  },
+  {
     "id": "2026-11-13-anfavea-quer-debater-nova-politica-autom",
     "data": "2026-11-13",
     "categoria": "mercado",
