@@ -1,5 +1,31 @@
 [
   {
+    "id": "2026-11-17-frota-de-eletricos-pode-subir-10-vezes-a",
+    "data": "2026-11-17",
+    "categoria": "mercado",
+    "titulo": "Frota de elétricos pode subir 10 vezes até 2036",
+    "texto": "Projeção da Empresa de Pesquisa Energética estima que a frota de veículos eletrificados no Brasil alcançará 9,7 milhões de unidades até 2036, com avanço médio anual de 26% nas vendas.",
+    "fontes": [
+      {
+        "nome": "Poder360",
+        "url": "https://www.poder360.com.br/poder-energia/frota-de-carros-eletricos-no-brasil-deve-crescer-10-vezes-em-10-anos/",
+        "data": "2026-11-16"
+      },
+      {
+        "nome": "NSC Total",
+        "url": "https://www.nsctotal.com.br/economia/carros-eletricos-brasil-frota-97-milhoes-2036",
+        "data": "2026-11-17"
+      }
+    ],
+    "foto": {
+      "id": "u-bFTVxTo266E",
+      "autor": "Maksim Tarasov",
+      "autorUrl": "https://unsplash.com/@awsmsky?utm_source=erase-revisional&utm_medium=referral",
+      "pagina": "https://unsplash.com/photos/red-hatchback-vehicle-on-asphalt-road-bFTVxTo266E?utm_source=erase-revisional&utm_medium=referral",
+      "fonte": "Unsplash"
+    }
+  },
+  {
     "id": "2026-11-16-lei-do-superendividamento-permite-negoci",
     "data": "2026-11-16",
     "categoria": "credito-pessoal",
