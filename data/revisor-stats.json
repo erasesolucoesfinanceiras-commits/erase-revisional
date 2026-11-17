@@ -478,5 +478,25 @@
    "sem_novidade": 2,
    "criterios": {}
   }
+ },
+ "2026-11-17": {
+  "artigo": {
+   "aprovados": 0,
+   "reprovados": 2,
+   "sem_novidade": 0,
+   "criterios": {
+    "forma": 1,
+    "sem_repeticao": 2,
+    "original": 2
+   }
+  },
+  "nota": {
+   "aprovados": 0,
+   "reprovados": 1,
+   "sem_novidade": 0,
+   "criterios": {
+    "fontes": 1
+   }
+  }
  }
 }
