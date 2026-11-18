@@ -1,5 +1,32 @@
 [
   {
+    "slug": "senado-aprova-ampliacao-de-credito-e-debate-ajuste-fiscal",
+    "categoria": "empresas-mei",
+    "titulo": "Senado aprova ampliação de crédito e debate ajuste fiscal",
+    "resumo": "Plenário aprova projeto que amplia recursos para exportadoras e debate restrições em compensações tributárias.",
+    "data": "2026-11-17",
+    "fontes": [
+      {
+        "nome": "Senado Federal",
+        "url": "https://www12.senado.leg.br/noticias/materias/2026/11/17/medida-que-amplia-credito-a-exportacoes-segue-para-sancao",
+        "data": "2026-11-17"
+      },
+      {
+        "nome": "G1 Economia",
+        "url": "https://g1.globo.com/economia/noticia/2026/11/17/creditos-tributarios-empresas-ajuste-fiscal.ghtml",
+        "data": "2026-11-17"
+      },
+      {
+        "nome": "WSCOM",
+        "url": "https://wscom.com.br/destaque/destaque-especial/2026/11/12/endividamento-empresarial-atinge-933-mil-empresas-na-paraiba-e-soma-r-178-bilhao/",
+        "data": "2026-11-12"
+      }
+    ],
+    "corpo": "<h2>Novos recursos para o setor exportador</h2>\n<p>O Plenário do Senado aprovou em 17 de novembro de 2026 um projeto derivado de medida provisória que destina recursos adicionais ao Plano Brasil Soberano. A iniciativa amplia em até R$ 13,5 bilhões os valores voltados a empresas exportadoras que enfrentam impactos decorrentes de barreiras tarifárias e conflitos internacionais, somando-se aos R$ 15 bilhões inicialmente autorizados para o programa.</p>\n<p>Segundo a relatora da matéria, senadora Leany Lemos, a proposta busca preservar a capacidade produtiva e proteger postos de trabalho no mercado internacional. O texto, que seguiu para sanção presidencial, permite combinar a verba com recursos próprios do BNDES, além de estabelecer governança interministerial para a aplicação dos valores. A relatora destacou que se trata de financiamentos e recursos reembolsáveis, sem gerar despesa primária para a União, com riscos assumidos pelo BNDES e pelas instituições financeiras habilitadas.</p>\n<p>A parlamentar também apontou que a medida reforça o suporte à indústria de transformação, micros, pequenas e médias empresas, além de estender o alcance a setores de agropecuária, pesca, mineração e florestas plantadas, bem como a seus fornecedores.</p>\n\n<h2>Compensações tributárias e debates legislativos</h2>\n<p>Enquanto o Congresso discute medidas de ajuste fiscal, dados divulgados pela Receita Federal e repercutidos por veículos de comunicação mostram que empresas declararam R$ 200,1 bilhões em compensações de tributos entre janeiro e setembro de 2026, o que representa uma alta de 14,6% em relação ao mesmo período de 2025, sem descontar a inflação.</p>\n<p>O Senado analisa propostas associadas ao ajuste fiscal que preveem a possibilidade de o governo limitar o uso de créditos de um tributo federal para quitar outro, condicionado à adoção de medidas de contenção de despesas e a percentuais definidos posteriormente pelo Executivo. Especialistas ouvidos por veículos de imprensa apontam que essa eventual restrição pode exigir que companhias utilizem recursos do próprio caixa para cumprir obrigações fiscais, com reflexos sobre o capital de giro, especialmente entre exportadores, cujas vendas ao exterior são desoneradas e acumulam créditos tributários.</p>\n\n<h2>Panorama do endividamento empresarial</h2>\n<p>No cenário do crédito corporativo, levantamentos indicam que o endividamento e a inadimplência continuam a desafiar o setor produtivo. Dados da Serasa Experian apontam que o número de empresas inadimplentes no Brasil alcançou 9,4 milhões de CNPJs em setembro de 2026, registrando um crescimento de 12% em comparação com o mesmo período do ano anterior. O total de dívidas negativadas chegou a 68,9 milhões, somando R$ 247,8 bilhões, com média de 7,3 contas negativadas por empresa inadimplente e dívida média de R$ 26.411,73 por CNPJ.</p>\n<p>Em âmbito regional, estudos específicos demonstram realidades diversas. Na Paraíba, o endividamento corporativo atingiu 93.357 empresas, acumulando R$ 1,78 bilhão em compromissos em atraso, conforme levantamento divulgado pelo WSCOM. Outras análises regionais evidenciam variações no volume de dívidas e tickets médios por CNPJ, refletindo a cautela necessária na gestão financeira dos negócios diante de um ambiente de crédito restritivo e custos de financiamento elevados.</p>\n\n<h2>O que observar na prática</h2>\n<p>Para empreendedores e gestores que dependem de capital de giro ou planejam buscar financiamentos, é fundamental acompanhar a evolução das regras de compensação tributária e as condições de acesso ao crédito oferecidas por instituições financeiras. Monitorar o fluxo de caixa, avaliar prazos de pagamento e acompanhar as discussões legislativas sobre o ajuste fiscal e o crédito à exportação ajuda a mitigar os riscos associados a um ambiente de endividamento e custos operacionais elevados.</p>",
+    "foto_busca": "business credit loan office",
+    "tipo": "noticia"
+  },
+  {
     "slug": "bc-determina-liquidacao-de-administradora-de-consorcios-e-cooperativa-de-credito",
     "categoria": "consorcio-seguros",
     "titulo": "BC determina liquidação de administradora de consórcios e cooperativa de crédito",

@@ -481,13 +481,14 @@
  },
  "2026-11-17": {
   "artigo": {
-   "aprovados": 0,
-   "reprovados": 2,
-   "sem_novidade": 1,
+   "aprovados": 1,
+   "reprovados": 5,
+   "sem_novidade": 3,
    "criterios": {
-    "forma": 1,
+    "forma": 4,
     "sem_repeticao": 2,
-    "original": 2
+    "original": 3,
+    "fatos": 1
    }
   },
   "nota": {
