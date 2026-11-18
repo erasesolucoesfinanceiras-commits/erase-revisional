@@ -2284,3 +2284,30 @@
 {"quando":"2026-11-18T22:11:57.324Z","data":"2026-11-18","evento":"gemini","modelo":"gemini-3.5-flash","status":"rede","acao":"espera_e_repete","espera_s":10}
 {"quando":"2026-11-18T22:12:07.335Z","data":"2026-11-18","evento":"revisao_guia","resultado":"erro","motivo":"tempo do job esgotado esperando o Gemini"}
 {"quando":"2026-11-18T22:12:07.335Z","data":"2026-11-18","evento":"uso_gemini","pedidos":15,"ok":0,"por_status":{"429":5,"503":6}}
+{"quando":"2026-11-18T23:27:48.893Z","data":"2026-11-18","evento":"gemini","modelo":"gemini-3.8-flash","status":503,"acao":"espera_e_repete","espera_s":10}
+{"quando":"2026-11-18T23:28:04.908Z","data":"2026-11-18","evento":"gemini","modelo":"gemini-3.8-flash","status":503,"acao":"espera_e_repete","espera_s":40}
+{"quando":"2026-11-18T23:28:47.303Z","data":"2026-11-18","evento":"gemini","modelo":"gemini-3.8-flash","status":503,"acao":"proximo_modelo","motivo":"erro temporário persistiu"}
+{"quando":"2026-11-18T23:28:52.063Z","data":"2026-11-18","evento":"gemini","modelo":"gemini-3.7-flash","status":429,"acao":"espera_e_repete","espera_s":70}
+{"quando":"2026-11-18T23:30:02.200Z","data":"2026-11-18","evento":"gemini","modelo":"gemini-3.7-flash","status":429,"acao":"espera_e_repete","espera_s":70}
+{"quando":"2026-11-18T23:36:13.035Z","data":"2026-11-18","evento":"gemini","modelo":"gemini-3.7-flash","status":"rede","acao":"proximo_modelo","motivo":"erro temporário persistiu"}
+{"quando":"2026-11-18T23:36:13.906Z","data":"2026-11-18","evento":"gemini","modelo":"gemini-3.6-flash","status":503,"acao":"espera_e_repete","espera_s":10}
+{"quando":"2026-11-18T23:36:25.637Z","data":"2026-11-18","evento":"gemini","modelo":"gemini-3.6-flash","status":503,"acao":"espera_e_repete","espera_s":40}
+{"quando":"2026-11-18T23:37:05.901Z","data":"2026-11-18","evento":"gemini","modelo":"gemini-3.6-flash","status":503,"acao":"proximo_modelo","motivo":"erro temporário persistiu"}
+{"quando":"2026-11-18T23:37:12.936Z","data":"2026-11-18","evento":"gemini","modelo":"gemini-3.5-flash","status":503,"acao":"espera_e_repete","espera_s":10}
+{"quando":"2026-11-18T23:37:23.413Z","data":"2026-11-18","evento":"gemini","modelo":"gemini-3.5-flash","status":503,"acao":"espera_e_repete","espera_s":40}
+{"quando":"2026-11-18T23:38:19.711Z","data":"2026-11-18","evento":"gemini","modelo":"gemini-3.5-flash","status":503,"acao":"proximo_modelo","motivo":"erro temporário persistiu"}
+{"quando":"2026-11-18T23:38:19.786Z","data":"2026-11-18","evento":"gemini","modelo":"gemini-2.5-flash","status":404,"acao":"proximo_modelo","motivo":"modelo indisponível ou recusado"}
+{"quando":"2026-11-18T23:38:33.806Z","data":"2026-11-18","evento":"gemini","modelo":"gemini-3.8-flash","status":429,"acao":"espera_e_repete","espera_s":70}
+{"quando":"2026-11-18T23:44:44.600Z","data":"2026-11-18","evento":"gemini","modelo":"gemini-3.8-flash","status":"rede","acao":"espera_e_repete","espera_s":40}
+{"quando":"2026-11-18T23:45:24.632Z","data":"2026-11-18","evento":"erro","tipo":"nota","motivo":"tempo do job esgotado esperando o Gemini"}
+{"quando":"2026-11-18T23:45:28.689Z","data":"2026-11-18","evento":"gemini","modelo":"gemini-3.8-flash","status":429,"acao":"espera_e_repete","espera_s":70}
+{"quando":"2026-11-18T23:51:39.480Z","data":"2026-11-18","evento":"gemini","modelo":"gemini-3.8-flash","status":"rede","acao":"espera_e_repete","espera_s":40}
+{"quando":"2026-11-18T23:52:20.055Z","data":"2026-11-18","evento":"gemini","modelo":"gemini-3.8-flash","status":429,"acao":"proximo_modelo","motivo":"cota por minuto ainda esgotada após esperas"}
+{"quando":"2026-11-18T23:52:29.432Z","data":"2026-11-18","evento":"gemini","modelo":"gemini-3.7-flash","status":503,"acao":"espera_e_repete","espera_s":10}
+{"quando":"2026-11-18T23:52:39.556Z","data":"2026-11-18","evento":"gemini","modelo":"gemini-3.7-flash","status":429,"acao":"espera_e_repete","espera_s":70}
+{"quando":"2026-11-18T23:53:49.705Z","data":"2026-11-18","evento":"gemini","modelo":"gemini-3.7-flash","status":429,"acao":"proximo_modelo","motivo":"cota por minuto ainda esgotada após esperas"}
+{"quando":"2026-11-18T23:53:57.526Z","data":"2026-11-18","evento":"gemini","modelo":"gemini-3.6-flash","status":503,"acao":"espera_e_repete","espera_s":10}
+{"quando":"2026-11-18T23:54:25.424Z","data":"2026-11-18","evento":"gemini","modelo":"gemini-3.6-flash","status":503,"acao":"espera_e_repete","espera_s":40}
+{"quando":"2026-11-18T23:55:11.586Z","data":"2026-11-18","evento":"gemini","modelo":"gemini-3.6-flash","status":503,"acao":"proximo_modelo","motivo":"erro temporário persistiu"}
+{"quando":"2026-11-18T23:55:19.317Z","data":"2026-11-18","evento":"revisao_guia","resultado":"sem_mudanca","slug":"como-calcular-a-taxa-de-juros-do-seu-financiamento"}
+{"quando":"2026-11-18T23:55:19.317Z","data":"2026-11-18","evento":"uso_gemini","pedidos":26,"ok":2,"por_status":{"404":1,"429":7,"503":13}}
