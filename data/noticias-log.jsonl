@@ -2247,3 +2247,22 @@
 {"quando":"2026-11-18T00:21:36.122Z","data":"2026-11-17","evento":"uso_gemini","pedidos":45,"ok":24,"por_status":{"404":1,"429":13,"503":7}}
 {"quando":"2026-11-18T00:22:27.040Z","data":"2026-11-17","evento":"indexnow","resultado":"enviado","status":200,"enviadas":4,"ainda_pendentes":0,"urls":["https://revisional.eraseconsulta.com.br/noticias/senado-aprova-ampliacao-de-credito-e-debate-ajuste-fiscal","https://revisional.eraseconsulta.com.br/","https://revisional.eraseconsulta.com.br/artigos","https://revisional.eraseconsulta.com.br/categoria-empresas-mei"],"resposta":""}
 {"quando":"2026-11-18T01:47:24.316Z","data":"2026-11-17","evento":"verificacao","origem":"verificacao-diaria","acao":"tudo_certo","motivo":"último artigo 2026-11-17 (0 dia(s)), na capa do site"}
+{"quando":"2026-11-18T19:14:34.753Z","data":"2026-11-18","evento":"gemini","modelo":"gemini-3.8-flash","status":503,"acao":"espera_e_repete","espera_s":10}
+{"quando":"2026-11-18T19:19:45.544Z","data":"2026-11-18","evento":"gemini","modelo":"gemini-3.8-flash","status":"rede","acao":"espera_e_repete","espera_s":40}
+{"quando":"2026-11-18T19:20:31.616Z","data":"2026-11-18","evento":"gemini","modelo":"gemini-3.8-flash","status":503,"acao":"proximo_modelo","motivo":"erro temporário persistiu"}
+{"quando":"2026-11-18T19:20:37.873Z","data":"2026-11-18","evento":"gemini","modelo":"gemini-3.7-flash","status":503,"acao":"espera_e_repete","espera_s":10}
+{"quando":"2026-11-18T19:20:48.775Z","data":"2026-11-18","evento":"gemini","modelo":"gemini-3.7-flash","status":503,"acao":"espera_e_repete","espera_s":40}
+{"quando":"2026-11-18T19:21:54.918Z","data":"2026-11-18","evento":"gemini","modelo":"gemini-3.7-flash","status":503,"acao":"proximo_modelo","motivo":"erro temporário persistiu"}
+{"quando":"2026-11-18T19:24:41.573Z","data":"2026-11-18","evento":"gemini","modelo":"gemini-3.8-flash","status":503,"acao":"espera_e_repete","espera_s":10}
+{"quando":"2026-11-18T19:24:52.654Z","data":"2026-11-18","evento":"gemini","modelo":"gemini-3.8-flash","status":503,"acao":"espera_e_repete","espera_s":40}
+{"quando":"2026-11-18T19:25:33.486Z","data":"2026-11-18","evento":"gemini","modelo":"gemini-3.8-flash","status":503,"acao":"proximo_modelo","motivo":"erro temporário persistiu"}
+{"quando":"2026-11-18T19:25:40.124Z","data":"2026-11-18","evento":"gemini","modelo":"gemini-3.7-flash","status":503,"acao":"espera_e_repete","espera_s":10}
+{"quando":"2026-11-18T19:30:50.917Z","data":"2026-11-18","evento":"gemini","modelo":"gemini-3.7-flash","status":"rede","acao":"espera_e_repete","espera_s":40}
+{"quando":"2026-11-18T19:31:30.919Z","data":"2026-11-18","evento":"erro","tipo":"nota","motivo":"tempo do job esgotado esperando o Gemini"}
+{"quando":"2026-11-18T19:36:41.277Z","data":"2026-11-18","evento":"gemini","modelo":"gemini-3.8-flash","status":"rede","acao":"espera_e_repete","espera_s":10}
+{"quando":"2026-11-18T19:39:07.466Z","data":"2026-11-18","evento":"gemini","modelo":"gemini-3.8-flash","status":503,"acao":"espera_e_repete","espera_s":40}
+{"quando":"2026-11-18T19:39:49.855Z","data":"2026-11-18","evento":"gemini","modelo":"gemini-3.8-flash","status":503,"acao":"proximo_modelo","motivo":"erro temporário persistiu"}
+{"quando":"2026-11-18T19:39:56.541Z","data":"2026-11-18","evento":"gemini","modelo":"gemini-3.7-flash","status":503,"acao":"espera_e_repete","espera_s":10}
+{"quando":"2026-11-18T19:45:07.315Z","data":"2026-11-18","evento":"gemini","modelo":"gemini-3.7-flash","status":"rede","acao":"espera_e_repete","espera_s":40}
+{"quando":"2026-11-18T19:45:47.356Z","data":"2026-11-18","evento":"revisao_guia","resultado":"erro","motivo":"tempo do job esgotado esperando o Gemini"}
+{"quando":"2026-11-18T19:45:47.356Z","data":"2026-11-18","evento":"uso_gemini","pedidos":17,"ok":1,"por_status":{"503":12}}
