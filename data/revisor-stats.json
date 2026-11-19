@@ -499,5 +499,19 @@
     "fontes": 1
    }
   }
+ },
+ "2026-11-19": {
+  "artigo": {
+   "aprovados": 1,
+   "reprovados": 0,
+   "sem_novidade": 2,
+   "criterios": {}
+  },
+  "nota": {
+   "aprovados": 0,
+   "reprovados": 0,
+   "sem_novidade": 2,
+   "criterios": {}
+  }
  }
 }

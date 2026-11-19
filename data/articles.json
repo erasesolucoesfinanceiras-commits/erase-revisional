@@ -1,5 +1,34 @@
 [
   {
+    "slug": "aneel-propoe-novas-regras-para-energia-solar-por-assinatura-e-gera-debate-no-set",
+    "categoria": "energia-solar",
+    "titulo": "Aneel propõe novas regras para energia solar por assinatura e gera debate no setor",
+    "resumo": "Setor elétrico contesta exigência de permanência mínima de 12 meses e restrições a créditos na geração compartilhada em discussão na Aneel.",
+    "data": "2026-11-19",
+    "fontes": [
+      {
+        "nome": "megawhat",
+        "url": "https://megawhat.uol.com.br/regulacao/setor-questiona-legalidade-de-restricoes-a-energia-por-assinatura-propostas-pela-aneel/",
+        "data": "2026-11-17"
+      },
+      {
+        "nome": "Click Petróleo e Gás",
+        "url": "https://clickpetroleoegas.com.br/aneel-propoe-novas-regras-para-energia-solar-por-assinatura-exige-permanencia-minima-de-12-meses-e-abre-disputa-juridica-que-pode-afetar-contratos-investimentos-em-usinas-solares-e-de-vacs75/",
+        "data": "2026-11-10"
+      }
+    ],
+    "corpo": "<p>A regulação da geração distribuída no Brasil entrou em uma nova fase de discussões técnicas e jurídicas. A Agência Nacional de Energia Elétrica (Aneel) apresentou uma proposta que visa alterar as regras de funcionamento da geração compartilhada, modelo que viabiliza os serviços conhecidos como energia solar por assinatura. As diretrizes em debate enfrentaram contestações formais de associações representativas do setor fotovoltaico durante reunião de diretoria da autarquia, realizada em 17 de novembro.</p><h2>Proposta da agência e principais alterações previstas</h2><p>As medidas apresentadas pelo órgão regulador constam da Nota Técnica nº 184/2026. O texto prevê a exigência de uma permanência mínima obrigatória de 12 meses no Sistema de Compensação de Energia Elétrica (SCEE) para os participantes dos empreendimentos de geração compartilhada. Além disso, a proposta introduz restrições na sistemática de distribuição dos créditos gerados e estabelece a possibilidade de cobrança financeira nos casos em que houver substituição ou alteração de beneficiários cadastrados.</p><p>As medidas ainda não possuem aprovação em caráter definitivo e seguem em fase de tramitação no âmbito regulatório. Caso sejam confirmadas, as normas afetarão diretamente as estruturas operacionais adotadas pelas empresas que fornecem energia solar por assinatura, modalidade que possibilita aos consumidores obter descontos na fatura elétrica sem a obrigatoriedade de instalar módulos solares em seus próprios imóveis.</p><h2>Questionamentos jurídicos e defesa do Marco Legal da GD</h2><p>Durante a sessão colegiada, representantes de entidades do setor de geração própria contestaram a legalidade de exigências normativas que não estejam explicitadas no texto da Lei nº 14.300/2022, que fixou o Marco Legal da Geração Distribuída. A entidade Red, nova denominação da Associação Brasileira de Geração Distribuída (ABGD), argumentou contra a obrigatoriedade do período de carência contratual.</p><p>O advogado Urias Martiniano, representante da Red, defendeu que a imposição de permanência mínima de 12 meses pode ferir o princípio constitucional da livre associação e desassociação. O representante também questionou o critério de equivalência obrigatória entre a cota de participação no consórcio ou cooperativa e a divisão formal de custos, riscos e benefícios, sob o argumento de que tal vinculação carece de base legal expressa na Lei 14.300/2022. Em razão dessas ressalvas, a entidade requereu o sobrestamento da abertura de consulta pública até a entrega de uma Análise de Impacto Regulatório (AIR) ou, em caráter sucessivo, o envio da minuta à Procuradoria Federal que atua junto à Aneel para emissão de parecer jurídico.</p><p>A realização prévia de uma AIR também foi requerida pela Associação Brasileira de Energia Solar Fotovoltaica (Absolar). A representante da associação, Isabela Sene Santos Carneiro, pontuou que o estabelecimento de critérios uniformes desconsidera a pluralidade de arranjos societários e operacionais existentes na geração compartilhada, o que pode comprometer a estabilidade e a segurança jurídica de contratos e investimentos já em andamento.</p><h2>Reflexos no segmento de geração compartilhada</h2><p>O mercado de energia por assinatura expandiu-se com base na flexibilidade contratual conferida a residências e empresas de pequeno e médio porte. Pelo formato tradicional, o cliente adere a uma fração da produção de usinas solares remotas, compensando a fatura da concessionária local por meio de créditos atribuídos à sua unidade consumidora.</p><p>Caso as mudanças sugeridas na nota técnica sejam referendadas pela diretoria colegiada, os contratos poderão sofrer restrições quanto à rotatividade de beneficiários e perda de flexibilidade para o usuário comum. Para as companhias detentoras de ativos de geração, a preocupação reside na rigidez para reestruturar suas carteiras de clientes e na eventual imposição de taxas regulatórias durante remanejamentos da base compradora.</p><h2>O que observar na prática ao contratar ou financiar</h2><p>Consumidores e empreendedores que utilizam ou pretendem ingressar no ecossistema de geração solar compartilhada podem acompanhar os desdobramentos da deliberação da Aneel antes de firmar compromissos contratuais de longo prazo. Na prática, é oportuno checar previamente nos contratos vigentes as condições de fidelidade, os prazos de aviso prévio e as eventuais penalidades aplicáveis para cancelamento ou troca de fornecedor. Para quem estrutura ou financia projetos vinculados a usinas remotas, a evolução regulatória da Nota Técnica nº 184/2026 representa um ponto de atenção para os cálculos de taxa de vacância, receitas projetadas e regras de alocação de créditos entre consorciados.</p>",
+    "foto_busca": "solar farm panels",
+    "tipo": "noticia",
+    "foto": {
+      "id": 3381073,
+      "autor": "stux",
+      "autorUrl": "https://pixabay.com/users/stux-12364/",
+      "pagina": "https://pixabay.com/photos/solar-field-meadow-energy-3381073/",
+      "fonte": "Pixabay"
+    }
+  },
+  {
     "slug": "senado-aprova-ampliacao-de-credito-e-debate-ajuste-fiscal",
     "categoria": "empresas-mei",
     "titulo": "Senado aprova ampliação de crédito e debate ajuste fiscal",
