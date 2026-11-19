@@ -2311,3 +2311,4 @@
 {"quando":"2026-11-18T23:55:11.586Z","data":"2026-11-18","evento":"gemini","modelo":"gemini-3.6-flash","status":503,"acao":"proximo_modelo","motivo":"erro temporário persistiu"}
 {"quando":"2026-11-18T23:55:19.317Z","data":"2026-11-18","evento":"revisao_guia","resultado":"sem_mudanca","slug":"como-calcular-a-taxa-de-juros-do-seu-financiamento"}
 {"quando":"2026-11-18T23:55:19.317Z","data":"2026-11-18","evento":"uso_gemini","pedidos":26,"ok":2,"por_status":{"404":1,"429":7,"503":13}}
+{"quando":"2026-11-19T01:21:09.628Z","data":"2026-11-18","evento":"verificacao","origem":"verificacao-diaria","acao":"tudo_certo","motivo":"último artigo 2026-11-17 (1 dia(s)), na capa do site"}
