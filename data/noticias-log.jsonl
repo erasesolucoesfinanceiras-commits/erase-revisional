@@ -2335,3 +2335,4 @@
 {"quando":"2026-11-19T20:09:18.860Z","data":"2026-11-19","evento":"erro","tipo":"nota","motivo":"tempo do job esgotado esperando o Gemini"}
 {"quando":"2026-11-19T20:12:56.936Z","data":"2026-11-19","evento":"revisao_guia","resultado":"sem_mudanca","slug":"juros-acima-da-media-sao-abusivos-o-que-diz-o-stj"}
 {"quando":"2026-11-19T20:12:56.936Z","data":"2026-11-19","evento":"uso_gemini","pedidos":18,"ok":9,"por_status":{"503":5}}
+{"quando":"2026-11-19T20:13:32.728Z","data":"2026-11-19","evento":"indexnow","resultado":"enviado","status":200,"enviadas":4,"ainda_pendentes":0,"urls":["https://revisional.eraseconsulta.com.br/noticias/aneel-propoe-novas-regras-para-energia-solar-por-assinatura-e-gera-debate-no-set","https://revisional.eraseconsulta.com.br/","https://revisional.eraseconsulta.com.br/artigos","https://revisional.eraseconsulta.com.br/categoria-energia-solar"],"resposta":""}
