@@ -1,5 +1,24 @@
 [
   {
+    "id": "2026-11-19-justica-suspende-cobrancas-do-grupo-faze",
+    "data": "2026-11-19",
+    "categoria": "empresas-mei",
+    "titulo": "Justiça suspende cobranças do Grupo Fazendão por dívida de R$ 2,5 bilhões",
+    "texto": "A Justiça do Tocantins concedeu liminar para suspender temporariamente as cobranças de dívidas do Grupo Fazendão Agronegócio, que declarou um endividamento de R$ 2,5 bilhões. Com a medida, a empresa tem o prazo de 30 dias para apresentar seu pedido de recuperação judicial.",
+    "fontes": [
+      {
+        "nome": "g1",
+        "url": "https://g1.globo.com/to/tocantins/noticia/2026/11/19/justica-suspende-cobrancas-contra-grupo-fazendao-que-declara-divida-de-r-25-bilhoes.ghtml",
+        "data": "2026-11-19"
+      },
+      {
+        "nome": "novacana",
+        "url": "https://www.novacana.com/noticias/justica-suspende-cobrancas-contra-grupo-fazendao-que-declara-endividamento-de-r-2-5-bi",
+        "data": "2026-11-19"
+      }
+    ]
+  },
+  {
     "id": "2026-11-17-frota-de-eletricos-pode-subir-10-vezes-a",
     "data": "2026-11-17",
     "categoria": "mercado",
