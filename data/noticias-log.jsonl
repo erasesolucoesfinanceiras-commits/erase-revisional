@@ -2379,3 +2379,25 @@
 {"quando":"2026-11-19T23:52:24.321Z","data":"2026-11-19","evento":"uso_gemini","pedidos":24,"ok":18,"por_status":{"429":6}}
 {"quando":"2026-11-19T23:53:06.610Z","data":"2026-11-19","evento":"indexnow","resultado":"enviado","status":200,"enviadas":3,"ainda_pendentes":0,"urls":["https://revisional.eraseconsulta.com.br/","https://revisional.eraseconsulta.com.br/radar","https://revisional.eraseconsulta.com.br/categoria-empresas-mei"],"resposta":""}
 {"quando":"2026-11-20T01:23:14.905Z","data":"2026-11-19","evento":"verificacao","origem":"verificacao-diaria","acao":"tudo_certo","motivo":"último artigo 2026-11-19 (0 dia(s)), na capa do site"}
+{"quando":"2026-11-20T18:57:41.259Z","data":"2026-11-20","evento":"gemini","modelo":"gemini-3.8-flash","status":503,"acao":"espera_e_repete","espera_s":10}
+{"quando":"2026-11-20T19:02:52.007Z","data":"2026-11-20","evento":"gemini","modelo":"gemini-3.8-flash","status":"rede","acao":"espera_e_repete","espera_s":40}
+{"quando":"2026-11-20T19:03:40.728Z","data":"2026-11-20","evento":"gemini","modelo":"gemini-3.8-flash","status":503,"acao":"proximo_modelo","motivo":"erro temporário persistiu"}
+{"quando":"2026-11-20T19:03:46.085Z","data":"2026-11-20","evento":"gemini","modelo":"gemini-3.7-flash","status":503,"acao":"espera_e_repete","espera_s":10}
+{"quando":"2026-11-20T19:04:27.159Z","data":"2026-11-20","evento":"gemini","modelo":"gemini-3.7-flash","status":503,"acao":"espera_e_repete","espera_s":40}
+{"quando":"2026-11-20T19:05:57.018Z","data":"2026-11-20","evento":"gemini","modelo":"gemini-3.7-flash","status":503,"acao":"proximo_modelo","motivo":"erro temporário persistiu"}
+{"quando":"2026-11-20T19:06:12.180Z","data":"2026-11-20","evento":"pulado","tipo":"nota","tema":"credito-rural","motivo":"sem novidade real: Não há pelo menos duas fontes de veículos diferentes cobrindo o mesmo fato recente."}
+{"quando":"2026-11-20T19:06:12.180Z","data":"2026-11-20","evento":"tema_trocado","tipo":"nota","de":"credito-rural","para":"empresas-mei","motivo":"fontes insuficientes ou sem novidade real","ultimos_motivos":["sem novidade real: Não há pelo menos duas fontes de veículos diferentes cobrindo o mesmo fato recente."]}
+{"quando":"2026-11-20T19:06:38.146Z","data":"2026-11-20","evento":"gemini","modelo":"gemini-3.8-flash","status":503,"acao":"espera_e_repete","espera_s":10}
+{"quando":"2026-11-20T19:07:18.299Z","data":"2026-11-20","evento":"gemini","modelo":"gemini-3.8-flash","status":503,"acao":"espera_e_repete","espera_s":40}
+{"quando":"2026-11-20T19:08:02.645Z","data":"2026-11-20","evento":"gemini","modelo":"gemini-3.8-flash","status":503,"acao":"proximo_modelo","motivo":"erro temporário persistiu"}
+{"quando":"2026-11-20T19:08:21.542Z","data":"2026-11-20","evento":"gemini","modelo":"gemini-3.7-flash","status":503,"acao":"espera_e_repete","espera_s":10}
+{"quando":"2026-11-20T19:13:32.301Z","data":"2026-11-20","evento":"gemini","modelo":"gemini-3.7-flash","status":"rede","acao":"espera_e_repete","espera_s":40}
+{"quando":"2026-11-20T19:14:12.342Z","data":"2026-11-20","evento":"erro","tipo":"nota","motivo":"tempo do job esgotado esperando o Gemini"}
+{"quando":"2026-11-20T19:14:43.800Z","data":"2026-11-20","evento":"gemini","modelo":"gemini-3.8-flash","status":503,"acao":"espera_e_repete","espera_s":10}
+{"quando":"2026-11-20T19:19:54.530Z","data":"2026-11-20","evento":"gemini","modelo":"gemini-3.8-flash","status":"rede","acao":"espera_e_repete","espera_s":40}
+{"quando":"2026-11-20T19:20:37.822Z","data":"2026-11-20","evento":"gemini","modelo":"gemini-3.8-flash","status":503,"acao":"proximo_modelo","motivo":"erro temporário persistiu"}
+{"quando":"2026-11-20T19:20:47.508Z","data":"2026-11-20","evento":"gemini","modelo":"gemini-3.7-flash","status":503,"acao":"espera_e_repete","espera_s":10}
+{"quando":"2026-11-20T19:21:03.576Z","data":"2026-11-20","evento":"gemini","modelo":"gemini-3.7-flash","status":503,"acao":"espera_e_repete","espera_s":40}
+{"quando":"2026-11-20T19:21:43.745Z","data":"2026-11-20","evento":"gemini","modelo":"gemini-3.7-flash","status":429,"acao":"proximo_modelo","motivo":"cota por minuto ainda esgotada após esperas"}
+{"quando":"2026-11-20T19:22:17.235Z","data":"2026-11-20","evento":"revisao_guia","resultado":"sem_mudanca","slug":"o-que-e-revisao-de-contrato-de-financiamento"}
+{"quando":"2026-11-20T19:22:17.236Z","data":"2026-11-20","evento":"uso_gemini","pedidos":19,"ok":2,"por_status":{"429":1,"503":13}}
