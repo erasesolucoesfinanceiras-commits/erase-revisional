@@ -1,5 +1,31 @@
 [
   {
+    "id": "2026-11-20-cmn-exige-envio-mensal-de-dados-tributar",
+    "data": "2026-11-20",
+    "categoria": "financeiro",
+    "titulo": "CMN exige envio mensal de dados tributários de bancos ao BC a partir de 2028",
+    "texto": "O Conselho Monetário Nacional aprovou a Resolução CMN 5.345, que exige o envio mensal de informações contábeis sobre tributos, créditos fiscais e provisões pelas instituições financeiras ao Banco Central a partir de 1º de janeiro de 2028. A medida amplia a supervisão sem alterar alíquotas de impostos.",
+    "fontes": [
+      {
+        "nome": "Agência Brasil",
+        "url": "https://agenciabrasil.ebc.com.br/economia/noticia/2026-11/cmn-amplia-controle-sobre-recolhimentos-de-tributos-dos-bancos",
+        "data": "2026-11-19"
+      },
+      {
+        "nome": "Economic News Brasil",
+        "url": "https://economicnewsbrasil.com.br/2026/11/19/tributos-bancos-controle-banco-central/",
+        "data": "2026-11-19"
+      }
+    ],
+    "foto": {
+      "id": 1400243,
+      "autor": "WildPixar",
+      "autorUrl": "https://pixabay.com/users/WildPixar-2381951/",
+      "pagina": "https://pixabay.com/photos/buick-oldtimer-old-car-blue-car-1400243/",
+      "fonte": "Pixabay"
+    }
+  },
+  {
     "id": "2026-11-19-justica-suspende-cobrancas-do-grupo-faze",
     "data": "2026-11-19",
     "categoria": "empresas-mei",
