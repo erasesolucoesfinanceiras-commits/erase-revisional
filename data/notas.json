@@ -1,5 +1,31 @@
 [
   {
+    "id": "2026-11-21-governo-avalia-iof-em-debentures-e-absol",
+    "data": "2026-11-21",
+    "categoria": "energia-solar",
+    "titulo": "Governo avalia IOF em debêntures e Absolar alerta para alta na energia",
+    "texto": "A equipe econômica do governo federal avalia cobrar IOF sobre debêntures incentivadas para reforçar a arrecadação pública. Em contrapartida, a Absolar alerta que a medida pode encarecer o financiamento do setor elétrico e elevar as tarifas. De acordo com a Anbima, o segmento respondeu por 53,6% dos R$ 72,8 bilhões emitidos nesses títulos entre janeiro e agosto de 2026.",
+    "fontes": [
+      {
+        "nome": "Canal Solar",
+        "url": "https://canalsolar.com.br/absolar-iof-debentures-energia-infraestrutura/",
+        "data": "2026-11-18"
+      },
+      {
+        "nome": "megawhat",
+        "url": "https://megawhat.uol.com.br/economia-e-politica/absolar-ve-risco-de-alta-nas-tarifas-de-energia-com-iof-sobre-debentures/",
+        "data": "2026-11-18"
+      }
+    ],
+    "foto": {
+      "id": 4824555,
+      "autor": "Solarimo",
+      "autorUrl": "https://pixabay.com/users/Solarimo-15097051/",
+      "pagina": "https://pixabay.com/photos/solar-solar-energy-solar-power-4824555/",
+      "fonte": "Pixabay"
+    }
+  },
+  {
     "id": "2026-11-20-cmn-exige-envio-mensal-de-dados-tributar",
     "data": "2026-11-20",
     "categoria": "financeiro",
