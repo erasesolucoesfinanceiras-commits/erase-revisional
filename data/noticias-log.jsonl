@@ -2489,3 +2489,23 @@
 {"quando":"2026-11-22T18:29:34.993Z","data":"2026-11-22","evento":"erro","tipo":"nota","motivo":"tempo do job esgotado esperando o Gemini"}
 {"quando":"2026-11-22T18:31:35.163Z","data":"2026-11-22","evento":"revisao_guia","resultado":"sem_mudanca","slug":"cet-custo-efetivo-total-o-que-entra-na-conta"}
 {"quando":"2026-11-22T18:31:35.163Z","data":"2026-11-22","evento":"uso_gemini","pedidos":21,"ok":4,"por_status":{"503":16}}
+{"quando":"2026-11-22T20:31:05.620Z","data":"2026-11-22","evento":"gemini","modelo":"gemini-3.8-flash","status":503,"acao":"espera_e_repete","espera_s":10}
+{"quando":"2026-11-22T20:31:24.958Z","data":"2026-11-22","evento":"gemini","modelo":"gemini-3.8-flash","status":503,"acao":"espera_e_repete","espera_s":40}
+{"quando":"2026-11-22T20:32:09.771Z","data":"2026-11-22","evento":"gemini","modelo":"gemini-3.8-flash","status":503,"acao":"proximo_modelo","motivo":"erro temporário persistiu"}
+{"quando":"2026-11-22T20:32:12.066Z","data":"2026-11-22","evento":"gemini","modelo":"gemini-3.7-flash","status":429,"acao":"espera_e_repete","espera_s":70}
+{"quando":"2026-11-22T20:33:25.117Z","data":"2026-11-22","evento":"gemini","modelo":"gemini-3.7-flash","status":503,"acao":"espera_e_repete","espera_s":40}
+{"quando":"2026-11-22T20:35:18.725Z","data":"2026-11-22","evento":"pulado","tipo":"nota","tema":"empresas-mei","motivo":"sem novidade real: Não há pelo menos duas fontes disponíveis de veículos diferentes sobre o mesmo fato recente elegível para publicação."}
+{"quando":"2026-11-22T20:35:18.726Z","data":"2026-11-22","evento":"tema_trocado","tipo":"nota","de":"empresas-mei","para":"financeiro","motivo":"fontes insuficientes ou sem novidade real","ultimos_motivos":["sem novidade real: Não há pelo menos duas fontes disponíveis de veículos diferentes sobre o mesmo fato recente elegível para publicação."]}
+{"quando":"2026-11-22T20:35:25.743Z","data":"2026-11-22","evento":"gemini","modelo":"gemini-3.8-flash","status":429,"acao":"espera_e_repete","espera_s":70}
+{"quando":"2026-11-22T20:38:55.403Z","data":"2026-11-22","evento":"pulado","tipo":"nota","tema":"financeiro","motivo":"sem novidade real: O único assunto com múltiplas fontes já foi publicado recentemente e as demais notícias contam com apenas uma fonte disponível."}
+{"quando":"2026-11-22T20:38:55.403Z","data":"2026-11-22","evento":"tema_trocado","tipo":"nota","de":"financeiro","para":"economia","motivo":"fontes insuficientes ou sem novidade real","ultimos_motivos":["sem novidade real: O único assunto com múltiplas fontes já foi publicado recentemente e as demais notícias contam com apenas uma fonte disponível."]}
+{"quando":"2026-11-22T20:39:05.249Z","data":"2026-11-22","evento":"gemini","modelo":"gemini-3.8-flash","status":429,"acao":"espera_e_repete","espera_s":70}
+{"quando":"2026-11-22T20:40:15.379Z","data":"2026-11-22","evento":"gemini","modelo":"gemini-3.8-flash","status":429,"acao":"espera_e_repete","espera_s":70}
+{"quando":"2026-11-22T20:41:35.036Z","data":"2026-11-22","evento":"gemini","modelo":"gemini-3.8-flash","status":503,"acao":"proximo_modelo","motivo":"erro temporário persistiu"}
+{"quando":"2026-11-22T20:41:35.121Z","data":"2026-11-22","evento":"gemini","modelo":"gemini-3.7-flash","status":429,"acao":"espera_e_repete","espera_s":70}
+{"quando":"2026-11-22T20:42:48.132Z","data":"2026-11-22","evento":"gemini","modelo":"gemini-3.7-flash","status":503,"acao":"espera_e_repete","espera_s":40}
+{"quando":"2026-11-22T20:43:28.233Z","data":"2026-11-22","evento":"gemini","modelo":"gemini-3.7-flash","status":429,"acao":"proximo_modelo","motivo":"cota por minuto ainda esgotada após esperas"}
+{"quando":"2026-11-22T20:43:46.422Z","data":"2026-11-22","evento":"gemini","modelo":"gemini-3.8-flash","status":429,"acao":"espera_e_repete","espera_s":70}
+{"quando":"2026-11-22T20:44:56.549Z","data":"2026-11-22","evento":"gemini","modelo":"gemini-3.8-flash","status":429,"acao":"espera_e_repete","espera_s":70}
+{"quando":"2026-11-22T20:46:06.606Z","data":"2026-11-22","evento":"erro","tipo":"nota","motivo":"tempo do job esgotado esperando o Gemini"}
+{"quando":"2026-11-22T20:46:06.611Z","data":"2026-11-22","evento":"uso_gemini","pedidos":17,"ok":3,"por_status":{"429":8,"503":6}}
