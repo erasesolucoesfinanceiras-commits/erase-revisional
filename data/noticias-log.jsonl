@@ -2465,3 +2465,27 @@
 {"quando":"2026-11-21T20:42:50.126Z","data":"2026-11-21","evento":"indexnow","resultado":"enviado","status":200,"enviadas":6,"ainda_pendentes":0,"urls":["https://revisional.eraseconsulta.com.br/noticias/credito-rural-recua-25-7-no-inicio-da-safra-2026-27-com-alta-de-dividas","https://revisional.eraseconsulta.com.br/","https://revisional.eraseconsulta.com.br/artigos","https://revisional.eraseconsulta.com.br/radar","https://revisional.eraseconsulta.com.br/categoria-energia-solar","https://revisional.eraseconsulta.com.br/categoria-credito-rural"],"resposta":""}
 {"quando":"2026-11-21T22:14:45.624Z","data":"2026-11-21","evento":"uso_gemini","pedidos":0,"ok":0,"por_status":{}}
 {"quando":"2026-11-21T23:52:41.568Z","data":"2026-11-21","evento":"verificacao","origem":"verificacao-diaria","acao":"tudo_certo","motivo":"último artigo 2026-11-21 (0 dia(s)), na capa do site"}
+{"quando":"2026-11-22T18:15:11.742Z","data":"2026-11-22","evento":"gemini","modelo":"gemini-3.8-flash","status":503,"acao":"espera_e_repete","espera_s":10}
+{"quando":"2026-11-22T18:15:24.518Z","data":"2026-11-22","evento":"gemini","modelo":"gemini-3.8-flash","status":503,"acao":"espera_e_repete","espera_s":40}
+{"quando":"2026-11-22T18:16:08.912Z","data":"2026-11-22","evento":"gemini","modelo":"gemini-3.8-flash","status":503,"acao":"proximo_modelo","motivo":"erro temporário persistiu"}
+{"quando":"2026-11-22T18:16:16.917Z","data":"2026-11-22","evento":"gemini","modelo":"gemini-3.7-flash","status":503,"acao":"espera_e_repete","espera_s":10}
+{"quando":"2026-11-22T18:16:31.813Z","data":"2026-11-22","evento":"gemini","modelo":"gemini-3.7-flash","status":503,"acao":"espera_e_repete","espera_s":40}
+{"quando":"2026-11-22T18:17:15.855Z","data":"2026-11-22","evento":"gemini","modelo":"gemini-3.7-flash","status":503,"acao":"proximo_modelo","motivo":"erro temporário persistiu"}
+{"quando":"2026-11-22T18:17:23.969Z","data":"2026-11-22","evento":"gemini","modelo":"gemini-3.6-flash","status":503,"acao":"espera_e_repete","espera_s":10}
+{"quando":"2026-11-22T18:17:39.682Z","data":"2026-11-22","evento":"pulado","tipo":"nota","tema":"empresas-mei","motivo":"sem novidade real: Não existem pelo menos duas fontes disponíveis que tratem do mesmo fato recente sobre o tema."}
+{"quando":"2026-11-22T18:17:39.683Z","data":"2026-11-22","evento":"tema_trocado","tipo":"nota","de":"empresas-mei","para":"financeiro","motivo":"fontes insuficientes ou sem novidade real","ultimos_motivos":["sem novidade real: Não existem pelo menos duas fontes disponíveis que tratem do mesmo fato recente sobre o tema."]}
+{"quando":"2026-11-22T18:18:01.896Z","data":"2026-11-22","evento":"gemini","modelo":"gemini-3.8-flash","status":503,"acao":"espera_e_repete","espera_s":10}
+{"quando":"2026-11-22T18:18:20.858Z","data":"2026-11-22","evento":"gemini","modelo":"gemini-3.8-flash","status":503,"acao":"espera_e_repete","espera_s":40}
+{"quando":"2026-11-22T18:19:12.664Z","data":"2026-11-22","evento":"gemini","modelo":"gemini-3.8-flash","status":503,"acao":"proximo_modelo","motivo":"erro temporário persistiu"}
+{"quando":"2026-11-22T18:19:14.949Z","data":"2026-11-22","evento":"gemini","modelo":"gemini-3.7-flash","status":503,"acao":"espera_e_repete","espera_s":10}
+{"quando":"2026-11-22T18:19:29.619Z","data":"2026-11-22","evento":"gemini","modelo":"gemini-3.7-flash","status":503,"acao":"espera_e_repete","espera_s":40}
+{"quando":"2026-11-22T18:20:19.146Z","data":"2026-11-22","evento":"gemini","modelo":"gemini-3.7-flash","status":503,"acao":"proximo_modelo","motivo":"erro temporário persistiu"}
+{"quando":"2026-11-22T18:20:28.252Z","data":"2026-11-22","evento":"pulado","tipo":"nota","tema":"financeiro","motivo":"sem novidade real: O único assunto com múltiplos veículos disponíveis já foi abordado nos últimos 15 dias e as demais pautas contam com apenas uma fonte."}
+{"quando":"2026-11-22T18:20:28.253Z","data":"2026-11-22","evento":"tema_trocado","tipo":"nota","de":"financeiro","para":"economia","motivo":"fontes insuficientes ou sem novidade real","ultimos_motivos":["sem novidade real: O único assunto com múltiplos veículos disponíveis já foi abordado nos últimos 15 dias e as demais pautas contam com apenas uma fonte."]}
+{"quando":"2026-11-22T18:20:39.989Z","data":"2026-11-22","evento":"gemini","modelo":"gemini-3.8-flash","status":503,"acao":"espera_e_repete","espera_s":10}
+{"quando":"2026-11-22T18:21:16.703Z","data":"2026-11-22","evento":"gemini","modelo":"gemini-3.8-flash","status":503,"acao":"espera_e_repete","espera_s":40}
+{"quando":"2026-11-22T18:27:53.310Z","data":"2026-11-22","evento":"gemini","modelo":"gemini-3.8-flash","status":"rede","acao":"espera_e_repete","espera_s":10}
+{"quando":"2026-11-22T18:28:54.957Z","data":"2026-11-22","evento":"gemini","modelo":"gemini-3.8-flash","status":503,"acao":"espera_e_repete","espera_s":40}
+{"quando":"2026-11-22T18:29:34.993Z","data":"2026-11-22","evento":"erro","tipo":"nota","motivo":"tempo do job esgotado esperando o Gemini"}
+{"quando":"2026-11-22T18:31:35.163Z","data":"2026-11-22","evento":"revisao_guia","resultado":"sem_mudanca","slug":"cet-custo-efetivo-total-o-que-entra-na-conta"}
+{"quando":"2026-11-22T18:31:35.163Z","data":"2026-11-22","evento":"uso_gemini","pedidos":21,"ok":4,"por_status":{"503":16}}
