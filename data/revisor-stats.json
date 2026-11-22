@@ -543,9 +543,12 @@
  "2026-11-22": {
   "nota": {
    "aprovados": 0,
-   "reprovados": 0,
-   "sem_novidade": 4,
-   "criterios": {}
+   "reprovados": 2,
+   "sem_novidade": 13,
+   "criterios": {
+    "fatos": 1,
+    "sem_generico": 1
+   }
   }
  }
 }
