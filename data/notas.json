@@ -1,5 +1,31 @@
 [
   {
+    "id": "2026-11-23-previa-da-inflacao-de-novembro-fica-no-r",
+    "data": "2026-11-23",
+    "categoria": "economia",
+    "titulo": "Prévia da inflação de novembro fica no radar e sinaliza rumo dos juros",
+    "texto": "A divulgação do IPCA-15 de novembro pelo IBGE, marcada para quinta-feira (26), trará novos dados sobre os preços no país. Segundo projeção do Bradesco, a prévia da inflação deve subir 0,36% no mês, impulsionada por alimentos e serviços. Para quem busca financiar um veículo, o resultado é relevante, pois a manutenção da pressão inflacionária pode levar o Banco Central a manter os juros altos, o que tende a encarecer o crédito automotivo.",
+    "fontes": [
+      {
+        "nome": "ISTOÉ DINHEIRO",
+        "url": "https://istoedinheiro.com.br/calendario-economico-semana-23-27-novembro-2026",
+        "data": "2026-11-23"
+      },
+      {
+        "nome": "InfoMoney",
+        "url": "https://www.infomoney.com.br/mercados/calendario-economico-da-semana-ipca-15-e-pce-nos-eua-estarao-no-radar-dos-mercados/",
+        "data": "2026-11-23"
+      }
+    ],
+    "foto": {
+      "id": 2696229,
+      "autor": "nattanan23",
+      "autorUrl": "https://pixabay.com/users/nattanan23-6312362/",
+      "pagina": "https://pixabay.com/photos/money-finance-mortgage-loan-2696229/",
+      "fonte": "Pixabay"
+    }
+  },
+  {
     "id": "2026-11-21-governo-avalia-iof-em-debentures-e-absol",
     "data": "2026-11-21",
     "categoria": "energia-solar",

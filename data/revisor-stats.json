@@ -550,5 +550,22 @@
     "sem_generico": 1
    }
   }
+ },
+ "2026-11-23": {
+  "artigo": {
+   "aprovados": 1,
+   "reprovados": 2,
+   "sem_novidade": 0,
+   "criterios": {
+    "sem_generico": 1,
+    "fatos": 2
+   }
+  },
+  "nota": {
+   "aprovados": 1,
+   "reprovados": 0,
+   "sem_novidade": 8,
+   "criterios": {}
+  }
  }
 }

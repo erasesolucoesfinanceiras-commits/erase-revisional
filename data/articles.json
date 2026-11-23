@@ -1,5 +1,39 @@
 [
   {
+    "slug": "vendas-de-eletricos-e-hibridos-somam-18-1-do-mercado-nacional-de-veiculos-em-202",
+    "categoria": "mercado",
+    "titulo": "Vendas de elétricos e híbridos somam 18,1% do mercado nacional de veículos em 2026",
+    "resumo": "Com 436.809 emplacamentos de janeiro a outubro de 2026, mercado de eletrificados cresce 158,8% no Brasil, enquanto país atinge 25 mil eletropostos.",
+    "data": "2026-11-23",
+    "fontes": [
+      {
+        "nome": "Correio 24 Horas",
+        "url": "https://www.correio24horas.com.br/economia/vendas-de-carros-eletricos-e-hibridos-batem-recorde-e-ja-somam-18-do-mercado-no-brasil-veja-lista-dos-mais-vendidos-1126",
+        "data": "2026-11-12"
+      },
+      {
+        "nome": "Autoesporte",
+        "url": "https://autoesporte.globo.com/setor-automotivo/mercado-automotivo/noticia/2026/11/carros-eletricos-hibridos-mais-vendidos-brasil-outubro-2026.ghtml",
+        "data": "2026-11-09"
+      },
+      {
+        "nome": "Quatro Rodas",
+        "url": "https://quatrorodas.abril.com.br/auto-servico/eletropostos-suficientes-brasil-carros-eletricos/",
+        "data": "2026-11-20"
+      }
+    ],
+    "corpo": "<p>O mercado brasileiro de veículos elétricos e híbridos registrou expressivo crescimento nos dez primeiros meses de 2026. Segundo levantamento da Associação Brasileira do Veículo Elétrico (ABVE), o país contabilizou 436.809 emplacamentos de automóveis eletrificados entre janeiro e outubro. O volume representa um aumento de 158,8% na comparação com as 168.798 unidades comercializadas no mesmo período de 2025.</p><p>Com esse desempenho, as vendas acumuladas até outubro já superam praticamente o dobro de todo o volume registrado ao longo do ano de 2025, quando 223.912 veículos eletrificados foram comercializados. De acordo com informações compiladas pela Federação Nacional da Distribuição de Veículos Automotores (Fenabrave), a categoria de eletrificados atingiu uma participação de 18,1% no total de 2.410.505 automóveis e comerciais leves emplacados no território nacional nos dez primeiros meses de 2026.</p><h2>Desempenho no mês de outubro e divisão por tecnologias</h2><p>No mês de outubro de 2026, foram faturadas 54.486 unidades elétricas e híbridas no Brasil. O resultado aponta para um avanço de 154,9% em relação ao mesmo mês de 2025, quando o mercado havia somado 21.369 emplacamentos. Na comparação direta com setembro de 2026, o crescimento mensal do segmento foi de 2,5%.</p><p>A divisão das vendas por tipo de propulsão indica maior volume entre os veículos híbridos. Em outubro de 2026, essa tecnologia respondeu por cerca de 60,3% dos emplacamentos de eletrificados, totalizando 32.829 unidades. Esse montante divide-se da seguinte forma:</p><ul><li><strong>Híbridos plug-in (PHEV):</strong> concentraram 21.056 emplacamentos no mês;</li><li><strong>Híbridos plenos (HEV e HEV Flex):</strong> somaram 11.773 registros faturados em outubro.</li></ul><p>Por sua vez, os modelos totalmente elétricos (BEV) responderam por 39,7% das vendas do segmento em outubro de 2026, totalizando 21.657 unidades faturadas. O número representou um recuo de 2,6% frente aos 22.246 registros computados em setembro do mesmo ano.</p><h2>Modelos em destaque e dinâmicas de mercado</h2><p>No ranking de vendas dos modelos 100% elétricos em outubro de 2026, os dados apontam o BYD Dolphin Mini na liderança da categoria com 8.431 emplacamentos faturados, seguido pelo BYD Dolphin, que contabilizou 5.262 unidades vendidas no período.</p><p>A terceira colocação no segmento de elétricos ficou com o GWM Ora 5, que somou 1.598 registros no mês. O quarto lugar foi ocupado pelo Geely EX2, com 1.483 unidades comercializadas. Segundo dados do setor automotivo, o modelo da Geely registrou fila de espera de até quatro meses no período devido a limitações no abastecimento de estoque nas concessionárias.</p><h2>Infraestrutura de recarga em expansão no país</h2><p>O avanço contínuo nos emplacamentos de veículos eletrificados ocorre em paralelo com o desenvolvimento da infraestrutura de recarga no território nacional. Conforme levantamento da ABVE divulgado pela publicação Quatro Rodas, o Brasil ultrapassou a marca de 25.000 pontos de recarga instalados em redes públicas e privadas.</p><p>Contudo, ao cruzar o tamanho da frota com os postos de carregamento existentes, a relação atual no mercado brasileiro é de aproximadamente 20 veículos elétricos e híbridos plug-in para cada ponto disponível. Em mercados internacionais de maior maturidade no setor automotivo, a proporção média de referência fica em torno de 10 automóveis para cada eletroposto.</p><h2>O que observar na prática ao financiar um veículo eletrificado</h2><p>Ao avaliar o financiamento de um carro elétrico ou híbrido, o consumidor pode calcular o custo total de propriedade ao longo do contrato de crédito automotivo. Esse planejamento envolve analisar o valor das parcelas mensais do financiamento em conjunto com a estimativa de custos com recarga de energia elétrica ou combustível, os prazos e valores das revisões periódicas recomendadas pela fabricante e a quilometragem média percorrida na rotina.</p><p>Além dos custos operacionais diretos, o comprador pode verificar a disponibilidade de pontos de carregamento residenciais ou públicos nos seus itinerários rotineiros, bem como pesquisar a existência de incentivos fiscais estaduais ou municipais, tais como isenções de IPVA ou descontos em tarifas, que variam conforme a localização e a tecnologia do veículo escolhido.</p>",
+    "foto_busca": "electric car charging",
+    "tipo": "noticia",
+    "foto": {
+      "id": 4382651,
+      "autor": "andreas160578",
+      "autorUrl": "https://pixabay.com/users/andreas160578-2383079/",
+      "pagina": "https://pixabay.com/photos/carsharing-electric-car-automobile-4382651/",
+      "fonte": "Pixabay"
+    }
+  },
+  {
     "slug": "credito-rural-recua-25-7-no-inicio-da-safra-2026-27-com-alta-de-dividas",
     "categoria": "credito-rural",
     "titulo": "Crédito rural recua 25,7% no início da safra 2026/27 com alta de dívidas",
