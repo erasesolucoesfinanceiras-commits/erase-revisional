@@ -2542,3 +2542,4 @@
 {"quando":"2026-11-22T22:48:37.751Z","data":"2026-11-22","evento":"pulado","tipo":"nota","tema":"credito-rural","motivo":"sem novidade real: Não há pelo menos duas fontes de veículos diferentes tratando do mesmo fato recente."}
 {"quando":"2026-11-22T22:48:37.752Z","data":"2026-11-22","evento":"sem_publicacao","tipo":"nota","motivo":"todos os textos foram reprovados"}
 {"quando":"2026-11-22T22:48:37.759Z","data":"2026-11-22","evento":"uso_gemini","pedidos":21,"ok":12,"por_status":{"429":3,"503":6}}
+{"quando":"2026-11-23T00:24:34.375Z","data":"2026-11-22","evento":"verificacao","origem":"verificacao-diaria","acao":"tudo_certo","motivo":"último artigo 2026-11-21 (1 dia(s)), na capa do site"}
