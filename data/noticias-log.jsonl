@@ -2619,3 +2619,17 @@
 {"quando":"2026-11-24T03:39:26.424Z","data":"2026-11-24","evento":"revisao_guia","resultado":"sem_fontes","slug":"por-que-motos-pagam-juros-mais-altos-que-carros","motivo":"só 0 fonte(s) oficial(is) legível(is)"}
 {"quando":"2026-11-24T03:39:26.424Z","data":"2026-11-24","evento":"uso_gemini","pedidos":8,"ok":1,"por_status":{"429":5}}
 {"quando":"2026-11-24T04:22:14.267Z","data":"2026-11-24","evento":"verificacao","origem":"verificacao-diaria","acao":"tudo_certo","motivo":"último artigo 2026-11-23 (1 dia(s)), na capa do site"}
+{"quando":"2026-11-24T21:00:32.702Z","data":"2026-11-24","evento":"gemini","modelo":"gemini-3.8-flash","status":503,"acao":"espera_e_repete","espera_s":10}
+{"quando":"2026-11-24T21:04:12.680Z","data":"2026-11-24","evento":"gemini","modelo":"gemini-3.8-flash","status":503,"acao":"espera_e_repete","espera_s":40}
+{"quando":"2026-11-24T21:04:55.240Z","data":"2026-11-24","evento":"gemini","modelo":"gemini-3.8-flash","status":503,"acao":"proximo_modelo","motivo":"erro temporário persistiu"}
+{"quando":"2026-11-24T21:05:52.682Z","data":"2026-11-24","evento":"gemini","modelo":"gemini-3.7-flash","status":503,"acao":"espera_e_repete","espera_s":10}
+{"quando":"2026-11-24T21:06:10.579Z","data":"2026-11-24","evento":"gemini","modelo":"gemini-3.7-flash","status":503,"acao":"espera_e_repete","espera_s":40}
+{"quando":"2026-11-24T21:06:59.249Z","data":"2026-11-24","evento":"gemini","modelo":"gemini-3.7-flash","status":503,"acao":"proximo_modelo","motivo":"erro temporário persistiu"}
+{"quando":"2026-11-24T21:07:16.903Z","data":"2026-11-24","evento":"pulado","tipo":"nota","tema":"financeiro","motivo":"sem novidade real: Não há pelo menos duas fontes de sites diferentes cobrindo o mesmo fato recente e não listado nos tópicos excluídos."}
+{"quando":"2026-11-24T21:07:16.903Z","data":"2026-11-24","evento":"tema_trocado","tipo":"nota","de":"financeiro","para":"economia","motivo":"fontes insuficientes ou sem novidade real","ultimos_motivos":["sem novidade real: Não há pelo menos duas fontes de sites diferentes cobrindo o mesmo fato recente e não listado nos tópicos excluídos."]}
+{"quando":"2026-11-24T21:09:23.411Z","data":"2026-11-24","evento":"gemini","modelo":"gemini-3.8-flash","status":503,"acao":"espera_e_repete","espera_s":10}
+{"quando":"2026-11-24T21:09:51.521Z","data":"2026-11-24","evento":"gemini","modelo":"gemini-3.8-flash","status":503,"acao":"espera_e_repete","espera_s":40}
+{"quando":"2026-11-24T21:15:32.337Z","data":"2026-11-24","evento":"gemini","modelo":"gemini-3.8-flash","status":"rede","acao":"proximo_modelo","motivo":"erro temporário persistiu"}
+{"quando":"2026-11-24T21:15:32.338Z","data":"2026-11-24","evento":"erro","tipo":"nota","motivo":"tempo do job esgotado esperando o Gemini"}
+{"quando":"2026-11-24T21:15:48.213Z","data":"2026-11-24","evento":"revisao_guia","resultado":"sem_fontes","slug":"por-que-motos-pagam-juros-mais-altos-que-carros","motivo":"só 0 fonte(s) oficial(is) legível(is)"}
+{"quando":"2026-11-24T21:15:48.213Z","data":"2026-11-24","evento":"uso_gemini","pedidos":10,"ok":1,"por_status":{"503":8}}
