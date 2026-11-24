@@ -2618,3 +2618,4 @@
 {"quando":"2026-11-24T03:39:10.655Z","data":"2026-11-24","evento":"erro","tipo":"nota","motivo":"tempo do job esgotado esperando o Gemini"}
 {"quando":"2026-11-24T03:39:26.424Z","data":"2026-11-24","evento":"revisao_guia","resultado":"sem_fontes","slug":"por-que-motos-pagam-juros-mais-altos-que-carros","motivo":"só 0 fonte(s) oficial(is) legível(is)"}
 {"quando":"2026-11-24T03:39:26.424Z","data":"2026-11-24","evento":"uso_gemini","pedidos":8,"ok":1,"por_status":{"429":5}}
+{"quando":"2026-11-24T04:22:14.267Z","data":"2026-11-24","evento":"verificacao","origem":"verificacao-diaria","acao":"tudo_certo","motivo":"último artigo 2026-11-23 (1 dia(s)), na capa do site"}
