@@ -2608,3 +2608,13 @@
 {"quando":"2026-11-23T23:14:44.216Z","data":"2026-11-23","evento":"uso_gemini","pedidos":57,"ok":23,"por_status":{"404":1,"429":11,"503":20}}
 {"quando":"2026-11-23T23:15:21.082Z","data":"2026-11-23","evento":"indexnow","resultado":"enviado","status":200,"enviadas":6,"ainda_pendentes":0,"urls":["https://revisional.eraseconsulta.com.br/noticias/vendas-de-eletricos-e-hibridos-somam-18-1-do-mercado-nacional-de-veiculos-em-202","https://revisional.eraseconsulta.com.br/","https://revisional.eraseconsulta.com.br/artigos","https://revisional.eraseconsulta.com.br/radar","https://revisional.eraseconsulta.com.br/categoria-mercado","https://revisional.eraseconsulta.com.br/categoria-economia"],"resposta":""}
 {"quando":"2026-11-24T01:21:30.329Z","data":"2026-11-23","evento":"uso_gemini","pedidos":0,"ok":0,"por_status":{}}
+{"quando":"2026-11-24T03:29:11.532Z","data":"2026-11-24","evento":"gemini","modelo":"gemini-3.8-flash","status":"rede","acao":"espera_e_repete","espera_s":10}
+{"quando":"2026-11-24T03:34:22.281Z","data":"2026-11-24","evento":"gemini","modelo":"gemini-3.8-flash","status":"rede","acao":"espera_e_repete","espera_s":40}
+{"quando":"2026-11-24T03:35:02.474Z","data":"2026-11-24","evento":"gemini","modelo":"gemini-3.8-flash","status":429,"acao":"proximo_modelo","motivo":"cota por minuto ainda esgotada após esperas"}
+{"quando":"2026-11-24T03:35:09.466Z","data":"2026-11-24","evento":"gemini","modelo":"gemini-3.7-flash","status":429,"acao":"espera_e_repete","espera_s":70}
+{"quando":"2026-11-24T03:36:19.648Z","data":"2026-11-24","evento":"gemini","modelo":"gemini-3.7-flash","status":429,"acao":"espera_e_repete","espera_s":70}
+{"quando":"2026-11-24T03:37:29.842Z","data":"2026-11-24","evento":"gemini","modelo":"gemini-3.7-flash","status":429,"acao":"proximo_modelo","motivo":"cota por minuto ainda esgotada após esperas"}
+{"quando":"2026-11-24T03:38:00.624Z","data":"2026-11-24","evento":"gemini","modelo":"gemini-3.6-flash","status":429,"acao":"espera_e_repete","espera_s":70}
+{"quando":"2026-11-24T03:39:10.655Z","data":"2026-11-24","evento":"erro","tipo":"nota","motivo":"tempo do job esgotado esperando o Gemini"}
+{"quando":"2026-11-24T03:39:26.424Z","data":"2026-11-24","evento":"revisao_guia","resultado":"sem_fontes","slug":"por-que-motos-pagam-juros-mais-altos-que-carros","motivo":"só 0 fonte(s) oficial(is) legível(is)"}
+{"quando":"2026-11-24T03:39:26.424Z","data":"2026-11-24","evento":"uso_gemini","pedidos":8,"ok":1,"por_status":{"429":5}}
