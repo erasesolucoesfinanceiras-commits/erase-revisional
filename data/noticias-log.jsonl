@@ -2633,3 +2633,40 @@
 {"quando":"2026-11-24T21:15:32.338Z","data":"2026-11-24","evento":"erro","tipo":"nota","motivo":"tempo do job esgotado esperando o Gemini"}
 {"quando":"2026-11-24T21:15:48.213Z","data":"2026-11-24","evento":"revisao_guia","resultado":"sem_fontes","slug":"por-que-motos-pagam-juros-mais-altos-que-carros","motivo":"só 0 fonte(s) oficial(is) legível(is)"}
 {"quando":"2026-11-24T21:15:48.213Z","data":"2026-11-24","evento":"uso_gemini","pedidos":10,"ok":1,"por_status":{"503":8}}
+{"quando":"2026-11-24T23:19:26.335Z","data":"2026-11-24","evento":"gemini","modelo":"gemini-3.8-flash","status":503,"acao":"espera_e_repete","espera_s":10}
+{"quando":"2026-11-24T23:20:03.304Z","data":"2026-11-24","evento":"pulado","tipo":"nota","tema":"financeiro","motivo":"sem novidade real: Não há ao menos duas fontes de sites diferentes cobrindo o mesmo fato recente e inédito dentro do tema proposto."}
+{"quando":"2026-11-24T23:20:03.305Z","data":"2026-11-24","evento":"tema_trocado","tipo":"nota","de":"financeiro","para":"economia","motivo":"fontes insuficientes ou sem novidade real","ultimos_motivos":["sem novidade real: Não há ao menos duas fontes de sites diferentes cobrindo o mesmo fato recente e inédito dentro do tema proposto."]}
+{"quando":"2026-11-24T23:21:54.029Z","data":"2026-11-24","evento":"pulado","tipo":"nota","tema":"economia","motivo":"sem novidade real: Não há pelo menos duas fontes de veículos diferentes tratando do mesmo fato recente elegível para publicação."}
+{"quando":"2026-11-24T23:21:54.029Z","data":"2026-11-24","evento":"tema_trocado","tipo":"nota","de":"economia","para":"revisional","motivo":"fontes insuficientes ou sem novidade real","ultimos_motivos":["sem novidade real: Não há pelo menos duas fontes de veículos diferentes tratando do mesmo fato recente elegível para publicação."]}
+{"quando":"2026-11-24T23:24:54.979Z","data":"2026-11-24","evento":"pulado","tipo":"nota","tema":"revisional","motivo":"sem novidade real: Não há pelo menos duas fontes distintas que tratem do mesmo fato recente relacionado a financiamento e crédito de veículos."}
+{"quando":"2026-11-24T23:24:54.980Z","data":"2026-11-24","evento":"tema_trocado","tipo":"nota","de":"revisional","para":"mercado","motivo":"fontes insuficientes ou sem novidade real","ultimos_motivos":["sem novidade real: Não há pelo menos duas fontes distintas que tratem do mesmo fato recente relacionado a financiamento e crédito de veículos."]}
+{"quando":"2026-11-24T23:25:07.441Z","data":"2026-11-24","evento":"gemini","modelo":"gemini-3.8-flash","status":503,"acao":"espera_e_repete","espera_s":10}
+{"quando":"2026-11-24T23:25:18.226Z","data":"2026-11-24","evento":"gemini","modelo":"gemini-3.8-flash","status":503,"acao":"espera_e_repete","espera_s":40}
+{"quando":"2026-11-24T23:26:03.159Z","data":"2026-11-24","evento":"gemini","modelo":"gemini-3.8-flash","status":503,"acao":"proximo_modelo","motivo":"erro temporário persistiu"}
+{"quando":"2026-11-24T23:26:18.388Z","data":"2026-11-24","evento":"gemini","modelo":"gemini-3.7-flash","status":503,"acao":"espera_e_repete","espera_s":10}
+{"quando":"2026-11-24T23:26:32.264Z","data":"2026-11-24","evento":"gemini","modelo":"gemini-3.7-flash","status":503,"acao":"espera_e_repete","espera_s":40}
+{"quando":"2026-11-24T23:27:14.094Z","data":"2026-11-24","evento":"gemini","modelo":"gemini-3.7-flash","status":503,"acao":"proximo_modelo","motivo":"erro temporário persistiu"}
+{"quando":"2026-11-24T23:27:30.266Z","data":"2026-11-24","evento":"pulado","tipo":"nota","tema":"mercado","motivo":"sem novidade real: Não há pelo menos duas fontes de veículos diferentes cobrindo o mesmo fato recente."}
+{"quando":"2026-11-24T23:27:30.266Z","data":"2026-11-24","evento":"tema_trocado","tipo":"nota","de":"mercado","para":"energia-solar","motivo":"fontes insuficientes ou sem novidade real","ultimos_motivos":["sem novidade real: Não há pelo menos duas fontes de veículos diferentes cobrindo o mesmo fato recente."]}
+{"quando":"2026-11-24T23:27:38.839Z","data":"2026-11-24","evento":"gemini","modelo":"gemini-3.8-flash","status":503,"acao":"espera_e_repete","espera_s":10}
+{"quando":"2026-11-24T23:27:48.947Z","data":"2026-11-24","evento":"gemini","modelo":"gemini-3.8-flash","status":429,"acao":"espera_e_repete","espera_s":70}
+{"quando":"2026-11-24T23:29:03.015Z","data":"2026-11-24","evento":"gemini","modelo":"gemini-3.8-flash","status":503,"acao":"proximo_modelo","motivo":"erro temporário persistiu"}
+{"quando":"2026-11-24T23:29:06.890Z","data":"2026-11-24","evento":"gemini","modelo":"gemini-3.7-flash","status":503,"acao":"espera_e_repete","espera_s":10}
+{"quando":"2026-11-24T23:29:20.676Z","data":"2026-11-24","evento":"gemini","modelo":"gemini-3.7-flash","status":503,"acao":"espera_e_repete","espera_s":40}
+{"quando":"2026-11-24T23:30:02.334Z","data":"2026-11-24","evento":"gemini","modelo":"gemini-3.7-flash","status":503,"acao":"proximo_modelo","motivo":"erro temporário persistiu"}
+{"quando":"2026-11-24T23:31:56.612Z","data":"2026-11-24","evento":"pulado","tipo":"nota","tema":"energia-solar","motivo":"sem novidade real: Não há duas fontes de veículos diferentes abordando o mesmo fato sobre o tema."}
+{"quando":"2026-11-24T23:31:56.612Z","data":"2026-11-24","evento":"tema_trocado","tipo":"nota","de":"energia-solar","para":"imoveis","motivo":"fontes insuficientes ou sem novidade real","ultimos_motivos":["sem novidade real: Não há duas fontes de veículos diferentes abordando o mesmo fato sobre o tema."]}
+{"quando":"2026-11-24T23:32:14.744Z","data":"2026-11-24","evento":"gemini","modelo":"gemini-3.8-flash","status":503,"acao":"espera_e_repete","espera_s":10}
+{"quando":"2026-11-24T23:32:24.851Z","data":"2026-11-24","evento":"gemini","modelo":"gemini-3.8-flash","status":429,"acao":"espera_e_repete","espera_s":70}
+{"quando":"2026-11-24T23:33:37.907Z","data":"2026-11-24","evento":"gemini","modelo":"gemini-3.8-flash","status":503,"acao":"proximo_modelo","motivo":"erro temporário persistiu"}
+{"quando":"2026-11-24T23:33:45.676Z","data":"2026-11-24","evento":"gemini","modelo":"gemini-3.7-flash","status":503,"acao":"espera_e_repete","espera_s":10}
+{"quando":"2026-11-24T23:33:55.799Z","data":"2026-11-24","evento":"gemini","modelo":"gemini-3.7-flash","status":429,"acao":"espera_e_repete","espera_s":70}
+{"quando":"2026-11-24T23:35:05.865Z","data":"2026-11-24","evento":"erro","tipo":"nota","motivo":"tempo do job esgotado esperando o Gemini"}
+{"quando":"2026-11-24T23:35:07.302Z","data":"2026-11-24","evento":"gemini","modelo":"gemini-3.8-flash","status":429,"acao":"espera_e_repete","espera_s":70}
+{"quando":"2026-11-24T23:36:17.396Z","data":"2026-11-24","evento":"gemini","modelo":"gemini-3.8-flash","status":429,"acao":"espera_e_repete","espera_s":70}
+{"quando":"2026-11-24T23:37:27.538Z","data":"2026-11-24","evento":"gemini","modelo":"gemini-3.8-flash","status":429,"acao":"proximo_modelo","motivo":"cota por minuto ainda esgotada após esperas"}
+{"quando":"2026-11-24T23:37:34.548Z","data":"2026-11-24","evento":"gemini","modelo":"gemini-3.7-flash","status":429,"acao":"espera_e_repete","espera_s":70}
+{"quando":"2026-11-24T23:38:44.706Z","data":"2026-11-24","evento":"gemini","modelo":"gemini-3.7-flash","status":429,"acao":"espera_e_repete","espera_s":70}
+{"quando":"2026-11-24T23:39:54.871Z","data":"2026-11-24","evento":"gemini","modelo":"gemini-3.7-flash","status":429,"acao":"proximo_modelo","motivo":"cota por minuto ainda esgotada após esperas"}
+{"quando":"2026-11-24T23:40:05.915Z","data":"2026-11-24","evento":"revisao_guia","resultado":"sem_mudanca","slug":"por-que-motos-pagam-juros-mais-altos-que-carros"}
+{"quando":"2026-11-24T23:40:05.915Z","data":"2026-11-24","evento":"uso_gemini","pedidos":30,"ok":6,"por_status":{"429":9,"503":15}}
