@@ -1,5 +1,31 @@
 [
   {
+    "id": "2026-11-24-itau-passa-a-oferecer-credito-imobiliari",
+    "data": "2026-11-24",
+    "categoria": "imoveis",
+    "titulo": "Itaú passa a oferecer crédito imobiliário pelo Minha Casa, Minha Vida",
+    "texto": "O Itaú Unibanco anunciou a entrada no programa Minha Casa, Minha Vida. O atendimento começará de forma gradual para a Faixa 3, destinada a famílias com renda mensal entre R$ 5 mil e R$ 9,6 mil, e para a linha Pró-Cotista, voltada a trabalhadores com renda de até R$ 12 mil.",
+    "fontes": [
+      {
+        "nome": "Brasil 247",
+        "url": "https://www.brasil247.com/negocios/itau-entra-no-mcmv-e-desafia-dominio-da-caixa-no-financiamento-imobiliario/",
+        "data": "2026-11-24"
+      },
+      {
+        "nome": "jc",
+        "url": "https://jc.uol.com.br/colunas/metro-quadrado/2026/11/24/itau-unibanco-entra-no-minha-casa-minha-vida-em-meio-a-recorde-historico-de-lancamentos-do-programa.html",
+        "data": "2026-11-24"
+      }
+    ],
+    "foto": {
+      "id": 4503753,
+      "autor": "TierraMallorca",
+      "autorUrl": "https://pixabay.com/users/TierraMallorca-13743214/",
+      "pagina": "https://pixabay.com/photos/build-a-house-house-drawing-4503753/",
+      "fonte": "Pixabay"
+    }
+  },
+  {
     "id": "2026-11-23-previa-da-inflacao-de-novembro-fica-no-r",
     "data": "2026-11-23",
     "categoria": "economia",
