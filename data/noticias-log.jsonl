@@ -2733,3 +2733,4 @@
 {"quando":"2026-11-25T03:07:10.459Z","data":"2026-11-25","evento":"verificacao","origem":"verificacao-diaria","acao":"disparou_geracao","motivo":"o horário agendado não disparou hoje"}
 {"quando":"2026-11-25T03:27:36.011Z","data":"2026-11-25","evento":"verificacao","origem":"verificacao-diaria","acao":"tudo_certo","motivo":"último artigo 2026-11-23 (2 dia(s)), na capa do site"}
 {"quando":"2026-11-25T20:22:37.574Z","data":"2026-11-25","evento":"uso_gemini","pedidos":0,"ok":0,"por_status":{}}
+{"quando":"2026-11-25T22:51:54.271Z","data":"2026-11-25","evento":"uso_gemini","pedidos":0,"ok":0,"por_status":{}}
