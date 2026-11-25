@@ -1,5 +1,31 @@
 [
   {
+    "id": "2026-11-25-crescimento-e-cuidados-no-mercado-de-con",
+    "data": "2026-11-25",
+    "categoria": "consorcio-seguros",
+    "titulo": "Crescimento e cuidados no mercado de consórcios",
+    "texto": "O setor de consórcios registrou alta de participantes até setembro de 2026, com expansão em serviços e imóveis, segundo a Associação Brasileira de Administradoras de Consórcios. Para 2027, Cleber Gomes, CEO da Maestria, orienta avaliar custos e objetivos antes da adesão.",
+    "fontes": [
+      {
+        "nome": "Terra",
+        "url": "https://www.terra.com.br/economia/vale-a-pena-fazer-consorcio-em-2027-4-pontos-para-avaliar-primeiro,c120923e6faa4bf3e8daefdb238ba12cgijt4iqe.html",
+        "data": "2026-11-24"
+      },
+      {
+        "nome": "Tupãense Notícias",
+        "url": "https://tupaense.com.br/2026/11/23/seu-proximo-carro-ou-imovel-comeca-com-um-plano/",
+        "data": "2026-11-23"
+      }
+    ],
+    "foto": {
+      "id": 1941669,
+      "autor": "ElisaRiva",
+      "autorUrl": "https://pixabay.com/users/ElisaRiva-1348268/",
+      "pagina": "https://pixabay.com/photos/machine-ferrari-toy-car-red-toy-car-1941669/",
+      "fonte": "Pixabay"
+    }
+  },
+  {
     "id": "2026-11-24-itau-passa-a-oferecer-credito-imobiliari",
     "data": "2026-11-24",
     "categoria": "imoveis",

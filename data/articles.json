@@ -1,5 +1,34 @@
 [
   {
+    "slug": "credito-rural-regras-de-renegociacao-e-impactos-no-setor-entram-em-debate",
+    "categoria": "credito-rural",
+    "titulo": "Crédito rural: regras de renegociação e impactos no setor entram em debate",
+    "resumo": "Banco do Brasil confirma interlocução com o governo sobre normas do crédito rural enquanto TCU avalia relatório sobre prorrogações e juros praticados em dívidas do setor.",
+    "data": "2026-11-25",
+    "fontes": [
+      {
+        "nome": "Metrópoles",
+        "url": "https://www.metropoles.com/colunas/dinheiro-e-negocios/bb-confirma-conversas-com-governo-sobre-regras-do-credito-rural",
+        "data": "2026-11-24"
+      },
+      {
+        "nome": "Globo Rural",
+        "url": "https://globorural.globo.com/credito-e-investimento/noticia/2026/11/tcu-deve-votar-relatorio-sobre-irregularidades-no-credito-rural.ghtml",
+        "data": "2026-11-23"
+      }
+    ],
+    "corpo": "<p>O setor de crédito rural no Brasil passa por discussões normativas e ações de fiscalização. O Banco do Brasil (BB) confirmou que mantém conversas com autoridades governamentais e reguladoras a respeito das normas que regem o financiamento do agronegócio. A manifestação ocorreu por meio de comunicado ao mercado, em resposta a pedido de esclarecimentos feito pela Comissão de Valores Mobiliários (CVM).</p><h2>Conversas regulatórias e desempenho financeiro</h2><p>O primeiro ofício da CVM sobre o assunto foi encaminhado à instituição financeira em 17 de novembro, com prazo para esclarecimentos estendido para 24 de novembro. Em sua nota ao mercado, o Banco do Brasil informou manter interlocução técnica constante a respeito do aprimoramento normativo do Sistema Financeiro Nacional, abrangendo as operações de crédito do agronegócio. O banco não especificou se há propostas de alterações nas regras de contabilização de perdas com o crédito rural, cujas eventuais mudanças têm potencial para afetar os resultados financeiros da instituição.</p><p>As tratativas ocorrem em meio a alterações nos indicadores financeiros do setor. Nos primeiros nove meses de 2026, o agronegócio representou 45,6% das baixas para prejuízo efetuadas pelo banco. No terceiro trimestre de 2026, a instituição registrou lucro líquido ajustado de R$ 1,3 bilhão, valor que representa uma queda de 66,5% na comparação com o mesmo período do ano anterior, acompanhado por um custo do crédito de R$ 21,2 bilhões.</p><p>Em razão desse cenário, o Banco do Brasil revisou a sua estimativa de lucro para o ano de 2026. A previsão anterior, fixada entre R$ 18 bilhões e R$ 22 bilhões, foi reduzida para o intervalo de R$ 9 bilhões a R$ 11 bilhões. Segundo informações prestadas pela instituição, a pontualidade no pagamento das dívidas do setor rural variou de 81% em agosto para 76% em setembro e 66% em outubro, sob concentração maior entre médios e grandes produtores de soja, milho e pecuária, sobretudo na região Centro-Oeste. O banco assinalou, contudo, que 90% dos 544 mil produtores rurais com operações na instituição mantêm o pagamento regular das parcelas.</p><h2>Auditoria do TCU sobre juros e regramento de renegociações</h2><p>Paralelamente às discussões de mercado, o Tribunal de Contas da União (TCU) pautou a votação do relatório elaborado pelo ministro Augusto Nardes sobre a auditoria realizada na Política Nacional de Crédito Rural. O processo foi aberto a partir de solicitação da Comissão de Agricultura da Câmara dos Deputados, motivada por requerimento do deputado Afonso Hamm (PP-RS).</p><p>A apuração do tribunal tem como eixo principal averiguar a possível cobrança de taxas de juros superiores às fixadas originalmente nos contratos durante a renegociação de débitos. O documento que deu origem à auditoria apontou preocupações com a observância do Manual de Crédito Rural (MCR) por agentes financeiros públicos, privados e cooperativas, especificamente quanto ao dispositivo que torna obrigatória a prorrogação de dívidas rurais com a manutenção dos encargos financeiros contratados do início do financiamento, nos casos em que o produtor comprova frustração de safras por adversidades climáticas, problemas de comercialização ou perdas acumuladas.</p><h2>O que observar na prática sobre o crédito rural</h2><p>Na prática, o produtor rural que necessita repactuar ou prorrogar financiamentos pode verificar as disposições do Manual de Crédito Rural e conferir se as condições propostas na renegociação mantêm as taxas de juros e encargos pactuados originalmente no contrato. A apresentação de documentação comprobatória sobre eventuais frustrações de safra ou dificuldades temporárias de comercialização costuma ser o procedimento padrão exigido pelas instituições para fundamentar os pedidos de prorrogação previstos pela regulamentação do setor.</p>",
+    "foto_busca": "agricultural credit contract farm",
+    "tipo": "noticia",
+    "foto": {
+      "id": 1845835,
+      "autor": "Pexels",
+      "autorUrl": "https://pixabay.com/users/Pexels-2286921/",
+      "pagina": "https://pixabay.com/photos/wheat-wheat-crops-barley-crops-1845835/",
+      "fonte": "Pixabay"
+    }
+  },
+  {
     "slug": "vendas-de-eletricos-e-hibridos-somam-18-1-do-mercado-nacional-de-veiculos-em-202",
     "categoria": "mercado",
     "titulo": "Vendas de elétricos e híbridos somam 18,1% do mercado nacional de veículos em 2026",
