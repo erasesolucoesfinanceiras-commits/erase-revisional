@@ -2754,3 +2754,13 @@
 {"quando":"2026-11-26T20:23:53.422Z","data":"2026-11-26","evento":"gemini","modelo":"gemini-3.6-flash","status":503,"acao":"espera_e_repete","espera_s":40}
 {"quando":"2026-11-26T20:24:33.452Z","data":"2026-11-26","evento":"revisao_guia","resultado":"erro","motivo":"tempo do job esgotado esperando o Gemini"}
 {"quando":"2026-11-26T20:24:33.452Z","data":"2026-11-26","evento":"uso_gemini","pedidos":15,"ok":0,"por_status":{"503":12}}
+{"quando":"2026-11-26T22:42:06.544Z","data":"2026-11-26","evento":"gemini","modelo":"gemini-3.8-flash","status":503,"acao":"espera_e_repete","espera_s":10}
+{"quando":"2026-11-26T22:47:17.301Z","data":"2026-11-26","evento":"gemini","modelo":"gemini-3.8-flash","status":"rede","acao":"espera_e_repete","espera_s":40}
+{"quando":"2026-11-26T22:48:43.990Z","data":"2026-11-26","evento":"gemini","modelo":"gemini-3.8-flash","status":503,"acao":"proximo_modelo","motivo":"erro temporário persistiu"}
+{"quando":"2026-11-26T22:53:44.736Z","data":"2026-11-26","evento":"gemini","modelo":"gemini-3.7-flash","status":"rede","acao":"espera_e_repete","espera_s":10}
+{"quando":"2026-11-26T22:53:56.834Z","data":"2026-11-26","evento":"gemini","modelo":"gemini-3.7-flash","status":503,"acao":"espera_e_repete","espera_s":40}
+{"quando":"2026-11-26T22:59:37.617Z","data":"2026-11-26","evento":"gemini","modelo":"gemini-3.7-flash","status":"rede","acao":"proximo_modelo","motivo":"erro temporário persistiu"}
+{"quando":"2026-11-26T22:59:37.618Z","data":"2026-11-26","evento":"erro","tipo":"nota","motivo":"tempo do job esgotado esperando o Gemini"}
+{"quando":"2026-11-26T23:00:09.285Z","data":"2026-11-26","evento":"gemini","modelo":"gemini-3.8-flash","status":503,"acao":"espera_e_repete","espera_s":10}
+{"quando":"2026-11-26T23:03:12.158Z","data":"2026-11-26","evento":"revisao_guia","resultado":"sem_mudanca","slug":"juros-acima-da-media-sao-abusivos-o-que-diz-o-stj"}
+{"quando":"2026-11-26T23:03:12.158Z","data":"2026-11-26","evento":"uso_gemini","pedidos":8,"ok":1,"por_status":{"503":4}}
