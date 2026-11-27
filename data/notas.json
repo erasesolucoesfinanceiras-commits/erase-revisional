@@ -1,5 +1,31 @@
 [
   {
+    "id": "2026-11-26-ipca-15-desacelera-para-0-22-em-novembro",
+    "data": "2026-11-26",
+    "categoria": "economia",
+    "titulo": "IPCA-15 desacelera para 0,22% em novembro com recuo em transportes",
+    "texto": "O IPCA-15 registrou alta de 0,22% em novembro de 2026, desacelerando em relação aos 0,32% apurados em outubro, segundo o IBGE. O recuo de 0,71% no grupo transportes, puxado pelas passagens aéreas (-9,57%) e pela gasolina (-1,23%), conteve o índice geral. Contudo, como o acumulado em 12 meses atingiu 4,64%, a taxa Selic tende a permanecer elevada, o que pode manter as taxas de juros e as parcelas do financiamento de veículos sem expectativa de alívio no curto prazo.",
+    "fontes": [
+      {
+        "nome": "InfoMoney",
+        "url": "https://www.infomoney.com.br/economia/ipca-15-surpreende-para-baixo-e-reforca-aposta-em-selic-parada-por-mais-tempo/",
+        "data": "2026-11-26"
+      },
+      {
+        "nome": "Exame",
+        "url": "https://exame.com/economia/ipca-15-previa-da-inflacao-desacelera-para-022-em-novembro/",
+        "data": "2026-11-26"
+      }
+    ],
+    "foto": {
+      "id": 1015125,
+      "autor": "stevepb",
+      "autorUrl": "https://pixabay.com/users/stevepb-282134/",
+      "pagina": "https://pixabay.com/photos/coins-calculator-budget-1015125/",
+      "fonte": "Pixabay"
+    }
+  },
+  {
     "id": "2026-11-25-crescimento-e-cuidados-no-mercado-de-con",
     "data": "2026-11-25",
     "categoria": "consorcio-seguros",
