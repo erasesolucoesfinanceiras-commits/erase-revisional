@@ -1,5 +1,31 @@
 [
   {
+    "id": "2026-11-27-gato-solar-gera-impacto-de-ate-r-4-bilho",
+    "data": "2026-11-27",
+    "categoria": "energia-solar",
+    "titulo": "Gato solar gera impacto de até R$ 4 bilhões na conta de luz",
+    "texto": "A expansão irregular da geração solar distribuída, conhecida como gato solar, gera um custo de R$ 3,3 bilhões a R$ 4 bilhões e pode provocar impacto de 1,1% a 1,3% no aumento da tarifa de energia, segundo a Associação Brasileira de Distribuidores de Energia Elétrica (Abradee). A irregularidade ocorre quando unidades já cadastradas ampliam seus equipamentos sem regularizar a alteração junto à distribuidora local.",
+    "fontes": [
+      {
+        "nome": "Valor Econômico",
+        "url": "https://valor.globo.com/brasil/mercado-ilegal/noticia/2026/11/25/gato-solar-tem-custo-de-ate-r-4-bilhoes.ghtml",
+        "data": "2026-11-25"
+      },
+      {
+        "nome": "O GLOBO",
+        "url": "https://oglobo.globo.com/economia/mercado-ilegal/noticia/2026/11/25/gato-solar-expansao-irregular-tem-custo-de-ate-r-4-bilhoes-e-impacta-conta-de-luz.ghtml",
+        "data": "2026-11-24"
+      }
+    ],
+    "foto": {
+      "id": 824691,
+      "autor": "succo",
+      "autorUrl": "https://pixabay.com/users/succo-96729/",
+      "pagina": "https://pixabay.com/photos/solar-cells-solar-energy-824691/",
+      "fonte": "Pixabay"
+    }
+  },
+  {
     "id": "2026-11-26-ipca-15-desacelera-para-0-22-em-novembro",
     "data": "2026-11-26",
     "categoria": "economia",

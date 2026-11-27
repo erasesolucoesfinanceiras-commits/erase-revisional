@@ -601,5 +601,21 @@
    "sem_novidade": 0,
    "criterios": {}
   }
+ },
+ "2026-11-27": {
+  "artigo": {
+   "aprovados": 1,
+   "reprovados": 1,
+   "sem_novidade": 1,
+   "criterios": {
+    "original": 1
+   }
+  },
+  "nota": {
+   "aprovados": 1,
+   "reprovados": 0,
+   "sem_novidade": 1,
+   "criterios": {}
+  }
  }
 }

@@ -1,5 +1,34 @@
 [
   {
+    "slug": "volkswagen-anuncia-motor-1-5-hibrido-flex-nacional-com-aporte-de-r-16-bi",
+    "categoria": "mercado",
+    "titulo": "Volkswagen anuncia motor 1.5 híbrido flex nacional com aporte de R$ 16 bi",
+    "resumo": "A montadora confirmou a tecnologia 1.5 TSI Evo2 Flex para veículos montados no país, com cronograma industrial previsto entre 2027 e 2028.",
+    "data": "2026-11-27",
+    "fontes": [
+      {
+        "nome": "Autoesporte",
+        "url": "https://autoesporte.globo.com/setor-automotivo/inovacao-e-tecnologia-em-automoveis/noticia/2026/11/volkswagen-motor-1-5-tsi-evo-2-hibrido-flex-carros-marca-eletricos.ghtml",
+        "data": "2026-11-27"
+      },
+      {
+        "nome": "G1 Carros",
+        "url": "https://g1.globo.com/carros/noticia/2026/11/25/volkswagen-motor-hibrido-flex-no-brasil.ghtml",
+        "data": "2026-11-25"
+      }
+    ],
+    "corpo": "<p>A Volkswagen estruturou uma nova etapa em sua estratégia industrial no mercado automotivo brasileiro ao detalhar a chegada da propulsão híbrida flex. O conjunto mecânico terá como base o propulsor 1.5 TSI Evo2, que viabilizará a estreia do primeiro sistema híbrido pleno (HEV) da fabricante no país. A implementação da tecnologia integra o aporte de R$ 16 bilhões direcionado às operações brasileiras até 2028, montante que compõe o pacote de investimentos de R$ 20 bilhões planejado pela montadora para toda a América do Sul durante o mesmo período.</p><h2>Cronograma de lançamentos e polos de produção</h2><p>A previsão oficial indica que o primeiro automóvel equipado com a arquitetura híbrida flex chegará ao mercado doméstico na segunda metade de 2027. O veículo será montado nas instalações fabris da unidade Anchieta, em São Bernardo do Campo (SP), local onde a empresa já produz modelos como Polo Track, Saveiro, Nivus e Nivus GTS. O projeto utiliza como suporte estrutural a plataforma denominada MQB37 Evo.</p><p>Em uma segunda etapa, programada para ter início em 2028, a motorização atenderá outros utilitários esportivos da gama. Entre os lançamentos confirmados figuram o veículo compacto concebido sob a denominação interna de Projeto Saga, modelo associado à segunda geração do T-Roc comercializado na Europa, e um utilitário de porte médio categorizado como A-SUV, responsável por dar origem à nova geração nacional do Taos.</p><p>Ao término de todo esse ciclo de investimentos até 2028, a montadora prevê disponibilizar cinco utilitários esportivos manufaturados em fábricas brasileiras: Tera, Nivus, T-Cross, a versão de produção do Projeto Saga e o novo Taos. O planejamento corporativo contempla 17 veículos inéditos ou atualizados no país, dos quais dez modelos já foram introduzidos no comércio automotivo nacional.</p><h2>Especificações técnicas do motor 1.5 TSI Evo2</h2><p>O propulsor 1.5 TSI Evo2 consiste em uma evolução direta em relação ao propulsor 1.4 TSI empregado em diferentes produtos da montadora há mais de uma década. Trata-se de um conjunto flexível turbocomprimido de quatro cilindros em linha, dotado de injeção direta de combustível e calibrado para operar em ciclo Miller. Os parâmetros técnicos divulgados registram 150 cv de potência máxima e 25,5 kgfm de torque, repetindo os números do conjunto mecânico anterior.</p><p>Embora retenha o bloco construído em alumínio e a medida de 74,5 mm de diâmetro nos cilindros, o propulsor recebeu transformações com foco em rendimento térmico e conformidade ambiental. O projeto introduziu alterações nas câmaras de combustão, na angulação do trem de válvulas, nos pistões, nas bielas e no virabrequim. O mecanismo de sobrealimentação adota turbocompressor de geometria variável, associado a uma pressão operacional elevada na linha de combustível, além de filtro de partículas reposicionado em área adjacente ao motor e catalisador de três vias.</p><p>O sistema conta ainda com a tecnologia ACTPlus, recurso de gerenciamento eletrônico capaz de desativar o trabalho de até dois cilindros durante situações de condução em que a demanda de força ou velocidade se mantém em patamares baixos ou moderados. No aspecto logístico, a montadora trará as primeiras remessas do propulsor importadas de instalações mexicanas, uma vez que a fabricação na planta de São Carlos (SP) só está projetada para se concretizar a partir de 2030.</p><h2>Estudo comparativo de pegada de carbono</h2><p>Durante evento corporativo sobre metas sustentáveis (ESG Day), simulações técnicas apresentadas pela fabricante compararam as emissões de dióxido de carbono equivalente em um utilitário esportivo fictício ao longo de 200 mil km de uso, englobando também a etapa produtiva do veículo e o fornecimento de suas baterias.</p><p>Os dados apurados apontaram que a variante híbrida sem recarga externa abastecida exclusivamente com etanol gera 16 toneladas de CO₂ equivalente. Esse indicador representa aproximadamente 60% menos emissões quando comparado ao índice de 41 toneladas apurado para o mesmo veículo rodando exclusivamente com gasolina comum. Já no modelo dotado de propulsão puramente elétrica movida a bateria, a projeção calculada na análise atingiu 23 toneladas ao fim do ciclo operacional estipulado.</p><h2>Aspectos práticos para quem planeja financiar um veículo</h2><p>A ampliação planejada de modelos eletrificados tende a diversificar as faixas de valor dos automóveis novos e alterar os padrões de desvalorização entre diferentes tecnologias mecânicas. Para o consumidor que utiliza o crédito automotivo ou consórcios, é recomendável analisar como a eventual economia no consumo de combustível se equilibra com as parcelas mensais, as taxas de juros contratadas e a manutenção especializada exigida por conjuntos mecânicos mais complexos.</p>",
+    "foto_busca": "modern car engine hybrid",
+    "tipo": "noticia",
+    "foto": {
+      "id": 1374450,
+      "autor": "pgottschalk",
+      "autorUrl": "https://pixabay.com/users/pgottschalk-1485111/",
+      "pagina": "https://pixabay.com/photos/coupe-limousine-car-black-car-auto-1374450/",
+      "fonte": "Pixabay"
+    }
+  },
+  {
     "slug": "credito-rural-regras-de-renegociacao-e-impactos-no-setor-entram-em-debate",
     "categoria": "credito-rural",
     "titulo": "Crédito rural: regras de renegociação e impactos no setor entram em debate",
