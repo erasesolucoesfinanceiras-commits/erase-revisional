@@ -2819,3 +2819,4 @@
 {"quando":"2026-11-27T20:20:34.249Z","data":"2026-11-27","evento":"uso_gemini","pedidos":38,"ok":14,"por_status":{"429":8,"503":15}}
 {"quando":"2026-11-27T20:21:09.728Z","data":"2026-11-27","evento":"indexnow","resultado":"enviado","status":200,"enviadas":6,"ainda_pendentes":0,"urls":["https://revisional.eraseconsulta.com.br/noticias/volkswagen-anuncia-motor-1-5-hibrido-flex-nacional-com-aporte-de-r-16-bi","https://revisional.eraseconsulta.com.br/","https://revisional.eraseconsulta.com.br/artigos","https://revisional.eraseconsulta.com.br/radar","https://revisional.eraseconsulta.com.br/categoria-mercado","https://revisional.eraseconsulta.com.br/categoria-energia-solar"],"resposta":""}
 {"quando":"2026-11-27T22:24:44.475Z","data":"2026-11-27","evento":"uso_gemini","pedidos":0,"ok":0,"por_status":{}}
+{"quando":"2026-11-28T00:36:24.012Z","data":"2026-11-27","evento":"uso_gemini","pedidos":0,"ok":0,"por_status":{}}
