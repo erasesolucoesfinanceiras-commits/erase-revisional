@@ -1,5 +1,31 @@
 [
   {
+    "id": "2026-11-28-seguro-prestamista-embutido-exige-atenca",
+    "data": "2026-11-28",
+    "categoria": "consorcio-seguros",
+    "titulo": "Seguro prestamista embutido exige atenção ao Custo Efetivo Total",
+    "texto": "Ao parcelar bens em crediários ou financiamentos, o consumidor deve checar se o seguro prestamista foi embutido nas parcelas e avaliar o impacto no Custo Efetivo Total (CET). Embora a modalidade possa cobrir situações como morte ou invalidez, é essencial verificar prazos de carência, franquias e o valor total financiado para evitar gastos imprevistos no orçamento.",
+    "fontes": [
+      {
+        "nome": "InfoMoney",
+        "url": "https://www.infomoney.com.br/minhas-financas/black-friday-quais-seguros-vale-a-pena-contratar-na-hora-das-compras/",
+        "data": "2026-11-27"
+      },
+      {
+        "nome": "ativovirtual.com.br",
+        "url": "https://www.ativovirtual.com.br/avnews/artigos/seguro-na-black-friday-o-que-corroi-o-desconto",
+        "data": "2026-11-27"
+      }
+    ],
+    "foto": {
+      "id": 962358,
+      "autor": "Edar",
+      "autorUrl": "https://pixabay.com/users/Edar-609103/",
+      "pagina": "https://pixabay.com/photos/business-signature-contract-962358/",
+      "fonte": "Pixabay"
+    }
+  },
+  {
     "id": "2026-11-27-gato-solar-gera-impacto-de-ate-r-4-bilho",
     "data": "2026-11-27",
     "categoria": "energia-solar",
